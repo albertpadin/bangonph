@@ -43,7 +43,7 @@ var MainView = Backbone.View.extend({
   },
   editContact: function(id) {
     var route = new Router();
-    route.navigate("edit/" + id, {trigger: true});
+    route.navigate("user/edit/" + id, {trigger: true});
   },
   deleteContact: function(id, name) {
     if (confirm("Are you sure to delete?")) {
@@ -116,6 +116,7 @@ var Router = Backbone.Router.extend({
         "" : "renderMainPage",
         "users" : "renderMainPage",
         "user/new" : "renderAddUserPage",
+        "user/edit/:id" : "renderEditUserPage",
         "*default" : "defaultpage"
     },
 
@@ -131,6 +132,10 @@ var Router = Backbone.Router.extend({
 
     renderAddUserPage: function() {
       addUser.render();
+    },
+
+    renderEditUserPage: function(id) {
+      console.log(id);
     }
     
 });

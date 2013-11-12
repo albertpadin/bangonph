@@ -331,7 +331,7 @@ class DashboardPage(BaseHandler):
 class UserHandler(BaseHandler):
     @login_required
     def get(self):
-        self.response.out.write(simplejson.dumps(get_all_user()))
+        self.response.out.write(simplejson.dumps(get_all_user(self.user.email)))
 
     def post(self):
         body = self.request.body

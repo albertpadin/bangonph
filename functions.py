@@ -66,8 +66,8 @@ def send_reset_password_email(user, token):
         return False
 
 
-def get_all_user():
-    users = User.query().fetch(100)
+def get_all_user(data):
+    users = User.query(User.email != data).fetch(100)
     if users:
         datas = []
         for user in users:
@@ -77,7 +77,7 @@ def get_all_user():
             temp["email"] = user.email
             temp["contacts"] = user.contacts
             datas.append(temp)
-            
+
         return datas
 
 def add_location(data):

@@ -389,6 +389,44 @@ var AddDistribution = Backbone.View.extend({
   }
 });
 
+var DistributorView = Backbone.View.extend({
+  el: "#app",
+  template: _.template( $("#distributorsTemplate").html() ),
+  render: function() {
+    $(this.el).html( this.template() );
+  }
+});
+
+var AddDistributor = Backbone.View.extend({
+  el: "#app",
+  template: _.template( $("#addDistributorTemplate").html() ),
+  events: {
+    "submit form#frmAddDistributor" : "addDistributor"
+  },
+  render: function() {
+    $(this.el).html( this.template() );
+  },
+  addDistributor: function() {
+    $.ajax({
+      type: "post",
+      url: "/distributors",
+      data: {
+        "name": _.escape($("#fname").val()),
+        "location": _.escape($("#location").val()),
+        "phone": _.escape($("#phone").val()),
+        "email": _.escape($("#email").val()),
+        "website": _.escape($("#website").val()),
+        "contacts": _.escape($("#contacts").val()),
+        "destinations": _.escape($("#destinations").val()),
+      },
+      success: function() {
+        window.location.hash = "#distributors";
+      }
+    });
+    return false;
+  }
+});
+
 var Router = Backbone.Router.extend({
     routes: {
         "" : "renderMainPage",
@@ -403,8 +441,11 @@ var Router = Backbone.Router.extend({
         "locations" : "renderLocationPage",
         "location/new" : "renderAddLocationPage",
 
-        "distributions" : "renderDistibutionPage",
+        "distributions" : "renderDistributionPage",
         "distribution/new" : "renderAddDistributionPage",
+
+        "distributors" : "renderDistributorPage",
+        "distributor/new" : "renderAddDistributorPage",
 
         "*default" : "defaultpage"
     },
@@ -448,11 +489,18 @@ var Router = Backbone.Router.extend({
       addLocation.render();
     },
 
-    renderDistibutionPage: function() {
+    renderDistributionPage: function() {
       distributionView.render();
     },
     renderAddDistributionPage: function() {
       addDistribution.render();
+    },
+
+    renderDistributorPage: function() {
+      distributorView.render();
+    },
+    renderAddDistributorPage: function() {
+      addDistributor.render();
     }
     
 });
@@ -470,6 +518,9 @@ var addLocation = new AddLocation();
 
 var distributionView = new DistributionView();
 var addDistribution = new AddDistribution();
+
+var distributorView = new DistributorView();
+var addDistributor = new AddDistributor();
 
 var router = new Router();
 Backbone.history.start();

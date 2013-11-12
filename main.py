@@ -377,7 +377,32 @@ class UserHandler(BaseHandler):
 class ContactHandler(BaseHandler):
     @login_required
     def post(self):
-        pass
+        body = self.request.body
+        details = simplejson.loads(body)
+        logging.critical(body)
+        contacts = ""
+
+        if details["contacts"]:
+            if ", " in details["contacts"]:
+                contacts = details["contacts"].split(", ")
+            else:
+                contacts = [details["contacts"]]
+
+
+        data = {
+            "name": details["name"],
+            "email": details["email"],
+            "twitter": details["twitter"],
+            "facebook": details["facebook"],
+            "contacts": contacts,
+        }
+
+        add_contact(data)
+        temp = {}
+        temp["success"] = True
+        temp["message"] = "Successfully added."
+        self.response.out.write(simplejson.dumps(temp))
+
 
 
 class LocationHandler(BaseHandler):

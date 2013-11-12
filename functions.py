@@ -163,6 +163,17 @@ def add_post(data):
     return post
     
 
+def add_contact(data):
+    contact = Contact(id=data["name"])
+    contact.name = data["name"]
+    contact.contacts = data["contacts"]
+    contact.email = data["email"]
+    contact.facebook = data["facebook"]
+    contact.twitter = data["twitter"]
+
+    contact.put()
+    return contact
+
 
 
 

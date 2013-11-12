@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+	</head>
+	<body>
+		<ul>
+			<li><a href="#">Home</a></li>
+			<li><a href="#login">Login</a></li>
+			<li><a href="#datas">Datas</a></li>
+			<li><a href="#profile">Profile</a></li>
+			<li><a href="#message">Message</a></li>
+			{% if numbers %}
+			{% for number in numbers %}
+			<li><a href="#page/{{ number }}">View Page {{ number }}</a></li>
+			{% endfor %}
+			{% endif %}
+		</ul>
+
+		<div id="content-pane"></div>
+
+		<script type="text/javascript" src="/js/jquery.js"></script>
+		<script type="text/javascript" src="/js/underscore.js"></script>
+		<script type="text/javascript" src="/js/backbone.js"></script>
+
+		<!-- main -->
+		<script type="text/javascript" src="/js/json2html.js"></script>
+		<script type="text/javascript" src="/js/jquery.json2html.js"></script>
+		<script type="text/javascript" src="/js/example-3-1.js"></script>
+	</body>
+</html>

@@ -1,0 +1,112 @@
+<table cellspacing="0" cellpadding="0" border="0" width="100%" background="{{ current_url }}images/email-images/paper.jpg">
+
+	 <tbody style="background: url('{{ current_url }}images/email-images/ml-map.jpg') no-repeat bottom right"><tr>
+		 <td style="padding:20px 20px 40px">
+			 <table cellspacing="0" cellpadding="0" border="0" align="center" width="620">
+			 <tbody>
+		 <tr>
+
+		 <td align="center">
+
+		 <table cellspacing="0" cellpadding="0" border="0" align="center">
+
+		 <tbody><tr>
+
+		 <td>
+
+		 <h1 style="font-family:segoe ui, arial,sans-serif;font-weight:normal;font-size:22px;line-height:21px;color:#211922!important;margin:0;padding:0 20px"> 
+
+		 Hi {{ receiver_name }},
+
+		 </h1>
+
+		 </td>
+
+		 </tr>
+
+		 </tbody></table>
+
+		 </td>
+
+		 </tr>
+
+		 <tr>
+
+		 <td style="padding:30px 0 30px 8px">
+
+		 <table cellspacing="0" cellpadding="0" border="0">
+
+		 <tbody><tr>
+
+		 <td width="1" style="background-color:#eceaeb"></td>
+		
+		 <td>
+		 	<div  style="background: #fff url('{{ current_url }}images/email-images/linedpaper.png');padding:0px;border-bottom:1px solid #b2b1b1;border-left:1px solid #d4d2d3;border-right:1px solid #d4d2d3; display:block">
+		 <table cellspacing="0" cellpadding="0" border="0">
+
+		 <tbody><tr>
+
+		 <td>
+
+			 <table cellspacing="0" cellpadding="0" border="0" width="617">
+
+				 <tbody>
+					 <tr>
+						 <td width="80" valign="center">
+
+						 <img id="check" src="{{ current_url }}images/email-images/check.png" width="80" height="80" style="vertical-align:top;outline:none;border:none;margin-left: -12px">
+						 </td>
+						 <td width="341">
+							 <p style="font-family:'helvetica neue',helvetica,arial,sans-serif;font-size:14px;color:#211922;line-height:24px;margin:0;padding:40px 30px 35px 15px">
+<!-- different email types -->
+
+{% if type %}
+
+	{% if type == "reset_password" %}
+		To reset your password, please click the following link:<br>
+
+	    <a href="{{ current_url }}password/reset?token={{email_content['token']}}">Reset my Password</a><br><br>
+
+	    If you did not request for password reset, please ignore this message.
+	    
+	 {% endif %}
+{% endif %}
+
+<br><br><br><i>( Company Name )</i><br>
+<!-- end of email types -->							
+							 </p>
+						 </td>
+					 </tr>
+				 </tbody>
+			</table>
+		 </td>
+		 </tr>
+		 </tbody></table>
+		</div>
+		 </td>
+		 
+		 </tr>
+		 </tbody></table>
+		 </td>
+		 </tr>
+
+		 <tr>
+		 <td height="18" width="100%" background="{{ current_url }}images/email-images/ml-badge.gif" align="center"></td>
+		 </tr>
+		 <tr>
+		 <td align="center" style="padding:30px 0 15px">
+		 <p style="font-family:'helvetica neue',helvetica,arial,sans-serif;font-size:10px;color:#999999;line-height:1.35em;margin:0;padding:0">This email was sent to <a style="color:#999;text-decoration:none">{{ receiver_email }}</a>.<br> 
+		 </td>
+		 </tr>
+		 <tr>
+		 <td align="center">
+		 <p style="font-family:'helvetica neue',helvetica,arial,sans-serif;font-size:10px;color:#999999;line-height:1.35em;margin:0;padding:0">
+		 	<span>&copy;</span> ( Company Name ) Powered by <a href="http://sym.ph" style="color:#999;text-decoration:underline">Symph</a> <font style="color:#aaa;padding:0 2px">|</font> All Rights Reserved<br><a href="#" style="color:#999;text-decoration:underline" target="_blank">Privacy Policy</a> <font style="color:#aaa;padding:0 2px"> |</font> <a href="#" style="color:#999;text-decoration:underline" target="_blank">Terms and Conditions</a>
+		 </p>
+		 </td>
+		 </tr>
+		 </tbody></table>
+		 </td>
+		 </tr>
+	</tbody>
+</table>

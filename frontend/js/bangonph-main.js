@@ -334,15 +334,25 @@ var AddLocation = Backbone.View.extend({
       type: "post",
       url: "/locations",
       data: {
-        "name": _.escape($("#fname").val()),
+        "name": _.escape($("#name").val()),
         "latlong": _.escape($("#latlong").val()),
         "featured_photo": _.escape($("#featured_photo").val()),
         "death_count": _.escape($("#death_count").val()),
         "affected_count": _.escape($("#affected_count").val()),
         "status_board": _.escape($("#status_board").val()),
-        "needs": _.escape($("#needs").val()),
-        "centers": _.escape($("#centers").val()),
-        "status": _.escape($("#status").val())
+        "food": _.escape($("#food").val()),
+        "water": _.escape($("#water").val()),
+        "medicines": _.escape($("#medicines").val()),
+        "social_workers": _.escape($("#social_workers").val()),
+        "medical_workers": _.escape($("#medical_workers").val()),
+        "shelter": _.escape($("#shelter").val()),
+        "formula": _.escape($("#formula").val()),
+        "toiletries": _.escape($("#toiletries").val()),
+        "flashlights": _.escape($("#flashlights").val()),
+        "cloths": _.escape($("#cloths").val()),
+        "power": _.escape($("#power").val()),
+        "communication": _.escape($("#communication").val()),
+        "water": _.escape($("#water").val())
       },
       success: function() {
         window.location.hash = "#locations";
@@ -427,6 +437,45 @@ var AddDistributor = Backbone.View.extend({
   }
 });
 
+var DropOffCenterView = Backbone.View.extend({
+  el: "#app",
+  template: _.template( $("#drop-off-centersTemplate").html() ),
+  render: function() {
+    $(this.el).html( this.template() );
+  }
+});
+
+var AddDropOffCenter = Backbone.View.extend({
+  el: "#app",
+  template: _.template( $("#addDrop-off-centersTemplate").html() ),
+  events: {
+    "submit form#frmAddDropOffCenter" : "addDropOff"
+  },
+  render: function() {
+    $(this.el).html( this.template() );
+  },
+  addDropOff: function() {
+    $.ajax({
+      type: "post",
+      url: "/drop-off-centers",
+      data: {
+        "name" : _.escape($("#fname").val()),
+        "latlong" : _.escape($("#latlong").val()),
+        "destinations" : _.escape($("#destinations").val()),
+        "schedule" : _.escape($("#schedule").val()),
+        "twitter" : _.escape($("#twitter").val()),
+        "facebook" : _.escape($("#facebook").val()),
+        "phone" : _.escape($("#phone").val()),
+        "email" : _.escape($("#email").val()),
+      },
+      success: function() {
+        window.location.hash = "#drop-off-centers";
+      }
+    });
+    return false;
+  }
+});
+
 var Router = Backbone.Router.extend({
     routes: {
         "" : "renderMainPage",
@@ -446,6 +495,9 @@ var Router = Backbone.Router.extend({
 
         "distributors" : "renderDistributorPage",
         "distributor/new" : "renderAddDistributorPage",
+
+        "drop-off-centers" : "renderDropOffCenterPage",
+        "drop-off-center/new" : "renderAddDropOffCenterPage",
 
         "*default" : "defaultpage"
     },
@@ -501,6 +553,13 @@ var Router = Backbone.Router.extend({
     },
     renderAddDistributorPage: function() {
       addDistributor.render();
+    },
+
+    renderDropOffCenterPage: function() {
+      dropOffCenterView.render();
+    },
+    renderAddDropOffCenterPage: function() {
+      addDropOffCenter.render();
     }
     
 });
@@ -521,6 +580,9 @@ var addDistribution = new AddDistribution();
 
 var distributorView = new DistributorView();
 var addDistributor = new AddDistributor();
+
+var dropOffCenterView = new DropOffCenterView();
+var addDropOffCenter = new AddDropOffCenter();
 
 var router = new Router();
 Backbone.history.start();

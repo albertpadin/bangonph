@@ -1,6 +1,7 @@
 import logging
 import webapp2, jinja2, os
 import datetime
+from models import User
 import json as simplejson
 
 from google.appengine.api import urlfetch
@@ -65,5 +66,16 @@ def send_reset_password_email(user, token):
         return False
 
 
-    
+def get_all_user():
+    user = User.query().fetch(100)
+
+    return user
+
+
+
+
+
+
+
+
 

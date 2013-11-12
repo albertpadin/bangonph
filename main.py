@@ -327,111 +327,12 @@ class DashboardPage(BaseHandler):
     def get(self):
         self.render('frontend/dashboard.html')
 
-class AddressBookHandler(BaseHandler):
+
+class UserHandler(BaseHandler):
+    @login_required
     def get(self):
-        id_edit = self.request.get("id_edit")
-        if id_edit:
-            temp = {}
-            user = User.get_by_id(self.user.email)
-            if user:
-                for a in user.addressbook:
-                    if a["id"] == id_edit:
-                        temp["id"] = a["id"]
-                        temp["fullname"] = a["fullname"]
-                        temp["email"] = a["email"]
-                        temp["phone"] = a["phone"]
-                        temp["address"] = a["address"]
-
-                self.response.out.write(simplejson.dumps(temp))
-                return
-
-        id_delete = self.request.get("id_delete")
-        if id_delete:
-            temp = {}
-            user = User.get_by_id(self.user.email)
-            if user:
-                x = 0
-                for a in user.addressbook:
-                    if a["id"] == id_delete:
-                        user.addressbook.pop(int(x))
-                    x += 1
-
-                user.put()
-                
-                temp["message"] = "Success"
-
-            self.response.out.write(simplejson.dumps(temp))
-            return
-
-        user = User.get_by_id(self.user.email)
-        if user:
-            datas = []
-            if user.addressbook:
-                for a in user.addressbook:
-                    temp = {}
-                    temp["id"] = a["id"]
-                    temp["fullname"] = a["fullname"]
-                    temp["email"] = a["email"]
-                    temp["phone"] = a["phone"]
-                    temp["address"] = a["address"]
-                    datas.append(temp)
-
-                self.response.out.write(simplejson.dumps(datas))
-
-    def post(self):
-        details = self.request.body
-        temp = {}
-        if details:
-            newmessage = simplejson.loads(details)
-
-            user = User.get_by_id(self.user.email)
-            datas = []
-            if user:
-                data = {}
-                data["fullname"] = newmessage["fullname"]
-                data["email"] = newmessage["email"]
-                data["phone"] = newmessage["phone"]
-                data["address"] = newmessage["address"]
-                data["id"] = str(uuid.uuid4())
-                if user.addressbook:
-                    user.addressbook.append(data)
-                else:
-                    datas.append(data)
-                    user.addressbook = datas
-
-                user.put()
-
-                temp = {}
-                temp["id"] = data["id"]
-                temp["fullname"] = newmessage["fullname"]
-                temp["email"] = newmessage["email"]
-                temp["phone"] = newmessage["phone"]
-                temp["address"] = newmessage["address"]
-
-            self.response.out.write(simplejson.dumps(temp))
-
-class AddressBookUpdateHandler(BaseHandler):
-    def put(self, *args, **kwargs):
-        id = kwargs["id"]
-        details = self.request.body
-        logging.critical(details)
-
-        if id:
-            newmessage = simplejson.loads(details)
-            user = User.get_by_id(self.user.email)
-            if user:
-                for a in user.addressbook:
-                    if a["id"] == id:
-                        a["id"] = newmessage["id"]
-                        a["fullname"] = newmessage["fullname"]
-                        a["email"] = newmessage["email"]
-                        a["phone"] = newmessage["phone"]
-                        a["address"] = newmessage["address"]
-
-                user.put()
-
-                self.response.out.write(simplejson.dumps(a))
-                return
+        self.tv["users"] = get_all_user()
+        
 
 class ErrorHandler(BaseHandler):
     def get(self, page):
@@ -449,8 +350,10 @@ app = webapp2.WSGIApplication([
         webapp2.Route('/dashboard', handler=DashboardPage, name="www-dashboard"),
         webapp2.Route('/cosmo', handler=CosmoPage, name="www-test"),
 
-        webapp2.Route('/addressbook', handler=AddressBookHandler, name="www-address-book"),
-        webapp2.Route(r'/addressbook/<id>', handler=AddressBookUpdateHandler, name="www-address-book-update"),
+        # leonard : 
+        webapp2.Route('/users', handler=UserHandler, name="www-users"),
         webapp2.Route(r'/<:.*>', ErrorHandler)
     ])
 ])
+
+

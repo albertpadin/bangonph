@@ -1,0 +1,36 @@
+{% extends 'frontend/index.html' %}
+
+{% block content %}
+<div class="row">
+  <div class="span12">
+    <form class="form-center" action="/login" method="POST">
+      <h2 class="form-center-heading">Login</h2>
+      <input id="input-email" type="email" name="email" class="input-block-level" placeholder="Email address"{% if email %} value="{{ email }}"{% endif %}>
+      <input id="input-password" type="password" name="password" class="input-block-level" placeholder="Password">
+      <div class="pull-left">No account? <a href="/register">Register</a>.</div><button class="btn btn-large btn-primary pull-right" type="submit">Login</button>
+      <div class="clear"></div>
+
+      <div class="pull-left"><a href="/forgot-pass">Forgot Password?</a>.</div>
+      <div class="clear"></div>
+
+      <div class="fblogin-section">
+      	<div class="or-separator">or</div>
+      	<div><a href="{{ fb_login_url }}" target="_blank" title="Login with Facebook"><img src="/img/facebook-button.png" alt="Login with Facebook" /></a></div>
+      </div>
+      <div class="clear"></div>
+    </form>
+  </div>
+</div>
+{% endblock %}
+
+{% block jsbottom %}
+<script type="text/javascript">
+	$(document).ready(function(){
+		{% if email %}
+		$("#input-password").focus();
+		{% else %}
+		$("#input-email").focus();
+		{% endif %}
+	});
+</script>
+{% endblock %}

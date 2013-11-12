@@ -1,0 +1,28 @@
+{% extends 'frontend/index.html' %}
+
+{% block content %}
+<div class="row">
+  <div class="span12">
+    <form class="form-center" action="/forgot-pass" method="POST">
+      <h2 class="form-center-heading">Forgot Password</h2>
+      <input id="input-email" type="email" name="email" class="input-block-level" placeholder="Email address"{% if email %} value="{{ email }}"{% endif %}>
+      
+      <div class="pull-left">No account? <a href="/register">Register</a>.</div><button class="btn btn-large btn-primary pull-right" type="submit">GO!</button>
+      <div class="clear"></div>
+
+    </form>
+  </div>
+</div>
+{% endblock %}
+
+{% block jsbottom %}
+<script type="text/javascript">
+	$(document).ready(function(){
+		{% if email %}
+		$("#input-password").focus();
+		{% else %}
+		$("#input-email").focus();
+		{% endif %}
+	});
+</script>
+{% endblock %}

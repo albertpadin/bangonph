@@ -109,7 +109,12 @@ class Post(ndb.Model):
     message = ndb.TextProperty()
 
 
-
+class LogActivity(ndb.Model):
+    created = ndb.DateTimeProperty(auto_now_add=True)
+    user = ndb.StringProperty()
+    previous_values = ndb.JsonProperty()
+    new_values = ndb.JsonProperty
+    action = ndb.StringProperty()
 
 
 

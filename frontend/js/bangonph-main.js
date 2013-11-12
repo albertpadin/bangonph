@@ -167,12 +167,90 @@ var EditUser = Backbone.View.extend({
   }
 });
 
+var Contacts = Backbone.Model.extend({
+  defaults: {
+    name: "",
+    contacts: "",
+    email: "",
+    facebook: "",
+    twitter: ""
+  }
+});
+
+var ContactsCollection = Backbone.Collection.extend({
+  model: Contacts,
+  url: "/contacts"
+});
+
+var ContactView = Backbone.View.extend({
+  el: "#app",
+  template: _.template( $("#contactTemplate").html() ),
+  initialize: function() {
+    _.bindAll(this, "render", "contacts");
+  },
+  render: function(response) {
+    var self = this;
+    $(this.el).html( this.template({ contacts: response }) );
+  },
+  contacts: function() {
+    var self = this;
+    var contactsCollection = new ContactsCollection();
+    contactsCollection.fetch({
+      success: function(datas) {
+        self.render(datas.toJSON());
+      }
+    });
+  }
+});
+
+var AddContact = Backbone.View.extend({
+  el: "#app",
+  template: _.template( $("#addContactTemplate").html() ),
+  events: {
+    'submit form#frmAdd': 'add'
+  }, 
+  render: function() {
+    $(this.el).html( this.template );
+  },
+  add: function() {
+    var fname = $("#fname").val();
+    var contacts = $("#contacts").val();
+    var email = $("#email").val();
+    var facebook = $("#facebook").val();
+    var twitter = $("#twitter").val();
+
+    var details = {
+      name: _.escape(fname),
+      contacts: _.escape(contacts),
+      email: _.escape(email),
+      facebook: _.escape(facebook),
+      twitter: _.escape(twitter)
+    };
+
+    var contactsCollection = new ContactsCollection();
+    contactsCollection.create(details, {
+      success: function(data) {
+        window.location.hash = "#contacts";
+        console.log(data.toJSON());
+      },
+      error: function(data) {
+        console.log(data.toJSON());
+      }
+    });
+    return false;
+  }
+});
+
 var Router = Backbone.Router.extend({
     routes: {
         "" : "renderMainPage",
         "users" : "renderUserPage",
         "user/new" : "renderAddUserPage",
         "user/edit/:id" : "renderEditUserPage",
+
+        "contacts" : "renderContactPage",
+        "contact/new" : "renderAddContactPage",
+
         "*default" : "defaultpage"
     },
 
@@ -181,23 +259,28 @@ var Router = Backbone.Router.extend({
       $("#app").html(html);
     },
 
+    // user page
     renderMainPage: function() {
       mainview.render();
       mainview.users();
     },
-
     renderUserPage: function() {
       mainview.render();
       mainview.users();
     },
-
     renderAddUserPage: function() {
       addUser.render();
     },
-
     renderEditUserPage: function(id) {
       editUser.render();
       editUser.data(id);
+    },
+    // contact page
+    renderContactPage: function() {
+      contactView.render();
+    },
+    renderAddContactPage: function() {
+      addContact.render();
     }
     
 });
@@ -205,5 +288,9 @@ var Router = Backbone.Router.extend({
 var mainview = new MainView();
 var addUser = new AddUser();
 var editUser = new EditUser();
+
+var contactView = new ContactView();
+var addContact = new AddContact();
+
 var router = new Router();
 Backbone.history.start();

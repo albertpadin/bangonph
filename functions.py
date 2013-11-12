@@ -76,6 +76,7 @@ def get_all_user(data):
             temp["name"] = user.name
             temp["email"] = user.email
             temp["contacts"] = user.contacts
+            temp["permissions"] = user.permissions
             datas.append(temp)
 
         return datas

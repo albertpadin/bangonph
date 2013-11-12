@@ -331,9 +331,22 @@ class DashboardPage(BaseHandler):
 class UserHandler(BaseHandler):
     @login_required
     def get(self):
+        edit_id = self.request.get("id_edit")
+        if edit_id:
+            user = User.get_by_id(edit_id)
+            if user:
+                temp = {}
+                temp["id"] = edit_id
+                temp["name"] = user.name
+                temp["email"] = user.email
+                temp["contacts"] = user.contacts
+                temp["permissions"] = user.permissions
+                self.response.out.write(simplejson.dumps(temp))
+            return
+
         delete_id = self.request.get("id_delete")
         if delete_id:
-            user = User.get_by_id(int(delete_id))
+            user = User.get_by_id(delete_id)
             if user:
                 user.key.delete()
                 self.response.out.write(simplejson.dumps({"success": True, "message": "Successfully deleted."}))
@@ -342,50 +355,29 @@ class UserHandler(BaseHandler):
         self.response.out.write(simplejson.dumps(get_all_user(self.user.email)))
 
     def post(self):
-        body = self.request.body
-        if body:
-            details = simplejson.loads(body)
-
-            logging.critical(details)
-
+        if self.request.get("id"):
+            user = User.get_by_id(self.request.get("id"))
+            if user:
+                user.email = self.request.get("email")
+                user.name = self.request.get("name")
+                user.contacts = self.request.get("contacts")
+                user.permissions = self.request.get("permissions")
+                user.put()
+        else:
             data = {
-                "name": details["name"],
-                "email": details["email"],
-                "password": hash_password(details["email"], details["password"]),
-                "contacts": details["contacts"],
-                "permissions": details["permissions"]
+                "name": self.request.get("name"),
+                "email": self.request.get("email"),
+                "password": hash_password(self.request.get("email"), self.request.get("password")),
+                "contacts": self.request.get("contacts"),
+                "permissions": self.request.get("permissions")
             }
 
             add_user(data)
 
-            temp = {}
-            temp["success"] = True
-            temp["message"] = "Successfully added."
-            self.response.out.write(simplejson.dumps(temp))
-
-class UserUpdateHandler(BaseHandler):
-    def put(self, *args, **kwargs):
-        body = self.request.body
-
-        if body:
-            details = simplejson.loads(body)
-            user = User.get_by_id(details["id"])
-            if user:
-                data = {
-                    "user": user,
-                    "name": details["name"],
-                    "email": details["email"],
-                    "contacts": details["contacts"],
-                    "permissions": details["permissions"]
-                }
-                update_user(data)
-                self.response.out.write(simplejson.dumps({"success":True, "message":"Successfully updated."}))
-
 class ContactHandler(BaseHandler):
     @login_required
     def post(self):
-        body = self.request.body
-        logging.critical(body)
+        pass
 
 
 class LocationHandler(BaseHandler):
@@ -393,18 +385,20 @@ class LocationHandler(BaseHandler):
     def get(self):
         pass
     def post(self):
-        data = {
-            "name": self.request.get("name"),
-            "needs": self.request.get_all("needs"), # json format
-            "centers": self.request.get_all("centers"),
-            "latlong": self.request.get("latlong"),
-            "featured_photo": self.request.get("featured_photo"),
-            "death_count": self.request.get("death_count"),
-            "affected_count": self.request.get("affected_count"),
-            "status_board": self.request.get("status_board"),
-            "status": self.request.get("status") # json format
-        }
-        add_location(data)
+        body = self.request.body
+        logging.critical(body)
+        # data = {
+        #     "name": self.request.get("name"),
+        #     "needs": self.request.get_all("needs"), # json format
+        #     "centers": self.request.get_all("centers"),
+        #     "latlong": self.request.get("latlong"),
+        #     "featured_photo": self.request.get("featured_photo"),
+        #     "death_count": self.request.get("death_count"),
+        #     "affected_count": self.request.get("affected_count"),
+        #     "status_board": self.request.get("status_board"),
+        #     "status": self.request.get("status") # json format
+        # }
+        # add_location(data)
 
 class CentersHandler(BaseHandler):
     @login_required
@@ -467,7 +461,6 @@ app = webapp2.WSGIApplication([
         webapp2.Route('/locations', handler=LocationHandler, name="www-locations"),
         webapp2.Route('/users', handler=UserHandler, name="www-users"),
         webapp2.Route('/posts', handler=PostsHandler, name="www-post"),
-        webapp2.Route(r'/users/<id>', handler=UserUpdateHandler, name="www-users-update"),
 
         webapp2.Route('/contacts', handler=ContactHandler, name="www-contacts"),
         webapp2.Route('/drop-off-center', handler=CentersHandler, name="www-centers"),

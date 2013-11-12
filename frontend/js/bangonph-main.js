@@ -476,6 +476,30 @@ var AddDropOffCenter = Backbone.View.extend({
   }
 });
 
+var ResourcesView = Backbone.View.extend({
+  el: "#app",
+  template: _.template( $("#resourcesTemplate").html() ),
+  render: function() {
+    $(this.el).html( this.template() );
+  }
+});
+
+var SubscribersView = Backbone.View.extend({
+  el: "#app",
+  template: _.template( $("#subscribersTemplate").html() ),
+  render: function() {
+    $(this.el).html( this.template() );
+  }
+});
+
+var PostsView = Backbone.View.extend({
+  el: "#app",
+  template: _.template( $("#postsTemplate").html() ),
+  render: function() {
+    $(this.el).html( this.template() );
+  }
+});
+
 var Router = Backbone.Router.extend({
     routes: {
         "" : "renderMainPage",
@@ -498,6 +522,12 @@ var Router = Backbone.Router.extend({
 
         "drop-off-centers" : "renderDropOffCenterPage",
         "drop-off-center/new" : "renderAddDropOffCenterPage",
+
+        "resources" : "renderResourcesPage",
+
+        "subscribers" : "renderSubscriberPage",
+
+        "posts" : "renderPostsPage",
 
         "*default" : "defaultpage"
     },
@@ -560,6 +590,18 @@ var Router = Backbone.Router.extend({
     },
     renderAddDropOffCenterPage: function() {
       addDropOffCenter.render();
+    },
+
+    renderResourcesPage: function() {
+      resourcesView.render();
+    },
+
+    renderSubscriberPage: function() {
+      subscribersView.render();
+    },
+
+    renderPostsPage: function() {
+      postsView.render();
     }
     
 });
@@ -583,6 +625,12 @@ var addDistributor = new AddDistributor();
 
 var dropOffCenterView = new DropOffCenterView();
 var addDropOffCenter = new AddDropOffCenter();
+
+var resourcesView = new ResourcesView();
+
+var subscribersView = new SubscribersView();
+
+var postsView = new PostsView();
 
 var router = new Router();
 Backbone.history.start();

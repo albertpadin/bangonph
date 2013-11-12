@@ -373,11 +373,33 @@ var DistributionView = Backbone.View.extend({
 var AddDistribution = Backbone.View.extend({
   el: "#app",
   template: _.template( $("#addDistributionsTemplate").html() ),
+  initialize: function(contacts, locations) {
+    _.bindAll(this, "render", "contacts");
+    _.bindAll(this, "render", "locations");
+  },
   events: {
     "submit form#frmAddDistribution" : "addDistribution"
   },
-  render: function() {
-    $(this.el).html( this.template() );
+  render: function(response, locs) {
+    $(this.el).html( this.template({ contacts: response, locations: locs }) );
+  },
+  contacts: function() {
+    var self = this;
+    var contactsCollection = new ContactsCollection();
+    contactsCollection.fetch({
+      success: function(datas) {
+        self.render(datas.toJSON());
+      }
+    });
+  },
+  locations: function() {
+    var self = this;
+    var collection = new LocationCollection();
+    collection.fetch({
+      success: function(datas) {
+        self.render(datas.toJSON());
+      }
+    });
   },
   addDistribution: function() {
     $.ajax({
@@ -413,8 +435,20 @@ var AddDistributor = Backbone.View.extend({
   events: {
     "submit form#frmAddDistributor" : "addDistributor"
   },
-  render: function() {
-    $(this.el).html( this.template() );
+  initialize: function() {
+    _.bindAll(this, "render", "contacts");
+  },
+  render: function(response, locs) {
+    $(this.el).html( this.template({ contacts: response }) );
+  },
+  contacts: function() {
+    var self = this;
+    var contactsCollection = new ContactsCollection();
+    contactsCollection.fetch({
+      success: function(datas) {
+        self.render(datas.toJSON());
+      }
+    });
   },
   addDistributor: function() {
     $.ajax({
@@ -492,11 +526,68 @@ var SubscribersView = Backbone.View.extend({
   }
 });
 
+var PostsModel = Backbone.Model.extend({
+  defaults: {
+    name: "",
+    email: "",
+    twitter: "",
+    facebook: "",
+    phone: "",
+    message: ""
+  }
+});
+
+var PostsCollection = Backbone.Collection.extend({
+  model: PostsModel,
+  url: "/posts"
+});
+
 var PostsView = Backbone.View.extend({
   el: "#app",
   template: _.template( $("#postsTemplate").html() ),
+  initialize: function() {
+    _.bindAll(this, "render", "posts");
+  },
+  render: function(response) {
+    $(this.el).html( this.template({ posts: response}) );
+  },
+  posts: function() {
+    var self = this;
+    var collection = new PostsCollection();
+    collection.fetch({
+      success: function(datas) {
+        self.render(datas.toJSON());
+      }
+    });
+  }
+});
+
+var AddPost = Backbone.View.extend({
+  el: "#app",
+  template: _.template( $("#addPostTemplate").html() ),
+  events: {
+    "submit form#frmAddPost" : "addPost"
+  },
   render: function() {
     $(this.el).html( this.template() );
+  },
+  addPost: function() {
+    $.ajax({
+      type: "post",
+      url: "/posts",
+      data: {
+        "name": _.escape($("#fname").val()),
+        "email": _.escape($("#email").val()),
+        "twitter": _.escape($("#twitter").val()),
+        "facebook": _.escape($("#facebook").val()),
+        "phone": _.escape($("#phone").val()),
+        "message": _.escape($("#message").val())
+      },
+      success: function() {
+        window.location.hash = "#posts";
+      }
+    });
+    return false;
   }
 });
 
@@ -528,6 +619,7 @@ var Router = Backbone.Router.extend({
         "subscribers" : "renderSubscriberPage",
 
         "posts" : "renderPostsPage",
+        "post/new" : "renderAddPostPage",
 
         "*default" : "defaultpage"
     },
@@ -576,6 +668,8 @@ var Router = Backbone.Router.extend({
     },
     renderAddDistributionPage: function() {
       addDistribution.render();
+      addDistribution.contacts();
+      addDistribution.locations();
     },
 
     renderDistributorPage: function() {
@@ -583,6 +677,7 @@ var Router = Backbone.Router.extend({
     },
     renderAddDistributorPage: function() {
       addDistributor.render();
+      addDistributor.contacts();
     },
 
     renderDropOffCenterPage: function() {
@@ -602,6 +697,10 @@ var Router = Backbone.Router.extend({
 
     renderPostsPage: function() {
       postsView.render();
+      postsView.posts();
+    },
+    renderAddPostPage: function() {
+      addPost.render();
     }
     
 });
@@ -631,6 +730,7 @@ var resourcesView = new ResourcesView();
 var subscribersView = new SubscribersView();
 
 var postsView = new PostsView();
+var addPost = new AddPost();
 
 var router = new Router();
 Backbone.history.start();

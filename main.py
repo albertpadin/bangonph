@@ -383,9 +383,9 @@ class SubscriberPage(BaseHandler):
         distribution = distribution.key
         if distribution:
             data = {
-                'name': self.request.get('name')
-                'email': self.request.get('email')
-                'fb_id': self.request.get('fb_id')
+                'name': self.request.get('name'),
+                'email': self.request.get('email'),
+                'fb_id': self.request.get('fb_id'),
                 'distributor': distribution.key
             }
             add_subcriber(data)

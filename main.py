@@ -381,6 +381,13 @@ class UserUpdateHandler(BaseHandler):
                 update_user(data)
                 self.response.out.write(simplejson.dumps({"success":True, "message":"Successfully updated."}))
 
+class ContactHandler(BaseHandler):
+    @login_required
+    def post(self):
+        body = self.request.body
+        logging.critical(body)
+
+
 class LocationHandler(BaseHandler):
     @login_required
     def get(self):
@@ -461,6 +468,8 @@ app = webapp2.WSGIApplication([
         webapp2.Route('/users', handler=UserHandler, name="www-users"),
         webapp2.Route('/posts', handler=PostsHandler, name="www-post"),
         webapp2.Route(r'/users/<id>', handler=UserUpdateHandler, name="www-users-update"),
+
+        webapp2.Route('/contacts', handler=ContactHandler, name="www-contacts"),
         webapp2.Route('/drop-off-center', handler=CentersHandler, name="www-centers"),
 
         

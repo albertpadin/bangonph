@@ -54,10 +54,12 @@ var MainView = Backbone.View.extend({
         success: function(data) {
           console.log(data.toJSON());
           $('#usersGrid tr[data-id="' + id + '"]').fadeOut('fast');
+          $(".error-message").hide();
           $(".success-message").fadeIn("fast");
           $("#title").text('"' + name + '" has been successfully deleted.');
         },
         error: function() {
+          $(".success-message").hide();
           $(".error-message").fadeIn("fast");
           $("#title").text('Unable to delete "' + name + '". Try again.');
         }
@@ -80,32 +82,20 @@ var AddUser = Backbone.View.extend({
     var email = $("#email").val();
     var pwd = $("#password").val();
     var contacts = $("#contacts").val();
+    var permissions = $("#permissions").val();
 
-    var details = {
-      name: _.escape(fname),
-      email: _.escape(email),
-      password: _.escape(pwd),
-      contacts: _.escape(contacts)
-    };
-
-    var collection = new UsersCollection();
-    collection.create(details, {
-      success: function(data) {
-        window.location.hash = "#users";
-        console.log(data.toJSON());
-        $("#fname").val("");
-        $("#email").val("");
-        $("#password").val("");
-        $("#contacts").val("");
-        $(".success-message").fadeIn("fast");
-
-        setTimeout(function() {
-          $(".success-message").fadeOut("fast");
-        }, 2000);
+    $.ajax({
+      type: "post",
+      url: "/users",
+      data: {
+        "name" : _.escape(fname),
+        "email" : _.escape(email),
+        "password" : _.escape(pwd),
+        "contacts" : _.escape(contacts),
+        "permissions" : _.escape(permissions)
       },
-      error: function(data) {
-        console.log(data.toJSON());
-        $(".error-message").fadeIn("fast");
+      success: function(datas) {
+        window.location.hash = "#users";
       }
     });
     return false;
@@ -135,32 +125,18 @@ var EditUser = Backbone.View.extend({
     });
   },
   editUser: function() {
-    var id = $("#id").val();
-    var fname = $("#fname").val();
-    var email = $("#email").val();
-    var contacts = $("#contacts").val();
-
-    var details = {
-      id: id,
-      name: _.escape(fname),
-      email: _.escape(email),
-      contacts: _.escape(contacts)
-    };
-
-    var collection = new UsersCollection();
-    collection.create(details, {
-      success: function(data) {
-        window.location.hash = "#users";
-        console.log(data.toJSON());
-        $(".success-message").fadeIn("fast");
-
-        setTimeout(function() {
-          $(".success-message").fadeOut("fast");
-        }, 2000);
+    $.ajax({
+      type: "post",
+      url: "/users",
+      data: {
+        "id" : _.escape($("#id").val()),
+        "name" : _.escape($("#fname").val()),
+        "email" : _.escape($("#email").val()),
+        "contacts" : _.escape($("#contacts").val()),
+        "permissions" : _.escape($("#permissions").val())
       },
-      error: function(data) {
-        console.log(data.toJSON());
-        $(".error-message").fadeIn("fast");
+      success: function(datas) {
+        window.location.hash = "#users";
       }
     });
     return false;
@@ -241,6 +217,70 @@ var AddContact = Backbone.View.extend({
   }
 });
 
+// var Locations = Backbone.Model.extend({
+//   defaults: {
+//     name: "",
+//     latlong: "",
+//     featured_photo: "",
+//     death_count: "",
+//     affected_count: "",
+//     status_board: "",
+//     needs: "",
+//     centers: "",
+//     status: ""
+//   },
+//   urlRoot: "/locations"
+// });
+
+// var LocationView = Backbone.View.extend({
+//   el: "#app",
+//   template: _.template( $("#locationTemplate").html() ),
+//   initialize: function() {
+//     _.bindAll(this, "render", "locations");
+//   },
+//   render: function(response) {
+//     var self = this;
+//     $(this.el).html( this.template({ locations: response }) );
+//   },
+//   locations: function() {
+//   }
+// });
+
+// var AddLocation = Backbone.View.extend({
+//   el: "#app",
+//   template: _.template( $("#addLocationTemplate").html() ),
+//   events: {
+//     'submit form#frmAdd': 'add'
+//   }, 
+//   render: function() {
+//     $(this.el).html( this.template );
+//   },
+//   add: function() {
+//     var details = {
+//       name: _.escape($("#fname").val()),
+//       latlong: _.escape($("#latlong").val()),
+//       featured_photo: _.escape($("#featured_photo").val()),
+//       death_count: _.escape($("#death_count").val()),
+//       affected_count: _.escape($("#affected_count").val()),
+//       status_board: _.escape($("#status_board").val()),
+//       needs: _.escape($("#needs").val()),
+//       centers: _.escape($("#centers").val()),
+//       status: _.escape($("#status").val())
+//     };
+//     var locations = new Locations();
+//     locations.save(details, {
+//       success: function(data) {
+//         window.location.hash = "#locations";
+//         console.log(data.toJSON());
+//       },
+//       error: function(data) {
+//         console.log(data.toJSON());
+//       }
+//     });
+//     return false;
+//   }
+// });
+
 var Router = Backbone.Router.extend({
     routes: {
         "" : "renderMainPage",
@@ -251,6 +291,9 @@ var Router = Backbone.Router.extend({
         "contacts" : "renderContactPage",
         "contact/new" : "renderAddContactPage",
 
+        "locations" : "renderLocationPage",
+        "location/new" : "renderAddLocationPage",
+
         "*default" : "defaultpage"
     },
 
@@ -258,8 +301,6 @@ var Router = Backbone.Router.extend({
       var html = "<div style=\"margin-top: 15px;\" class=\"alert alert-dismissable alert-warning\"><button type=\"button\" class=\"close\" data-dismiss=\"alert\">&times;</button><strong>Error!</strong> Unhandled route<p>No access granted for: <strong>"+ d +"</strong></p></div>";
       $("#app").html(html);
     },
-
-    // user page
     renderMainPage: function() {
       mainview.render();
       mainview.users();
@@ -275,13 +316,19 @@ var Router = Backbone.Router.extend({
       editUser.render();
       editUser.data(id);
     },
-    // contact page
     renderContactPage: function() {
       contactView.render();
     },
     renderAddContactPage: function() {
       addContact.render();
-    }
+    },
+
+    // renderLocationPage: function() {
+    //   locationView.render();
+    // },
+    // renderAddLocationPage: function() {
+    //   addLocation.render();
+    // }
     
 });
 
@@ -289,8 +336,11 @@ var mainview = new MainView();
 var addUser = new AddUser();
 var editUser = new EditUser();
 
-var contactView = new ContactView();
-var addContact = new AddContact();
+// var contactView = new ContactView();
+// var addContact = new AddContact();
+
+// var locationView = new LocationView();
+// var addLocation = new AddLocation();
 
 var router = new Router();
 Backbone.history.start();

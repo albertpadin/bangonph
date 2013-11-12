@@ -331,6 +331,14 @@ class DashboardPage(BaseHandler):
 class UserHandler(BaseHandler):
     @login_required
     def get(self):
+        delete_id = self.request.get("id_delete")
+        if delete_id:
+            user = User.get_by_id(int(delete_id))
+            if user:
+                user.key.delete()
+                self.response.out.write(simplejson.dumps({"success": True, "message": "Successfully deleted."}))
+            return
+
         self.response.out.write(simplejson.dumps(get_all_user(self.user.email)))
 
     def post(self):
@@ -354,6 +362,21 @@ class UserHandler(BaseHandler):
             temp["success"] = True
             temp["message"] = "Successfully added."
             self.response.out.write(simplejson.dumps(temp))
+
+class UserUpdateHandler(BaseHandler):
+    def put(self, *args, **kwargs):
+        body = self.request.body
+
+        if body:
+            details = simplejson.loads(body)
+            user = User.get_by_id(int(details["id"]))
+            if user:
+                user.name = details["name"]
+                user.email = details["email"]
+                user.contacts = details["contacts"]
+                user.put()
+
+                self.response.out.write(simplejson.dumps({"success":True, "message":"Successfully updated."}))
 
 class LocationHandler(BaseHandler):
     @login_required
@@ -393,6 +416,20 @@ class CentersHandler(BaseHandler):
 
         add_drop_off_centers(data)
 
+class SubscriberPage(BaseHandler):
+    @login_required
+    def get(self):
+        pass
+    def post(self):
+        distribution = distribution.key
+        if distribution:
+            data = {
+                'name': self.request.get('name'),
+                'email': self.request.get('email'),
+                'fb_id': self.request.get('fb_id'),
+                'distributor': distribution.key
+            }
+            add_subcriber(data)
 
 class ErrorHandler(BaseHandler):
     def get(self, page):
@@ -413,8 +450,12 @@ app = webapp2.WSGIApplication([
         # leonard : 
         webapp2.Route('/locations', handler=LocationHandler, name="www-locations"),
         webapp2.Route('/users', handler=UserHandler, name="www-users"),
+        webapp2.Route(r'/users/<id>', handler=UserUpdateHandler, name="www-users-update"),
         webapp2.Route('/drop-off-center', handler=CentersHandler, name="www-centers"),
+
         
+        webapp2.Route('/subscribers', handler=SubscriberPage, name="www-subscribers"),
+
         webapp2.Route(r'/<:.*>', ErrorHandler)
     ])
 ])

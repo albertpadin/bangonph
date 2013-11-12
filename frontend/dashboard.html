@@ -399,10 +399,14 @@
             %>
                 <tr class="active" data-name="<%- _.unescape(this.name) %>" data-id="<%- this.id %>">
                     <td><%- _.unescape(this.name) %></td>
-                    <td><%- _.unescape(this.contacts) %></td>
-                    <td><%- _.unescape(this.email) %></td>
-                    <td><%- _.unescape(this.facebook) %></td>
-                    <td><%- _.unescape(this.twitter) %></td>
+                    <td><%- _.unescape(this.latlong) %></td>
+                    <td><%- _.unescape(this.featured_photo) %></td>
+                    <td><%- _.unescape(this.death_count) %></td>
+                    <td><%- _.unescape(this.affected_count) %></td>
+                    <td><%- _.unescape(this.status_board) %></td>
+                    <td><%- _.unescape(this.needs) %></td>
+                    <td><%- _.unescape(this.centers) %></td>
+                    <td><%- _.unescape(this.status) %></td>
                     <td align='center'><a class="first">Edit</a> | <a class="last">Delete</a></td>
                 </tr>
             <%    
@@ -457,7 +461,118 @@
               </p>
               <p>
                 <button type="submit" class="btn btn-primary">Submit</button> 
-                <a href="#contacts" class="btn btn-default">Cancel</a> 
+                <a href="#locations" class="btn btn-default">Cancel</a> 
+                <div style="display:none" class="alert alert-dismissable alert-success success-message">
+                  <button type="button" class="close" data-dismiss="alert">&times;</button>
+                  <strong>Well done!</strong> New contact has been added.
+                </div>
+                <div style="display:none" class="alert alert-dismissable alert-danger error-message">
+                  <button type="button" class="close" data-dismiss="alert">&times;</button>
+                  <strong>Oh snap!</strong> Unable to add new contact. Try again.
+                </div>
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </form>
+  </script>
+
+
+
+
+  <script type="text/template" id="distributionsTemplate">
+  <div class="row" style="margin-top: -50px;">
+    <div class="col-lg-12">
+      <div class="bs-example table-responsive page-header" style="margin: 70px 0 21px!important; border-bottom: none!important">
+
+        <hr/>
+
+        <div style="display:none" class="alert alert-dismissable alert-success success-message">
+          <button type="button" class="close" data-dismiss="alert">&times;</button>
+          <strong>Well done!</strong> <span id="title"></span>
+        </div>
+        <div style="display:none" class="alert alert-dismissable alert-danger error-message">
+          <button type="button" class="close" data-dismiss="alert">&times;</button>
+          <strong>Oh snap!</strong> <span id="title"></span>
+        </div>
+
+        <h4>Distributions <button type="button" class="btn btn-success"><a style="color: white;" href="#distribution/new">New</a></button></h4>
+        <table id="contactsGrid" class="table table-striped table-bordered table-hover">
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>date_of_distribution</th>
+              <th>contact</th>
+              <th>destinations</th>
+              <th>supply_goal</th>
+              <th>actual_supply</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody>
+          </tbody>
+        </table>
+
+      </div>
+    </div>
+  </div>
+  </script>
+
+  <script type="text/template" id="addDistributionsTemplate">
+    <form enctype="multipart/form-data" class="bs-example form-horizontal" id="frmAddDistribution">
+      <div class="row" style="margin-top: -50px;">
+        <div class="col-lg-12">
+          <div class="page-header" style="border-bottom: none!important">
+          </div>
+          <div class="panel panel-default">
+            <div class="panel-heading">
+              <h3 class="panel-title"><strong>New Distribution</strong></h3>
+            </div>
+            <div class="panel-body">
+              <p>
+                <input type="text" id="fname" required="required" class="form-control" placeholder="Full Name">
+              </p>
+              <p>
+                <input type="date" id="date_of_distribution" required="required" class="form-control" placeholder="Date of Distribution">
+              </p>
+              <p>
+                <input type="text" id="contact" required="required" class="form-control" placeholder="Contact">
+              </p>
+              <p>
+                <input type="text" id="destinations" required="required" class="form-control" placeholder="Destinations">
+              </p>
+              <p>
+                Supply Goal
+                <select id="supply_goal" required="required" class="form-control">
+                  <option value="food">food</option>
+                  <option value="water">water</option>
+                  <option value="medicines">medicines</option>
+                  <option value="social_workers">social_workers</option>
+                  <option value="medical_workers">medical_workers</option>
+                  <option value="shelter">shelter</option>
+                  <option value="formula">formula</option>
+                  <option value="toiletries">toiletries</option>
+                  <option value="flashlights">flashlights</option>
+                </select>
+              </p>
+              <p>
+                Actual Supply
+                <select id="actual_supply" required="required" class="form-control">
+                  <option value="food">food</option>
+                  <option value="water">water</option>
+                  <option value="medicines">medicines</option>
+                  <option value="social_workers">social_workers</option>
+                  <option value="medical_workers">medical_workers</option>
+                  <option value="shelter">shelter</option>
+                  <option value="formula">formula</option>
+                  <option value="toiletries">toiletries</option>
+                  <option value="flashlights">flashlights</option>
+                </select>
+              </p>
+              <p>
+                <button type="submit" class="btn btn-primary">Submit</button> 
+                <a href="#distributions" class="btn btn-default">Cancel</a> 
                 <div style="display:none" class="alert alert-dismissable alert-success success-message">
                   <button type="button" class="close" data-dismiss="alert">&times;</button>
                   <strong>Well done!</strong> New contact has been added.

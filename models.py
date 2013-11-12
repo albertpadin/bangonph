@@ -65,14 +65,11 @@ class DropOffCenter(ndb.Model):
 class Distribution(ndb.Model):
     created = ndb.DateTimeProperty(auto_now_add=True)
     updated = ndb.DateTimeProperty(auto_now=True)
-    location = ndb.KeyProperty()
     date_of_distribution = ndb.DateTimeProperty()
     contact = ndb.KeyProperty()
     destinations = ndb.KeyProperty()
     supply_goal = ndb.JsonProperty(repeated=True)
     actual_supply = ndb.JsonProperty(repeated=True)
-    status = ndb.StringProperty(default="undelivered")
-    drop_off_centers = ndb.StringProperty(repeated=True)
 
 
     def to_object(self):

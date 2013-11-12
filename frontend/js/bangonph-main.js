@@ -352,6 +352,43 @@ var AddLocation = Backbone.View.extend({
   }
 });
 
+var DistributionView = Backbone.View.extend({
+  el: "#app",
+  template: _.template( $("#distributionsTemplate").html() ),
+  render: function() {
+    $(this.el).html( this.template() );
+  }
+});
+
+var AddDistribution = Backbone.View.extend({
+  el: "#app",
+  template: _.template( $("#addDistributionsTemplate").html() ),
+  events: {
+    "submit form#frmAddDistribution" : "addDistribution"
+  },
+  render: function() {
+    $(this.el).html( this.template() );
+  },
+  addDistribution: function() {
+    $.ajax({
+      type: "post",
+      url: "/distributions",
+      data: {
+        "name": _.escape($("#fname").val()),
+        "date_of_distribution": _.escape($("#date_of_distribution").val()),
+        "contact": _.escape($("#contact").val()),
+        "destinations": _.escape($("#destinations").val()),
+        "supply_goal": _.escape($("#supply_goal").val()),
+        "actual_supply": _.escape($("#actual_supply").val())
+      },
+      success: function() {
+        window.location.hash = "#distributions";
+      }
+    });
+    return false;
+  }
+});
+
 var Router = Backbone.Router.extend({
     routes: {
         "" : "renderMainPage",
@@ -365,6 +402,9 @@ var Router = Backbone.Router.extend({
 
         "locations" : "renderLocationPage",
         "location/new" : "renderAddLocationPage",
+
+        "distributions" : "renderDistibutionPage",
+        "distribution/new" : "renderAddDistributionPage",
 
         "*default" : "defaultpage"
     },
@@ -406,6 +446,13 @@ var Router = Backbone.Router.extend({
     },
     renderAddLocationPage: function() {
       addLocation.render();
+    },
+
+    renderDistibutionPage: function() {
+      distributionView.render();
+    },
+    renderAddDistributionPage: function() {
+      addDistribution.render();
     }
     
 });
@@ -420,6 +467,9 @@ var editContact = new EditContact();
 
 var locationView = new LocationView();
 var addLocation = new AddLocation();
+
+var distributionView = new DistributionView();
+var addDistribution = new AddDistribution();
 
 var router = new Router();
 Backbone.history.start();

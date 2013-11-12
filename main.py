@@ -369,13 +369,16 @@ class UserUpdateHandler(BaseHandler):
 
         if body:
             details = simplejson.loads(body)
-            user = User.get_by_id(int(details["id"]))
+            user = User.get_by_id(details["id"])
             if user:
-                user.name = details["name"]
-                user.email = details["email"]
-                user.contacts = details["contacts"]
-                user.put()
-
+                data = {
+                    "user": user,
+                    "name": details["name"],
+                    "email": details["email"],
+                    "contacts": details["contacts"],
+                    "permissions": details["permissions"]
+                }
+                update_user(data)
                 self.response.out.write(simplejson.dumps({"success":True, "message":"Successfully updated."}))
 
 class LocationHandler(BaseHandler):

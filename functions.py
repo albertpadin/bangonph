@@ -72,6 +72,16 @@ def get_all_user():
     return user
 
 
+def add_location(data):
+    location = Locations(id=data["name"])
+    location.name = data["name"]
+    location.goal = data["goal"]
+    location.needs = data["needs"]
+    location.centers = data["centers"]
+
+    location.put()
+
+
 
 
 

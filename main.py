@@ -332,6 +332,20 @@ class UserHandler(BaseHandler):
     @login_required
     def get(self):
         self.tv["users"] = get_all_user()
+
+
+class LocationHandler(BaseHandler):
+    @login_required
+    def get(self):
+        pass
+    def post(self):
+        data = {
+            "name": self.request.get("name"),
+            "goal": self.request.get("goal"),
+            "needs": self.request.get_all("needs"),
+            "centers": self.request.get_all("centers")
+        }
+        add_location(data)
         
 
 class ErrorHandler(BaseHandler):
@@ -351,6 +365,7 @@ app = webapp2.WSGIApplication([
         webapp2.Route('/cosmo', handler=CosmoPage, name="www-test"),
 
         # leonard : 
+        webapp2.Route('/locations', handler=LocationHandler, name="www-locations"),
         webapp2.Route('/users', handler=UserHandler, name="www-users"),
         webapp2.Route(r'/<:.*>', ErrorHandler)
     ])

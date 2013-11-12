@@ -37,7 +37,7 @@ class Location(ndb.Model):
     updated = ndb.DateTimeProperty(auto_now=True)
     name = ndb.StringProperty()
     latlong = ndb.StringProperty()
-    featured_photo = ndb.StringProperty(repeated=True)
+    featured_photo = ndb.StringProperty()
     death_count = ndb.IntegerProperty()
     affected_count = ndb.IntegerProperty()
     status_board = ndb.StringProperty()

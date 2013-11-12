@@ -334,15 +334,25 @@ var AddLocation = Backbone.View.extend({
       type: "post",
       url: "/locations",
       data: {
-        "name": _.escape($("#fname").val()),
+        "name": _.escape($("#name").val()),
         "latlong": _.escape($("#latlong").val()),
         "featured_photo": _.escape($("#featured_photo").val()),
         "death_count": _.escape($("#death_count").val()),
         "affected_count": _.escape($("#affected_count").val()),
         "status_board": _.escape($("#status_board").val()),
-        "needs": _.escape($("#needs").val()),
-        "centers": _.escape($("#centers").val()),
-        "status": _.escape($("#status").val())
+        "food": _.escape($("#food").val()),
+        "water": _.escape($("#water").val()),
+        "medicines": _.escape($("#medicines").val()),
+        "social_workers": _.escape($("#social_workers").val()),
+        "medical_workers": _.escape($("#medical_workers").val()),
+        "shelter": _.escape($("#shelter").val()),
+        "formula": _.escape($("#formula").val()),
+        "toiletries": _.escape($("#toiletries").val()),
+        "flashlights": _.escape($("#flashlights").val()),
+        "cloths": _.escape($("#cloths").val()),
+        "power": _.escape($("#power").val()),
+        "communication": _.escape($("#communication").val()),
+        "water": _.escape($("#water").val())
       },
       success: function() {
         window.location.hash = "#locations";

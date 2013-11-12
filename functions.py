@@ -1,7 +1,7 @@
 import logging
 import webapp2, jinja2, os
 import datetime
-from models import User, Contact
+from models import User, Contact, Location, Distribution, Post
 import json as simplejson
 
 from google.appengine.api import urlfetch
@@ -103,15 +103,14 @@ def update_user(data):
     return user
 
 def add_location(data):
-    location = Locations(id=data["name"])
+    location = Location()
     location.name = data["name"]
-    location.goal = data["goal"]
     location.needs = data["needs"]
     location.centers = data["centers"]
     location.latlong = data["latlong"]
     location.featured_photo = data["featured_photo"]
-    location.death_count = data["death_count"]
-    location.affected_count = data["affected_count"]
+    location.death_count = int(data["death_count"])
+    location.affected_count = int(data["affected_count"])
     location.status_board = data["status_board"]
     location.needs = data["needs"]
     location.status = data["status"]
@@ -119,6 +118,15 @@ def add_location(data):
     location.put()
     return location
 
+def add_destribution(data):
+    distribution = Distribution()
+    distribution.date_of_distribution = data["distribution"]
+    distribution.contact = data["contact"]
+    distribution.destinations = data["destinations"]
+    distribution.supply_goal = data["supply_goal"]
+    distribution.actual_supply = data["actual_supply"]
+    distribution.put()
+    return distribution
 
 def add_drop_off_centers(data):
     center = DropOffCenter(id=data["name"])
@@ -152,7 +160,7 @@ def add_post(data):
     post.email = data["email"]
     post.twitter = data["twitter"]
     post.facebook = data["facebook"]
-    post.contacts = data["contacts"]
+    post.phone = data["phone"]
     post.message = data["message"]
 
     post.put()

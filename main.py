@@ -1,6 +1,6 @@
 import webapp2, jinja2, os
 from webapp2_extras import routes
-from models import User, Contact, Location
+from models import User, Contact, Location, Post
 from functions import *
 import json as simplejson
 import logging
@@ -467,13 +467,13 @@ class LocationHandler(BaseHandler):
                 temp["affected_count"] = location.affected_count
                 temp["status_board"] = location.status_board
                 temp["needs"] = location.needs
-                temp["center"] = location.center
                 temp["status"] = location.status
                 datas.append(temp)
+            self.response.out.write(simplejson.dumps(datas))
                 
     def post(self):
         needs = {
-            "food": self.request.get("food"),
+           "food": self.request.get("food"),
             "water": self.request.get("water"),
             "medicines": self.request.get("medicines"),
             "social_workers": self.request.get("social_workers"),
@@ -482,9 +482,9 @@ class LocationHandler(BaseHandler):
             "formula": self.request.get("formula"),
             "toiletries": self.request.get("toiletries"),
             "flashlights": self.request.get("flashlights"),
-            "cloths": self.request.get("cloths")
+            "cloths": self.request.get("cloths"),
         }
-        
+
         status = {
             "power": self.request.get("power"),
             "communication": self.request.get("communication"),
@@ -493,17 +493,24 @@ class LocationHandler(BaseHandler):
 
         data = {
             "name": self.request.get("name"),
-            "needs": self.request.get_all("needs"), # json format
+            "needs": needs, # json format
             "centers": self.request.get_all("centers"),
             "latlong": self.request.get("latlong"),
             "featured_photo": self.request.get("featured_photo"),
             "death_count": self.request.get("death_count"),
             "affected_count": self.request.get("affected_count"),
             "status_board": self.request.get("status_board"),
-            "needs": needs,
             "status": status # json format
         }
         add_location(data)
+
+class DistributionHandler(BaseHandler):
+    @login_required
+    def get(self):
+        pass
+
+    def post(self):
+        pass
 
 class CentersHandler(BaseHandler):
     @login_required
@@ -543,7 +550,32 @@ class SubscriberPage(BaseHandler):
 class PostsHandler(BaseHandler):
     @login_required
     def get(self):
-        pass
+        posts = Post.query().fetch(100)
+        if posts:
+            datas = []
+            for post in posts:
+                temp = {}
+                temp["id"] = post.key.id()
+                temp["name"] = post.name
+                temp["phone"] = post.phone
+                temp["email"] = post.email
+                temp["facebook"] = post.facebook
+                temp["twitter"] = post.twitter
+                temp["message"] = post.message
+                datas.append(temp)
+            self.response.out.write(simplejson.dumps(datas))
+
+    def post(self):
+        data = {
+            "name": self.request.get("name"),
+            "email": self.request.get("email"),
+            "twitter": self.request.get("twitter"),
+            "facebook": self.request.get("facebook"),
+            "phone": self.request.get("phone"),
+            "message": self.request.get("message"),
+        }
+
+        add_post(data)
     
 
 class ErrorHandler(BaseHandler):
@@ -563,11 +595,14 @@ app = webapp2.WSGIApplication([
         webapp2.Route('/cosmo', handler=CosmoPage, name="www-test"),
 
         # leonard : 
-        webapp2.Route('/locations', handler=LocationHandler, name="www-locations"),
         webapp2.Route('/users', handler=UserHandler, name="www-users"),
+        webapp2.Route('/contacts', handler=ContactHandler, name="www-contacts"),
+        webapp2.Route('/locations', handler=LocationHandler, name="www-locations"),
+        webapp2.Route('/distributions', handler=DistributionHandler, name="www-distributions"),
+
+
         webapp2.Route('/posts', handler=PostsHandler, name="www-post"),
 
-        webapp2.Route('/contacts', handler=ContactHandler, name="www-contacts"),
         webapp2.Route('/drop-off-center', handler=CentersHandler, name="www-centers"),
 
         

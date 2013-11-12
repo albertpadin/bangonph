@@ -42,8 +42,7 @@ class Location(ndb.Model):
     affected_count = ndb.IntegerProperty()
     status_board = ndb.StringProperty()
     needs = ndb.JsonProperty()
-    centers = ndb.StringProperty(repeated=True)
-    status = ndb.JsonProperty(repeated=True)
+    status = ndb.JsonProperty()
     
 
 class DropOffCenter(ndb.Model):
@@ -101,7 +100,7 @@ class Post(ndb.Model):
     email = ndb.StringProperty()
     twitter = ndb.StringProperty()
     facebook = ndb.StringProperty()
-    contacts = ndb.StringProperty(repeated=True)
+    phone = ndb.StringProperty()
     message = ndb.TextProperty()
 
 

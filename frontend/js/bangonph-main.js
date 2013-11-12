@@ -21,7 +21,7 @@ var MainView = Backbone.View.extend({
   render: function(response) {
     var self = this;
     $(this.el).html( this.template({ users: response }) );
-    $("#contactsGrid tr[data-id]").each(function(){
+    $("#usersGrid tr[data-id]").each(function(){
       var id = $(this).attr("data-id");
       var name = $(this).attr("data-name");
       $(this).find("a.first").click(function() {
@@ -52,7 +52,7 @@ var MainView = Backbone.View.extend({
         data: { id_delete: id },
         success: function(data) {
           console.log(data.toJSON());
-          $('#contactsGrid tr[data-id="' + id + '"]').fadeOut('fast');
+          $('#usersGrid tr[data-id="' + id + '"]').fadeOut('fast');
           $(".success-message").fadeIn("fast");
           $("#title").text('"' + name + '" has been successfully deleted.');
         },
@@ -90,7 +90,7 @@ var AddUser = Backbone.View.extend({
     var collection = new UsersCollection();
     collection.create(details, {
       success: function(data) {
-        //window.location.hash = "#";
+        window.location.hash = "#users";
         console.log(data.toJSON());
         $("#fname").val("");
         $("#email").val("");
@@ -111,10 +111,65 @@ var AddUser = Backbone.View.extend({
   }
 });
 
+var EditUser = Backbone.View.extend({
+  el: "#app",
+  template: _.template( $("#editUserTemplate").html() ),
+  initialize: function() {
+    _.bindAll(this, "render", "data");
+  },
+  events: {
+    'submit form#frmEdit' : 'editUser'
+  },
+  render: function(response) {
+    $(this.el).html( this.template({ user: response }) );
+  },
+  data: function(id) {
+    var self = this;
+    var collection = new UsersCollection();
+    collection.fetch({
+      data: { id_edit: id },
+      success: function(data) {
+        self.render(data.toJSON());
+      }
+    });
+  },
+  editUser: function() {
+    var id = $("#id").val();
+    var fname = $("#fname").val();
+    var email = $("#email").val();
+    var contacts = $("#contacts").val();
+
+    var details = {
+      id: id,
+      name: _.escape(fname),
+      email: _.escape(email),
+      contacts: _.escape(contacts)
+    };
+
+    var collection = new UsersCollection();
+    collection.create(details, {
+      success: function(data) {
+        window.location.hash = "#users";
+        console.log(data.toJSON());
+        $(".success-message").fadeIn("fast");
+
+        setTimeout(function() {
+          $(".success-message").fadeOut("fast");
+        }, 2000);
+      },
+      error: function(data) {
+        console.log(data.toJSON());
+        $(".error-message").fadeIn("fast");
+      }
+    });
+    return false;
+  }
+});
+
 var Router = Backbone.Router.extend({
     routes: {
         "" : "renderMainPage",
-        "users" : "renderMainPage",
+        "users" : "renderUserPage",
         "user/new" : "renderAddUserPage",
         "user/edit/:id" : "renderEditUserPage",
         "*default" : "defaultpage"
@@ -130,17 +185,24 @@ var Router = Backbone.Router.extend({
       mainview.users();
     },
 
+    renderUserPage: function() {
+      mainview.render();
+      mainview.users();
+    },
+
     renderAddUserPage: function() {
       addUser.render();
     },
 
     renderEditUserPage: function(id) {
-      console.log(id);
+      editUser.render();
+      editUser.data(id);
     }
     
 });
 
 var mainview = new MainView();
 var addUser = new AddUser();
+var editUser = new EditUser();
 var router = new Router();
 Backbone.history.start();

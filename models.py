@@ -50,6 +50,7 @@ class DropOffCenter(ndb.Model):
 
     created = ndb.DateTimeProperty(auto_now_add=True)
     updated = ndb.DateTimeProperty(auto_now=True)
+    name = ndb.StringProperty()
     drop_off_locations = ndb.StringProperty(repeated=True)
     distributor = ndb.StringProperty(repeated=True)
     address = ndb.StringProperty(repeated=True)
@@ -95,6 +96,21 @@ class Contact(ndb.Model):
     email = ndb.StringProperty()
     facebook = ndb.StringProperty()
     twitter = ndb.StringProperty()
+
+
+class Post(ndb.Model):
+    created = ndb.DateTimeProperty(auto_now_add=True)
+    updated = ndb.DateTimeProperty(auto_now=True)
+    name = ndb.StringProperty()
+    email = ndb.StringProperty()
+    twitter = ndb.StringProperty()
+    facebook = ndb.StringProperty()
+    contacts = ndb.StringProperty(repeated=True)
+    message = ndb.TextProperty()
+
+
+
+
 
 
 

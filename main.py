@@ -434,6 +434,12 @@ class SubscriberPage(BaseHandler):
             }
             add_subcriber(data)
 
+class PostsHandler(BaseHandler):
+    @login_required
+    def get(self):
+        pass
+    
+
 class ErrorHandler(BaseHandler):
     def get(self, page):
         logging.critical("This route is not handled.")
@@ -453,6 +459,7 @@ app = webapp2.WSGIApplication([
         # leonard : 
         webapp2.Route('/locations', handler=LocationHandler, name="www-locations"),
         webapp2.Route('/users', handler=UserHandler, name="www-users"),
+        webapp2.Route('/posts', handler=PostsHandler, name="www-post"),
         webapp2.Route(r'/users/<id>', handler=UserUpdateHandler, name="www-users-update"),
         webapp2.Route('/drop-off-center', handler=CentersHandler, name="www-centers"),
 

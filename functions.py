@@ -1,7 +1,7 @@
 import logging
 import webapp2, jinja2, os
 import datetime
-from models import User
+from models import *
 import json as simplejson
 
 from google.appengine.api import urlfetch
@@ -121,8 +121,9 @@ def add_location(data):
 
 
 def add_drop_off_centers(data):
-    center = DropOffCenter()
+    center = DropOffCenter(id=data["name"])
     center.drop_off_locations = data["drop_off_locations"]
+    center.name = data["name"]
     center.distributor = data["distributor"]
     center.address = data["address"]
     center.latlong = data["latlong"]
@@ -146,6 +147,19 @@ def add_subcriber(data):
     subscriber.put()
     
     return subscriber
+
+
+def add_post(data):
+    post = Post()
+    post.name = data["name"]
+    post.email = data["email"]
+    post.twitter = data["twitter"]
+    post.facebook = data["facebook"]
+    post.contacts = data["contacts"]
+    post.message = data["message"]
+
+    post.put()
+    return post
     
 
 

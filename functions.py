@@ -83,8 +83,19 @@ def get_all_user(data):
 def add_user(data):
     user = User(id=data["email"])
     user.password = data["password"]
+    user.email = data["email"]
     user.name = data["name"]
     user.contacts = data["contacts"]
+    user.permissions = data["permissions"]
+
+    user.put()
+    return user
+
+def update_user(data):
+    user = data["user"]
+    user.name = data["name"]
+    user.contacts = data["contacts"]
+    user.email = data["email"]
     user.permissions = data["permissions"]
 
     user.put()

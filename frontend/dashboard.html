@@ -159,8 +159,17 @@
                   <p>
                     <input type="email" id="email" class="form-control" required="required" placeholder="Email" value="<%- _.unescape(this.email) %>">
                   </p>
+
                   <p>
                     <input type="text" id="contacts" class="form-control" required="required" placeholder="Contacts" value="<%- _.unescape(this.contacts) %>">
+                  </p>
+
+                  <p>
+                    <select id="permissions" name="permissions">
+                      <option value="coordinator">Coordinator</option>
+                      <option value="developer">Developer</option>
+                      <option value="symph">Symph</option>
+                    </select>
                   </p>
                   <p>
                     <button type="submit" class="btn btn-primary">Submit</button> 

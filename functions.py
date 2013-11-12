@@ -1,7 +1,7 @@
 import logging
 import webapp2, jinja2, os
 import datetime
-from models import *
+from models import User
 import json as simplejson
 
 from google.appengine.api import urlfetch
@@ -83,19 +83,8 @@ def get_all_user(data):
 def add_user(data):
     user = User(id=data["email"])
     user.password = data["password"]
-    user.email = data["email"]
     user.name = data["name"]
     user.contacts = data["contacts"]
-    user.permissions = data["permissions"]
-
-    user.put()
-    return user
-
-def update_user(data):
-    user = data["user"]
-    user.name = data["name"]
-    user.contacts = data["contacts"]
-    user.email = data["email"]
     user.permissions = data["permissions"]
 
     user.put()
@@ -121,9 +110,8 @@ def add_location(data):
 
 
 def add_drop_off_centers(data):
-    center = DropOffCenter(id=data["name"])
+    center = DropOffCenter()
     center.drop_off_locations = data["drop_off_locations"]
-    center.name = data["name"]
     center.distributor = data["distributor"]
     center.address = data["address"]
     center.latlong = data["latlong"]
@@ -145,25 +133,13 @@ def add_subcriber(data):
     subscriber.distribution = data["distribution"]
 
     subscriber.put()
-    
     return subscriber
-
-
-def add_post(data):
-    post = Post()
-    post.name = data["name"]
-    post.email = data["email"]
-    post.twitter = data["twitter"]
-    post.facebook = data["facebook"]
-    post.contacts = data["contacts"]
-    post.message = data["message"]
-
-    post.put()
-    return post
     
+def log_trail(data):
+    log = LogActivity()
+    log.user = data["user"]
+    log.previous_values = data["previous_values"]
+    log.new_values = data["new_values"]
 
-
-
-
-
-
+    log.put()
+    return log

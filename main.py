@@ -375,6 +375,20 @@ class CentersHandler(BaseHandler):
         }
         add_centers(data)
 
+class SubscriberPage(BaseHandler):
+    @login_required
+    def get(self):
+        pass
+    def post(self):
+        distribution = distribution.key
+        if distribution:
+            data = {
+                'name': self.request.get('name')
+                'email': self.request.get('email')
+                'fb_id': self.request.get('fb_id')
+                'distributor': distribution.key
+            }
+            add_subcriber(data)
 
 class ErrorHandler(BaseHandler):
     def get(self, page):
@@ -396,7 +410,10 @@ app = webapp2.WSGIApplication([
         webapp2.Route('/locations', handler=LocationHandler, name="www-locations"),
         webapp2.Route('/users', handler=UserHandler, name="www-users"),
         webapp2.Route('/drop-off-center', handler=CentersHandler, name="www-centers"),
+
         
+        webapp2.Route('/subscribers', handler=SubscriberPage, name="www-subscribers"),
+
         webapp2.Route(r'/<:.*>', ErrorHandler)
     ])
 ])

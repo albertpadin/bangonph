@@ -64,7 +64,7 @@ def send_reset_password_email(user, token):
         return True
     else:
         return False
-
+        
 
 def get_all_user(data):
     users = User.query(User.email != data).fetch(100)
@@ -116,6 +116,18 @@ def add_centers(data):
 
     center.put()
     return center
+
+def add_subcriber(data):
+    subscriber = Subscriber()
+    subscriber.name = data["name"]
+    subscriber.email = data["email"]
+    subscriber.fb_id = data["fb_id"]
+    subscriber.distribution = data["distribution"]
+
+    subscriber.put()
+    
+    return subscriber
+    
 
 
 

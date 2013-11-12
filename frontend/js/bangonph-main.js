@@ -427,6 +427,45 @@ var AddDistributor = Backbone.View.extend({
   }
 });
 
+var DropOffCenterView = Backbone.View.extend({
+  el: "#app",
+  template: _.template( $("#drop-off-centersTemplate").html() ),
+  render: function() {
+    $(this.el).html( this.template() );
+  }
+});
+
+var AddDropOffCenter = Backbone.View.extend({
+  el: "#app",
+  template: _.template( $("#addDrop-off-centersTemplate").html() ),
+  events: {
+    "submit form#frmAddDropOffCenter" : "addDropOff"
+  },
+  render: function() {
+    $(this.el).html( this.template() );
+  },
+  addDropOff: function() {
+    $.ajax({
+      type: "post",
+      url: "/drop-off-centers",
+      data: {
+        "name" : _.escape($("#fname").val()),
+        "latlong" : _.escape($("#latlong").val()),
+        "destinations" : _.escape($("#destinations").val()),
+        "schedule" : _.escape($("#schedule").val()),
+        "twitter" : _.escape($("#twitter").val()),
+        "facebook" : _.escape($("#facebook").val()),
+        "phone" : _.escape($("#phone").val()),
+        "email" : _.escape($("#email").val()),
+      },
+      success: function() {
+        window.location.hash = "#drop-off-centers";
+      }
+    });
+    return false;
+  }
+});
+
 var Router = Backbone.Router.extend({
     routes: {
         "" : "renderMainPage",
@@ -446,6 +485,9 @@ var Router = Backbone.Router.extend({
 
         "distributors" : "renderDistributorPage",
         "distributor/new" : "renderAddDistributorPage",
+
+        "drop-off-centers" : "renderDropOffCenterPage",
+        "drop-off-center/new" : "renderAddDropOffCenterPage",
 
         "*default" : "defaultpage"
     },
@@ -501,6 +543,13 @@ var Router = Backbone.Router.extend({
     },
     renderAddDistributorPage: function() {
       addDistributor.render();
+    },
+
+    renderDropOffCenterPage: function() {
+      dropOffCenterView.render();
+    },
+    renderAddDropOffCenterPage: function() {
+      addDropOffCenter.render();
     }
     
 });
@@ -521,6 +570,9 @@ var addDistribution = new AddDistribution();
 
 var distributorView = new DistributorView();
 var addDistributor = new AddDistributor();
+
+var dropOffCenterView = new DropOffCenterView();
+var addDropOffCenter = new AddDropOffCenter();
 
 var router = new Router();
 Backbone.history.start();

@@ -8,6 +8,7 @@ class User(ndb.Model):
     email = ndb.StringProperty()
     password = ndb.StringProperty()
     name = ndb.StringProperty()
+    contacts = ndb.StringProperty()
     
     def to_object(self):
         details = {}
@@ -37,7 +38,7 @@ class Locations(ndb.Model):
 class DropOfCenters(ndb.Model):
     created = ndb.DateTimeProperty(auto_now_add=True)
     updated = ndb.DateTimeProperty(auto_now=True)
-    locations = ndb.StringProperty(repeated=True)
+    drop_of_locations = ndb.StringProperty(repeated=True)
     distributor = ndb.StringProperty(repeated=True)
     address = ndb.StringProperty(repeated=True)
 

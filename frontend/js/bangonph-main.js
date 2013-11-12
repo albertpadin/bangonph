@@ -26,10 +26,10 @@ var MainView = Backbone.View.extend({
       var id = $(this).attr("data-id");
       var name = $(this).attr("data-name");
       $(this).find("a.first").click(function() {
-        self.editContact(id);
+        self.editUser(id);
       });
       $(this).find("a.last").click(function() {
-        self.deleteContact(id, name);
+        self.deleteUser(id, name);
       });
     });
   },
@@ -42,17 +42,16 @@ var MainView = Backbone.View.extend({
       }
     });
   },
-  editContact: function(id) {
+  editUser: function(id) {
     var route = new Router();
     route.navigate("user/edit/" + id, {trigger: true});
   },
-  deleteContact: function(id, name) {
+  deleteUser: function(id, name) {
     if (confirm("Are you sure to delete?")) {
       var collection = new UsersCollection();
       collection.fetch({
         data: { id_delete: id },
         success: function(data) {
-          console.log(data.toJSON());
           $('#usersGrid tr[data-id="' + id + '"]').fadeOut('fast');
           $(".error-message").hide();
           $(".success-message").fadeIn("fast");
@@ -72,7 +71,7 @@ var AddUser = Backbone.View.extend({
   el: "#app",
   template: _.template( $("#addUserTemplate").html() ),
   events: {
-    'submit form#frmAdd': 'addUser'
+    'submit form#frmAddUser': 'addUser'
   }, 
   render: function() {
     $(this.el).html( this.template );
@@ -109,7 +108,7 @@ var EditUser = Backbone.View.extend({
     _.bindAll(this, "render", "data");
   },
   events: {
-    'submit form#frmEdit' : 'editUser'
+    'submit form#frmEditUser' : 'editUser'
   },
   render: function(response) {
     $(this.el).html( this.template({ user: response }) );
@@ -167,6 +166,15 @@ var ContactView = Backbone.View.extend({
   render: function(response) {
     var self = this;
     $(this.el).html( this.template({ contacts: response }) );
+    $("#contactsGrid tr[data-id]").each(function(){
+      var id = $(this).attr("data-id");
+      $(this).find("a.first").click(function() {
+        self.editContact(id);
+      });
+      $(this).find("a.last").click(function() {
+        self.deleteContact(id);
+      });
+    });
   },
   contacts: function() {
     var self = this;
@@ -176,6 +184,29 @@ var ContactView = Backbone.View.extend({
         self.render(datas.toJSON());
       }
     });
+  },
+  editContact: function(id) {
+    var route = new Router();
+    route.navigate("contact/edit/" + id, {trigger: true});
+  },
+  deleteContact: function(id) {
+    if (confirm("Are you sure to delete?")) {
+      var collection = new ContactsCollection();
+      collection.fetch({
+        data: { id_delete: id },
+        success: function(data) {
+          $('#contactsGrid tr[data-id="' + id + '"]').fadeOut('fast');
+          $(".error-message").hide();
+          $(".success-message").fadeIn("fast");
+          $("#title").text('Successfully deleted.');
+        },
+        error: function() {
+          $(".success-message").hide();
+          $(".error-message").fadeIn("fast");
+          $("#title").text('Unable to delete. Try again.');
+        }
+      });
+    }
   }
 });
 
@@ -183,34 +214,66 @@ var AddContact = Backbone.View.extend({
   el: "#app",
   template: _.template( $("#addContactTemplate").html() ),
   events: {
-    'submit form#frmAdd': 'add'
+    'submit form#frmAddContact': 'addContact'
   }, 
   render: function() {
     $(this.el).html( this.template );
   },
-  add: function() {
-    var fname = $("#fname").val();
-    var contacts = $("#contacts").val();
-    var email = $("#email").val();
-    var facebook = $("#facebook").val();
-    var twitter = $("#twitter").val();
-
-    var details = {
-      name: _.escape(fname),
-      contacts: _.escape(contacts),
-      email: _.escape(email),
-      facebook: _.escape(facebook),
-      twitter: _.escape(twitter)
-    };
-
-    var contactsCollection = new ContactsCollection();
-    contactsCollection.create(details, {
-      success: function(data) {
-        window.location.hash = "#contacts";
-        console.log(data.toJSON());
+  addContact: function() {
+    $.ajax({
+      type: "post",
+      url: "/contacts",
+      data: {
+        "name" : _.escape($("#fname").val()),
+        "contacts" : _.escape($("#contacts").val()),
+        "email" : _.escape($("#email").val()),
+        "facebook" : _.escape($("#facebook").val()),
+        "twitter" : _.escape($("#twitter").val())
       },
-      error: function(data) {
-        console.log(data.toJSON());
+      success: function(datas) {
+        window.location = "#contacts";
+      }
+    });
+    return false;
+  }
+});
+
+var EditContact = Backbone.View.extend({
+  el: "#app",
+  template: _.template( $("#editContactTemplate").html() ),
+  initialize: function() {
+    _.bindAll(this, "render", "data");
+  },
+  events: {
+    'submit form#frmEditContact' : 'editContact'
+  },
+  render: function(response) {
+    $(this.el).html( this.template({ contact: response }) );
+  },
+  data: function(id) {
+    var self = this;
+    var contactsCollection = new ContactsCollection();
+    contactsCollection.fetch({
+      data: { id_edit: id },
+      success: function(datas) {
+        self.render(datas.toJSON());
+      }
+    });
+  },
+  editContact: function() {
+    $.ajax({
+      type: "post",
+      url: "/contacts",
+      data: {
+        "id" : _.escape($("#id").val()),
+        "name" : _.escape($("#fname").val()),
+        "contacts" : _.escape($("#contacts").val()),
+        "email" : _.escape($("#email").val()),
+        "facebook" : _.escape($("#facebook").val()),
+        "twitter" : _.escape($("#twitter").val())
+      },
+      success: function(datas) {
+        window.location = "#contacts";
       }
     });
     return false;
@@ -290,6 +353,7 @@ var Router = Backbone.Router.extend({
 
         "contacts" : "renderContactPage",
         "contact/new" : "renderAddContactPage",
+        "contact/edit/:id" : "renderEditContactPage",
 
         "locations" : "renderLocationPage",
         "location/new" : "renderAddLocationPage",
@@ -318,10 +382,15 @@ var Router = Backbone.Router.extend({
     },
     renderContactPage: function() {
       contactView.render();
+      contactView.contacts();
     },
     renderAddContactPage: function() {
       addContact.render();
     },
+    renderEditContactPage: function(id) {
+      editContact.render();
+      editContact.data(id);
+    }
 
     // renderLocationPage: function() {
     //   locationView.render();
@@ -336,8 +405,9 @@ var mainview = new MainView();
 var addUser = new AddUser();
 var editUser = new EditUser();
 
-// var contactView = new ContactView();
-// var addContact = new AddContact();
+var contactView = new ContactView();
+var addContact = new AddContact();
+var editContact = new EditContact();
 
 // var locationView = new LocationView();
 // var addLocation = new AddLocation();

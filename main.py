@@ -1,6 +1,6 @@
 import webapp2, jinja2, os
 from webapp2_extras import routes
-from models import User
+from models import User, Contact
 from functions import *
 import json as simplejson
 import logging
@@ -376,34 +376,80 @@ class UserHandler(BaseHandler):
 
 class ContactHandler(BaseHandler):
     @login_required
+    def get(self):
+        edit_id = self.request.get("id_edit")
+        if edit_id:
+            contact = Contact.get_by_id(int(edit_id))
+            if contact:
+                temp = {}
+                temp["id"] = contact.key.id()
+                temp["name"] = contact.name
+                temp["contacts"] = contact.contacts
+                temp["email"] = contact.email
+                temp["facebook"] = contact.facebook
+                temp["twitter"] = contact.twitter
+                self.response.out.write(simplejson.dumps(temp))
+            return
+
+        delete_id = self.request.get("id_delete")
+        if delete_id:
+            contact = Contact.get_by_id(int(delete_id))
+            if contact:
+                contact.key.delete()
+                self.response.out.write(simplejson.dumps({"success": True, "message": "Successfully deleted."}))
+            return
+
+        contacts = Contact.query().fetch(100)
+        if contacts:
+            datas = []
+            for contact in contacts:
+                temp = {}
+                temp["id"] = contact.key.id()
+                temp["name"] = contact.name
+                temp["contacts"] = contact.contacts
+                temp["email"] = contact.email
+                temp["facebook"] = contact.facebook
+                temp["twitter"] = contact.twitter
+                datas.append(temp)
+            self.response.out.write(simplejson.dumps(datas))
+
     def post(self):
-        body = self.request.body
-        details = simplejson.loads(body)
-        logging.critical(body)
-        contacts = ""
+        if self.request.get("id"):
+            contact = Contact.get_by_id(int(self.request.get("id")))
+            if contact:
+                contacts = ""
 
-        if details["contacts"]:
-            if ", " in details["contacts"]:
-                contacts = details["contacts"].split(", ")
-            else:
-                contacts = [details["contacts"]]
+                if self.request.get("contacts"):
+                    if ", " in self.request.get("contacts"):
+                        contacts = self.request.get("contacts").split(", ")
+                    else:
+                        contacts = [self.request.get("contacts")]
+
+                contact.name = self.request.get("name")
+                contact.contacts = contacts
+                contact.email = self.request.get("email")
+                contact.facebook = self.request.get("facebook")
+                contact.twitter = self.request.get("twitter")
+                contact.put()
+        else:
+            contacts = ""
+
+            if self.request.get("contacts"):
+                if ", " in self.request.get("contacts"):
+                    contacts = self.request.get("contacts").split(", ")
+                else:
+                    contacts = [self.request.get("contacts")]
 
 
-        data = {
-            "name": details["name"],
-            "email": details["email"],
-            "twitter": details["twitter"],
-            "facebook": details["facebook"],
-            "contacts": contacts,
-        }
+            data = {
+                "name": self.request.get("name"),
+                "email": self.request.get("email"),
+                "twitter": self.request.get("twitter"),
+                "facebook": self.request.get("facebook"),
+                "contacts": contacts,
+            }
 
-        add_contact(data)
-        temp = {}
-        temp["success"] = True
-        temp["message"] = "Successfully added."
-        self.response.out.write(simplejson.dumps(temp))
-
-
+            add_contact(data)
 
 class LocationHandler(BaseHandler):
     @login_required

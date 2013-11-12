@@ -11,6 +11,7 @@ import datetime
 import hashlib
 import base64
 import facebook
+from oauth_models import Client
 
 from google.appengine.api import urlfetch
 
@@ -78,7 +79,7 @@ class BaseHandler(webapp2.RequestHandler):
 
         self.session = self.get_session()
         self.user = self.get_current_user()
-        
+
 
     def render(self, template_path=None, force=False):
         self.tv["current_timestamp"] = time.mktime(self.now.timetuple())
@@ -218,37 +219,69 @@ class Logout(BaseHandler):
 
 
 class LoginPage(BaseHandler):
-    def post(self):
-        temp = {}
-        body = self.request.body
-        if body:
-            details = simplejson.loads(body)
+    def get(self):
+        if self.request.get("id") and self.request.get("redirect"):
+            self.tv["id"] = self.request.get("id")
+            self.tv["redirect"] = self.request.get("redirect")
+            self.render('frontend/remote-login.html')
+        else:
+            self.redirect(self.uri_for('www-front'))
 
-            if details["email"] and details["password"]:
-                user = User.get_by_id(details["email"])
+    def post(self):
+        if self.request.get("id") and self.request.get("redirect"):
+            client_id = self.request.get("id")
+            redirect = self.request.get("redirect")
+            if self.request.get("email") and self.request.get("password"):
+                email = self.request.get("email")
+                password = self.request.get("password")
+                user = User.get_by_id(email)
 
                 if not user:
-                    if details["email"] == "admin@sym.ph" and details["password"] == "1234567890asd":
-                        user = User(id=details["email"])
-                        user.email = details["email"]
-                        user.name = "symph admin"
-                        user.password = hash_password(details["email"], details["password"])
-                        user.put()
+                    self.redirect('/login?id=' + client_id + '&redirect=' + redirect)
+                    return
+
+                logging.info("asdasdasd")
+                if user.password == hash_password(email, password):
+                    from oauth import AuthorizationProvider as provider
+                    self.provider = provider()
+                    response = self.provider.get_authorization_code(client_id, email, redirect)
+                    if response.status_code == 200:
+                        self.redirect(response.headers['Location'])
+                    else:
+                        pass
+                else:
+                    pass
+        else:
+            temp = {}
+            body = self.request.body
+            if body:
+                details = simplejson.loads(body)
+
+                if details["email"] and details["password"]:
+                    user = User.get_by_id(details["email"])
+
+                    if not user:
+                        if details["email"] == "admin@sym.ph" and details["password"] == "1234567890asd":
+                            user = User(id=details["email"])
+                            user.email = details["email"]
+                            user.name = "symph admin"
+                            user.password = hash_password(details["email"], details["password"])
+                            user.put()
+                        else:
+                            temp["success"] = False
+                            temp["message"] = "User not found. Please try another email or register."
+                            self.response.out.write(simplejson.dumps(temp))
+                            return
+
+                    if user.password == hash_password(details["email"], details["password"]):
+                        self.login(user)
+                        temp["success"] = True
+                        temp["message"] = "User authenticated!"
+                        self.response.out.write(simplejson.dumps(temp))
                     else:
                         temp["success"] = False
-                        temp["message"] = "User not found. Please try another email or register."
+                        temp["message"] = "Wrong password. Please try again."
                         self.response.out.write(simplejson.dumps(temp))
-                        return
-
-                if user.password == hash_password(details["email"], details["password"]):
-                    self.login(user)
-                    temp["success"] = True
-                    temp["message"] = "User authenticated!"
-                    self.response.out.write(simplejson.dumps(temp))
-                else:
-                    temp["success"] = False
-                    temp["message"] = "Wrong password. Please try again."
-                    self.response.out.write(simplejson.dumps(temp))
 
 class RegisterPage(BaseHandler):
     def get(self):
@@ -469,8 +502,12 @@ class LocationHandler(BaseHandler):
                 temp["needs"] = location.needs
                 temp["status"] = location.status
                 datas.append(temp)
+<<<<<<< Updated upstream
             self.response.out.write(simplejson.dumps(datas))
                 
+=======
+
+>>>>>>> Stashed changes
     def post(self):
         needs = {
            "food": self.request.get("food"),
@@ -550,6 +587,7 @@ class SubscriberPage(BaseHandler):
 class PostsHandler(BaseHandler):
     @login_required
     def get(self):
+<<<<<<< Updated upstream
         posts = Post.query().fetch(100)
         if posts:
             datas = []
@@ -577,6 +615,28 @@ class PostsHandler(BaseHandler):
 
         add_post(data)
     
+=======
+        pass
+
+class GetAuthorizationCode(BaseHandler):
+    def post(self):
+        from oauth import AuthorizationProvider as provider
+        self.provider = provider()
+        if self.request.body:
+            body = simplejson.loads(self.request.body)
+            response = self.provider.get_authorization_code(body['client_id'], body['user_id'], body['redirect_url'])
+
+            self.response.headers.update(response.headers)
+            self.response.out.write(response.content)
+            # self.response.out = response.raw
+
+
+# for testing purposes only
+class sampler(BaseHandler):
+    def get(self):
+        pass
+
+>>>>>>> Stashed changes
 
 class ErrorHandler(BaseHandler):
     def get(self, page):
@@ -585,7 +645,7 @@ class ErrorHandler(BaseHandler):
 site_domain = SETTINGS["site_domain"].replace(".","\.")
 
 app = webapp2.WSGIApplication([
-    routes.DomainRoute(r'<:addressbook-backbone\.appspot\.com|localhost>', [
+    routes.DomainRoute(r'<:gcdc2013-bangonph\.appspot\.com|localhost|www\.bangonph\.com>', [
         webapp2.Route('/', handler=FrontPage, name="www-front"),
         webapp2.Route('/register', handler=RegisterPage, name="www-register"),
         webapp2.Route('/logout', handler=Logout, name="www-logout"),
@@ -594,7 +654,12 @@ app = webapp2.WSGIApplication([
         webapp2.Route('/dashboard', handler=DashboardPage, name="www-dashboard"),
         webapp2.Route('/cosmo', handler=CosmoPage, name="www-test"),
 
+<<<<<<< Updated upstream
         # leonard : 
+=======
+        # leonard gwapo:
+        webapp2.Route('/locations', handler=LocationHandler, name="www-locations"),
+>>>>>>> Stashed changes
         webapp2.Route('/users', handler=UserHandler, name="www-users"),
         webapp2.Route('/contacts', handler=ContactHandler, name="www-contacts"),
         webapp2.Route('/locations', handler=LocationHandler, name="www-locations"),
@@ -605,8 +670,67 @@ app = webapp2.WSGIApplication([
 
         webapp2.Route('/drop-off-center', handler=CentersHandler, name="www-centers"),
 
-        
+
         webapp2.Route('/subscribers', handler=SubscriberPage, name="www-subscribers"),
+
+
+        # richmond:
+        webapp2.Route('/get_authorization_code', handler=GetAuthorizationCode, name="www-get-authorization-code"),
+        webapp2.Route('/s', handler=sampler, name="www-get-authorization-code"),
+
+        webapp2.Route(r'/<:.*>', ErrorHandler)
+    ]),
+    routes.DomainRoute('admin.bangonph.com', [
+        webapp2.Route('/', handler=FrontPage, name="www-front"),
+        webapp2.Route('/register', handler=RegisterPage, name="www-register"),
+        webapp2.Route('/logout', handler=Logout, name="www-logout"),
+        webapp2.Route('/login', handler=LoginPage, name="www-login"),
+        webapp2.Route('/fblogin', handler=FBLoginPage, name="www-fblogin"),
+        webapp2.Route('/dashboard', handler=DashboardPage, name="www-dashboard"),
+        webapp2.Route('/cosmo', handler=CosmoPage, name="www-test"),
+
+        # leonard gwapo:
+        webapp2.Route('/locations', handler=LocationHandler, name="www-locations"),
+        webapp2.Route('/users', handler=UserHandler, name="www-users"),
+        webapp2.Route('/posts', handler=PostsHandler, name="www-post"),
+
+        webapp2.Route('/contacts', handler=ContactHandler, name="www-contacts"),
+        webapp2.Route('/drop-off-center', handler=CentersHandler, name="www-centers"),
+
+
+        webapp2.Route('/subscribers', handler=SubscriberPage, name="www-subscribers"),
+
+
+        # richmond:
+        webapp2.Route('/get_authorization_code', handler=GetAuthorizationCode, name="www-get-authorization-code"),
+        webapp2.Route('/s', handler=sampler, name="www-get-authorization-code"),
+
+        webapp2.Route(r'/<:.*>', ErrorHandler)
+    ]),
+    routes.DomainRoute('api.bangonph.com', [
+        webapp2.Route('/', handler=FrontPage, name="www-front"),
+        webapp2.Route('/register', handler=RegisterPage, name="www-register"),
+        webapp2.Route('/logout', handler=Logout, name="www-logout"),
+        webapp2.Route('/login', handler=LoginPage, name="www-login"),
+        webapp2.Route('/fblogin', handler=FBLoginPage, name="www-fblogin"),
+        webapp2.Route('/dashboard', handler=DashboardPage, name="www-dashboard"),
+        webapp2.Route('/cosmo', handler=CosmoPage, name="www-test"),
+
+        # leonard gwapo:
+        webapp2.Route('/locations', handler=LocationHandler, name="www-locations"),
+        webapp2.Route('/users', handler=UserHandler, name="www-users"),
+        webapp2.Route('/posts', handler=PostsHandler, name="www-post"),
+
+        webapp2.Route('/contacts', handler=ContactHandler, name="www-contacts"),
+        webapp2.Route('/drop-off-center', handler=CentersHandler, name="www-centers"),
+
+
+        webapp2.Route('/subscribers', handler=SubscriberPage, name="www-subscribers"),
+
+
+        # richmond:
+        webapp2.Route('/get_authorization_code', handler=GetAuthorizationCode, name="www-get-authorization-code"),
+        webapp2.Route('/s', handler=sampler, name="www-get-authorization-code"),
 
         webapp2.Route(r'/<:.*>', ErrorHandler)
     ])

@@ -80,19 +80,37 @@ def get_all_user(data):
 
         return datas
 
+def add_user(data):
+    user = User(data["email"])
+    user.password = data["password"]
+    user.name = data["name"]
+    user.contacts = data["contacts"]
+    user.permissions = data["permissions"]
+
+    user.put()
+    return user
+
+
 def add_location(data):
     location = Locations(id=data["name"])
     location.name = data["name"]
     location.goal = data["goal"]
     location.needs = data["needs"]
     location.centers = data["centers"]
-
+    location.latlong = data["latlong"]
+    location.featured_photo = data["featured_photo"]
+    location.death_count = data["death_count"]
+    location.affected_count = data["affected_count"]
+    location.status_board = data["status_board"]
+    location.needs = data["needs"]
+    location.status = data["status"]
+    
     location.put()
     return location
 
 def add_centers(data):
     center = DropOfCenters()
-    center.drop_of_locations = data["locations"]
+    center.drop_off_locations = data["locations"]
     center.distributor = data["distributor"]
     center.address = data["address"]
 

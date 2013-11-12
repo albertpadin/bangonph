@@ -369,7 +369,7 @@ class CentersHandler(BaseHandler):
         pass
     def post(self):
         data = {
-            "drop_of_locations": self.request.get("drop_of_locations"),
+            "drop_off_locations": self.request.get("drop_of_locations"),
             "distributor": self.request.get("distributor"),
             "address": self.request.get("address")
         }

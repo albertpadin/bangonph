@@ -64,8 +64,7 @@ def send_reset_password_email(user, token):
         return True
     else:
         return False
-add_subcriber
-
+        
 
 def get_all_user(data):
     users = User.query(User.email != data).fetch(100)

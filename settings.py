@@ -1,7 +1,7 @@
 SETTINGS = {
     "app_id": "app_id_goes_here",
     "site_domain": "www.example.com",
-    "site_name": "Address Book",
+    "site_name": "Bangon PH",
     "start_year": 2012,
     "enable_fb_login": True,
     "fb_id": "",

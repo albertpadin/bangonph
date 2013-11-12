@@ -345,11 +345,15 @@ app = webapp2.WSGIApplication([
         webapp2.Route('/', handler=FrontPage, name="www-front"),
         webapp2.Route('/register', handler=RegisterPage, name="www-register"),
         webapp2.Route('/logout', handler=Logout, name="www-logout"),
-        webapp2.Route('/users', handler=UserHandler, name="www-users"),
         webapp2.Route('/login', handler=LoginPage, name="www-login"),
         webapp2.Route('/fblogin', handler=FBLoginPage, name="www-fblogin"),
         webapp2.Route('/dashboard', handler=DashboardPage, name="www-dashboard"),
         webapp2.Route('/cosmo', handler=CosmoPage, name="www-test"),
+
+        # leonard : 
+        webapp2.Route('/users', handler=UserHandler, name="www-users"),
         webapp2.Route(r'/<:.*>', ErrorHandler)
     ])
 ])
+
+

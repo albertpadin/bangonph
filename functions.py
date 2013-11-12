@@ -76,6 +76,7 @@ def get_all_user(data):
             temp["name"] = user.name
             temp["email"] = user.email
             temp["contacts"] = user.contacts
+            temp["permissions"] = user.permissions
             datas.append(temp)
 
         return datas
@@ -156,6 +157,18 @@ def add_post(data):
 
     post.put()
     return post
+
+def add_contact(data):
+    contact = Contact(id=data["name"])
+    contact.name = data["name"]
+    contact.contacts = data["contacts"]
+    contact.email = data["email"]
+    contact.facebook = data["facebook"]
+    contact.twitter = data["twitter"]
+
+    contact.put()
+    return contact
+
 
 def log_trail(data):
     log = LogActivity()

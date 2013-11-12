@@ -338,12 +338,17 @@ class UserHandler(BaseHandler):
         if body:
             details = simplejson.loads(body)
 
-            user = User()
-            user.name = details["name"]
-            user.email = details["email"]
-            user.password = hash_password(details["email"], details["password"])
-            user.contacts = details["contacts"]
-            user.put()
+            logging.critical(details)
+
+            data = {
+                "name": details["name"],
+                "email": details["email"],
+                "password": hash_password(details["email"], details["password"]),
+                "contacts": details["contacts"],
+                "permissions": details["permissions"]
+            }
+
+            add_user(data)
 
             temp = {}
             temp["success"] = True
@@ -357,9 +362,14 @@ class LocationHandler(BaseHandler):
     def post(self):
         data = {
             "name": self.request.get("name"),
-            "goal": self.request.get("goal"),
-            "needs": self.request.get_all("needs"),
-            "centers": self.request.get_all("centers")
+            "needs": self.request.get_all("needs"), # json format
+            "centers": self.request.get_all("centers"),
+            "latlong": self.request.get("latlong"),
+            "featured_photo": self.request.get("featured_photo"),
+            "death_count": self.request.get("death_count"),
+            "affected_count": self.request.get("affected_count"),
+            "status_board": self.request.get("status_board"),
+            "status": self.request.get("status") # json format
         }
         add_location(data)
 
@@ -371,9 +381,17 @@ class CentersHandler(BaseHandler):
         data = {
             "drop_off_locations": self.request.get("drop_of_locations"),
             "distributor": self.request.get("distributor"),
-            "address": self.request.get("address")
+            "address": self.request.get("address"),
+            "latlong": self.request.get("latlong"),
+            "destinations": self.request.get("destinations"),
+            "schedule": self.request.get("schedule"),
+            "twitter": self.request.get("twitter"),
+            "facebook": self.request.get("facebook"),
+            "contacts": self.request.get("contacts"),
+            "email": self.request.get("email"),
         }
-        add_centers(data)
+
+        add_drop_off_centers(data)
 
 
 class ErrorHandler(BaseHandler):

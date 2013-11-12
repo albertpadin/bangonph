@@ -10,7 +10,7 @@ var RegisterModel = Backbone.Model.extend({
   defaults: {
     email: "",
     password: "",
-    name: ""
+    name: "",
   },
   urlRoot: "/register"
 });

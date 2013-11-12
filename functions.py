@@ -80,8 +80,16 @@ def add_location(data):
     location.centers = data["centers"]
 
     location.put()
+    return location
 
+def add_centers(data):
+    center = DropOfCenters()
+    center.drop_of_locations = data["locations"]
+    center.distributor = data["distributor"]
+    center.address = data["address"]
 
+    center.put()
+    return center
 
 
 

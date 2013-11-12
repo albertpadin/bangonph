@@ -47,7 +47,6 @@ class Location(ndb.Model):
     
 
 class DropOffCenter(ndb.Model):
-
     created = ndb.DateTimeProperty(auto_now_add=True)
     updated = ndb.DateTimeProperty(auto_now=True)
     name = ndb.StringProperty()

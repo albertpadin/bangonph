@@ -231,7 +231,7 @@ var AddContact = Backbone.View.extend({
         "twitter" : _.escape($("#twitter").val())
       },
       success: function(datas) {
-        window.location = "#contacts";
+        window.location.hash = "#contacts";
       }
     });
     return false;
@@ -273,76 +273,84 @@ var EditContact = Backbone.View.extend({
         "twitter" : _.escape($("#twitter").val())
       },
       success: function(datas) {
-        window.location = "#contacts";
+        window.location.hash = "#contacts";
       }
     });
     return false;
   }
 });
 
-// var Locations = Backbone.Model.extend({
-//   defaults: {
-//     name: "",
-//     latlong: "",
-//     featured_photo: "",
-//     death_count: "",
-//     affected_count: "",
-//     status_board: "",
-//     needs: "",
-//     centers: "",
-//     status: ""
-//   },
-//   urlRoot: "/locations"
-// });
+var Locations = Backbone.Model.extend({
+  defaults: {
+    name: "",
+    latlong: "",
+    featured_photo: "",
+    death_count: "",
+    affected_count: "",
+    status_board: "",
+    needs: "",
+    centers: "",
+    status: ""
+  }
+});
 
-// var LocationView = Backbone.View.extend({
-//   el: "#app",
-//   template: _.template( $("#locationTemplate").html() ),
-//   initialize: function() {
-//     _.bindAll(this, "render", "locations");
-//   },
-//   render: function(response) {
-//     var self = this;
-//     $(this.el).html( this.template({ locations: response }) );
-//   },
-//   locations: function() {
-//   }
-// });
+var LocationCollection = Backbone.Collection.extend({
+  model: Locations,
+  url: "/locations"
+});
 
-// var AddLocation = Backbone.View.extend({
-//   el: "#app",
-//   template: _.template( $("#addLocationTemplate").html() ),
-//   events: {
-//     'submit form#frmAdd': 'add'
-//   }, 
-//   render: function() {
-//     $(this.el).html( this.template );
-//   },
-//   add: function() {
-//     var details = {
-//       name: _.escape($("#fname").val()),
-//       latlong: _.escape($("#latlong").val()),
-//       featured_photo: _.escape($("#featured_photo").val()),
-//       death_count: _.escape($("#death_count").val()),
-//       affected_count: _.escape($("#affected_count").val()),
-//       status_board: _.escape($("#status_board").val()),
-//       needs: _.escape($("#needs").val()),
-//       centers: _.escape($("#centers").val()),
-//       status: _.escape($("#status").val())
-//     };
-//     var locations = new Locations();
-//     locations.save(details, {
-//       success: function(data) {
-//         window.location.hash = "#locations";
-//         console.log(data.toJSON());
-//       },
-//       error: function(data) {
-//         console.log(data.toJSON());
-//       }
-//     });
-//     return false;
-//   }
-// });
+var LocationView = Backbone.View.extend({
+  el: "#app",
+  template: _.template( $("#locationTemplate").html() ),
+  initialize: function() {
+    _.bindAll(this, "render", "locations");
+  },
+  render: function(response) {
+    var self = this;
+    $(this.el).html( this.template({ locations: response }) );
+  },
+  locations: function() {
+    var self = this;
+    var collection = new LocationCollection();
+    collection.fetch({
+      success: function(datas) {
+        self.render(datas.toJSON());
+      }
+    });
+  }
+});
+
+var AddLocation = Backbone.View.extend({
+  el: "#app",
+  template: _.template( $("#addLocationTemplate").html() ),
+  events: {
+    'submit form#frmAddLocation': 'addLocation'
+  }, 
+  render: function() {
+    $(this.el).html( this.template );
+  },
+  addLocation: function() {
+    $.ajax({
+      type: "post",
+      url: "/locations",
+      data: {
+        "name": _.escape($("#fname").val()),
+        "latlong": _.escape($("#latlong").val()),
+        "featured_photo": _.escape($("#featured_photo").val()),
+        "death_count": _.escape($("#death_count").val()),
+        "affected_count": _.escape($("#affected_count").val()),
+        "status_board": _.escape($("#status_board").val()),
+        "needs": _.escape($("#needs").val()),
+        "centers": _.escape($("#centers").val()),
+        "status": _.escape($("#status").val())
+      },
+      success: function() {
+        window.location.hash = "#locations";
+      }
+    });
+    return false;
+  }
+});
 
 var Router = Backbone.Router.extend({
     routes: {
@@ -390,14 +398,15 @@ var Router = Backbone.Router.extend({
     renderEditContactPage: function(id) {
       editContact.render();
       editContact.data(id);
-    }
+    },
 
-    // renderLocationPage: function() {
-    //   locationView.render();
-    // },
-    // renderAddLocationPage: function() {
-    //   addLocation.render();
-    // }
+    renderLocationPage: function() {
+      locationView.render();
+      locationView.locations();
+    },
+    renderAddLocationPage: function() {
+      addLocation.render();
+    }
     
 });
 
@@ -409,8 +418,8 @@ var contactView = new ContactView();
 var addContact = new AddContact();
 var editContact = new EditContact();
 
-// var locationView = new LocationView();
-// var addLocation = new AddLocation();
+var locationView = new LocationView();
+var addLocation = new AddLocation();
 
 var router = new Router();
 Backbone.history.start();

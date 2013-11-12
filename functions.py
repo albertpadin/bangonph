@@ -1,7 +1,7 @@
 import logging
 import webapp2, jinja2, os
 import datetime
-from models import User
+from models import User, Contact
 import json as simplejson
 
 from google.appengine.api import urlfetch
@@ -159,7 +159,7 @@ def add_post(data):
     return post
 
 def add_contact(data):
-    contact = Contact(id=data["name"])
+    contact = Contact()
     contact.name = data["name"]
     contact.contacts = data["contacts"]
     contact.email = data["email"]

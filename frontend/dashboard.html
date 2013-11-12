@@ -40,6 +40,9 @@
   <div class="row" style="margin-top: -50px;">
     <div class="col-lg-12">
       <div class="bs-example table-responsive page-header" style="margin: 70px 0 21px!important; border-bottom: none!important">
+
+        <hr/>
+
         <div style="display:none" class="alert alert-dismissable alert-success success-message">
           <button type="button" class="close" data-dismiss="alert">&times;</button>
           <strong>Well done!</strong> <span id="title"></span>
@@ -49,10 +52,8 @@
           <strong>Oh snap!</strong> <span id="title"></span>
         </div>
 
-        <hr/>
-
         <h4>Users <button type="button" class="btn btn-success"><a style="color: white;" href="#user/new">New</a></button></h4>
-        <table id="contactsGrid" class="table table-striped table-bordered table-hover">
+        <table id="usersGrid" class="table table-striped table-bordered table-hover">
           <thead>
             <tr>
               <th>Name</th>
@@ -129,7 +130,7 @@
     </form>
   </script>
 
-  <script type="text/template" id="editTemplate">
+  <script type="text/template" id="editUserTemplate">
     <form class="bs-example form-horizontal" id="frmEdit">
       <div class="row" style="margin-top: -50px;">
         <div class="col-lg-12">
@@ -137,29 +138,26 @@
           </div>
           <div class="panel panel-default">
             <div class="panel-heading">
-              <h3 class="panel-title"><strong>Edit</strong></h3>
+              <h3 class="panel-title"><strong>Edit User</strong></h3>
             </div>
             <div class="panel-body">
               <% 
-                if (!$.isEmptyObject(addressbook)) { 
-                  $.each(addressbook, function() {
+                if (!$.isEmptyObject(user)) { 
+                  $.each(user, function() {
               %>
                   <input type="hidden" id="id" value="<%- this.id %>">
                   <p>
-                    <input type="text" id="fname" class="form-control" placeholder="Full Name" value="<%- _.unescape(this.fullname) %>">
+                    <input type="text" id="fname" class="form-control" required="required" placeholder="Full Name" value="<%- _.unescape(this.name) %>">
                   </p>
                   <p>
-                    <input type="email" id="email" class="form-control" placeholder="Email" value="<%- _.unescape(this.email) %>">
+                    <input type="email" id="email" class="form-control" required="required" placeholder="Email" value="<%- _.unescape(this.email) %>">
                   </p>
                   <p>
-                    <input type="text" id="phone" class="form-control" placeholder="Phone" value="<%- _.unescape(this.phone) %>">
+                    <input type="text" id="contacts" class="form-control" required="required" placeholder="Contacts" value="<%- _.unescape(this.contacts) %>">
                   </p>
                   <p>
-                    <input type="text" id="address" class="form-control" placeholder="Address" value="<%- _.unescape(this.address) %>">
-                  </p>
-                  <p>
-                    <a href="#" class="btn btn-default">Cancel</a> 
                     <button type="submit" class="btn btn-primary">Submit</button> 
+                    <a href="#users" class="btn btn-default">Cancel</a>
                     <div style="display:none" class="alert alert-dismissable alert-success success-message">
                       <button type="button" class="close" data-dismiss="alert">&times;</button>
                       <strong>Well done!</strong> Successfully updated.

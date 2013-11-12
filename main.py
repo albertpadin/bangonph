@@ -502,12 +502,8 @@ class LocationHandler(BaseHandler):
                 temp["needs"] = location.needs
                 temp["status"] = location.status
                 datas.append(temp)
-<<<<<<< Updated upstream
             self.response.out.write(simplejson.dumps(datas))
-                
-=======
 
->>>>>>> Stashed changes
     def post(self):
         needs = {
            "food": self.request.get("food"),
@@ -587,7 +583,6 @@ class SubscriberPage(BaseHandler):
 class PostsHandler(BaseHandler):
     @login_required
     def get(self):
-<<<<<<< Updated upstream
         posts = Post.query().fetch(100)
         if posts:
             datas = []
@@ -614,9 +609,7 @@ class PostsHandler(BaseHandler):
         }
 
         add_post(data)
-    
-=======
-        pass
+
 
 class GetAuthorizationCode(BaseHandler):
     def post(self):
@@ -636,8 +629,6 @@ class sampler(BaseHandler):
     def get(self):
         pass
 
->>>>>>> Stashed changes
-
 class ErrorHandler(BaseHandler):
     def get(self, page):
         logging.critical("This route is not handled.")
@@ -654,12 +645,8 @@ app = webapp2.WSGIApplication([
         webapp2.Route('/dashboard', handler=DashboardPage, name="www-dashboard"),
         webapp2.Route('/cosmo', handler=CosmoPage, name="www-test"),
 
-<<<<<<< Updated upstream
-        # leonard : 
-=======
         # leonard gwapo:
         webapp2.Route('/locations', handler=LocationHandler, name="www-locations"),
->>>>>>> Stashed changes
         webapp2.Route('/users', handler=UserHandler, name="www-users"),
         webapp2.Route('/contacts', handler=ContactHandler, name="www-contacts"),
         webapp2.Route('/locations', handler=LocationHandler, name="www-locations"),

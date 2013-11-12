@@ -26,7 +26,7 @@ class Distributor(ndb.Model):
     contact_num = ndb.StringProperty()
 
 
-class Locations(ndb.Model):
+class Location(ndb.Model):
     created = ndb.DateTimeProperty(auto_now_add=True)
     updated = ndb.DateTimeProperty(auto_now=True)
     name = ndb.StringProperty()
@@ -35,7 +35,7 @@ class Locations(ndb.Model):
     centers = ndb.StringProperty(repeated=True)
     
 
-class DropOfCenters(ndb.Model):
+class DropOfCenter(ndb.Model):
     created = ndb.DateTimeProperty(auto_now_add=True)
     updated = ndb.DateTimeProperty(auto_now=True)
     drop_of_locations = ndb.StringProperty(repeated=True)
@@ -43,13 +43,24 @@ class DropOfCenters(ndb.Model):
     address = ndb.StringProperty(repeated=True)
 
 
-class Distributions(ndb.Model):
+class Distribution(ndb.Model):
     created = ndb.DateTimeProperty(auto_now_add=True)
     updated = ndb.DateTimeProperty(auto_now=True)
     location = ndb.KeyProperty()
     status = ndb.StringProperty(default="undelivered")
     centers = ndb.StringProperty(repeated=True)
 
+    def to_object(self):
+        details = {}
+        details["key"] = self.key.urlsafe()
+
+        return details
+
+class Subscriber(ndb.Model):
+    name = ndb.StringProperty()
+    email = ndb.StringProperty()
+    fb_id = ndb.StringProperty()
+    distribution = ndb.KeyProperty()
 
 
 

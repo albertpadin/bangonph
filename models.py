@@ -28,11 +28,11 @@ class Distributor(ndb.Model):
 class Locations(ndb.Model):
     created = ndb.DateTimeProperty(auto_now_add=True)
     updated = ndb.DateTimeProperty(auto_now=True)
+    name = ndb.StringProperty()
     goal = ndb.StringProperty()
-    needs = ndb.TextProperty()
+    needs = ndb.StringProperty(repeated=True)
     centers = ndb.StringProperty(repeated=True)
-    distributions = ndb.StringProperty(repeated=True)
-
+    
 
 class DropOfCenters(ndb.Model):
     created = ndb.DateTimeProperty(auto_now_add=True)

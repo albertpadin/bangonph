@@ -1,6 +1,6 @@
 import webapp2, jinja2, os
 from webapp2_extras import routes
-from models import User, Contact
+from models import User, Contact, Location
 from functions import *
 import json as simplejson
 import logging
@@ -454,10 +454,25 @@ class ContactHandler(BaseHandler):
 class LocationHandler(BaseHandler):
     @login_required
     def get(self):
-        pass
+        locations = Location.query().fetch(100)
+        if locations:
+            datas = []
+            for location in locations:
+                temp = {}
+                temp["id"] = location.key.id()
+                temp["name"] = location.name
+                temp["latlong"] = location.latlong
+                temp["featured_photo"] = location.featured_photo
+                temp["death_count"] = location.death_count
+                temp["affected_count"] = location.affected_count
+                temp["status_board"] = location.status_board
+                temp["needs"] = location.needs
+                temp["center"] = location.center
+                temp["status"] = location.status
+                datas.append(temp)
+                
     def post(self):
-        body = self.request.body
-        logging.critical(body)
+        pass
         # data = {
         #     "name": self.request.get("name"),
         #     "needs": self.request.get_all("needs"), # json format

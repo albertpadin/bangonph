@@ -283,6 +283,14 @@ class LoginPage(BaseHandler):
                         temp["message"] = "Wrong password. Please try again."
                         self.response.out.write(simplejson.dumps(temp))
 
+
+class PublicFrontPage(BaseHandler):
+    def get(self):
+        self.tv["current_page"] = "PUBLIC_FRONT"
+        self.tv['locations'] = Location.query().fetch(100)
+        self.render('frontend/public-front.html')
+
+
 class RegisterPage(BaseHandler):
     def get(self):
         if self.user:
@@ -638,6 +646,7 @@ site_domain = SETTINGS["site_domain"].replace(".","\.")
 app = webapp2.WSGIApplication([
     routes.DomainRoute(r'<:gcdc2013-bangonph\.appspot\.com|localhost|www\.bangonph\.com>', [
         webapp2.Route('/', handler=FrontPage, name="www-front"),
+        webapp2.Route('/public', handler=PublicFrontPage, name="www-front"),
         webapp2.Route('/register', handler=RegisterPage, name="www-register"),
         webapp2.Route('/logout', handler=Logout, name="www-logout"),
         webapp2.Route('/login', handler=LoginPage, name="www-login"),

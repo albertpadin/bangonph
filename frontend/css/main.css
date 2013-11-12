@@ -1,0 +1,69 @@
+.clear{
+    clear: both;
+}
+
+/*overwritten bootstrap*/
+
+.jumbotron{
+    background: url(../img/cover.jpg);
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+.sr-only{
+    position: absolute!important;
+    margin: 2px!important;
+    right: 38px!important;
+    color: #939393!important;
+    font-style: italic!important;
+    font-size: 0.8em!important;
+    clip: auto!important;
+    width: auto!important;
+    overflow: visible!important;
+}
+
+/*end overwritten bootstrap*/
+
+.status-item{
+    border: 1px solid #b6b6b6;
+    padding: 15px;
+    border-radius: 6px;
+    margin-bottom: 30px;
+}
+
+.status-item > img{
+    width: 100%;
+}
+
+.status-item h3{
+    margin-top: 0;
+}
+
+.status-group{
+    
+}
+
+.status-entry{
+    width: 160px;
+    float: left;
+    font-size: 0.8em;
+    padding-top: 7px;
+}
+
+.status-entry span{
+    padding-left: 2px;
+}
+
+.icon{
+    height: 16px;
+    width: 16px;
+    margin-left: 10px;
+}
+
+.progress{
+    margin-bottom: 2px!important;
+}
+
+.entry-btn{
+    margin-top: 8px;
+}

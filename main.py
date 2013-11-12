@@ -331,8 +331,24 @@ class DashboardPage(BaseHandler):
 class UserHandler(BaseHandler):
     @login_required
     def get(self):
-        self.tv["users"] = get_all_user()
+        self.response.out.write(simplejson.dumps(get_all_user(self.user.email)))
 
+    def post(self):
+        body = self.request.body
+        if body:
+            details = simplejson.loads(body)
+
+            user = User()
+            user.name = details["name"]
+            user.email = details["email"]
+            user.password = hash_password(details["email"], details["password"])
+            user.contacts = details["contacts"]
+            user.put()
+
+            temp = {}
+            temp["success"] = True
+            temp["message"] = "Successfully added."
+            self.response.out.write(simplejson.dumps(temp))
 
 class LocationHandler(BaseHandler):
     @login_required
@@ -353,8 +369,8 @@ class CentersHandler(BaseHandler):
         pass
     def post(self):
         data = {
-            "drop_of_locations": self.request.get("drop_of_locations")
-            "distributor": self.request.get("distributor")
+            "drop_of_locations": self.request.get("drop_of_locations"),
+            "distributor": self.request.get("distributor"),
             "address": self.request.get("address")
         }
         add_centers(data)

@@ -66,11 +66,19 @@ def send_reset_password_email(user, token):
         return False
 
 
-def get_all_user():
-    user = User.query().fetch(100)
+def get_all_user(data):
+    users = User.query(User.email != data).fetch(100)
+    if users:
+        datas = []
+        for user in users:
+            temp = {}
+            temp["id"] = user.key.id()
+            temp["name"] = user.name
+            temp["email"] = user.email
+            temp["contacts"] = user.contacts
+            datas.append(temp)
 
-    return user
-
+        return datas
 
 def add_location(data):
     location = Locations(id=data["name"])

@@ -3,7 +3,8 @@ var Users = Backbone.Model.extend({
     name: "",
     email: "",
     password: "",
-    contacts: ""
+    contacts: "",
+    permissions: ""
   }
 });
 

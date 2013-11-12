@@ -29,7 +29,7 @@ class Distributor(ndb.Model):
     email = ndb.StringProperty()
     website = ndb.StringProperty()
     contacts = ndb.KeyProperty()
-    
+    facebook = ndb.StringProperty()
 
 
 class Location(ndb.Model):
@@ -50,7 +50,7 @@ class DropOffCenter(ndb.Model):
 
     created = ndb.DateTimeProperty(auto_now_add=True)
     updated = ndb.DateTimeProperty(auto_now=True)
-    drop_of_locations = ndb.StringProperty(repeated=True)
+    drop_off_locations = ndb.StringProperty(repeated=True)
     distributor = ndb.StringProperty(repeated=True)
     address = ndb.StringProperty(repeated=True)
     latlong = ndb.StringProperty()
@@ -58,7 +58,7 @@ class DropOffCenter(ndb.Model):
     schedule = ndb.StringProperty()
     twitter = ndb.StringProperty()
     facebook = ndb.StringProperty()
-    phone = ndb.StringProperty()
+    contacts = ndb.StringProperty(repeated=True)
     email = ndb.StringProperty()
 
 

@@ -81,7 +81,7 @@ def get_all_user(data):
         return datas
 
 def add_user(data):
-    user = User(data["email"])
+    user = User(id=data["email"])
     user.password = data["password"]
     user.name = data["name"]
     user.contacts = data["contacts"]
@@ -108,11 +108,19 @@ def add_location(data):
     location.put()
     return location
 
-def add_centers(data):
-    center = DropOfCenters()
-    center.drop_off_locations = data["locations"]
+
+def add_drop_off_centers(data):
+    center = DropOffCenter()
+    center.drop_off_locations = data["drop_off_locations"]
     center.distributor = data["distributor"]
     center.address = data["address"]
+    center.latlong = data["latlong"]
+    center.destinations = data["destinations"]
+    center.schedule = data["schedule"]
+    center.twitter = data["twitter"]
+    center.facebook = data["facebook"]
+    center.contacts = data["contacts"]
+    center.email = data["email"]
 
     center.put()
     return center
@@ -128,7 +136,6 @@ def add_subcriber(data):
     
     return subscriber
     
-
 
 
 

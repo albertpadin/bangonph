@@ -145,7 +145,8 @@ var AddDistribution = Backbone.View.extend({
         "chk_actual_supply_toiletries" : _.escape($("#actual_supply_toiletries").val()),
         "chk_actual_supply_toiletries_description" : _.escape($("#actual_supply_toiletries_description").val()),
 
-        "chk_actual_supply_flashlights" : _.escape($("#actual_supply_flashlights").val())
+        "chk_actual_supply_flashlights" : _.escape($("#actual_supply_flashlights").val()),
+        
         "chk_actual_supply_flashlights_description" : _.escape($("#actual_supply_flashlights_description").val())
       },
       success: function() {

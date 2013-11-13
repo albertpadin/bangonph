@@ -169,10 +169,10 @@ def add_distribution(data, instance_id=""):
         distribution.date_of_distribution = data["date_of_distribution"]
 
     if data["contact"]:
-        distribution.contact = ndb.Key('Contact', data["contact"])
+        distribution.contact = data["contact"]
 
     if data["destinations"]:
-        distribution.destinations = ndb.Key('Location', data["destinations"])
+        distribution.destinations = data["destinations"]
 
     if data["supply_goal"]:
         distribution.supply_goal = data["supply_goal"]
@@ -260,7 +260,7 @@ def add_contact(data, instance_id=""):
         if contact.contacts:
             contact.contacts.append(data["contacts"])
         else:
-            contact.contacts = [data["contacts"]]
+            contact.contacts = data["contacts"]
 
     if data["email"]:
         contact.email = data["email"]

@@ -85,6 +85,22 @@
     <script type="text/javascript" src="/js/backbone.js"></script>
     <script type="text/javascript" src="/js/bootstrap.min.js"></script>
 
+    <script type="text/javascript">
+      function remove_(id) {
+        $("#image"+id).remove();
+      }
+
+      $(function() {
+        
+        var counter_table = 2;
+        
+        $(".addimage").click(function() {
+          var id = counter_table++;
+          $(".imageTable").prepend($("<tbody id='image"+id+"'><tr><th>Image "+id+"</th><th style=\"text-align: right;\"><a href=\"javascript:;\" onclick=\"javascript:remove_("+id+")\">Remove</a></th></tr><tr><td>Image URL</td><td><input type=\"text\" id='image_url_"+id+"' class=\"form-control image_url\"/></td></tr><tr><td>Title</td><td><input type=\"text\" id='image_title_"+id+"' class=\"form-control image_title\"/></td></tr><tr><td>Caption</td><td><textarea id='image_caption_"+id+"' class=\"image_caption\" style=\"width: 1002px; height: 73px; margin: 0px;\"></textarea></td></tr></tbody>").fadeIn('slow'));
+        });
+      });
+    </script>
+
 
     <!-- main -->
     {% if not user %}

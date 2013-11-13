@@ -16,7 +16,7 @@ class User(ndb.Model):
 
     def to_object(self):
         details = {}
-        details["meta"] = {"href": "http://api.bangonph.com/users/?" + self.key.id()}
+        details["meta"] = {"href": "http://api.bangonph.com/users/" + self.key.id()}
         details["created"] = str(self.created)
         details["updated"] = str(self.updated)
         details["email"] = self.email

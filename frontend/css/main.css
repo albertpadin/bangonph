@@ -1,6 +1,16 @@
+/*custom classes*/
+.mb0{
+    margin-bottom: 0!important;
+}
+
 .clear{
     clear: both;
 }
+
+.emphasize{
+    color: red;
+}
+/*end custom classes*/
 
 /*overwritten bootstrap*/
 
@@ -22,7 +32,12 @@
     overflow: visible!important;
 }
 
+.progress{
+    margin-bottom: 2px!important;
+}
 /*end overwritten bootstrap*/
+
+/*le styles*/
 
 .status-item{
     border: 1px solid #b6b6b6;
@@ -60,10 +75,12 @@
     margin-left: 10px;
 }
 
-.progress{
-    margin-bottom: 2px!important;
-}
-
 .entry-btn{
     margin-top: 8px;
 }
+
+.relief-orgs-group img{
+    margin:2px;
+}
+
+/*end le styles*/

@@ -891,11 +891,11 @@ class APIUsersHandler(APIBaseHandler):
             if self.request.get("cursor"):
                 curs = Cursor(urlsafe=self.request.get("cursor"))
                 if curs:
-                    users, next_cursor, more = User.query().fetch_page(20, start_cursor=curs)
+                    users, next_cursor, more = User.query().fetch_page(25, start_cursor=curs)
                 else:
-                    users, next_cursor, more = User.query().fetch_page(100)
+                    users, next_cursor, more = User.query().fetch_page(25)
             else:
-                users, next_cursor, more = User.query().fetch_page(100)
+                users, next_cursor, more = User.query().fetch_page(25)
 
             for user in users:
                 users_json.append(user.to_object())
@@ -925,11 +925,11 @@ class APILocationsHandler(APIBaseHandler):
             if self.request.get("cursor"):
                 curs = Cursor(urlsafe=self.request.get("cursor"))
                 if curs:
-                    locations, next_cursor, more = Location.query().fetch_page(10, start_cursor=curs)
+                    locations, next_cursor, more = Location.query().fetch_page(25, start_cursor=curs)
                 else:
-                    locations, next_cursor, more = Location.query().fetch_page(10)
+                    locations, next_cursor, more = Location.query().fetch_page(25)
             else:
-                locations, next_cursor, more = Location.query().fetch_page(10)
+                locations, next_cursor, more = Location.query().fetch_page(25)
 
             for location in locations:
                 locations_json.append(location.to_object())
@@ -1021,11 +1021,11 @@ class APIPostsHandler(APIBaseHandler):
             if self.request.get("cursor"):
                 curs = Cursor(urlsafe=self.request.get("cursor"))
                 if curs:
-                    posts, next_cursor, more = Post.query().fetch_page(10, start_cursor=curs)
+                    posts, next_cursor, more = Post.query().fetch_page(25, start_cursor=curs)
                 else:
-                    posts, next_cursor, more = Post.query().fetch_page(10)
+                    posts, next_cursor, more = Post.query().fetch_page(25)
             else:
-                posts, next_cursor, more = Post.query().fetch_page(10)
+                posts, next_cursor, more = Post.query().fetch_page(25)
 
             for post in posts:
                 posts_json.append(post.to_object())
@@ -1079,11 +1079,11 @@ class APIDropOffCentersHandler(APIBaseHandler):
             if self.request.get("cursor"):
                 curs = Cursor(urlsafe=self.request.get("cursor"))
                 if curs:
-                    centers, next_cursor, more = DropOffCenter.query().fetch_page(10, start_cursor=curs)
+                    centers, next_cursor, more = DropOffCenter.query().fetch_page(25, start_cursor=curs)
                 else:
-                    centers, next_cursor, more = DropOffCenter.query().fetch_page(10)
+                    centers, next_cursor, more = DropOffCenter.query().fetch_page(25)
             else:
-                centers, next_cursor, more = DropOffCenter.query().fetch_page(10)
+                centers, next_cursor, more = DropOffCenter.query().fetch_page(25)
 
             for center in centers:
                 centers_json.append(center.to_object())
@@ -1126,11 +1126,11 @@ class APIEffortsHandler(APIBaseHandler):
             if self.request.get("cursor"):
                 curs = Cursor(urlsafe=self.request.get("cursor"))
                 if curs:
-                    efforts, next_cursor, more = Distribution.query().fetch_page(10, start_cursor=curs)
+                    efforts, next_cursor, more = Distribution.query().fetch_page(25, start_cursor=curs)
                 else:
-                    efforts, next_cursor, more = Distribution.query().fetch_page(10)
+                    efforts, next_cursor, more = Distribution.query().fetch_page(25)
             else:
-                efforts, next_cursor, more = Distribution.query().fetch_page(10)
+                efforts, next_cursor, more = Distribution.query().fetch_page(25)
 
             for effort in efforts:
                 efforts_json.append(effort.to_object(self.request.get("expand").lower()))
@@ -1180,11 +1180,11 @@ class APIContactsHandler(APIBaseHandler):
             if self.request.get("cursor"):
                 curs = Cursor(urlsafe=self.request.get("cursor"))
                 if curs:
-                    contacts, next_cursor, more = Contact.query().fetch_page(10, start_cursor=curs)
+                    contacts, next_cursor, more = Contact.query().fetch_page(25, start_cursor=curs)
                 else:
-                    contacts, next_cursor, more = Contact.query().fetch_page(10)
+                    contacts, next_cursor, more = Contact.query().fetch_page(25)
             else:
-                contacts, next_cursor, more = Contact.query().fetch_page(10)
+                contacts, next_cursor, more = Contact.query().fetch_page(25)
 
             for contact in contacts:
                 contacts_json.append(contact.to_object())

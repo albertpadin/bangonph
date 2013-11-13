@@ -27,6 +27,7 @@
             <th>Needs</th>
             <th>Status</th>
             <th>Images</th>
+            <th>Hash Tag</th>
             <th>Action</th>
           </tr>
         </thead>
@@ -108,6 +109,7 @@
                       <hr/>
                     <% }) %>
                   </td>
+                  <td><%- _.unescape(this.hash_tag) %></td>
                   <td align='center'><a class="first">Edit</a> | <a class="last">Delete</a></td>
               </tr>
           <%    
@@ -179,7 +181,6 @@
 
               Number of clothes<input type="text" id="cloths" placeholder="Number of clothes"><br/>
             </p>
-            
             <p>
               Power
               <input type="text" id="status_power"/>
@@ -192,6 +193,9 @@
             <p>
               Water
               <input type="text" id="status_water"/>
+            </p>
+            <p>Hash Tag
+              <input type="text" id="hash_tag"/>
             </p>
             <p>
             <br/>
@@ -310,6 +314,9 @@
                 })
               }
             %>
+            <p>Hash Tag
+              <input type="text" value="<%- this.hash_tag %>" id="hash_tag"/>
+            </p>
             <p>
               <button type="submit" class="btn btn-primary">Submit</button> 
               <a href="#locations" class="btn btn-default">Cancel</a> 

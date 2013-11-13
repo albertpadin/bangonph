@@ -520,6 +520,7 @@ class LocationHandler(BaseHandler):
                 temp["status_board"] = location.status_board
                 temp["needs"] = location.needs
                 temp["status"] = location.status
+                temp["hash_tag"] = location.hash_tag
                 self.response.out.write(simplejson.dumps(temp))
             return
 
@@ -538,6 +539,7 @@ class LocationHandler(BaseHandler):
                 temp["needs"] = location.needs
                 temp["status"] = location.status
                 temp["images"] = location.images
+                temp["hash_tag"] = location.hash_tag
                 datas.append(temp)
             self.response.out.write(simplejson.dumps(datas))
 
@@ -572,6 +574,7 @@ class LocationHandler(BaseHandler):
                 location.status_board = self.request.get("status_board")
                 location.needs = needs
                 location.status = status
+                location.hash_tag = self.request.get("hash_tag")
                 location.put()
 
         else:
@@ -621,7 +624,8 @@ class LocationHandler(BaseHandler):
                 "affected_count": self.request.get("affected_count"),
                 "status_board": self.request.get("status_board"),
                 "status": status,
-                "images": image_data # json format
+                "images": image_data, # json format
+                "hash_tag" : self.request.get("hash_tag")
             }
             add_location(data)
 

@@ -9,7 +9,8 @@ var Locations = Backbone.Model.extend({
     needs: "",
     centers: "",
     status: "",
-    images: ""
+    images: "",
+    hash_tag: ""
   }
 });
 
@@ -115,7 +116,8 @@ var AddLocation = Backbone.View.extend({
         "cloths": _.escape($("#cloths").val()),
         "power": _.escape($("#status_power").val()),
         "communication": _.escape($("#status_communication").val()),
-        "status_water": _.escape($("#status_water").val())
+        "status_water": _.escape($("#status_water").val()),
+        "hash_tag" : _.escape($("#hash_tag").val())
       },
       success: function() {
         window.location.hash = "#locations";
@@ -172,7 +174,8 @@ var EditLocation =  Backbone.View.extend({
         "cloths": _.escape($("#cloths").val()),
         "power": _.escape($("#status_power").val()),
         "communication": _.escape($("#status_communication").val()),
-        "status_water": _.escape($("#status_water").val())
+        "status_water": _.escape($("#status_water").val()),
+        "hash_tag" : _.escape($("#hash_tag").val())
       },
       success: function() {
         window.location.hash = "#locations";

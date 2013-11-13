@@ -211,6 +211,7 @@ var Router = Backbone.Router.extend({
 
     renderDistributorPage: function() {
       distributorView.render();
+      distributorView.distributors();
     },
     renderAddDistributorPage: function() {
       addDistributor.render();

@@ -921,7 +921,29 @@ class DistributionFetchHandler(BaseHandler):
 class DistributorHandler(BaseHandler):
     @login_required
     def get(self):
-        pass
+        id_delete = self.request.get("id_delete")
+        if id_delete:
+            distributor = Distributor.get_by_id(int(id_delete))
+            if distributor:
+                distributor.key.delete()
+            return
+        
+        distributors = Distributor.query().fetch(100)
+        if distributors:
+            datas = []
+            for distributor in distributors:
+                temp = {}
+                temp["id"] = distributor.key.id()
+                temp["name"] = distributor.name
+                temp["contact_num"] = distributor.contact_num
+                temp["location"] = distributor.location
+                temp["email"] = distributor.email
+                temp["website"] = distributor.website
+                temp["contacts"] = distributor.contacts.urlsafe()
+                temp["facebook"] = distributor.facebook
+                
+                datas.append(temp)
+            self.response.out.write(simplejson.dumps(datas))
 
     def post(self):
         distributor = Distributor()
@@ -1802,7 +1824,7 @@ app = webapp2.WSGIApplication([
 
         webapp2.Route(r'/<:.*>', ErrorHandler)
     ]),
-    routes.DomainRoute(r'<:admin\.bangonph\.com>', [
+    routes.DomainRoute(r'<:admin\.bangonph\.com|localhost>', [
         webapp2.Route('/', handler=FrontPage, name="www-front"),
         webapp2.Route('/register', handler=RegisterPage, name="www-register"),
         webapp2.Route('/logout', handler=Logout, name="www-logout"),
@@ -1826,6 +1848,9 @@ app = webapp2.WSGIApplication([
         webapp2.Route('/subscribers', handler=SubscriberPage, name="www-subscribers"),
         webapp2.Route('/upload', handler=UploadPage, name="www-upload"),
         webapp2.Route('/upload/handler', handler=UploadHandler, name="www-upload-handler"),
+        webapp2.Route('/distributors', handler=DistributorHandler, name="www-distributors"),
+        webapp2.Route('/distributions/fetch', handler=DistributionFetchHandler, name="www-distributions-fetch"),
+        
 
 
         # richmond:

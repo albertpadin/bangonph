@@ -111,9 +111,29 @@ class Distribution(ndb.Model):
     actual_supply = ndb.JsonProperty()
 
 
-    def to_object(self):
+    def to_object(self, expand=""):
         details = {}
-        details["key"] = self.key.urlsafe()
+        details["meta"] = {"href": "http://api.bangonph.com/efforts/?" + str(self.key.id())}
+        details["created"] = str(self.created)
+        details["updated"] = str(self.updated)
+        details["dateOfDistribution"] = str(self.date_of_distribution)
+
+        if expand == "contacts":
+            contact_details = {}
+            cont = ndb.Key("Contact", self.contact).get()
+            contact_details["contact_details"] = cont.to_object()
+        else:
+            details["contact"] = self.contact
+
+        if expand == "destinations":
+            destination_details = {}
+            location = ndb.Key("Location", self.destinations).get()
+            destination_details["destination_details"] = location.to_object()
+        else:
+            details["destinations"] = self.destinations
+            
+        details["supply_goal"] = self.supply_goal
+        details["actual_supply"] = self.actual_supply
 
         return details
 

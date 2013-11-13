@@ -559,7 +559,7 @@ class DistributionHandler(BaseHandler):
             "actual_supply": self.request.get("actual_supply")
         }
 
-        add_destribution(data)
+        add_distribution(data)
 
 class DistributionFetchHandler(BaseHandler):
     @login_required
@@ -910,10 +910,44 @@ class APISubscribersHandler(APIBaseHandler):
 
 class APIEffortsHandler(APIBaseHandler):
     def get(self, instance_id=None):
-        pass
+        efforts_json = []
+        if not instance_id:
+            if self.request.get("cursor"):
+                curs = Cursor(urlsafe=self.request.get("cursor"))
+                if curs:
+                    efforts, next_cursor, more = Distribution.query().fetch_page(10, start_cursor=curs)
+                else:
+                    efforts, next_cursor, more = Distribution.query().fetch_page(10)
+            else:
+                efforts, next_cursor, more = Distribution.query().fetch_page(10)
+
+            for effort in efforts:
+                efefforts_json.append(effort.to_object())
+
+            data = {}
+            data["efforts"] = efforts_json
+            if more:
+                data["next_page"] = "http://api.bangonph.com/locations/?cursor=" + next_cursor
+            else:
+                data["next_page"] = False
+            self.render(data)
+        else:
+            effort = Distribution.get_by_id(instance_id)
+            if effort:
+                self.render(effort.to_object())
 
     def post(self, instance_id=None):
-        pass
+        if not instance_id:
+            data = {
+                "date_of_distribution": datetime.datetime.strptime(self.request.get("date_of_distribution"), "%Y-%m-%d"), #1992-10-20
+                "contact": int(self.request.get("contact")),
+                "destinations": int(self.request.get("destinations")),
+                "supply_goal": self.request.get("supply_goal"),
+                "actual_supply": self.request.get("actual_supply")
+            }
+
+            effort = add_distribution(data)
+            self.render(effort.to_object())
 
     def delete(self, instance_id=None):
         pass

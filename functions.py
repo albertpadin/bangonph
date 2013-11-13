@@ -144,14 +144,29 @@ def add_location(data, location_key=""):
     location.put()
     return location
 
-def add_destribution(data):
-    distribution = Distribution()
-    distribution.date_of_distribution = data["date_of_distribution"]
-    distribution.contact = ndb.Key('Contact', int(data["contact"]))
-    distribution.destinations = ndb.Key('Location', int(data["destinations"]))
-    distribution.supply_goal = data["supply_goal"]
-    distribution.actual_supply = data["actual_supply"]
+def add_distribution(data, instance_id):
+    if instance_id:
+        distribution = Distribution.get_by_id(instance_id)
+    else:
+        distribution = Distribution()
+
+    if data["date_of_distribution"]:
+        distribution.date_of_distribution = data["date_of_distribution"]
+
+    if data["contact"]:
+        distribution.contact = ndb.Key('Contact', int(data["contact"]))
+
+    if data["destinations"]:
+        distribution.destinations = ndb.Key('Location', int(data["destinations"]))
+
+    if data["supply_goal"]:
+        distribution.supply_goal = data["supply_goal"]
+
+    if data["actual_supply"]:
+        distribution.actual_supply = data["actual_supply"]
+
     distribution.put()
+
     return distribution
 
 def add_drop_off_centers(data):

@@ -13,7 +13,7 @@
   <div class="jumbotron">
       <div class="container">
         <h1>{{ location.name }}</h1>
-        <p>{% if location.description %}{{ location.description }}{% else %}Super Typhoon recently trampled our land, killed the cows & left us devasted. We are currently monitoring all the relief goods, making sure every place receives the goodies. Join us & feed the people!{% endif %}</p>
+        <p>{% if location.description %}{{ location.description }}{% else %}Super Typhoon Yolanda hit the Philippines and left several towns devastated. Affecting more than 2 million people and killing over 2,000 and still counting. This is the live and developing story of how we rise again. Together.{% endif %}</p>
       </div>
     </div>
 
@@ -53,38 +53,54 @@
               
               
               <div class="status-group">
-              <div class="status-entry">
-                <img class="icon" src="/img/icon-deaths.png" alt="Deaths">
-                <span>{{ location.death_count }} Deaths</span>
-              </div>
-              <div class="status-entry">
-                <img class="icon" src="/img/icon-family.png" alt="Families Affected">
-                <span>{{ location.affectedCount }} Affected</span>
-              </div>
-              <div class="status-entry">
-                <img class="icon" src="/img/icon-communication.png" alt="No Communication">
-                <span>{{ location.status_communication }}</span>
-              </div>
-              <div class="status-entry">
-                <img class="icon" src="/img/icon-water.png" alt="No Water">
-                <span>{{ location.status_water }}</span>
-              </div>
-              <div class="status-entry">
-                <img class="icon" src="/img/icon-electricity.png" alt="No Electricity">
-                <span>{{ location.status_electricity }}</span>
-              </div>
-              <div class="status-entry">
-                <img class="icon" src="/img/icon-medicine.png" alt="No Medicine">
-                <span>{{ location.status_medicine }}</span>
-              </div>
-              <div class="status-entry">
-                <img class="icon" src="/img/icon-clothes.png" alt="Needs Clothes">
-                <span>{{ location.status_clothes }}</span>
-              </div>
-              <div class="status-entry">
-                <img class="icon" src="/img/icon-food.png" alt="No Food">
-                <span>{{ location.status_food }}</span>
-              </div>
+              {% if location.death_count %}
+                <div class="status-entry">
+                  <img class="icon" src="/img/icon-deaths.png" alt="Deaths">
+                  <span>{{ location.death_count }} Deaths</span>
+                </div>
+                {% endif %}
+                {% if location.affected_count %}
+                <div class="status-entry">
+                  <img class="icon" src="/img/icon-family.png" alt="People Affected">
+                  <span>{{ location.affected_count }} People Affected</span>
+                </div>
+                {% endif %}
+                {% if location.status.communication %}
+                <div class="status-entry">
+                  <img class="icon" src="/img/icon-communication.png" alt="No Communication">
+                  <span>{{ location.status.communication }}</span>
+                </div>
+                {% endif %}
+                {% if location.status.water %}
+                <div class="status-entry">
+                  <img class="icon" src="/img/icon-water.png" alt="No Water">
+                  <span>{{ location.status.water }}</span>
+                </div>
+                {% endif %}
+                {% if location.status.power %}
+                <div class="status-entry">
+                  <img class="icon" src="/img/icon-electricity.png" alt="No Electricity">
+                  <span>{{ location.status.power }}</span>
+                </div>
+                {% endif %}
+                {% if location.status.medicine %}
+                <div class="status-entry">
+                  <img class="icon" src="/img/icon-medicine.png" alt="No Medicine">
+                  <span>{{ location.status.medicine }}</span>
+                </div>
+                {% endif %}
+                {% if location.status.clothes %}
+                <div class="status-entry">
+                  <img class="icon" src="/img/icon-clothes.png" alt="Needs Clothes">
+                  <span>{{ location.status.clothes }}</span>
+                </div>
+                {% endif %}
+                {% if location.status.food %}
+                <div class="status-entry">
+                  <img class="icon" src="/img/icon-food.png" alt="No Food">
+                  <span>{{ location.status.food }}</span>
+                </div>
+                {% endif %}
 
               </div>
 
@@ -106,7 +122,7 @@
                   </div>
                 </div>
 
-                <div class="status-entry">
+                <<!-- div class="status-entry">
                 <img class="icon" src="/img/icon-box.png" alt="Packs">
                 <span>{{ location.packs_needed }} packs needed</span>
               </div>
@@ -114,7 +130,7 @@
               <div class="status-entry">
                 <img class="icon" src="/img/icon-box-open.png" alt="Packs">
                 <span>{{ location.packs_provided }} packs provided</span>
-              </div>
+              </div> -->
               </div>
 
             <div class="clear"></div>
@@ -122,10 +138,10 @@
             </div>
 
             <br/>
-            <h4>Relief Efforts</h4>
+            <h4>Still Gathering Data on Relief Efforts</h4>
 
 
-            <div class="side-wrap">
+            <!-- <div class="side-wrap">
               <div class="side-head ongoing">
                 Ongoing
               </div>
@@ -165,7 +181,7 @@
                  </a>
                 </li>
               </ul>
-            </div>
+            </div> -->
 
           </div>
 
@@ -173,7 +189,7 @@
             <p>&nbsp;</p>
             <a data-toggle="collapse" href="#collapseOne" class="donate-btn">Donate Cash</a>
               <h3>Relief Operations that Needs your Help</h3>
-              <span>Stand up, take part and get involved!</span>
+              <span>Stand up, take part, and get involved!</span>
 
 
               <p>&nbsp;</p>
@@ -183,35 +199,35 @@
                   <div id="donations-wrap">
                     <div class="col-lg-4">
                       <div class="operations-content">
-                        <img src="/img/logos/dswd.png" class="operations-img"><br/>
-                        <strong>Ramon Aboitiz</strong>
-                        <div class="operations-details">
+                        <img src="/img/logos/aboitiz.png" class="operations-img"><br/>
+                        <strong>Aboitiz Foundation</strong>
+                        <!-- <div class="operations-details">
                           <p>We need people recently trampled our land, killed the cows & left us devasted. We are currently monitoring</p>
 
-                        </div>
-                        <a href="#" class="operations-btn blue-btn">Donate Cash</a>
+                        </div> -->
+                        <a href="http://ushare.unionbankph.com/aboitiz/" class="operations-btn blue-btn">Donate Cash</a>
                       </div>
                     </div>
                     <div class="col-lg-4">
                       <div class="operations-content">
-                        <img src="/img/logos/dswd.png" class="operations-img"><br/>
-                        <strong>Ramon Aboitiz</strong>
-                        <div class="operations-details">
+                        <img src="/img/logos/unicef.png" class="operations-img"><br/>
+                        <strong>Unicef Philippines</strong>
+                        <!-- <div class="operations-details">
                           <p>We need people recently trampled our land, killed the cows & left us devasted. We are currently monitoring</p>
 
-                        </div>
-                        <a href="#" class="operations-btn blue-btn">Donate Cash</a>
+                        </div> -->
+                        <a href="http://donate.unicef.ph/campaign/24/typhoon-yolanda-emergency-appeal" class="operations-btn blue-btn">Donate Cash</a>
                       </div>
                     </div>
                     <div class="col-lg-4">
                       <div class="operations-content">
-                        <img src="/img/logos/dswd.png" class="operations-img"><br/>
-                        <strong>Ramon Aboitiz</strong>
+                        <img src="/img/logos/red-cross.png" class="operations-img"><br/>
+                        <strong>Philippine Red Cross</strong><!-- 
                         <div class="operations-details">
                           <p>We need people recently trampled our land, killed the cows & left us devasted. We are currently monitoring</p>
 
-                        </div>
-                        <a href="#" class="operations-btn blue-btn">Donate Cash</a>
+                        </div> -->
+                        <a href="http://www.redcross.org.ph/donate" class="operations-btn blue-btn">Donate Cash</a>
                       </div>
                     </div>
                     <div class="clearfix"></div>
@@ -318,7 +334,7 @@
                   </div>
                 </div>
 
-                <div class="status-entry">
+                <!-- <div class="status-entry">
                 <img class="icon" src="/img/icon-box.png" alt="Packs">
                 <span>{{ location.packs_needed }} packs needed</span>
               </div>
@@ -326,7 +342,7 @@
               <div class="status-entry">
                 <img class="icon" src="/img/icon-box-open.png" alt="Packs">
                 <span>{{ location.packs_provided }} packs provided</span>
-              </div>
+              </div> -->
               </div>
 
             <div class="clear"></div>

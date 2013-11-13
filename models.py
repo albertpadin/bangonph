@@ -88,8 +88,8 @@ class Distribution(ndb.Model):
     date_of_distribution = ndb.DateTimeProperty()
     contact = ndb.KeyProperty()
     destinations = ndb.KeyProperty()
-    supply_goal = ndb.JsonProperty(repeated=True)
-    actual_supply = ndb.JsonProperty(repeated=True)
+    supply_goal = ndb.JsonProperty()
+    actual_supply = ndb.JsonProperty()
 
 
     def to_object(self):

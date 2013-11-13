@@ -350,9 +350,9 @@ var AddLocation = Backbone.View.extend({
         "toiletries": _.escape($("#toiletries").val()),
         "flashlights": _.escape($("#flashlights").val()),
         "cloths": _.escape($("#cloths").val()),
-        "power": _.escape($("#power").val()),
-        "communication": _.escape($("#communication").val()),
-        "water": _.escape($("#water").val())
+        "power": _.escape($("#status_power").is(':checked')),
+        "communication": _.escape($("#status_communication").is(':checked')),
+        "status_water": $("#status_water").is(":checked")
       },
       success: function() {
         window.location.hash = "#locations";
@@ -373,31 +373,24 @@ var DistributionView = Backbone.View.extend({
 var AddDistribution = Backbone.View.extend({
   el: "#app",
   template: _.template( $("#addDistributionsTemplate").html() ),
-  initialize: function(contacts, locations) {
+  initialize: function() {
     _.bindAll(this, "render", "contacts");
-    _.bindAll(this, "render", "locations");
   },
   events: {
     "submit form#frmAddDistribution" : "addDistribution"
   },
-  render: function(response, locs) {
-    $(this.el).html( this.template({ contacts: response, locations: locs }) );
+  render: function(contacts, locs) {
+    $(this.el).html( this.template({ contacts: contacts, locations: locs }) );
   },
   contacts: function() {
     var self = this;
-    var contactsCollection = new ContactsCollection();
-    contactsCollection.fetch({
+    $.ajax({
+      type: "get",
+      url: "/distributions/fetch",
       success: function(datas) {
-        self.render(datas.toJSON());
-      }
-    });
-  },
-  locations: function() {
-    var self = this;
-    var collection = new LocationCollection();
-    collection.fetch({
-      success: function(datas) {
-        self.render(datas.toJSON());
+        console.log(JSON.parse(datas));
+        var dd = JSON.parse(datas);
+        self.render(dd.contacts, dd.locations);
       }
     });
   },
@@ -406,10 +399,12 @@ var AddDistribution = Backbone.View.extend({
       type: "post",
       url: "/distributions",
       data: {
-        "name": _.escape($("#fname").val()),
         "date_of_distribution": _.escape($("#date_of_distribution").val()),
         "contact": _.escape($("#contact").val()),
         "destinations": _.escape($("#destinations").val()),
+
+        "s_food" : $("#chk_supply_goal_food").is(":checked").val(),
+
         "supply_goal": _.escape($("#supply_goal").val()),
         "actual_supply": _.escape($("#actual_supply").val())
       },
@@ -669,7 +664,6 @@ var Router = Backbone.Router.extend({
     renderAddDistributionPage: function() {
       addDistribution.render();
       addDistribution.contacts();
-      addDistribution.locations();
     },
 
     renderDistributorPage: function() {

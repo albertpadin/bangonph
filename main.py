@@ -529,7 +529,7 @@ class LocationHandler(BaseHandler):
         status = {
             "power": self.request.get("power"),
             "communication": self.request.get("communication"),
-            "water": self.request.get("water")
+            "water": self.request.get("status_water")
         }
 
         data = {
@@ -551,7 +551,51 @@ class DistributionHandler(BaseHandler):
         pass
 
     def post(self):
-        pass
+        data = {
+            "date_of_distribution": datetime.datetime.strptime(self.request.get("date_of_distribution"), "%Y-%m-%d"), #1992-10-20
+            "contact": int(self.request.get("contact")),
+            "destinations": int(self.request.get("destinations")),
+            "supply_goal": self.request.get("supply_goal"),
+            "actual_supply": self.request.get("actual_supply")
+        }
+
+        add_destribution(data)
+
+class DistributionFetchHandler(BaseHandler):
+    @login_required
+    def get(self):
+        datas_contacts = []
+        temp_type = {}
+        contacts = Contact.query().fetch(100)
+        if contacts:
+            for contact in contacts:
+                temp = {}
+                temp["id"] = contact.key.id()
+                temp["name"] = contact.name
+                temp["contacts"] = contact.contacts
+                temp["email"] = contact.email
+                temp["facebook"] = contact.facebook
+                temp["twitter"] = contact.twitter
+                datas_contacts.append(temp)
+            temp_type["contacts"] = datas_contacts
+
+        datas_locations = []
+        locations = Location.query().fetch(100)
+        if locations:
+            for location in locations:
+                temp = {}
+                temp["id"] = location.key.id()
+                temp["name"] = location.name
+                temp["latlong"] = location.latlong
+                temp["featured_photo"] = location.featured_photo
+                temp["death_count"] = location.death_count
+                temp["affected_count"] = location.affected_count
+                temp["status_board"] = location.status_board
+                temp["needs"] = location.needs
+                temp["status"] = location.status
+                datas_locations.append(temp)
+            temp_type["locations"] = datas_locations
+        self.response.out.write(simplejson.dumps(temp_type))
 
 class CentersHandler(BaseHandler):
     @login_required
@@ -640,8 +684,6 @@ class sampler(BaseHandler):
 class ErrorHandler(BaseHandler):
     def get(self, page):
         logging.critical("This route is not handled.")
-
-
 
 # API Handlers
 
@@ -797,7 +839,7 @@ class APIContactsHandler(APIBaseHandler):
 
 
 app = webapp2.WSGIApplication([
-    routes.DomainRoute(r'<:gcdc2013-bangonph\.appspot\.com|www\.bangonph\.com>', [
+    routes.DomainRoute(r'<:gcdc2013-bangonph\.appspot\.com|localhost|www\.bangonph\.com>', [
         webapp2.Route('/', handler=FrontPage, name="www-front"),
         webapp2.Route('/public', handler=PublicFrontPage, name="www-front"),
         webapp2.Route('/register', handler=RegisterPage, name="www-register"),
@@ -813,6 +855,7 @@ app = webapp2.WSGIApplication([
         webapp2.Route('/contacts', handler=ContactHandler, name="www-contacts"),
         webapp2.Route('/locations', handler=LocationHandler, name="www-locations"),
         webapp2.Route('/distributions', handler=DistributionHandler, name="www-distributions"),
+        webapp2.Route('/distributions/fetch', handler=DistributionFetchHandler, name="www-distributions-fetch"),
 
 
         webapp2.Route('/posts', handler=PostsHandler, name="www-post"),
@@ -857,7 +900,7 @@ app = webapp2.WSGIApplication([
         webapp2.Route(r'/<:.*>', ErrorHandler)
     ]),
 
-    routes.DomainRoute(r'<:api\.bangonph\.com|localhost>', [
+    routes.DomainRoute(r'<:api\.bangonph\.com>', [
         # leonard gwapo:
         webapp2.Route('/locations/', handler=APILocationsHandler, name="api-locations"),
         webapp2.Route('/users/', handler=APIUsersHandler, name="api-users"),

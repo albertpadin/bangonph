@@ -351,6 +351,8 @@ class PublicLocationPage(BaseHandler):
             self.redirect('/')
             return
 
+        self.tv['efforts'] = Distribution.query(Distribution.destinations == location.key, Distribution.date_of_distribution >= datetime.datetime.now()).order(Distribution.date_of_distribution)
+
         self.tv['location'] = location.to_object()
         self.tv['page_title'] = location.name
 
@@ -745,6 +747,10 @@ class DistributionHandler(BaseHandler):
                 temp["supply_goal"] = distribution.supply_goal
                 temp["actual_supply"] = distribution.actual_supply
                 temp["images"] = distribution.images
+                temp["status"] = distribution.status
+                temp["info"] = distribution.info
+                temp["featured_photo"] = distribution.featured_photo
+                temp["description"] = distribution.description
                 datas.append(temp)
             self.response.out.write(simplejson.dumps(datas))
 
@@ -867,7 +873,11 @@ class DistributionHandler(BaseHandler):
             "destinations": self.request.get("destinations"),
             "supply_goal": supply_goal,
             "actual_supply": actual_supply,
-            "images" : image_data
+            "images" : image_data,
+            "status" : self.request.get("status").strip().upper(),
+            "info": self.request.get("info"),
+            "featured_photo": self.request.get("featured_photo"),
+            "description": self.request.get("description")
         }
 
         add_distribution(data)

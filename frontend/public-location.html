@@ -3,11 +3,8 @@
 {% block ogdetails %}
 
 <meta property="og:image" content="http://s2.djyimg.com/n3/eet-content/uploads/2013/11/treeCEBUYolanda-611x450.jpg"/>
-    <meta property="og:title" content="Cebu"/>
-    <meta property="og:url" content="http://bangonphilippines.appspot.com/"/>
-    <meta property="og:site_name" content="BangonPhilippines"/>
-    <meta property="og:type" content="website"/>
-    <meta property="og:description" content="Several municipalities and cities were severely affected by supertyphoon Yolanda. Here are some of the ways you can help in the relief efforts underway to help over 4 million affected Filipinos."/>
+    <meta property="og:title" content="{{ location.name }}"/>
+    <meta property="og:url" content="{{ current_base_url }}"/>
 
 {% endblock %}
 
@@ -40,10 +37,10 @@
 
             <div class="side-wrap hide-border">
               <div class="social-item">
-                <div class="fb-share-button" data-href="http://bangonphilippines.appspot.com/tacloban.html" data-type="button_count"></div>            
+                <div class="fb-share-button" data-href="{{ current_base_url }}" data-type="button_count"></div>            
               </div>
               <div class="social-item">
-                <a href="https://twitter.com/share" class="twitter-share-button" data-hashtags="BangonVisayas">Tweet</a>
+                <a href="https://twitter.com/share" class="twitter-share-button" data-hashtags="BangonPH">Tweet</a>
                 <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
               </div>
               </div>
@@ -56,35 +53,35 @@
               <div class="status-group">
               <div class="status-entry">
                 <img class="icon" src="img/icon-deaths.png" alt="Deaths">
-                <span>100 Deaths</span>
+                <span>{{ location.death_count }} Deaths</span>
               </div>
               <div class="status-entry">
                 <img class="icon" src="img/icon-family.png" alt="Families Affected">
-                <span>123+ Families Affected</span>
+                <span>{{ location.affectedCount }} Affected</span>
               </div>
               <div class="status-entry">
                 <img class="icon" src="img/icon-communication.png" alt="No Communication">
-                <span>No Communication</span>
+                <span>{{ location.status_communication }}</span>
               </div>
               <div class="status-entry">
                 <img class="icon" src="img/icon-water.png" alt="No Water">
-                <span>No Water</span>
+                <span>{{ location.status_water }}</span>
               </div>
               <div class="status-entry">
                 <img class="icon" src="img/icon-electricity.png" alt="No Electricity">
-                <span>No Electricity</span>
+                <span>{{ location.status_electricity }}</span>
               </div>
               <div class="status-entry">
                 <img class="icon" src="img/icon-medicine.png" alt="No Medicine">
-                <span>No Medicine</span>
+                <span>{{ location.status_medicine }}</span>
               </div>
               <div class="status-entry">
                 <img class="icon" src="img/icon-clothes.png" alt="Needs Clothes">
-                <span>Needs Clothes</span>
+                <span>{{ location.status_clothes }}</span>
               </div>
               <div class="status-entry">
                 <img class="icon" src="img/icon-food.png" alt="No Food">
-                <span>No Food</span>
+                <span>{{ location.status_food }}</span>
               </div>
 
               </div>
@@ -103,18 +100,18 @@
               <h6>Relief Aid Status:</h6>
                 <div class="progress">
                   <div class="progress-bar progress-bar-danger" role="progressbar" aria-valuenow="30" aria-valuemin="0" aria-valuemax="100" style="width: 30%">
-                    <span class="sr-only">70% Needs Help</span>
+                    <span class="sr-only">Gathering data...</span>
                   </div>
                 </div>
 
                 <div class="status-entry">
                 <img class="icon" src="img/icon-box.png" alt="Packs">
-                <span>20,000 packs needed</span>
+                <span>{{ location.packs_needed }} packs needed</span>
               </div>
 
               <div class="status-entry">
                 <img class="icon" src="img/icon-box-open.png" alt="Packs">
-                <span>500 packs provided</span>
+                <span>{{ location.packs_provided }} packs provided</span>
               </div>
               </div>
 
@@ -396,35 +393,35 @@
               <div class="status-group">
               <div class="status-entry">
                 <img class="icon" src="img/icon-deaths.png" alt="Deaths">
-                <span>100 Deaths</span>
+                <span>{{ location.death_count }} Deaths</span>
               </div>
               <div class="status-entry">
                 <img class="icon" src="img/icon-family.png" alt="Families Affected">
-                <span>123+ Families Affected</span>
+                <span>{{ location.affectedCount }} Affected</span>
               </div>
               <div class="status-entry">
                 <img class="icon" src="img/icon-communication.png" alt="No Communication">
-                <span>No Communication</span>
+                <span>{{ location.status_communication }}</span>
               </div>
               <div class="status-entry">
                 <img class="icon" src="img/icon-water.png" alt="No Water">
-                <span>No Water</span>
+                <span>{{ location.status_water }}</span>
               </div>
               <div class="status-entry">
                 <img class="icon" src="img/icon-electricity.png" alt="No Electricity">
-                <span>No Electricity</span>
+                <span>{{ location.status_electricity }}</span>
               </div>
               <div class="status-entry">
                 <img class="icon" src="img/icon-medicine.png" alt="No Medicine">
-                <span>No Medicine</span>
+                <span>{{ location.status_medicine }}</span>
               </div>
               <div class="status-entry">
                 <img class="icon" src="img/icon-clothes.png" alt="Needs Clothes">
-                <span>Needs Clothes</span>
+                <span>{{ location.status_clothes }}</span>
               </div>
               <div class="status-entry">
                 <img class="icon" src="img/icon-food.png" alt="No Food">
-                <span>No Food</span>
+                <span>{{ location.status_food }}</span>
               </div>
 
               </div>
@@ -442,18 +439,18 @@
               <h6>Relief Aid Status:</h6>
                 <div class="progress">
                   <div class="progress-bar progress-bar-danger" role="progressbar" aria-valuenow="30" aria-valuemin="0" aria-valuemax="100" style="width: 30%">
-                    <span class="sr-only">70% Needs Help</span>
+                    <span class="sr-only">Gathering data...</span>
                   </div>
                 </div>
 
                 <div class="status-entry">
                 <img class="icon" src="img/icon-box.png" alt="Packs">
-                <span>20,000 packs needed</span>
+                <span>{{ location.packs_needed }} packs needed</span>
               </div>
 
               <div class="status-entry">
                 <img class="icon" src="img/icon-box-open.png" alt="Packs">
-                <span>500 packs provided</span>
+                <span>{{ location.packs_provided }} packs provided</span>
               </div>
               </div>
 

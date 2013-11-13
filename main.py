@@ -1814,32 +1814,30 @@ app = webapp2.WSGIApplication([
         webapp2.Route(r'/<:.*>', ErrorHandler)
     ]),
 
-    routes.DomainRoute(r'<:api\.bangonph\.com>', [
-        webapp2.Route('/locations', handler=APILocationsHandler, name="api-locations"),
-        webapp2.Route('/users', handler=APIUsersHandler, name="api-users"),
-        webapp2.Route('/contacts', handler=APIContactsHandler, name="api-locations"),
-        webapp2.Route('/posts', handler=APIPostsHandler, name="api-locations"),
-        webapp2.Route('/drop-off-centers', handler=APIDropOffCentersHandler, name="api-locations"),
-        webapp2.Route('/subscribers', handler=APISubscribersHandler, name="api-subscribers"),
-        webapp2.Route('/orgs', handler=APIOrganizationsHandler, name="api-locations"),
-        webapp2.Route('/efforts', handler=APIEffortsHandler, name="api-locations"),
-        webapp2.Route('/distributors', handler=APIDistributorsHandler, name="api-locations"),
+    routes.DomainRoute(r'<:api\.bangonph\.com|localhost>', [
+        webapp2.Route('/v1/locations', handler=APILocationsHandler, name="api-locations"),
+        webapp2.Route('/v1/users', handler=APIUsersHandler, name="api-users"),
+        webapp2.Route('/v1/contacts', handler=APIContactsHandler, name="api-locations"),
+        webapp2.Route('/v1/posts', handler=APIPostsHandler, name="api-locations"),
+        webapp2.Route('/v1/drop-off-centers', handler=APIDropOffCentersHandler, name="api-locations"),
+        webapp2.Route('/v1/subscribers', handler=APISubscribersHandler, name="api-subscribers"),
+        webapp2.Route('/v1/orgs', handler=APIOrganizationsHandler, name="api-locations"),
+        webapp2.Route('/v1/efforts', handler=APIEffortsHandler, name="api-locations"),
+        webapp2.Route('/v1/distributors', handler=APIDistributorsHandler, name="api-locations"),
 
 
-        webapp2.Route(r'/distributors/<:.*>', handler=APIDistributorsHandler, name="api-locations"),
-        webapp2.Route(r'/locations/<:.*>', handler=APILocationsHandler, name="api-locations"),
-        webapp2.Route(r'/users/<:.*>', handler=APIUsersHandler, name="api-users"),
-        webapp2.Route(r'/contacts/<:.*>', handler=APIContactsHandler, name="api-locations"),
-        webapp2.Route(r'/posts/<:.*>', handler=APIPostsHandler, name="api-locations"),
-        webapp2.Route(r'/drop-off-centers/<:.*>', handler=APIDropOffCentersHandler, name="api-locations"),
-        webapp2.Route(r'/subscribers/<:.*>', handler=APISubscribersHandler, name="api-subscribers"),
-        webapp2.Route(r'/orgs/<:.*>', handler=APIOrganizationsHandler, name="api-locations"),
-        webapp2.Route(r'/efforts/<:.*>', handler=APIEffortsHandler, name="api-locations"),
-
-
+        webapp2.Route(r'/v1/distributors/<:.*>', handler=APIDistributorsHandler, name="api-locations"),
+        webapp2.Route(r'/v1/locations/<:.*>', handler=APILocationsHandler, name="api-locations"),
+        webapp2.Route(r'/v1/users/<:.*>', handler=APIUsersHandler, name="api-users"),
+        webapp2.Route(r'/v1/contacts/<:.*>', handler=APIContactsHandler, name="api-locations"),
+        webapp2.Route(r'/v1/posts/<:.*>', handler=APIPostsHandler, name="api-locations"),
+        webapp2.Route(r'/v1/drop-off-centers/<:.*>', handler=APIDropOffCentersHandler, name="api-locations"),
+        webapp2.Route(r'/v1/subscribers/<:.*>', handler=APISubscribersHandler, name="api-subscribers"),
+        webapp2.Route(r'/v1/orgs/<:.*>', handler=APIOrganizationsHandler, name="api-locations"),
+        webapp2.Route(r'/v1/efforts/<:.*>', handler=APIEffortsHandler, name="api-locations"),
 
         # richmond:
-        webapp2.Route('/oauth/authorize', handler=GetUserToken, name="api-get-user-token"),
+        webapp2.Route('/v1/oauth/authorize', handler=GetUserToken, name="api-get-user-token"),
         webapp2.Route('/s', handler=sampler, name="api-get-authorization-code"),
 
         webapp2.Route(r'/<:.*>', ErrorHandler)

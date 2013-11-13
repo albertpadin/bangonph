@@ -787,7 +787,33 @@ class APIEffortsHandler(APIBaseHandler):
 
 class APIContactsHandler(APIBaseHandler):
     def get(self, instance_id=None):
-        pass
+        contacts_json = []
+        if not instance_id:
+            if self.request.get("cursor"):
+                curs = Cursor(urlsafe=self.request.get("cursor"))
+                if curs:
+                    contacts, next_cursor, more = Contact.query().fetch_page(10, start_cursor=curs)
+                else:
+                    contacts, next_cursor, more = Contact.query().fetch_page(10)
+            else:
+                contacts, next_cursor, more = Contact.query().fetch_page(10)
+
+            for contact in contacts:
+                contacts_json.append(contact.to_object())
+
+            data = {}
+            data["locations"] = contacts_json
+            if more:
+                data["next_page"] = "http://api.bangonph.com/contacts/?cursor=" + next_cursor
+            else:
+                data["next_page"] = False
+
+            self.render(data)
+        else:
+            contacts = Contact.get_by_id(instance_id)
+            if contacts:
+                self.render(contacts.to_object())
+
 
     def post(self, instance_id=None):
         pass
@@ -859,14 +885,14 @@ app = webapp2.WSGIApplication([
 
     routes.DomainRoute(r'<:api\.bangonph\.com|localhost>', [
         # leonard gwapo:
-        webapp2.Route('/locations/', handler=APILocationsHandler, name="api-locations"),
-        webapp2.Route('/users/', handler=APIUsersHandler, name="api-users"),
-        webapp2.Route('/contacts/', handler=APIContactsHandler, name="api-locations"),
-        webapp2.Route('/posts/', handler=APIPostsHandler, name="api-locations"),
-        webapp2.Route('/drop-off-centers/', handler=APIDropOffCentersHandler, name="api-locations"),
-        webapp2.Route('/subscribers/', handler=APISubscribersHandler, name="api-locations"),
-        webapp2.Route('/orgs/', handler=APIOrganizationsHandler, name="api-locations"),
-        webapp2.Route('/efforts/', handler=APIEffortsHandler, name="api-locations"),
+        webapp2.Route('/locations', handler=APILocationsHandler, name="api-locations"),
+        webapp2.Route('/users', handler=APIUsersHandler, name="api-users"),
+        webapp2.Route('/contacts', handler=APIContactsHandler, name="api-locations"),
+        webapp2.Route('/posts', handler=APIPostsHandler, name="api-locations"),
+        webapp2.Route('/drop-off-centers', handler=APIDropOffCentersHandler, name="api-locations"),
+        webapp2.Route('/subscribers', handler=APISubscribersHandler, name="api-locations"),
+        webapp2.Route('/orgs', handler=APIOrganizationsHandler, name="api-locations"),
+        webapp2.Route('/efforts', handler=APIEffortsHandler, name="api-locations"),
 
         webapp2.Route(r'/locations/<:.*>', handler=APILocationsHandler, name="api-locations"),
         webapp2.Route(r'/users/<:.*>', handler=APIUsersHandler, name="api-users"),

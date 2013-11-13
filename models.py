@@ -113,6 +113,19 @@ class Contact(ndb.Model):
     facebook = ndb.StringProperty()
     twitter = ndb.StringProperty()
 
+    def to_object(self, extended=""):
+        details = {}
+        details["meta"] = {"href": "http://api.bangonph.com/contacts/?" + str(self.key.id())}
+        details["created"] = str(self.created)
+        details["updated"] = str(self.updated)
+        details["name"] = self.name
+        details["contacts"] = self.contacts
+        details["email"] = self.email
+        details["facebook"] = self.facebook
+        details["status_board"] = self.status_board
+        details["twitter"] = self.twitter
+        
+        return details
 
 class Post(ndb.Model):
     created = ndb.DateTimeProperty(auto_now_add=True)

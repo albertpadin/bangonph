@@ -240,7 +240,7 @@ def add_contact(data, instance_id=""):
 
     if data["contacts"]:
         if contact.contacts:
-            contact.append(data["contacts"])
+            contact.contacts.append(data["contacts"])
         else:
             contact.contacts = [data["contacts"]]
 

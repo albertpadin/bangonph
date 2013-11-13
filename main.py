@@ -505,7 +505,7 @@ class LocationHandler(BaseHandler):
                 temp["latlong"] = location.latlong
                 temp["featured_photo"] = location.featured_photo
                 temp["death_count"] = location.death_count
-                temp["affected_count"] = location.affected_count
+                temp["affectedCount"] = location.affected_count
                 temp["status_board"] = location.status_board
                 temp["needs"] = location.needs
                 temp["status"] = location.status
@@ -641,7 +641,116 @@ class ErrorHandler(BaseHandler):
     def get(self, page):
         logging.critical("This route is not handled.")
 
-site_domain = SETTINGS["site_domain"].replace(".","\.")
+
+
+# API Handlers
+
+class APIBaseHandler(webapp2.RequestHandler):
+    def __init__(self, request=None, response=None):
+        pass
+
+    def render(self, template_path=None, force=False):
+        self.response.out.write(simplejson.dumps(self.tv))
+
+
+class APILocationsHandler(APIBaseHandler):
+    def get(self, instance_id=None):
+        pass
+
+    def post(self, instance_id=None):
+        pass
+
+    def delete(self, instance_id=None):
+        pass
+
+
+class APIUsersHandler(APIBaseHandler):
+    def get(self, instance_id=None):
+        pass
+
+    def post(self, instance_id=None):
+        pass
+
+    def delete(self, instance_id=None):
+        pass
+
+
+class APILContactsHandler(APIBaseHandler):
+    def get(self, instance_id=None):
+        pass
+
+    def post(self, instance_id=None):
+        pass
+
+    def delete(self, instance_id=None):
+        pass
+
+
+class APIOrganizationsHandler(APIBaseHandler):
+    def get(self, instance_id=None):
+        pass
+
+    def post(self, instance_id=None):
+        pass
+
+    def delete(self, instance_id=None):
+        pass
+
+
+class APIPostsHandler(APIBaseHandler):
+    def get(self, instance_id=None):
+        pass
+
+    def post(self, instance_id=None):
+        pass
+
+    def delete(self, instance_id=None):
+        pass
+
+
+class APIDropOffCentersHandler(APIBaseHandler):
+    def get(self, instance_id=None):
+        pass
+
+    def post(self, instance_id=None):
+        pass
+
+    def delete(self, instance_id=None):
+        pass
+
+
+class APISubscribersHandler(APIBaseHandler):
+    def get(self, instance_id=None):
+        pass
+
+    def post(self, instance_id=None):
+        pass
+
+    def delete(self, instance_id=None):
+        pass
+
+
+class APIEffortsHandler(APIBaseHandler):
+    def get(self, instance_id=None):
+        pass
+
+    def post(self, instance_id=None):
+        pass
+
+    def delete(self, instance_id=None):
+        pass
+
+
+class APIContactsHandler(APIBaseHandler):
+    def get(self, instance_id=None):
+        pass
+
+    def post(self, instance_id=None):
+        pass
+
+    def delete(self, instance_id=None):
+        pass
+
 
 app = webapp2.WSGIApplication([
     routes.DomainRoute(r'<:gcdc2013-bangonph\.appspot\.com|localhost|www\.bangonph\.com>', [
@@ -704,29 +813,30 @@ app = webapp2.WSGIApplication([
         webapp2.Route(r'/<:.*>', ErrorHandler)
     ]),
     routes.DomainRoute('api.bangonph.com', [
-        webapp2.Route('/', handler=FrontPage, name="www-front"),
-        webapp2.Route('/register', handler=RegisterPage, name="www-register"),
-        webapp2.Route('/logout', handler=Logout, name="www-logout"),
-        webapp2.Route('/login', handler=LoginPage, name="www-login"),
-        webapp2.Route('/fblogin', handler=FBLoginPage, name="www-fblogin"),
-        webapp2.Route('/dashboard', handler=DashboardPage, name="www-dashboard"),
-        webapp2.Route('/cosmo', handler=CosmoPage, name="www-test"),
-
         # leonard gwapo:
-        webapp2.Route('/locations', handler=LocationHandler, name="www-locations"),
-        webapp2.Route('/users', handler=UserHandler, name="www-users"),
-        webapp2.Route('/posts', handler=PostsHandler, name="www-post"),
+        webapp2.Route('/locations/', handler=APILocationsHandler, name="api-locations"),
+        webapp2.Route('/users/', handler=APIUsersHandler, name="api-locations"),
+        webapp2.Route('/contacts/', handler=APIContactsHandler, name="api-locations"),
+        webapp2.Route('/posts/', handler=APIPostsHandler, name="api-locations"),
+        webapp2.Route('/drop-off-centers/', handler=APIDropOffCentersHandler, name="api-locations"),
+        webapp2.Route('/subscribers/', handler=APISubscribersHandler, name="api-locations"),
+        webapp2.Route('/orgs/', handler=APIOrganizationsHandler, name="api-locations"),
+        webapp2.Route('/efforts/', handler=APIEffortsHandler, name="api-locations"),
 
-        webapp2.Route('/contacts', handler=ContactHandler, name="www-contacts"),
-        webapp2.Route('/drop-off-center', handler=CentersHandler, name="www-centers"),
+        webapp2.Route(r'/locations/<:.*>', handler=APILocationsHandler, name="api-locations"),
+        webapp2.Route(r'/users/<:.*>', handler=APIUsersHandler, name="api-locations"),
+        webapp2.Route(r'/contacts/<:.*>', handler=APIContactsHandler, name="api-locations"),
+        webapp2.Route(r'/posts/<:.*>', handler=APIPostsHandler, name="api-locations"),
+        webapp2.Route(r'/drop-off-centers/<:.*>', handler=APIDropOffCentersHandler, name="api-locations"),
+        webapp2.Route(r'/subscribers/<:.*>', handler=APISubscribersHandler, name="api-locations"),
+        webapp2.Route(r'/orgs/<:.*>', handler=APIOrganizationsHandler, name="api-locations"),
+        webapp2.Route(r'/efforts/<:.*>', handler=APIEffortsHandler, name="api-locations"),
 
-
-        webapp2.Route('/subscribers', handler=SubscriberPage, name="www-subscribers"),
 
 
         # richmond:
-        webapp2.Route('/get_authorization_code', handler=GetAuthorizationCode, name="www-get-authorization-code"),
-        webapp2.Route('/s', handler=sampler, name="www-get-authorization-code"),
+        webapp2.Route('/get_authorization_code', handler=GetAuthorizationCode, name="api-get-authorization-code"),
+        webapp2.Route('/s', handler=sampler, name="api-get-authorization-code"),
 
         webapp2.Route(r'/<:.*>', ErrorHandler)
     ])

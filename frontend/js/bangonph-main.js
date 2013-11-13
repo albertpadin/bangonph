@@ -139,6 +139,7 @@ var Router = Backbone.Router.extend({
 
         "distributors" : "renderDistributorPage",
         "distributor/new" : "renderAddDistributorPage",
+        "distributor/edit/:id" : "renderEditDistributorPage",
 
         "drop-off-centers" : "renderDropOffCenterPage",
         "drop-off-center/new" : "renderAddDropOffCenterPage",
@@ -216,6 +217,10 @@ var Router = Backbone.Router.extend({
     renderAddDistributorPage: function() {
       addDistributor.render();
     },
+    renderEditDistributorPage: function(id){
+      editDistributor.render();
+      editDistributor.data(id);
+    },
 
     renderDropOffCenterPage: function() {
       dropOffCenterView.render();
@@ -260,6 +265,7 @@ var editDistribution = new EditDistribution();
 
 var distributorView = new DistributorView();
 var addDistributor = new AddDistributor();
+var editDistributor = new EditDistributor();
 
 var dropOffCenterView = new DropOffCenterView();
 var addDropOffCenter = new AddDropOffCenter();

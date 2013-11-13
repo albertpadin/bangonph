@@ -65,6 +65,10 @@ var DistributorView = Backbone.View.extend({
       });
 
     }
+  },
+  editDistributor: function(id){
+    var route = new Router();
+    route.navigate("distributor/edit/" + id, {trigger: true});
   }
 });
 
@@ -92,6 +96,49 @@ var AddDistributor = Backbone.View.extend({
         "facebook": _.escape($("#facebook").val())
       },
       success: function() {
+        window.location.hash = "#distributors";
+      }
+    });
+    return false;
+  }
+});
+
+var EditDistributor = Backbone.View.extend({
+  el: "#app",
+  template: _.template($('#editDistributorTemplate').html()),
+  initialize: function(){
+    _.bindAll(this, "render", "data");
+  },
+  events: {
+    'submit form#frmEditDistributor' : 'editDistributor'
+  },
+  render: function(response){
+    $(this.el).html( this.template({ distributor: response }) );
+
+  },
+  data: function(id){
+    var self = this;
+    var distributorsCollection = new DistributorCollection();
+    distributorsCollection.fetch({
+      data:{ id_edit: id },
+      success: function(datas) {
+        self.render(datas.toJSON());
+      }
+    });
+  },
+  editDistributor: function() {
+    $.ajax({
+      type: "post",
+      url: "/distributors",
+      data: {
+        "id" : _.escape($("#id").val()),
+        "name" : _.escape($("#fname").val()),
+        "contact_num" : _.escape($("#contacts").val()),
+        "email" : _.escape($("#email").val()),
+        "website" : _.escape($("#website").val()),
+        "facebook" : _.escape($("#facebook").val())
+      },
+      success: function(temp) {
         window.location.hash = "#distributors";
       }
     });

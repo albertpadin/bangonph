@@ -40,6 +40,33 @@ API_OAUTH_RESP = {
 	"message": ""
 }
 
+
+API_RESPONSE_ = {
+	"response": "ok",
+	"code": 200,
+	"data": {
+		"meta": {
+			"href": "",
+		},
+		"parent": {
+			"meta": {
+				"href": "",
+			}
+		},
+		"children": {
+			"meta": {
+				"href": "",
+			}
+		},
+		"id": "",
+		"name": "",
+		"instance_id": ""
+	},
+	"type": "",
+	"property": "",
+	"description": ""
+}
+
 # Local Settings
 import os
 def development():

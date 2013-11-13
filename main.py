@@ -1540,7 +1540,11 @@ class APIEffortsHandler(APIBaseHandler):
                 else:
                     efforts, next_cursor, more = Distribution.query().fetch_page(25)
             else:
-                efforts, next_cursor, more = Distribution.query().fetch_page(25)
+                if self.request.get("filter_locations"):
+                    loc = slugify(self.request.get("filter_locations"))
+                    efforts = Distribution.query(Distribution.destinations == loc).fetch(100)
+                else:
+                    efforts, next_cursor, more = Distribution.query().fetch_page(25)
 
             for effort in efforts:
                 efforts_json.append(effort.to_object(self.request.get("expand").lower()))

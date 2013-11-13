@@ -1,6 +1,6 @@
 import webapp2, jinja2, os, calendar
 from webapp2_extras import routes
-from models import User, Contact, Location, Post, Distribution
+from models import User, Contact, Location, Post, Distribution, File
 from functions import *
 import json as simplejson
 import logging
@@ -14,6 +14,9 @@ import facebook
 from oauth_models import *
 
 from google.appengine.api import urlfetch
+from google.appengine.ext import blobstore
+from google.appengine.ext.webapp import blobstore_handlers
+from google.appengine.api import images
 
 from settings import SETTINGS
 from settings import SECRET_SETTINGS
@@ -1234,9 +1237,41 @@ class APIContactsHandler(APIBaseHandler):
             self.render(data)
 
 
+class UploadPage(BaseHandler):
+    @login_required
+    def get(self):
+        self.tv['upload_url'] = blobstore.create_upload_url('/upload/handler')
+        self.tv['files'] = File.query().fetch(500)
+        self.render('frontend/upload-file.html')
+
+
+class UploadHandler(blobstore_handlers.BlobstoreUploadHandler):
+    def post(self):
+        upload_files = self.get_uploads('file')
+        title = self.request.get('title').strip()
+        title_code = slugify(title)
+        logging.error(upload_files)
+        blob_info = upload_files[0]
+        blob_key = blob_info.key()
+
+        f = File(id=title_code)
+        f.title = title
+        f.blob_key = blob_key
+        try:
+            f.img_serving = images.get_serving_url(blob_key)
+        except:
+            logging.exception("Not an image?")
+        f.put()
+
+        if "?" in self.request.referer:
+            self.redirect(self.request.referer + "&success=File%20Uploaded")
+        else:
+            self.redirect(self.request.referer + "?success=File%20Uploaded")
+
+
 
 app = webapp2.WSGIApplication([
-    routes.DomainRoute(r'<:gcdc2013-bangonph\.appspot\.com|localhost|www\.bangonph\.com>', [
+    routes.DomainRoute(r'<:gcdc2013-bangonph\.appspot\.com|www\.bangonph\.com>', [
         webapp2.Route('/', handler=FrontPage, name="www-front"),
         webapp2.Route('/public', handler=PublicFrontPage, name="www-front"),
         webapp2.Route('/register', handler=RegisterPage, name="www-register"),
@@ -1268,7 +1303,7 @@ app = webapp2.WSGIApplication([
 
         webapp2.Route(r'/<:.*>', ErrorHandler)
     ]),
-    routes.DomainRoute('admin.bangonph.com', [
+    routes.DomainRoute(r'<:admin\.bangonph\.com|localhost>', [
         webapp2.Route('/', handler=FrontPage, name="www-front"),
         webapp2.Route('/register', handler=RegisterPage, name="www-register"),
         webapp2.Route('/logout', handler=Logout, name="www-logout"),
@@ -1287,6 +1322,8 @@ app = webapp2.WSGIApplication([
 
 
         webapp2.Route('/subscribers', handler=SubscriberPage, name="www-subscribers"),
+        webapp2.Route('/upload', handler=UploadPage, name="www-upload"),
+        webapp2.Route('/upload/handler', handler=UploadHandler, name="www-upload-handler"),
 
 
         # richmond:
@@ -1295,7 +1332,7 @@ app = webapp2.WSGIApplication([
         webapp2.Route(r'/<:.*>', ErrorHandler)
     ]),
 
-    routes.DomainRoute(r'<:api\.bangonph\.com|localhost>', [
+    routes.DomainRoute(r'<:api\.bangonph\.com>', [
         webapp2.Route('/locations', handler=APILocationsHandler, name="api-locations"),
         webapp2.Route('/users', handler=APIUsersHandler, name="api-users"),
         webapp2.Route('/contacts', handler=APIContactsHandler, name="api-locations"),

@@ -187,28 +187,50 @@ def add_distribution(data, instance_id=""):
 
     return distribution
 
-def add_drop_off_centers(data):
-    center_id = slugify(data["name"])
-    temp_center_id = center_id
-    while True:
-        count = 1
-        if DropOffCenter.get_by_id(temp_center_id):
-            temp_center_id = center_id + str(count)
-            count += 1
-        else:
-            center = DropOffCenter(id=temp_center_id)
-            break
+def add_drop_off_centers(data, instance_id=""):
+    if instance_id:
+        center = DropOffCenter.get_by_id(temp_center_id)
+    else:
+        center_id = slugify(data["name"])
+        temp_center_id = center_id
+        while True:
+            count = 1
+            if DropOffCenter.get_by_id(temp_center_id):
+                temp_center_id = center_id + str(count)
+                count += 1
+            else:
+                center = DropOffCenter(id=temp_center_id)
+                break
 
-    center.drop_off_locations = data["drop_off_locations"]
-    center.distributor = data["distributor"]
-    center.address = data["address"]
-    center.latlong = data["latlong"]
-    center.destinations = data["destinations"]
-    center.schedule = data["schedule"]
-    center.twitter = data["twitter"]
-    center.facebook = data["facebook"]
-    center.contacts = data["contacts"]
-    center.email = data["email"]
+    if data["drop_off_locations"]:
+        center.drop_off_locations = data["drop_off_locations"]
+
+    if data["distributor"]:
+        center.distributor = data["distributor"]
+
+    if data["address"]:
+        center.address = data["address"]
+
+    if data["latlong"]:
+        center.latlong = data["latlong"]
+
+    if data["destinations"]:
+        center.destinations = data["destinations"]
+
+    if data["schedule"]:
+        center.schedule = data["schedule"]
+
+    if data["twitter"]:
+        center.twitter = data["twitter"]
+
+    if data["facebook"]:
+        center.facebook = data["facebook"]
+
+    if data["contacts"]:
+        center.contacts = data["contacts"]
+
+    if data["email"]:
+        center.email = data["email"]
 
     center.put()
     return center

@@ -127,13 +127,17 @@ class Distribution(ndb.Model):
 
         if expand == "contacts":
             contact_details = {}
-            cont = self.contact.get()
-            contact_details["contact_details"] = cont.to_object()
+            try:
+                cont = Contact.get_by_id(self.contact)
+                contact_details["contact_details"] = cont.to_object()
+            except:
+                cont = Contact.query(Contact.name == self.contact).fetch(1)
+                contact_details["contact_details"] = cont[0].to_object()
             details["contact"] = contact_details
         else:
             if self.contact:
                 data = {}
-                data["meta"] = {"href": "http://api.bangonph.com/contacts/" + str(self.contact.urlsafe())}
+                data["meta"] = {"href": "http://api.bangonph.com/contacts/" + str(self.contact)}
                 details["contact"] = data
             else:
                 details["contact"] = ""

@@ -16,7 +16,7 @@ class User(ndb.Model):
 
     def to_object(self):
         details = {}
-        details["meta"] = {"href": "http://api.bangonph.com/users/" + self.key.id()}
+        details["meta"] = {"href": "http://api.bangonph.com/v1/users/" + self.key.id()}
         details["created"] = str(self.created)
         details["updated"] = str(self.updated)
         details["email"] = self.email
@@ -40,7 +40,7 @@ class Distributor(ndb.Model):
 
     def to_object(self):
         details = {}
-        details["meta"] = {"href": "http://api.bangonph.com/distributors/" + str(self.key.id())}
+        details["meta"] = {"href": "http://api.bangonph.com/v1/distributors/" + str(self.key.id())}
         details["created"] = str(self.created)
         details["updated"] = str(self.updated)
         details["email"] = self.email
@@ -69,7 +69,7 @@ class Location(ndb.Model):
 
     def to_object(self, extended=""):
         details = {}
-        details["meta"] = {"href": "http://api.bangonph.com/v1/locations/" + str(self.key.id())}
+        details["meta"] = {"href": "http://api.bangonph.com/v1/v1/locations/" + str(self.key.id())}
         details["created"] = str(self.created)
         details["updated"] = str(self.updated)
         details["latlong"] = self.latlong
@@ -105,7 +105,7 @@ class DropOffCenter(ndb.Model):
 
     def to_object(self, expand=""):
         details = {}
-        details["meta"] = {"href": "http://api.bangonph.com/drop-off-centers/" + str(self.key.id())}
+        details["meta"] = {"href": "http://api.bangonph.com/v1/drop-off-centers/" + str(self.key.id())}
         details["created"] = str(self.created)
         details["updated"] = str(self.updated)
         details["drop_off_locations"] = self.drop_off_locations
@@ -137,7 +137,7 @@ class Distribution(ndb.Model):
 
     def to_object(self, expand=""):
         details = {}
-        details["meta"] = {"href": "http://api.bangonph.com/efforts/" + str(self.key.id())}
+        details["meta"] = {"href": "http://api.bangonph.com/v1/efforts/" + str(self.key.id())}
         details["created"] = str(self.created)
         details["updated"] = str(self.updated)
         details["dateOfDistribution"] = str(self.date_of_distribution)
@@ -155,7 +155,7 @@ class Distribution(ndb.Model):
         else:
             if self.contact:
                 data = {}
-                data["meta"] = {"href": "http://api.bangonph.com/contacts/" + str(self.contact)}
+                data["meta"] = {"href": "http://api.bangonph.com/v1/contacts/" + str(self.contact)}
                 details["contact"] = data
             else:
                 details["contact"] = ""
@@ -171,7 +171,7 @@ class Distribution(ndb.Model):
         else:
             if self.destinations:
                 data = {}
-                data["meta"] = {"href": "http://api.bangonph.com/contacts/" + str(self.destinations.urlsafe())}
+                data["meta"] = {"href": "http://api.bangonph.com/v1/contacts/" + str(self.destinations.urlsafe())}
                 details["destinations"] = data
             else:
                 details["destinations"] = ""
@@ -216,7 +216,7 @@ class Contact(ndb.Model):
 
     def to_object(self, extended=""):
         details = {}
-        details["meta"] = {"href": "http://api.bangonph.com/contacts/" + str(self.key.id())}
+        details["meta"] = {"href": "http://api.bangonph.com/v1/contacts/" + str(self.key.id())}
         details["created"] = str(self.created)
         details["updated"] = str(self.updated)
         details["name"] = self.name
@@ -239,7 +239,7 @@ class Post(ndb.Model):
 
     def to_object(self):
         details = {}
-        details["meta"] = {"href": "http://api.bangonph.com/posts/" + str(self.key.id())}
+        details["meta"] = {"href": "http://api.bangonph.com/v1/posts/" + str(self.key.id())}
         details["created"] = str(self.created)
         details["updated"] = str(self.updated)
         details["name"] = self.name

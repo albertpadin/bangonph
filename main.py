@@ -1137,7 +1137,7 @@ class APIUsersHandler(APIBaseHandler):
             data = {}
             data["users"] = users_json
             if more:
-                data["next_page"] = "http://api.bangonph.com/users/?cursor=" + str(next_cursor)
+                data["next_page"] = "http://api.bangonph.com/v1/users/?cursor=" + str(next_cursor)
             else:
                 data["next_page"] = False
             self.render(data)
@@ -1171,7 +1171,7 @@ class APILocationsHandler(APIBaseHandler):
             data = {}
             data["locations"] = locations_json
             if more:
-                data["next_page"] = "http://api.bangonph.com/locations/?cursor=" + str(next_cursor)
+                data["next_page"] = "http://api.bangonph.com/v1/locations/?cursor=" + str(next_cursor)
             else:
                 data["next_page"] = False
             self.render(data)
@@ -1179,7 +1179,7 @@ class APILocationsHandler(APIBaseHandler):
             location = Location.get_by_id(instance_id)
             self.render(location.to_object())
 
-    @oauthed_required
+
     def post(self, instance_id=None):
         needs = {
            "food": self.request.get("food"),
@@ -1216,7 +1216,8 @@ class APILocationsHandler(APIBaseHandler):
             "affected_count": self.request.get("affected_count"),
             "status_board": self.request.get("status_board"),
             "status": status, # json format
-            "hash_tag": hash_tag
+            "hash_tag": hash_tag,
+            "images": self.request.get("images")
         }
         if not instance_id:
             location = add_location(data)
@@ -1290,7 +1291,7 @@ class APIPostsHandler(APIBaseHandler):
             data = {}
             data["posts"] = posts_json
             if more:
-                data["next_page"] = "http://api.bangonph.com/locations/?cursor=" + str(next_cursor)
+                data["next_page"] = "http://api.bangonph.com/v1/locations/?cursor=" + str(next_cursor)
             else:
                 data["next_page"] = False
             self.render(data)
@@ -1359,7 +1360,7 @@ class APIDropOffCentersHandler(APIBaseHandler):
             data = {}
             data["dropOffCenters"] = centers_json
             if more:
-                data["next_page"] = "http://api.bangonph.com/locations/?cursor=" + str(next_cursor)
+                data["next_page"] = "http://api.bangonph.com/v1/locations/?cursor=" + str(next_cursor)
             else:
                 data["next_page"] = False
             self.render(data)
@@ -1434,7 +1435,7 @@ class APISubscribersHandler(APIBaseHandler):
             data = {}
             data["subscribers"] = subscribers_json
             if more:
-                data["next_page"] = "http://api.bangonph.com/subscribers/?cursor=" + str(next_cursor)
+                data["next_page"] = "http://api.bangonph.com/v1/subscribers/?cursor=" + str(next_cursor)
             else:
                 data["next_page"] = False
             self.render(data)
@@ -1552,7 +1553,7 @@ class APIEffortsHandler(APIBaseHandler):
             data = {}
             data["efforts"] = efforts_json
             if more:
-                data["next_page"] = "http://api.bangonph.com/locations/?cursor=" + str(next_cursor)
+                data["next_page"] = "http://api.bangonph.com/v1/locations/?cursor=" + str(next_cursor)
             else:
                 data["next_page"] = False
             self.render(data)
@@ -1561,14 +1562,18 @@ class APIEffortsHandler(APIBaseHandler):
             if effort:
                 self.render(effort.to_object())
 
-    @oauthed_required
     def post(self, instance_id=None):
+        if self.request.get("date_of_distribution"):
+            date = datetime.datetime.strptime(self.request.get("date_of_distribution"), "%Y-%m-%d"), #1992-10-20
+        else:
+            date = None
         data = {
-            "date_of_distribution": datetime.datetime.strptime(self.request.get("date_of_distribution"), "%Y-%m-%d"), #1992-10-20
+            "date_of_distribution": date,
             "contact": self.request.get("contact"),
             "destinations": self.request.get("destinations"),
             "supply_goal": self.request.get("supply_goal"),
-            "actual_supply": self.request.get("actual_supply")
+            "actual_supply": self.request.get("actual_supply"),
+            "images": self.request.get("images")
         }
         if not instance_id:
             effort = add_distribution(data)
@@ -1620,7 +1625,7 @@ class APIContactsHandler(APIBaseHandler):
             data = {}
             data["locations"] = contacts_json
             if more:
-                data["next_page"] = "http://api.bangonph.com/contacts/?cursor=" + str(next_cursor)
+                data["next_page"] = "http://api.bangonph.com/v1/contacts/?cursor=" + str(next_cursor)
             else:
                 data["next_page"] = False
 
@@ -1688,7 +1693,7 @@ class APIDistributorsHandler(APIBaseHandler):
             data = {}
             data["distributors"] = distributors_json
             if more:
-                data["next_page"] = "http://api.bangonph.com/distributors/?cursor=" + str(next_cursor)
+                data["next_page"] = "http://api.bangonph.com/v1/distributors/?cursor=" + str(next_cursor)
             else:
                 data["next_page"] = False
 
@@ -1786,7 +1791,7 @@ app = webapp2.WSGIApplication([
 
         webapp2.Route(r'/<:.*>', ErrorHandler)
     ]),
-    routes.DomainRoute(r'<:admin\.bangonph\.com|localhost>', [
+    routes.DomainRoute(r'<:admin\.bangonph\.com>', [
         webapp2.Route('/', handler=FrontPage, name="www-front"),
         webapp2.Route('/register', handler=RegisterPage, name="www-register"),
         webapp2.Route('/logout', handler=Logout, name="www-logout"),

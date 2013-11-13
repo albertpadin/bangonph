@@ -1070,7 +1070,14 @@ class APIContactsHandler(APIBaseHandler):
 
 
     def delete(self, instance_id=None):
-        pass
+        if instance_id:
+            contact = Contact.get_by_id(int(instance_id))
+            contact.key.delete()
+
+            data = {}
+            data["success"] = True
+            self.render(data)
+
 
 
 app = webapp2.WSGIApplication([

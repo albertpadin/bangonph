@@ -89,6 +89,7 @@ class DropOffCenter(ndb.Model):
         details["drop_off_locations"] = self.drop_off_locations
         details["distributor"] = self.distributor
         details["address"] = self.address
+        details["name"] = self.name
         details["latlong"] = self.latlong
         details["destinations"] = self.destinations
         details["schedule"] = self.schedule

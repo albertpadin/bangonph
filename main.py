@@ -1079,7 +1079,7 @@ class APILocationsHandler(APIBaseHandler):
             "death_count": self.request.get("death_count"),
             "affected_count": self.request.get("affected_count"),
             "status_board": self.request.get("status_board"),
-            "status": status # json format
+            "status": status, # json format
             "hash_tag": hash_tag
         }
         if not instance_id:
@@ -1207,7 +1207,25 @@ class APIDropOffCentersHandler(APIBaseHandler):
                 self.render(center.to_object())
 
     def post(self, instance_id=None):
-        pass
+        data = {
+            "drop_off_locations" : self.request.get("drop_off_locations"),
+            "distributor" : self.request.get("distributor"),
+            "address" : self.request.get("address"),
+            "name" : self.request.get("name"),
+            "latlong" : self.request.get("latlong"),
+            "destinations" : self.request.get("destinations"),
+            "schedule" : self.request.get("schedule"),
+            "twitter" : self.request.get("twitter"),
+            "facebook" : self.request.get("facebook"),
+            "contacts" : self.request.get("contacts"),
+            "email" : self.request.get("email"),
+            "id" : self.request.get("id")
+        }
+        if not instance_id:
+            centers = add_drop_off_centers(data)
+            self.render()
+
+
 
     def delete(self, instance_id=None):
         pass
@@ -1369,7 +1387,7 @@ class UploadHandler(blobstore_handlers.BlobstoreUploadHandler):
 
 
 app = webapp2.WSGIApplication([
-    routes.DomainRoute(r'<:gcdc2013-bangonph\.appspot\.com|localhost|www\.bangonph\.com>', [
+    routes.DomainRoute(r'<:gcdc2013-bangonph\.appspot\.com|www\.bangonph\.com>', [
         webapp2.Route('/', handler=FrontPage, name="www-front"),
         webapp2.Route('/public', handler=PublicFrontPage, name="www-front"),
         webapp2.Route('/register', handler=RegisterPage, name="www-register"),
@@ -1431,7 +1449,7 @@ app = webapp2.WSGIApplication([
         webapp2.Route(r'/<:.*>', ErrorHandler)
     ]),
 
-    routes.DomainRoute(r'<:api\.bangonph\.com>', [
+    routes.DomainRoute(r'<:api\.bangonph\.com|localhost>', [
         webapp2.Route('/locations', handler=APILocationsHandler, name="api-locations"),
         webapp2.Route('/users', handler=APIUsersHandler, name="api-users"),
         webapp2.Route('/contacts', handler=APIContactsHandler, name="api-locations"),

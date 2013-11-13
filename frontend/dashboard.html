@@ -402,8 +402,53 @@
                     <td><%- _.unescape(this.death_count) %></td>
                     <td><%- _.unescape(this.affected_count) %></td>
                     <td><%- _.unescape(this.status_board) %></td>
-                    <td><%- _.unescape(this.needs) %></td>
-                    <td><%- _.unescape(this.status) %></td>
+                    <td>
+                      <% _.each(this.needs, function(item, name) { %>
+                        <% if (name == "medical_workers") { %>
+                          Medical Workers: <%- item %> <br/>
+                        <% } %>
+                        <% if (name == "social_workers") { %>
+                          Social Workers: <%- item %><br/>
+                        <% } %>
+                        <% if (name == "shelter") { %>
+                          Shelter: <%- item %><br/>
+                        <% } %>
+                        <% if (name == "cloths") { %>
+                          Clothes: <%- item %><br/>
+                        <% } %>
+                        <% if (name == "water") { %>
+                          Water: <%- item %><br/>
+                        <% } %>
+                        <% if (name == "medicines") { %>
+                          Medicines: <%- item %><br/>
+                        <% } %>
+                        <% if (name == "formula") { %>
+                          Formula: <%- item %><br/>
+                        <% } %>
+                        <% if (name == "food") { %>
+                          Food: <%- item %><br/>
+                        <% } %>
+                        <% if (name == "flashlights") { %>
+                          Flashlights: <%- item %><br/>
+                        <% } %>
+                        <% if (name == "toiletries") { %>
+                          Toiletries: <%- item %><br/>
+                        <% } %>
+                      <% }) %>
+                    </td>
+                    <td>
+                      <% _.each(this.status, function(item, name) { %>
+                        <% if (name == "power" && item == "true") { %>
+                          Power: Yes<br/>
+                        <% } %>
+                        <% if (name == "communication" && item == "true") { %>
+                          Communication: Yes<br/>
+                        <% } %>
+                        <% if (name == "water" && item == "true") { %>
+                          Water: Yes<br/>
+                        <% } %>
+                      <% }) %>
+                    </td>
                     <td align='center'><a class="first">Edit</a> | <a class="last">Delete</a></td>
                 </tr>
             <%    
@@ -471,14 +516,14 @@
               </p>
               
               <p>
-                <input type="checkbox" name="status" id="power" required="required" class="form-control" value="power"> Power
+                <input type="checkbox" name="status" id="status_power" class="form-control"/> Power
               </p>
 
               <p>
-                <input type="checkbox" name="status" id="communication" required="required" class="form-control" value="communication"> Communication
+                <input type="checkbox" name="status" id="status_communication" class="form-control"/> Communication
               </p>
               <p>
-                <input type="checkbox" name="status" id="water" required="required" class="form-control" value="water"> Water
+                <input type="checkbox" name="status" id="status_water" class="form-control"/> Water
               </p>
               <p>
                 <button type="submit" class="btn btn-primary">Submit</button> 
@@ -580,32 +625,28 @@
                 </select>
               </p>
               <p>
-                Supply Goal
-                <select id="supply_goal" required="required" class="form-control">
-                  <option value="food">food</option>
-                  <option value="water">water</option>
-                  <option value="medicines">medicines</option>
-                  <option value="social_workers">social_workers</option>
-                  <option value="medical_workers">medical_workers</option>
-                  <option value="shelter">shelter</option>
-                  <option value="formula">formula</option>
-                  <option value="toiletries">toiletries</option>
-                  <option value="flashlights">flashlights</option>
-                </select>
+                Supply Goal<br/>
+                <input type="checkbox" id="chk_supply_goal_food" value="Food"/> Food<br/>
+                <input type="checkbox" id="chk_supply_goal_water" value="Water"/> Water<br/>
+                <input type="checkbox" id="chk_supply_goal_medicines" value="Medicines"/> Medicines<br/>
+                <input type="checkbox" id="chk_supply_goal_social_workers" value="Social Workers"/> Social Workers<br/>
+                <input type="checkbox" id="chk_supply_goal_medical_workers" value="Medical Workers"/> Medical Workers<br/>
+                <input type="checkbox" id="chk_supply_goal_shelter" value="Shelter"/> Shelter<br/>
+                <input type="checkbox" id="chk_supply_goal_formula" value="Formula"/> Formula<br/>
+                <input type="checkbox" id="chk_supply_goal_toiletries" value="Toiletries"/> Toiletries<br/>
+                <input type="checkbox" id="chk_supply_goal_flashlights" value="Flashlights"/> Flashlights
               </p>
               <p>
-                Actual Supply
-                <select id="actual_supply" required="required" class="form-control">
-                  <option value="food">food</option>
-                  <option value="water">water</option>
-                  <option value="medicines">medicines</option>
-                  <option value="social_workers">social_workers</option>
-                  <option value="medical_workers">medical_workers</option>
-                  <option value="shelter">shelter</option>
-                  <option value="formula">formula</option>
-                  <option value="toiletries">toiletries</option>
-                  <option value="flashlights">flashlights</option>
-                </select>
+                Actual Supply<br/>
+                <input type="checkbox" id="chk_actual_supply_food" value="Food"/> Food<br/>
+                <input type="checkbox" id="chk_actual_supply_water" value="Water"/> Water<br/>
+                <input type="checkbox" id="chk_actual_supply_medicines" value="Medicines"/> Medicines<br/>
+                <input type="checkbox" id="chk_actual_supply_social_workers" value="Social Workers"/> Social Workers<br/>
+                <input type="checkbox" id="chk_actual_supply_medical_workers" value="Medical Workers"/> Medical Workers<br/>
+                <input type="checkbox" id="chk_actual_supply_shelter" value="Shelter"/> Shelter<br/>
+                <input type="checkbox" id="chk_actual_supply_formula" value="Formula"/> Formula<br/>
+                <input type="checkbox" id="chk_actual_supply_toiletries" value="Toiletries"/> Toiletries<br/>
+                <input type="checkbox" id="chk_actual_supply_flashlights" value="Flashlights"/> Flashlights
               </p>
               <p>
                 <button type="submit" class="btn btn-primary">Submit</button> 

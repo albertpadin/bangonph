@@ -4,6 +4,7 @@ import datetime
 from models import User, Contact, Location, Distribution, Post
 import json as simplejson
 
+from google.appengine.ext import ndb
 from google.appengine.api import urlfetch
 
 from settings import SETTINGS
@@ -120,9 +121,9 @@ def add_location(data):
 
 def add_destribution(data):
     distribution = Distribution()
-    distribution.date_of_distribution = data["distribution"]
-    distribution.contact = data["contact"]
-    distribution.destinations = data["destinations"]
+    distribution.date_of_distribution = data["date_of_distribution"]
+    distribution.contact = ndb.Key('Contact', int(data["contact"]))
+    distribution.destinations = ndb.Key('Location', int(data["destinations"]))
     distribution.supply_goal = data["supply_goal"]
     distribution.actual_supply = data["actual_supply"]
     distribution.put()

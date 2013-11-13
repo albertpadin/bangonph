@@ -1,0 +1,24 @@
+{% extends 'frontend/index.html' %}
+
+{% block content %}
+
+<div class="row">
+    <div id="notification" style="display: none" class="alert alert-dismissable alert-type">
+      <button type="button" class="close" data-dismiss="alert">&times;</button>
+      <strong class="type"></strong> <span class="message"></span>
+    </div>
+    <div class="span12" id="maincontent">
+    </div>
+</div>
+
+  <form class="form-center frmlogin" action="/login" method="POST">
+        <input type="hidden" name="id" value="{{id}}">
+        <input type="hidden" name="redirect" value="{{redirect}}">
+        <h2 class="form-center-heading">Login</h2>
+        <input type="email" class="form-control" name="email" required="required" placeholder="Email address">
+        <input type="password" class="form-control" name="password" required="required" placeholder="Password">
+        <button class="btn btn-large btn-success btn-block pull-right" type="submit">Login</button>
+        <div class="clear"></div>
+    </form>
+
+{% endblock %}

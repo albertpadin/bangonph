@@ -78,7 +78,7 @@ class DropOffCenter(ndb.Model):
     name = ndb.StringProperty()
     drop_off_locations = ndb.StringProperty(repeated=True)
     distributor = ndb.StringProperty(repeated=True)
-    address = ndb.StringProperty(repeated=True)
+    address = ndb.StringProperty()
     latlong = ndb.StringProperty()
     destinations = ndb.StringProperty(repeated=True)
     schedule = ndb.StringProperty()
@@ -89,7 +89,7 @@ class DropOffCenter(ndb.Model):
 
     def to_object(self, expand=""):
         details = {}
-        details["meta"] = {"href": "http://api.bangonph.com/locations/?" + str(self.key.id())}
+        details["meta"] = {"href": "http://api.bangonph.com/drop-off-centers/" + str(self.key.id())}
         details["created"] = str(self.created)
         details["updated"] = str(self.updated)
         details["drop_off_locations"] = self.drop_off_locations

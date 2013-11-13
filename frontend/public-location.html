@@ -13,7 +13,7 @@
   <div class="jumbotron">
       <div class="container">
         <h1>{{ page_title }}</h1>
-        <p>{% if location.description %}{{ location.description }}{% else %}Super Typhoon Yolanda hit the Philippines and left several towns devastated. Affecting more than 2 million people and killing over 2,000 and still counting. This is the live and developing story of how we rise again. Together.{% endif %}</p>
+        <p>{% if location.description %}{{ location.description }}{% else %}Super Typhoon Yolanda hit the Philippines and left several towns devastated. Affecting more than 2 million people and killing over 2,000 and still counting. This is the live and developing story of how we rise again. <span style="font-weight: bold; color: red;">Together.</span>{% endif %}</p>
       </div>
     </div>
 
@@ -171,7 +171,7 @@
 
             <div id="content">
             <p>&nbsp;</p>
-            <a data-toggle="collapse" href="#collapseOne" class="donate-btn">Donate Cash</a>
+            <!-- <a data-toggle="collapse" href="#collapseOne" class="donate-btn">Donate Cash</a> -->
               <h3>Relief Operations that Needs your Help</h3>
               <span>Stand up, take part, and get involved!</span>
 
@@ -179,11 +179,11 @@
               <p>&nbsp;</p>
               
             
-            <div id="collapseOne" class="panel-collapse collapse">
+            <div>
                   <div id="donations-wrap">
                     <div class="col-lg-4">
                       <div class="operations-content">
-                        <img src="/img/logos/aboitiz.png" class="operations-img"><br/>
+                        <img src="/img/logos/aboitiz.jpg" class="operations-img"><br/>
                         <strong>Aboitiz Foundation</strong>
                         <!-- <div class="operations-details">
                           <p>We need people recently trampled our land, killed the cows & left us devasted. We are currently monitoring</p>
@@ -194,7 +194,7 @@
                     </div>
                     <div class="col-lg-4">
                       <div class="operations-content">
-                        <img src="/img/logos/unicef.png" class="operations-img"><br/>
+                        <img src="/img/logos/unicef.jpg" class="operations-img"><br/>
                         <strong>Unicef Philippines</strong>
                         <!-- <div class="operations-details">
                           <p>We need people recently trampled our land, killed the cows & left us devasted. We are currently monitoring</p>
@@ -337,6 +337,7 @@
             <h4>Gathering Data on Relief Efforts</h4>
 
             <img src='/img/bangonph-ad1.png' title="Volunteer at #BangonPH" alt="Volunteer at #BangonPH" />
+            <br /><br /><br /><br />
 
             <!-- <div class="side-wrap">
               <div class="side-head needed">

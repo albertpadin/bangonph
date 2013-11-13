@@ -1,7 +1,7 @@
 import logging
 import webapp2, jinja2, os
 import datetime
-from models import User, Contact, Location, Distribution, Post
+from models import User, Contact, Location, Distribution, Post, Subscriber
 import json as simplejson
 
 from google.appengine.ext import ndb
@@ -58,14 +58,14 @@ def send_via_mandrill(receiver, subject, html=None, plain_text = None, email_typ
 def send_reset_password_email(user, token):
     content = {}
     content['token'] = str(token)
-    
+
     email = send_email(receiver_name=user.name,receiver_email=user.email,subject="Password Reset",content=content,email_type="reset_password")
 
     if email:
         return True
     else:
         return False
-        
+
 
 def slugify(value):
     return value.strip().lower().replace(' ','-').replace("'","").replace('"','').replace(",","").replace('--','-').replace('.','').replace('@','').replace('!','').replace('$','').replace('*','').replace('&','and').replace('(','').replace(')','').replace('+','plus').replace('=','').replace(':','').replace(';','').replace('<','').replace('>','').replace('/','').replace('?','').replace('~','').replace('`','')
@@ -235,16 +235,24 @@ def add_drop_off_centers(data, instance_id=""):
     center.put()
     return center
 
-def add_subcriber(data):
-    subscriber = Subscriber()
-    subscriber.name = data["name"]
-    subscriber.email = data["email"]
-    subscriber.fb_id = data["fb_id"]
-    subscriber.distribution = data["distribution"]
+def add_subcriber(data, instance_id=""):
+    if instance_id:
+        subscriber = Subscriber.get_by_id(str(instance_id))
+    else:
+        subscriber = Subscriber()
+
+    if data["name"]:
+        subscriber.name = data["name"]
+    if data["email"]:
+        subscriber.email = data["email"]
+    if data["fb_id"]:
+        subscriber.fb_id = data["fb_id"]
+    # if data["distribution"]:
+    #     subscriber.distribution = ndb.Key("Distribution", data["distribution"])
 
     subscriber.put()
     return subscriber
-    
+
 def add_post(data, instance_id=""):
     if instance_id:
         post = Post.get_by_id(instance_id)
@@ -262,7 +270,7 @@ def add_post(data, instance_id=""):
 
     if data["facebook"]:
         post.facebook = data["facebook"]
-    
+
     if data["phone"]:
         post.phone = data["phone"]
 
@@ -308,3 +316,10 @@ def log_trail(data):
 
     log.put()
     return log
+
+
+def check_all_keys(keys=[], haystack=[]):
+    for key in keys:
+        if key not in haystack:
+            return False
+    return True

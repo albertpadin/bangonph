@@ -215,7 +215,6 @@ var Router = Backbone.Router.extend({
     },
     renderAddDistributorPage: function() {
       addDistributor.render();
-      addDistributor.contacts();
     },
 
     renderDropOffCenterPage: function() {

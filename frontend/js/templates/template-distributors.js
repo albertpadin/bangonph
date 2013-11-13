@@ -46,7 +46,7 @@ var DistributorView = Backbone.View.extend({
   },
   deleteDistributor: function(id){
     if ( confirm('Are you sure to delete?')) {
-      
+
      var collection = new DistributorCollection();
       collection.fetch({
         data: { id_delete: id },
@@ -75,19 +75,10 @@ var AddDistributor = Backbone.View.extend({
     "submit form#frmAddDistributor" : "addDistributor"
   },
   initialize: function() {
-    _.bindAll(this, "render", "contacts");
+    _.bindAll(this, "render");
   },
-  render: function(response, locs) {
-    $(this.el).html( this.template({ contacts: response }) );
-  },
-  contacts: function() {
-    var self = this;
-    var contactsCollection = new ContactsCollection();
-    contactsCollection.fetch({
-      success: function(datas) {
-        self.render(datas.toJSON());
-      }
-    });
+  render: function() {
+    $(this.el).html( this.template() );
   },
   addDistributor: function() {
     $.ajax({
@@ -96,10 +87,8 @@ var AddDistributor = Backbone.View.extend({
       data: {
         "name": _.escape($("#fname").val()),
         "contact_num": _.escape($("#contact_num").val()),
-        "location": _.escape($("#location").val()),
         "email": _.escape($("#email").val()),
         "website": _.escape($("#website").val()),
-        "contacts": _.escape($("#contacts").val()),
         "facebook": _.escape($("#facebook").val())
       },
       success: function() {

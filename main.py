@@ -936,10 +936,8 @@ class DistributorHandler(BaseHandler):
                 temp["id"] = distributor.key.id()
                 temp["name"] = distributor.name
                 temp["contact_num"] = distributor.contact_num
-                temp["location"] = distributor.location
                 temp["email"] = distributor.email
                 temp["website"] = distributor.website
-                temp["contacts"] = distributor.contacts.urlsafe()
                 temp["facebook"] = distributor.facebook
                 
                 datas.append(temp)
@@ -949,10 +947,8 @@ class DistributorHandler(BaseHandler):
         distributor = Distributor()
         distributor.name = self.request.get("name")
         distributor.contact_num = self.request.get("contact_num")
-        distributor.location = self.request.get("location")
         distributor.email = self.request.get("email")
         distributor.website = self.request.get("website")
-        distributor.contacts = ndb.Key("Distributor", self.request.get("contacts"))
         distributor.facebook = self.request.get("facebook")
         distributor.put()
 

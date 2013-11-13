@@ -19,11 +19,9 @@
         <thead>
           <tr>
             <th>Name</th>
-            <th>location</th>
             <th>phone</th>
             <th>email</th>
             <th>website</th>
-            <th>contacts</th>
             <th>destinations</th>
             <th>Action</th>
           </tr>
@@ -39,10 +37,8 @@
               <tr class="active" data-name="<%- _.unescape(this.name) %>" data-id="<%- this.id %>">
                   <td><%- _.unescape(this.name) %></td>
                   <td><%- _.unescape(this.contact_num) %></td>
-                  <td><%- _.unescape(this.location) %></td>
                   <td><%- _.unescape(this.email) %></td>
                   <td><%- _.unescape(this.website) %></td>
-                  <td><%- _.unescape(this.contacts) %></td>
                   <td><%- _.unescape(this.facebook) %></td>
                   <td align='center'><a class="first">Edit</a> | <a class="last">Delete</a></td>
               </tr>
@@ -75,27 +71,12 @@
             <p>
               <input type="text" id="contact_num" required="required" class="form-control" placeholder="Contact Number">
             </p>
-            <p>
-              <input type="text" id="location" class="form-control" placeholder="location">
-            </p>
+            
             <p>
               <input type="email" id="email" required="required" class="form-control" placeholder="email">
             </p>
             <p>
               <input type="text" id="website" class="form-control" placeholder="website">
-            </p>
-            <p>
-              <select id="contacts" required="required" class="form-control">
-              <%
-                if(!$.isEmptyObject(contacts)) {
-                  $.each(contacts, function() {
-              %>
-                <option value="<%- this.id %>"><%- this.name %></option>
-              <%
-                  })
-                }
-              %>
-              </select>
             </p>
             <p>
               <input type="text" id="facebook" required="required" class="form-control" placeholder="facebook">

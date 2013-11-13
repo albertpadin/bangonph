@@ -1147,7 +1147,7 @@ class APIUsersHandler(APIBaseHandler):
             data = {}
             data["users"] = users_json
             if more:
-                data["next_page"] = "http://api.bangonph.com/v1/users/?cursor=" + str(next_cursor)
+                data["next_page"] = "http://api.bangonph.com/v1/users/cursor=" + str(next_cursor.urlsafe())
             else:
                 data["next_page"] = False
             self.render(data)
@@ -1181,7 +1181,7 @@ class APILocationsHandler(APIBaseHandler):
             data = {}
             data["locations"] = locations_json
             if more:
-                data["next_page"] = "http://api.bangonph.com/v1/locations/?cursor=" + str(next_cursor)
+                data["next_page"] = "http://api.bangonph.com/v1/locations/cursor=" + str(next_cursor.urlsafe())
             else:
                 data["next_page"] = False
             self.render(data)
@@ -1301,7 +1301,7 @@ class APIPostsHandler(APIBaseHandler):
             data = {}
             data["posts"] = posts_json
             if more:
-                data["next_page"] = "http://api.bangonph.com/v1/locations/?cursor=" + str(next_cursor)
+                data["next_page"] = "http://api.bangonph.com/v1/locations/cursor=" + str(next_cursor.urlsafe())
             else:
                 data["next_page"] = False
             self.render(data)
@@ -1370,7 +1370,7 @@ class APIDropOffCentersHandler(APIBaseHandler):
             data = {}
             data["dropOffCenters"] = centers_json
             if more:
-                data["next_page"] = "http://api.bangonph.com/v1/locations/?cursor=" + str(next_cursor)
+                data["next_page"] = "http://api.bangonph.com/v1/locations/cursor=" + str(next_cursor.urlsafe())
             else:
                 data["next_page"] = False
             self.render(data)
@@ -1445,7 +1445,7 @@ class APISubscribersHandler(APIBaseHandler):
             data = {}
             data["subscribers"] = subscribers_json
             if more:
-                data["next_page"] = "http://api.bangonph.com/v1/subscribers/?cursor=" + str(next_cursor)
+                data["next_page"] = "http://api.bangonph.com/v1/subscribers/cursor=" + str(next_cursor.urlsafe())
             else:
                 data["next_page"] = False
             self.render(data)
@@ -1564,7 +1564,7 @@ class APIEffortsHandler(APIBaseHandler):
             data = {}
             data["efforts"] = efforts_json
             if more:
-                data["next_page"] = "http://api.bangonph.com/v1/locations/?cursor=" + str(next_cursor)
+                data["next_page"] = "http://api.bangonph.com/v1/locations/cursor=" + str(next_cursor.urlsafe())
             else:
                 data["next_page"] = False
             self.render(data)
@@ -1636,7 +1636,7 @@ class APIContactsHandler(APIBaseHandler):
             data = {}
             data["locations"] = contacts_json
             if more:
-                data["next_page"] = "http://api.bangonph.com/v1/contacts/?cursor=" + str(next_cursor)
+                data["next_page"] = "http://api.bangonph.com/v1/contacts/cursor=" + str(next_cursor.urlsafe())
             else:
                 data["next_page"] = False
 
@@ -1704,7 +1704,7 @@ class APIDistributorsHandler(APIBaseHandler):
             data = {}
             data["distributors"] = distributors_json
             if more:
-                data["next_page"] = "http://api.bangonph.com/v1/distributors/?cursor=" + str(next_cursor)
+                data["next_page"] = "http://api.bangonph.com/v1/distributors/cursor=" + str(next_cursor.urlsafe())
             else:
                 data["next_page"] = False
 

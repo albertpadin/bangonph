@@ -57,8 +57,8 @@ class Location(ndb.Model):
         details["latlong"] = self.latlong
         details["featured_photo"] = self.featured_photo
         details["death_count"] = self.death_count
-        details["affected_count"] = self.affected_count
-        details["status_board"] = self.status_board
+        details["affectedCount"] = self.affected_count
+        details["statusBoard"] = self.status_board
         details["needs"] = self.needs
         details["status"] = self.status
 
@@ -74,12 +74,30 @@ class DropOffCenter(ndb.Model):
     distributor = ndb.StringProperty(repeated=True)
     address = ndb.StringProperty(repeated=True)
     latlong = ndb.StringProperty()
-    destinations = ndb.StringProperty()
+    destinations = ndb.StringProperty(repeated=True)
     schedule = ndb.StringProperty()
     twitter = ndb.StringProperty()
     facebook = ndb.StringProperty()
     contacts = ndb.StringProperty(repeated=True)
     email = ndb.StringProperty()
+
+    def to_object(self, expand=""):
+        details = {}
+        details["meta"] = {"href": "http://api.bangonph.com/locations/?" + str(self.key.id())}
+        details["created"] = str(self.created)
+        details["updated"] = str(self.updated)
+        details["drop_off_locations"] = self.drop_off_locations
+        details["distributor"] = self.distributor
+        details["address"] = self.address
+        details["latlong"] = self.latlong
+        details["destinations"] = self.destinations
+        details["schedule"] = self.schedule
+        details["twitter"] = self.twitter
+        details["facebook"] = self.facebook
+        details["contacts"] = self.contacts
+        details["email"] = self.email
+
+        return details
 
 
 class Distribution(ndb.Model):
@@ -122,7 +140,7 @@ class Contact(ndb.Model):
         details["contacts"] = self.contacts
         details["email"] = self.email
         details["facebook"] = self.facebook
-        details["status_board"] = self.status_board
+        details["statusBoard"] = self.status_board
         details["twitter"] = self.twitter
         
         return details
@@ -136,6 +154,20 @@ class Post(ndb.Model):
     facebook = ndb.StringProperty()
     phone = ndb.StringProperty()
     message = ndb.TextProperty()
+
+    def to_object(self):
+        details = {}
+        details["meta"] = {"href": "http://api.bangonph.com/posts/?" + str(self.key.id())}
+        details["created"] = str(self.created)
+        details["updated"] = str(self.updated)
+        details["name"] = self.name
+        details["twitter"] = self.twitter
+        details["facebook"] = self.facebook
+        details["phone"] = self.phone
+        details["message"] = self.message
+        
+        return details
+
 
 
 class LogActivity(ndb.Model):

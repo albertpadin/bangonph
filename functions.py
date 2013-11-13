@@ -103,7 +103,7 @@ def update_user(data):
     return user
 
 def add_location(data):
-    location = Location()
+    location = Location(id=data["name"].lower())
     location.name = data["name"]
     location.needs = data["needs"]
     location.centers = data["centers"]
@@ -129,7 +129,7 @@ def add_destribution(data):
     return distribution
 
 def add_drop_off_centers(data):
-    center = DropOffCenter(id=data["name"])
+    center = DropOffCenter(id=data["name"].lower())
     center.drop_off_locations = data["drop_off_locations"]
     center.distributor = data["distributor"]
     center.address = data["address"]

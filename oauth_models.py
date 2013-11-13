@@ -14,6 +14,7 @@ class UserToken(ndb.Model):  # user session per client
     user = ndb.KeyProperty(kind="User")
     client = ndb.KeyProperty(kind="Client")
     token = ndb.StringProperty()
+    created = ndb.DateTimeProperty(auto_now_add=True)
     code = ndb.StringProperty()
     expires = ndb.DateTimeProperty()
 

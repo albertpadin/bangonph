@@ -19,6 +19,7 @@
         <thead>
           <tr>
             <th>Date of Distribution</th>
+            <th>Description</th>
             <th>Contact</th>
             <th>Destinations</th>
             <th>Featured Photo</th>
@@ -43,6 +44,7 @@
           %>
               <tr class="active" data-id="<%- this.id %>">
                 <td><%- this.date_of_distribution %></td>
+                <td><%- this.description %></td>
                 <td><%- this.contact %></td>
                 <td><%- this.destinations %></td>
                 <td><%- this.featured_photo %></td>
@@ -405,6 +407,9 @@
             <h3 class="panel-title"><strong>New Distribution</strong></h3>
           </div>
           <div class="panel-body">
+            <p>
+              <textarea type="text" id="description" class="form-control" placeholder="Short Description"></textarea>
+            </p>
             <p>
               <input type="date" id="date_of_distribution" required="required" class="form-control" placeholder="Date of Distribution">
             </p>

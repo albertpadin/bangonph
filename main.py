@@ -351,6 +351,8 @@ class PublicLocationPage(BaseHandler):
             self.redirect('/')
             return
 
+        self.tv['efforts'] = Distribution.query(Distribution.destinations == location.key, Distribution.date_of_distribution >= datetime.datetime.now()).order(Distribution.date_of_distribution)
+
         self.tv['location'] = location.to_object()
         self.tv['page_title'] = location.name
 

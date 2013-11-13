@@ -1653,6 +1653,7 @@ class APIDistributorsHandler(APIBaseHandler):
             if contacts:
                 self.render(contacts.to_object())
 
+    @oauthed_required
     def post(self, instance_id=None):
         data = {
             "email": self.request.get("email"),
@@ -1670,6 +1671,8 @@ class APIDistributorsHandler(APIBaseHandler):
             distributor = add_distributor(data, instance_id)
             self.render(distributor.to_object())
 
+
+    @oauthed_required
     def delete(self, instance_id=None):
         resp = API_RESPONSE.copy()
         resp["method"] = "delete"

@@ -1,6 +1,6 @@
 import webapp2, jinja2, os
 from webapp2_extras import routes
-from models import User, Contact, Location, Post
+from models import *
 from functions import *
 import json as simplejson
 import logging
@@ -705,19 +705,21 @@ class APIUsersHandler(APIBaseHandler):
                 curs = Cursor(urlsafe=self.request.get("cursor"))
                 if curs:
                     users, next_cursor, more = User.query().fetch_page(20, start_cursor=curs)
+                else:
+                    users, next_cursor, more = User.query().fetch_page(100)
             else:
                 users, next_cursor, more = User.query().fetch_page(100)
                 
-                for user in users:
-                    users_json.append(user.to_object())
+            for user in users:
+                users_json.append(user.to_object())
 
-                data = {}
-                data["users"] = users_json
-                if more:
-                    data["next_page"] = "http://api.bangonph.com/users/?cursor=" + next_cursor
-                else:
-                    data["next_page"] = False
-                self.render(data)
+            data = {}
+            data["users"] = users_json
+            if more:
+                data["next_page"] = "http://api.bangonph.com/users/?cursor=" + next_cursor
+            else:
+                data["next_page"] = False
+            self.render(data)
         else:
             user = User.get_by_id(instance_id)
             users_json.append(user.to_object())
@@ -737,19 +739,21 @@ class APILocationsHandler(APIBaseHandler):
                 curs = Cursor(urlsafe=self.request.get("cursor"))
                 if curs:
                     locations, next_cursor, more = Location.query().fetch_page(10, start_cursor=curs)
+                else:
+                    locations, next_cursor, more = Location.query().fetch_page(10)
             else:
                 locations, next_cursor, more = Location.query().fetch_page(10)
 
-                for location in locations:
-                    locations_json.append(location.to_object())
+            for location in locations:
+                locations_json.append(location.to_object())
 
-                data = {}
-                data["locations"] = locations_json
-                if more:
-                    data["next_page"] = "http://api.bangonph.com/locations/?cursor=" + next_cursor
-                else:
-                    data["next_page"] = False
-                self.render(data)
+            data = {}
+            data["locations"] = locations_json
+            if more:
+                data["next_page"] = "http://api.bangonph.com/locations/?cursor=" + next_cursor
+            else:
+                data["next_page"] = False
+            self.render(data)
         else:
             location = Location.get_by_id(instance_id)
             self.render(location.to_object())
@@ -785,7 +789,31 @@ class APIOrganizationsHandler(APIBaseHandler):
 
 class APIPostsHandler(APIBaseHandler):
     def get(self, instance_id=None):
-        pass
+        posts_json = []
+        if not instance_id:
+            if self.request.get("cursor"):
+                curs = Cursor(urlsafe=self.request.get("cursor"))
+                if curs:
+                    posts, next_cursor, more = Post.query().fetch_page(10, start_cursor=curs)
+                else:
+                    posts, next_cursor, more = Post.query().fetch_page(10)
+            else:
+                posts, next_cursor, more = Post.query().fetch_page(10)
+
+            for post in posts:
+                posts_json.append(post.to_object())
+
+            data = {}
+            data["posts"] = posts_json
+            if more:
+                data["next_page"] = "http://api.bangonph.com/locations/?cursor=" + next_cursor
+            else:
+                data["next_page"] = False
+            self.render(data)
+        else:
+            post = Post.get_by_id(instance_id)
+            if post:
+                self.render(post.to_object())
 
     def post(self, instance_id=None):
         pass
@@ -796,7 +824,31 @@ class APIPostsHandler(APIBaseHandler):
 
 class APIDropOffCentersHandler(APIBaseHandler):
     def get(self, instance_id=None):
-        pass
+        centers_json = []
+        if not instance_id:
+            if self.request.get("cursor"):
+                curs = Cursor(urlsafe=self.request.get("cursor"))
+                if curs:
+                    centers, next_cursor, more = DropOffCenter.query().fetch_page(10, start_cursor=curs)
+                else:
+                    centers, next_cursor, more = DropOffCenter.query().fetch_page(10)
+            else:
+                centers, next_cursor, more = DropOffCenter.query().fetch_page(10)
+
+            for center in centers:
+                centers_json.append(center.to_object())
+
+            data = {}
+            data["dropOffCenters"] = centers_json
+            if more:
+                data["next_page"] = "http://api.bangonph.com/locations/?cursor=" + next_cursor
+            else:
+                data["next_page"] = False
+            self.render(data)
+        else:
+            center = DropOffCenter.get_by_id(instance_id)
+            if center:
+                self.render(center.to_object())
 
     def post(self, instance_id=None):
         pass
@@ -927,7 +979,6 @@ app = webapp2.WSGIApplication([
     ]),
 
     routes.DomainRoute(r'<:api\.bangonph\.com>', [
-        # leonard gwapo:
         webapp2.Route('/locations', handler=APILocationsHandler, name="api-locations"),
         webapp2.Route('/users', handler=APIUsersHandler, name="api-users"),
         webapp2.Route('/contacts', handler=APIContactsHandler, name="api-locations"),

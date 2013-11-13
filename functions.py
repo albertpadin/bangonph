@@ -153,6 +153,9 @@ def add_location(data, location_key=""):
     if data["status"]:
         location.status = data["status"]
 
+    if data["images"]:
+        location.images = data["images"]
+
     location.put()
     return location
 

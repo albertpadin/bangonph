@@ -8,7 +8,8 @@ var Locations = Backbone.Model.extend({
     status_board: "",
     needs: "",
     centers: "",
-    status: ""
+    status: "",
+    images: ""
   }
 });
 
@@ -26,6 +27,15 @@ var LocationView = Backbone.View.extend({
   render: function(response) {
     var self = this;
     $(this.el).html( this.template({ locations: response }) );
+    $("#locationsGrid tr[data-id]").each(function(){
+      var id = $(this).attr("data-id");
+      $(this).find("a.first").click(function() {
+        self.editLocation(id);
+      });
+      $(this).find("a.last").click(function() {
+        self.deleteLocation(id);
+      });
+    });
   },
   locations: function() {
     var self = this;
@@ -35,6 +45,24 @@ var LocationView = Backbone.View.extend({
         self.render(datas.toJSON());
       }
     });
+  },
+  editLocation: function(id) {
+    var route = new Router();
+    route.navigate("location/edit/" + id, {trigger: true});
+  },
+  deleteLocation: function(id) {
+    if (confirm("Are you sure to delete?")) {
+      var collection = new LocationCollection();
+      collection.fetch({
+        data: { id_delete: id },
+        success: function(data) {
+          $('#locationsGrid tr[data-id="' + id + '"]').fadeOut('fast');
+        },
+        error: function() {
+          $('#locationsGrid tr[data-id="' + id + '"]').fadeOut('fast');
+        }
+      });
+    }
   }
 });
 
@@ -48,10 +76,27 @@ var AddLocation = Backbone.View.extend({
     $(this.el).html( this.template );
   },
   addLocation: function() {
+    var obj_image_url = [];
+    $(".image_url").each(function() {
+        obj_image_url.push({"src": $(this).val()});
+    });
+
+    var obj_image_title = [];
+    $(".image_title").each(function() {
+        obj_image_title.push({"image_title": $(this).val()});
+    });
+    
+    var obj_image_caption = [];
+    $(".image_caption").each(function() {
+        obj_image_caption.push({"image_caption": $(this).val()});
+    });
     $.ajax({
       type: "post",
       url: "/locations",
       data: {
+        "image_urls" : JSON.stringify(obj_image_url),
+        "image_titles" : JSON.stringify(obj_image_title),
+        "image_captions" : JSON.stringify(obj_image_caption),
         "name": _.escape($("#name").val()),
         "latlong": _.escape($("#latlong").val()),
         "featured_photo": _.escape($("#featured_photo").val()),
@@ -76,6 +121,34 @@ var AddLocation = Backbone.View.extend({
         window.location.hash = "#locations";
       }
     });
+    // $.ajax({
+    //   type: "post",
+    //   url: "/locations",
+    //   data: {
+    //     "name": _.escape($("#name").val()),
+    //     "latlong": _.escape($("#latlong").val()),
+    //     "featured_photo": _.escape($("#featured_photo").val()),
+    //     "death_count": _.escape($("#death_count").val()),
+    //     "affected_count": _.escape($("#affected_count").val()),
+    //     "status_board": _.escape($("#status_board").val()),
+    //     "food": _.escape($("#food").val()),
+    //     "water": _.escape($("#water").val()),
+    //     "medicines": _.escape($("#medicines").val()),
+    //     "social_workers": _.escape($("#social_workers").val()),
+    //     "medical_workers": _.escape($("#medical_workers").val()),
+    //     "shelter": _.escape($("#shelter").val()),
+    //     "formula": _.escape($("#formula").val()),
+    //     "toiletries": _.escape($("#toiletries").val()),
+    //     "flashlights": _.escape($("#flashlights").val()),
+    //     "cloths": _.escape($("#cloths").val()),
+    //     "power": _.escape($("#status_power").is(':checked')),
+    //     "communication": _.escape($("#status_communication").is(':checked')),
+    //     "status_water": $("#status_water").is(":checked")
+    //   },
+    //   success: function() {
+    //     window.location.hash = "#locations";
+    //   }
+    // });
     return false;
   }
 });

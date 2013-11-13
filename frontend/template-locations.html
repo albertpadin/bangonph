@@ -15,7 +15,7 @@
       </div>
 
       <h4>Locations <a class="btn btn-success" href="#location/new">New</a></h4>
-      <table id="contactsGrid" class="table table-striped table-bordered table-hover">
+      <table id="locationsGrid" class="table table-striped table-bordered table-hover">
         <thead>
           <tr>
             <th>Name</th>
@@ -26,6 +26,7 @@
             <th>Status Board</th>
             <th>Needs</th>
             <th>Status</th>
+            <th>Images</th>
             <th>Action</th>
           </tr>
         </thead>
@@ -89,6 +90,22 @@
                       <% if (name == "water" && item == "true") { %>
                         Water: Yes<br/>
                       <% } %>
+                    <% }) %>
+                  </td>
+                  <td>
+                    <% _.each(this.images, function(item, name, d) { %>
+                      <% _.each(item, function(data, name) { %>
+                          <% if (name == "src") { %>
+                           src: <%- data %><br/>
+                          <% } %>
+                          <% if (name == "image_title") { %>
+                           Title: <%- data %><br/>
+                          <% } %>
+                          <% if (name == "image_caption") { %>
+                           Caption: <%- data %><br/>
+                          <% } %>
+                        <% }) %>
+                      <hr/>
                     <% }) %>
                   </td>
                   <td align='center'><a class="first">Edit</a> | <a class="last">Delete</a></td>
@@ -158,14 +175,38 @@
             </p>
             
             <p>
-              <input type="checkbox" name="status" id="status_power" class="form-control"/> Power
+              <input type="checkbox" name="status" id="status_power"/> Power
             </p>
 
             <p>
-              <input type="checkbox" name="status" id="status_communication" class="form-control"/> Communication
+              <input type="checkbox" name="status" id="status_communication"/> Communication
             </p>
             <p>
-              <input type="checkbox" name="status" id="status_water" class="form-control"/> Water
+              <input type="checkbox" name="status" id="status_water"/> Water
+            </p>
+            <p>
+            <br/>
+              Images <a href="javascript:;" class="btn btn-success addimage">Add More</a>
+              <table class="table imageTable">
+                <tbody id="image1">
+                  <tr>
+                    <th>Image 1</th>
+                    <th style="text-align: right;"><a href="javascript:;" rel="image1" onclick="$('#image1').remove();" class="removeimage">Remove</a></th>
+                  </tr>
+                  <tr>
+                    <td>Image URL</td>
+                    <td><input type="text" id="image_url_1" class="form-control image_url"/></td>
+                  </tr>
+                  <tr>
+                    <td>Title</td>
+                    <td><input type="text" id="image_title_1" class="form-control image_title"/></td>
+                  </tr>
+                  <tr>
+                    <td>Caption</td>
+                    <td><textarea id="image_caption_1" class="image_caption" style="width: 1002px; height: 73px; margin: 0px;"></textarea></td>
+                  </tr>
+                </tbody>
+              </table>
             </p>
             <p>
               <button type="submit" class="btn btn-primary">Submit</button> 

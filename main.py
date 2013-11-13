@@ -745,6 +745,9 @@ class DistributionHandler(BaseHandler):
                 temp["supply_goal"] = distribution.supply_goal
                 temp["actual_supply"] = distribution.actual_supply
                 temp["images"] = distribution.images
+                temp["status"] = distribution.status
+                temp["info"] = distribution.info
+                temp["featured_photo"] = distribution.featured_photo
                 datas.append(temp)
             self.response.out.write(simplejson.dumps(datas))
 
@@ -867,7 +870,10 @@ class DistributionHandler(BaseHandler):
             "destinations": self.request.get("destinations"),
             "supply_goal": supply_goal,
             "actual_supply": actual_supply,
-            "images" : image_data
+            "images" : image_data,
+            "status" : self.request.get("status").strip().upper(),
+            "info": self.request.get("info"),
+            "featured_photo": self.request.get("featured_photo")
         }
 
         add_distribution(data)

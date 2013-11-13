@@ -495,6 +495,13 @@ class ContactHandler(BaseHandler):
 class LocationHandler(BaseHandler):
     @login_required
     def get(self):
+        delete_id = self.request.get("id_delete")
+        if delete_id:
+            location = Location.get_by_id(int(delete_id))
+            if location:
+                location.key.delete()
+            return
+
         locations = Location.query().fetch(100)
         if locations:
             datas = []
@@ -509,10 +516,28 @@ class LocationHandler(BaseHandler):
                 temp["status_board"] = location.status_board
                 temp["needs"] = location.needs
                 temp["status"] = location.status
+                temp["images"] = location.images
                 datas.append(temp)
             self.response.out.write(simplejson.dumps(datas))
 
     def post(self):
+        urls = self.request.get("image_urls")
+        titles = self.request.get("image_titles")
+        captions = self.request.get("image_captions")
+        new_urls = simplejson.loads(urls)
+        new_titles = simplejson.loads(titles)
+        new_captions = simplejson.loads(captions)
+
+        images_datas = []
+        cnt = len(new_urls)
+        image_data = []
+        for i in range(0, cnt):
+            images = {}
+            images["src"] = new_urls[i]["src"]
+            images["image_title"] = new_titles[i]["image_title"]
+            images["image_caption"] = new_captions[i]["image_caption"]
+            image_data.append(images)
+
         needs = {
            "food": self.request.get("food"),
             "water": self.request.get("water"),
@@ -541,7 +566,8 @@ class LocationHandler(BaseHandler):
             "death_count": self.request.get("death_count"),
             "affected_count": self.request.get("affected_count"),
             "status_board": self.request.get("status_board"),
-            "status": status # json format
+            "status": status,
+            "images": image_data # json format
         }
         add_location(data)
 

@@ -503,6 +503,23 @@ class LocationHandler(BaseHandler):
                 location.key.delete()
             return
 
+        id_edit = self.request.get("id_edit")
+        if id_edit:
+            location = Location.get_by_id(id_edit)
+            if location:
+                temp = {}
+                temp["id"] = location.key.id()
+                temp["name"] = location.name
+                temp["latlong"] = location.latlong
+                temp["featured_photo"] = location.featured_photo
+                temp["death_count"] = location.death_count
+                temp["affected_count"] = location.affected_count
+                temp["status_board"] = location.status_board
+                temp["needs"] = location.needs
+                temp["status"] = location.status
+                self.response.out.write(simplejson.dumps(temp))
+            return
+
         locations = Location.query().fetch(100)
         if locations:
             datas = []
@@ -513,7 +530,7 @@ class LocationHandler(BaseHandler):
                 temp["latlong"] = location.latlong
                 temp["featured_photo"] = location.featured_photo
                 temp["death_count"] = location.death_count
-                temp["affectedCount"] = location.affected_count
+                temp["affected_count"] = location.affected_count
                 temp["status_board"] = location.status_board
                 temp["needs"] = location.needs
                 temp["status"] = location.status
@@ -522,55 +539,88 @@ class LocationHandler(BaseHandler):
             self.response.out.write(simplejson.dumps(datas))
 
     def post(self):
-        urls = self.request.get("image_urls")
-        titles = self.request.get("image_titles")
-        captions = self.request.get("image_captions")
-        new_urls = simplejson.loads(urls)
-        new_titles = simplejson.loads(titles)
-        new_captions = simplejson.loads(captions)
+        if self.request.get("id"):
+            location = Location.get_by_id(self.request.get("id"))
+            if location:
+                needs = {
+                    "food": self.request.get("food"),
+                    "water": self.request.get("water"),
+                    "medicines": self.request.get("medicines"),
+                    "social_workers": self.request.get("social_workers"),
+                    "medical_workers": self.request.get("medical_workers"),
+                    "shelter": self.request.get("shelter"),
+                    "formula": self.request.get("formula"),
+                    "toiletries": self.request.get("toiletries"),
+                    "flashlights": self.request.get("flashlights"),
+                    "cloths": self.request.get("cloths")
+                }
 
-        images_datas = []
-        cnt = len(new_urls)
-        image_data = []
-        for i in range(0, cnt):
-            images = {}
-            images["src"] = new_urls[i]["src"]
-            images["image_title"] = new_titles[i]["image_title"]
-            images["image_caption"] = new_captions[i]["image_caption"]
-            image_data.append(images)
+                status = {
+                    "power": self.request.get("power"),
+                    "communication": self.request.get("communication"),
+                    "water": self.request.get("status_water")
+                }
 
-        needs = {
-           "food": self.request.get("food"),
-            "water": self.request.get("water"),
-            "medicines": self.request.get("medicines"),
-            "social_workers": self.request.get("social_workers"),
-            "medical_workers": self.request.get("medical_workers"),
-            "shelter": self.request.get("shelter"),
-            "formula": self.request.get("formula"),
-            "toiletries": self.request.get("toiletries"),
-            "flashlights": self.request.get("flashlights"),
-            "cloths": self.request.get("cloths"),
-        }
+                location.name = self.request.get("name")
+                location.latlong = self.request.get("latlong")
+                location.featured_photo = self.request.get("featured_photo")
+                location.death_count = int(self.request.get("death_count"))
+                location.affected_count = int(self.request.get("affected_count"))
+                location.status_board = self.request.get("status_board")
+                location.needs = needs
+                location.status = status
+                location.put()
 
-        status = {
-            "power": self.request.get("power"),
-            "communication": self.request.get("communication"),
-            "water": self.request.get("status_water")
-        }
+        else:
+            urls = self.request.get("image_urls")
+            titles = self.request.get("image_titles")
+            captions = self.request.get("image_captions")
+            new_urls = simplejson.loads(urls)
+            new_titles = simplejson.loads(titles)
+            new_captions = simplejson.loads(captions)
 
-        data = {
-            "name": self.request.get("name"),
-            "needs": needs, # json format
-            "centers": self.request.get_all("centers"),
-            "latlong": self.request.get("latlong"),
-            "featured_photo": self.request.get("featured_photo"),
-            "death_count": self.request.get("death_count"),
-            "affected_count": self.request.get("affected_count"),
-            "status_board": self.request.get("status_board"),
-            "status": status,
-            "images": image_data # json format
-        }
-        add_location(data)
+            images_datas = []
+            cnt = len(new_urls)
+            image_data = []
+            for i in range(0, cnt):
+                images = {}
+                images["src"] = new_urls[i]["src"]
+                images["image_title"] = new_titles[i]["image_title"]
+                images["image_caption"] = new_captions[i]["image_caption"]
+                image_data.append(images)
+
+            needs = {
+               "food": self.request.get("food"),
+                "water": self.request.get("water"),
+                "medicines": self.request.get("medicines"),
+                "social_workers": self.request.get("social_workers"),
+                "medical_workers": self.request.get("medical_workers"),
+                "shelter": self.request.get("shelter"),
+                "formula": self.request.get("formula"),
+                "toiletries": self.request.get("toiletries"),
+                "flashlights": self.request.get("flashlights"),
+                "cloths": self.request.get("cloths"),
+            }
+
+            status = {
+                "power": self.request.get("power"),
+                "communication": self.request.get("communication"),
+                "water": self.request.get("status_water")
+            }
+
+            data = {
+                "name": self.request.get("name"),
+                "needs": needs, # json format
+                "centers": self.request.get_all("centers"),
+                "latlong": self.request.get("latlong"),
+                "featured_photo": self.request.get("featured_photo"),
+                "death_count": self.request.get("death_count"),
+                "affected_count": self.request.get("affected_count"),
+                "status_board": self.request.get("status_board"),
+                "status": status,
+                "images": image_data # json format
+            }
+            add_location(data)
 
 class DistributionHandler(BaseHandler):
     @login_required
@@ -1179,7 +1229,7 @@ class APIContactsHandler(APIBaseHandler):
 
 
 app = webapp2.WSGIApplication([
-    routes.DomainRoute(r'<:gcdc2013-bangonph\.appspot\.com|www\.bangonph\.com>', [
+    routes.DomainRoute(r'<:gcdc2013-bangonph\.appspot\.com|localhost|www\.bangonph\.com>', [
         webapp2.Route('/', handler=FrontPage, name="www-front"),
         webapp2.Route('/public', handler=PublicFrontPage, name="www-front"),
         webapp2.Route('/register', handler=RegisterPage, name="www-register"),

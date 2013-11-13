@@ -121,34 +121,63 @@ var AddLocation = Backbone.View.extend({
         window.location.hash = "#locations";
       }
     });
-    // $.ajax({
-    //   type: "post",
-    //   url: "/locations",
-    //   data: {
-    //     "name": _.escape($("#name").val()),
-    //     "latlong": _.escape($("#latlong").val()),
-    //     "featured_photo": _.escape($("#featured_photo").val()),
-    //     "death_count": _.escape($("#death_count").val()),
-    //     "affected_count": _.escape($("#affected_count").val()),
-    //     "status_board": _.escape($("#status_board").val()),
-    //     "food": _.escape($("#food").val()),
-    //     "water": _.escape($("#water").val()),
-    //     "medicines": _.escape($("#medicines").val()),
-    //     "social_workers": _.escape($("#social_workers").val()),
-    //     "medical_workers": _.escape($("#medical_workers").val()),
-    //     "shelter": _.escape($("#shelter").val()),
-    //     "formula": _.escape($("#formula").val()),
-    //     "toiletries": _.escape($("#toiletries").val()),
-    //     "flashlights": _.escape($("#flashlights").val()),
-    //     "cloths": _.escape($("#cloths").val()),
-    //     "power": _.escape($("#status_power").is(':checked')),
-    //     "communication": _.escape($("#status_communication").is(':checked')),
-    //     "status_water": $("#status_water").is(":checked")
-    //   },
-    //   success: function() {
-    //     window.location.hash = "#locations";
-    //   }
-    // });
+    return false;
+  }
+});
+
+var EditLocation =  Backbone.View.extend({
+  el: "#app",
+  template: _.template( $("#editLocationTemplate").html() ),
+  events: {
+    'submit form#frmEditLocation': 'editLocation'
+  }, 
+  initialize: function() {
+    _.bindAll(this, "render", "location");
+  },
+  render: function(response) {
+    $(this.el).html( this.template({ location: response }) );
+  },
+  location: function(id) {
+    console.log(id);
+    var self = this;
+    var collection = new LocationCollection();
+    collection.fetch({
+      data: { id_edit: id },
+      success: function(data) {
+        self.render(data.toJSON());
+      }
+    });
+  },
+  editLocation: function() {
+    $.ajax({
+      type: "post",
+      url: "/locations",
+      data: {
+        "id": $("#id").val(),
+        "name": _.escape($("#name").val()),
+        "latlong": _.escape($("#latlong").val()),
+        "featured_photo": _.escape($("#featured_photo").val()),
+        "death_count": _.escape($("#death_count").val()),
+        "affected_count": _.escape($("#affected_count").val()),
+        "status_board": _.escape($("#status_board").val()),
+        "food": _.escape($("#food").val()),
+        "water": _.escape($("#water").val()),
+        "medicines": _.escape($("#medicines").val()),
+        "social_workers": _.escape($("#social_workers").val()),
+        "medical_workers": _.escape($("#medical_workers").val()),
+        "shelter": _.escape($("#shelter").val()),
+        "formula": _.escape($("#formula").val()),
+        "toiletries": _.escape($("#toiletries").val()),
+        "flashlights": _.escape($("#flashlights").val()),
+        "cloths": _.escape($("#cloths").val()),
+        "power": _.escape($("#status_power").is(':checked')),
+        "communication": _.escape($("#status_communication").is(':checked')),
+        "status_water": $("#status_water").is(":checked")
+      },
+      success: function() {
+        window.location.hash = "#locations";
+      }
+    });
     return false;
   }
 });

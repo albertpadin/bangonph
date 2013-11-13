@@ -19,10 +19,15 @@
         <thead>
           <tr>
             <th>Date of Distribution</th>
+            <th>Description</th>
             <th>Contact</th>
             <th>Destinations</th>
+            <th>Featured Photo</th>
             <th>Supply Goal</th>
             <th>Actual Supply</th>
+            <th>Images</th>
+            <th>Info</th>
+            <th>Status</th>
             <th>Action</th>
           </tr>
         </thead>
@@ -31,7 +36,7 @@
             if ($.isEmptyObject(distributions)) {
           %>
               <tr>
-                <td colspan="6">No Record Found</td>
+                <td colspan="9">No Record Found</td>
               </tr>
           <%
             } else {
@@ -39,8 +44,10 @@
           %>
               <tr class="active" data-id="<%- this.id %>">
                 <td><%- this.date_of_distribution %></td>
+                <td><%- this.description %></td>
                 <td><%- this.contact %></td>
                 <td><%- this.destinations %></td>
+                <td><%- this.featured_photo %></td>
                 <td>
                   <% _.each(this.supply_goal, function(item, name) { %>
                     
@@ -49,10 +56,10 @@
                          _.each(item, function(itm, name) {
                       %>
                           <% if (name == "food") { %>
-                            food: <%- itm %>
+                            food: <% if (itm != "") { %> <%- itm %> <% } else { %> None <% } %>
                           <% } %>
                           <% if (name == "description") { %>
-                            Description: <%- itm %>
+                            Description: <% if (itm != "") { %> <%- itm %> <% } else { %> None <% } %>
                           <% } %>
                           <br/>
                       <%
@@ -66,10 +73,10 @@
                          _.each(item, function(itm, name) {
                       %>
                           <% if (name == "water") { %>
-                            water: <%- itm %>
+                            water: <% if (itm != "") { %> <%- itm %> <% } else { %> None <% } %>
                           <% } %>
                           <% if (name == "description") { %>
-                            Description: <%- itm %>
+                            Description: <% if (itm != "") { %> <%- itm %> <% } else { %> None <% } %>
                           <% } %>
                           <br/>
                       <%
@@ -83,10 +90,10 @@
                          _.each(item, function(itm, name) {
                       %>
                           <% if (name == "medical_workers") { %>
-                            medical_workers: <%- itm %>
+                            medical_workers: <% if (itm != "") { %> <%- itm %> <% } else { %> None <% } %>
                           <% } %>
                           <% if (name == "description") { %>
-                            Description: <%- itm %>
+                            Description: <% if (itm != "") { %> <%- itm %> <% } else { %> None <% } %>
                           <% } %>
                           <br/>
                       <%
@@ -100,10 +107,10 @@
                          _.each(item, function(itm, name) {
                       %>
                           <% if (name == "toiletries") { %>
-                            toiletries: <%- itm %>
+                            toiletries: <% if (itm != "") { %> <%- itm %> <% } else { %> None <% } %>
                           <% } %>
                           <% if (name == "description") { %>
-                            Description: <%- itm %>
+                            Description: <% if (itm != "") { %> <%- itm %> <% } else { %> None <% } %>
                           <% } %>
                           <br/>
                       <%
@@ -117,10 +124,10 @@
                          _.each(item, function(itm, name) {
                       %>
                           <% if (name == "flashlights") { %>
-                            flashlights: <%- itm %>
+                            flashlights: <% if (itm != "") { %> <%- itm %> <% } else { %> None <% } %>
                           <% } %>
                           <% if (name == "description") { %>
-                            Description: <%- itm %>
+                            Description: <% if (itm != "") { %> <%- itm %> <% } else { %> None <% } %>
                           <% } %>
                           <br/>
                       <%
@@ -134,10 +141,10 @@
                          _.each(item, function(itm, name) {
                       %>
                           <% if (name == "medicines") { %>
-                            medicines: <%- itm %>
+                            medicines: <% if (itm != "") { %> <%- itm %> <% } else { %> None <% } %>
                           <% } %>
                           <% if (name == "description") { %>
-                            Description: <%- itm %>
+                            Description: <% if (itm != "") { %> <%- itm %> <% } else { %> None <% } %>
                           <% } %>
                           <br/>
                       <%
@@ -151,10 +158,10 @@
                          _.each(item, function(itm, name) {
                       %>
                           <% if (name == "shelter") { %>
-                            shelter: <%- itm %>
+                            shelter: <% if (itm != "") { %> <%- itm %> <% } else { %> None <% } %>
                           <% } %>
                           <% if (name == "description") { %>
-                            Description: <%- itm %>
+                            Description: <% if (itm != "") { %> <%- itm %> <% } else { %> None <% } %>
                           <% } %>
                           <br/>
                       <%
@@ -168,10 +175,10 @@
                          _.each(item, function(itm, name) {
                       %>
                           <% if (name == "social_workers") { %>
-                            social_workers: <%- itm %>
+                            social_workers: <% if (itm != "") { %> <%- itm %> <% } else { %> None <% } %>
                           <% } %>
                           <% if (name == "description") { %>
-                            Description: <%- itm %>
+                            Description: <% if (itm != "") { %> <%- itm %> <% } else { %> None <% } %>
                           <% } %>
                           <br/>
                       <%
@@ -185,10 +192,10 @@
                          _.each(item, function(itm, name) {
                       %>
                           <% if (name == "formula") { %>
-                            formula: <%- itm %>
+                            formula: <% if (itm != "") { %> <%- itm %> <% } else { %> None <% } %>
                           <% } %>
                           <% if (name == "description") { %>
-                            Description: <%- itm %>
+                            Description: <% if (itm != "") { %> <%- itm %> <% } else { %> None <% } %>
                           <% } %>
                           <br/>
                       <%
@@ -201,41 +208,180 @@
                 </td>
                 <td>
                   <% _.each(this.actual_supply, function(item, name) { %>
-                    <%
-                       _.each(item, function(item, name) {
-                    %>
-                      <% if (name == "social_workers" && item != "") { %>
-                        Social Workers: <%- item %> <br/>
-                      <% } %>
-                      <% if (name == "medicines" && item != "") { %>
-                        Medicines: <%- item %> <br/>
-                      <% } %>
-                      <% if (name == "formula" && item != "") { %>
-                        Formula: <%- item %> <br/>
-                      <% } %>
-                      <% if (name == "food" && item != "") { %>
-                        Food: <%- item %> <br/>
-                      <% } %>
-                      <% if (name == "toiletries" && item != "") { %>
-                        Toiletries: <%- item %> <br/>
-                      <% } %>
-                      <% if (name == "flashlights" && item != "") { %>
-                        Flashlights: <%- item %> <br/>
-                      <% } %>
-                      <% if (name == "water" && item != "") { %>
-                        Water: <%- item %> <br/>
-                      <% } %>
-                      <% if (name == "medical_workers" && item != "") { %>
-                        Medical Workers: <%- item %> <br/>
-                      <% } %>
-                      <% if (name == "shelter" && item != "") { %>
-                        Shelter: <%- item %> <br/>
-                      <% } %>
-                    <%
-                      })
-                    %>
+                    
+                    <% if (name == "food") { %>
+                      <%
+                         _.each(item, function(itm, name) {
+                      %>
+                          <% if (name == "food") { %>
+                            food: <% if (itm != "") { %> <%- itm %> <% } else { %> None <% } %>
+                          <% } %>
+                          <% if (name == "description") { %>
+                            Description: <% if (itm != "") { %> <%- itm %> <% } else { %> None <% } %>
+                          <% } %>
+                          <br/>
+                      <%
+                        })
+                      %>
+                      <hr/>
+                    <% } %>
+
+                    <% if (name == "water") { %>
+                      <%
+                         _.each(item, function(itm, name) {
+                      %>
+                          <% if (name == "water") { %>
+                            water: <% if (itm != "") { %> <%- itm %> <% } else { %> None <% } %>
+                          <% } %>
+                          <% if (name == "description") { %>
+                            Description: <% if (itm != "") { %> <%- itm %> <% } else { %> None <% } %>
+                          <% } %>
+                          <br/>
+                      <%
+                        })
+                      %>
+                      <hr/>
+                    <% } %>
+
+                    <% if (name == "medical_workers") { %>
+                      <%
+                         _.each(item, function(itm, name) {
+                      %>
+                          <% if (name == "medical_workers") { %>
+                            medical_workers: <% if (itm != "") { %> <%- itm %> <% } else { %> None <% } %>
+                          <% } %>
+                          <% if (name == "description") { %>
+                            Description: <% if (itm != "") { %> <%- itm %> <% } else { %> None <% } %>
+                          <% } %>
+                          <br/>
+                      <%
+                        })
+                      %>
+                      <hr/>
+                    <% } %>
+
+                    <% if (name == "toiletries") { %>
+                      <%
+                         _.each(item, function(itm, name) {
+                      %>
+                          <% if (name == "toiletries") { %>
+                            toiletries: <% if (itm != "") { %> <%- itm %> <% } else { %> None <% } %>
+                          <% } %>
+                          <% if (name == "description") { %>
+                            Description: <% if (itm != "") { %> <%- itm %> <% } else { %> None <% } %>
+                          <% } %>
+                          <br/>
+                      <%
+                        })
+                      %>
+                      <hr/>
+                    <% } %>
+
+                    <% if (name == "flashlights") { %>
+                      <%
+                         _.each(item, function(itm, name) {
+                      %>
+                          <% if (name == "flashlights") { %>
+                            flashlights: <% if (itm != "") { %> <%- itm %> <% } else { %> None <% } %>
+                          <% } %>
+                          <% if (name == "description") { %>
+                            Description: <% if (itm != "") { %> <%- itm %> <% } else { %> None <% } %>
+                          <% } %>
+                          <br/>
+                      <%
+                        })
+                      %>
+                      <hr/>
+                    <% } %>
+
+                    <% if (name == "medicines") { %>
+                      <%
+                         _.each(item, function(itm, name) {
+                      %>
+                          <% if (name == "medicines") { %>
+                            medicines: <% if (itm != "") { %> <%- itm %> <% } else { %> None <% } %>
+                          <% } %>
+                          <% if (name == "description") { %>
+                            Description: <% if (itm != "") { %> <%- itm %> <% } else { %> None <% } %>
+                          <% } %>
+                          <br/>
+                      <%
+                        })
+                      %>
+                      <hr/>
+                    <% } %>
+
+                    <% if (name == "shelter") { %>
+                      <%
+                         _.each(item, function(itm, name) {
+                      %>
+                          <% if (name == "shelter") { %>
+                            shelter: <% if (itm != "") { %> <%- itm %> <% } else { %> None <% } %>
+                          <% } %>
+                          <% if (name == "description") { %>
+                            Description: <% if (itm != "") { %> <%- itm %> <% } else { %> None <% } %>
+                          <% } %>
+                          <br/>
+                      <%
+                        })
+                      %>
+                      <hr/>
+                    <% } %>
+
+                    <% if (name == "social_workers") { %>
+                      <%
+                         _.each(item, function(itm, name) {
+                      %>
+                          <% if (name == "social_workers") { %>
+                            social_workers: <% if (itm != "") { %> <%- itm %> <% } else { %> None <% } %>
+                          <% } %>
+                          <% if (name == "description") { %>
+                            Description: <% if (itm != "") { %> <%- itm %> <% } else { %> None <% } %>
+                          <% } %>
+                          <br/>
+                      <%
+                        })
+                      %>
+                      <hr/>
+                    <% } %>
+
+                    <% if (name == "formula") { %>
+                      <%
+                         _.each(item, function(itm, name) {
+                      %>
+                          <% if (name == "formula") { %>
+                            formula: <% if (itm != "") { %> <%- itm %> <% } else { %> None <% } %>
+                          <% } %>
+                          <% if (name == "description") { %>
+                            Description: <% if (itm != "") { %> <%- itm %> <% } else { %> None <% } %>
+                          <% } %>
+                          <br/>
+                      <%
+                        })
+                      %>
+                      <hr/>
+                    <% } %>
+
                   <% }) %>
                 </td>
+                <td>
+                  <% _.each(this.images, function(item, name, d) { %>
+                    <% _.each(item, function(data, name) { %>
+                        <% if (name == "src") { %>
+                         src: <%- data %><br/>
+                        <% } %>
+                        <% if (name == "image_title") { %>
+                         Title: <%- data %><br/>
+                        <% } %>
+                        <% if (name == "image_caption") { %>
+                         Caption: <%- data %><br/>
+                        <% } %>
+                      <% }) %>
+                    <hr/>
+                  <% }) %>
+                </td>
+                <td><%- this.info %></td>
+                <td><%- this.status %></td>
                 <td align='center'><a class="first">Edit</a> | <a class="last">Delete</a></td>
               </tr>
           <%
@@ -252,6 +398,145 @@
 
 <script type="text/template" id="addDistributionsTemplate">
   <form enctype="multipart/form-data" class="bs-example form-horizontal" id="frmAddDistribution">
+    <div class="row" style="margin-top: -50px;">
+      <div class="col-lg-12">
+        <div class="page-header" style="border-bottom: none!important">
+        </div>
+        <div class="panel panel-default">
+          <div class="panel-heading">
+            <h3 class="panel-title"><strong>New Distribution</strong></h3>
+          </div>
+          <div class="panel-body">
+            <p>
+              <textarea type="text" id="description" class="form-control" placeholder="Short Description"></textarea>
+            </p>
+            <p>
+              <input type="date" id="date_of_distribution" required="required" class="form-control" placeholder="Date of Distribution">
+            </p>
+            <p>
+              <select id="contact" required="required" class="form-control">
+              <%
+                if(!$.isEmptyObject(contacts)) {
+                  $.each(contacts, function() {
+              %>
+                <option value="<%- this.name %>"><%- this.name %></option>
+              <%
+                  })
+                }
+              %>
+              </select>
+            </p>
+            <p>
+              <select id="destinations" class="form-control">
+              <%
+                if(!$.isEmptyObject(locations)) {
+                  $.each(locations, function() {
+              %>
+                <option value="<%- this.id %>"><%- this.name %></option>
+              <%
+                  })
+                }
+              %>
+              </select>
+            </p>
+            <p>
+              <input type="text" placeholder="Featured Photo" class="form-control" id="featured_photo"/>
+            </p>
+            <p>
+              Supply Goal<br/>
+              <input type="text" id="supply_goal_food" placeholder="Number of Food"/>
+              <input type="text" id="supply_goal_food_description" placeholder="Description"/> <br/>
+              <input type="text" id="supply_goal_water" placeholder="Number of Water"/>
+              <input type="text" id="supply_goal_water_description" placeholder="Description"/> <br/>
+              <input type="text" id="supply_goal_medicines" placeholder="Number of Medicines"/>
+              <input type="text" id="supply_goal_medicines_description" placeholder="Description"/>  <br/>
+              <input type="text" id="supply_goal_social_workers" placeholder="Number of Social Workers"/>
+              <input type="text" id="supply_goal_social_workers_description" placeholder="Description"/>   <br/>
+              <input type="text" id="supply_goal_medical_workers" placeholder="Number of Medical Workers"/>
+              <input type="text" id="supply_goal_medical_workers_description" placeholder="Description"/>   <br/>
+              <input type="text" id="supply_goal_shelter" placeholder="Number of Shelter"/>
+              <input type="text" id="supply_goal_shelter_description" placeholder="Description"/>  <br/>
+              <input type="text" id="supply_goal_formula" placeholder="Number of Formula"/>
+              <input type="text" id="supply_goal_formula_description" placeholder="Description"/>  <br/>
+              <input type="text" id="supply_goal_toiletries" placeholder="Number of Toiletries"/>
+              <input type="text" id="supply_goal_toiletries_description" placeholder="Description"/>  <br/>
+              <input type="text" id="supply_goal_flashlights" placeholder="Number of Flashlights"/>
+              <input type="text" id="supply_goal_flashlights_description" placeholder="Description"/> 
+            </p>
+            <p>
+              Actual Supply<br/>
+              <input type="text" id="actual_supply_food" placeholder="Number of Food"/>
+              <input type="text" id="actual_supply_food_description" placeholder="Description"/> <br/>
+              <input type="text" id="actual_supply_water" placeholder="Number of Water"/>
+              <input type="text" id="actual_supply_water_description" placeholder="Description"/> <br/>
+              <input type="text" id="actual_supply_medicines" placeholder="Number of Medicines"/>
+              <input type="text" id="actual_supply_medicines_description" placeholder="Description"/> <br/>
+              <input type="text" id="actual_supply_social_workers" placeholder="Number of Social Workers"/>
+              <input type="text" id="actual_supply_social_workers_description" placeholder="Description"/> <br/>
+              <input type="text" id="actual_supply_medical_workers" placeholder="Number of Medical Workers"/>
+              <input type="text" id="actual_supply_medical_workers_description" placeholder="Description"/> <br/>
+              <input type="text" id="actual_supply_shelter" placeholder="Number of Shelter"/>
+              <input type="text" id="actual_supply_shelter_description" placeholder="Description"/> <br/>
+              <input type="text" id="actual_supply_formula" placeholder="Number of Formula"/>
+              <input type="text" id="actual_supply_formula_description" placeholder="Description"/> <br/>
+              <input type="text" id="actual_supply_toiletries" placeholder="Number of Toiletries"/>
+              <input type="text" id="actual_supply_toiletries_description" placeholder="Description"/> <br/>
+              <input type="text" id="actual_supply_flashlights" placeholder="Number of Flashlights"/>
+              <input type="text" id="actual_supply_flashlights_description" placeholder="Description"/> <br/>
+            </p>
+            <p>
+            Status
+            <input type="text" id="status"/>
+            </p>
+            <p>
+            Info
+            <textarea id="info" style="margin: 0px; width: 1066px; height: 175px;"></textarea>
+            </p>
+            <p>
+            <br/>
+              Images <a href="javascript:;" onclick="javascript:addimage()" class="btn btn-success addimage">Add More</a>
+              <table class="table imageTable">
+                <tbody id="image1">
+                  <tr>
+                    <th>Image 1</th>
+                    <th style="text-align: right;"><a href="javascript:;" rel="image1" onclick="$('#image1').remove();" class="removeimage">Remove</a></th>
+                  </tr>
+                  <tr>
+                    <td>Image URL</td>
+                    <td><input type="text" id="image_url_1" class="form-control image_url"/></td>
+                  </tr>
+                  <tr>
+                    <td>Title</td>
+                    <td><input type="text" id="image_title_1" class="form-control image_title"/></td>
+                  </tr>
+                  <tr>
+                    <td>Caption</td>
+                    <td><textarea id="image_caption_1" class="image_caption" style="width: 1002px; height: 73px; margin: 0px;"></textarea></td>
+                  </tr>
+                </tbody>
+              </table>
+            </p>
+            <p>
+              <button type="submit" class="btn btn-primary">Submit</button> 
+              <a href="#distributions" class="btn btn-default">Cancel</a> 
+              <div style="display:none" class="alert alert-dismissable alert-success success-message">
+                <button type="button" class="close" data-dismiss="alert">&times;</button>
+                <strong>Well done!</strong> New contact has been added.
+              </div>
+              <div style="display:none" class="alert alert-dismissable alert-danger error-message">
+                <button type="button" class="close" data-dismiss="alert">&times;</button>
+                <strong>Oh snap!</strong> Unable to add new contact. Try again.
+              </div>
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </form>
+</script>
+
+<script type="text/template" id="editDistributionsTemplate">
+  <form enctype="multipart/form-data" class="bs-example form-horizontal" id="frmEditDistribution">
     <div class="row" style="margin-top: -50px;">
       <div class="col-lg-12">
         <div class="page-header" style="border-bottom: none!important">
@@ -331,6 +616,30 @@
               <input type="text" id="actual_supply_toiletries_description" placeholder="Description"/> <br/>
               <input type="text" id="actual_supply_flashlights" placeholder="Number of Flashlights"/>
               <input type="text" id="actual_supply_flashlights_description" placeholder="Description"/> <br/>
+            </p>
+            <p>
+            <br/>
+              Images <a href="javascript:;" onclick="javascript:addimage()" class="btn btn-success addimage">Add More</a>
+              <table class="table imageTable">
+                <tbody id="image1">
+                  <tr>
+                    <th>Image 1</th>
+                    <th style="text-align: right;"><a href="javascript:;" rel="image1" onclick="$('#image1').remove();" class="removeimage">Remove</a></th>
+                  </tr>
+                  <tr>
+                    <td>Image URL</td>
+                    <td><input type="text" id="image_url_1" class="form-control image_url"/></td>
+                  </tr>
+                  <tr>
+                    <td>Title</td>
+                    <td><input type="text" id="image_title_1" class="form-control image_title"/></td>
+                  </tr>
+                  <tr>
+                    <td>Caption</td>
+                    <td><textarea id="image_caption_1" class="image_caption" style="width: 1002px; height: 73px; margin: 0px;"></textarea></td>
+                  </tr>
+                </tbody>
+              </table>
             </p>
             <p>
               <button type="submit" class="btn btn-primary">Submit</button> 

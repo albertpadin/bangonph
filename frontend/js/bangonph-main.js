@@ -135,6 +135,7 @@ var Router = Backbone.Router.extend({
 
         "distributions" : "renderDistributionPage",
         "distribution/new" : "renderAddDistributionPage",
+        "distribution/edit/:id" : "renderEditiDistributionPage",
 
         "distributors" : "renderDistributorPage",
         "distributor/new" : "renderAddDistributorPage",
@@ -203,6 +204,10 @@ var Router = Backbone.Router.extend({
       addDistribution.render();
       addDistribution.contacts();
     },
+    renderEditiDistributionPage: function(id) {
+      editDistribution.render();
+      editDistribution.contacts();
+    },
 
     renderDistributorPage: function() {
       distributorView.render();
@@ -252,6 +257,7 @@ var editLocation = new EditLocation();
 
 var distributionView = new DistributionView();
 var addDistribution = new AddDistribution();
+var editDistribution = new EditDistribution();
 
 var distributorView = new DistributorView();
 var addDistributor = new AddDistributor();

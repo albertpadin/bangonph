@@ -4,7 +4,11 @@ var Distribution = Backbone.Model.extend({
     contact: "",
     destinations: "",
     supply_goal: "",
-    actual_supply: ""
+    actual_supply: "",
+    images: "",
+    status: "",
+    info: "",
+    featured_photo: ""
   }
 });
 
@@ -42,7 +46,8 @@ var DistributionView = Backbone.View.extend({
     });
   },
   editDistribution: function(id) {
-    console.log(id);
+    var route = new Router();
+    route.navigate("distribution/edit/" + id, {trigger: true});
   },
   deleteDistribution: function(id) {
     if (confirm("Are you sure to delete?")) {
@@ -84,13 +89,35 @@ var AddDistribution = Backbone.View.extend({
     });
   },
   addDistribution: function() {
+    var obj_image_url = [];
+    $(".image_url").each(function() {
+        obj_image_url.push({"src": $(this).val()});
+    });
+
+    var obj_image_title = [];
+    $(".image_title").each(function() {
+        obj_image_title.push({"image_title": $(this).val()});
+    });
+    
+    var obj_image_caption = [];
+    $(".image_caption").each(function() {
+        obj_image_caption.push({"image_caption": $(this).val()});
+    });
+
     $.ajax({
       type: "post",
       url: "/distributions",
       data: {
+        "image_urls" : JSON.stringify(obj_image_url),
+        "image_titles" : JSON.stringify(obj_image_title),
+        "image_captions" : JSON.stringify(obj_image_caption),
         "date_of_distribution": _.escape($("#date_of_distribution").val()),
         "contact": _.escape($("#contact").val()),
         "destinations": _.escape($("#destinations").val()),
+        "status" : _.escape($("#status").val()),
+        "info": _.escape($("#info").val()),
+        "featured_photo": _.escape($("#featured_photo").val()),
+        "description": _.escape($("#description").val()),
 
         // supply goal
         "chk_supply_goal_food" : _.escape($("#supply_goal_food").val()),
@@ -154,5 +181,27 @@ var AddDistribution = Backbone.View.extend({
       }
     });
     return false;
+  }
+});
+
+var EditDistribution = Backbone.View.extend({
+  el: "#app",
+  template: _.template( $("#editDistributionsTemplate").html() ),
+  initialize: function() {
+    _.bindAll(this, "render", "contacts");
+  },
+  render: function() {
+    $(this.el).html( this.template() );
+  },
+  contacts: function() {
+    var self = this;
+    $.ajax({
+      type: "get",
+      url: "/distributions/fetch",
+      success: function(datas) {
+        var dd = JSON.parse(datas);
+        self.render(dd.contacts, dd.locations);
+      }
+    });
   }
 });

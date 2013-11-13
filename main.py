@@ -351,6 +351,8 @@ class PublicLocationPage(BaseHandler):
             self.redirect('/')
             return
 
+        self.tv['efforts'] = Distribution.query(Distribution.destinations == location.key, Distribution.date_of_distribution >= datetime.datetime.now()).order(Distribution.date_of_distribution)
+
         self.tv['location'] = location.to_object()
         self.tv['page_title'] = location.name
 
@@ -744,6 +746,11 @@ class DistributionHandler(BaseHandler):
                 temp["destinations"] = distribution.destinations.urlsafe()
                 temp["supply_goal"] = distribution.supply_goal
                 temp["actual_supply"] = distribution.actual_supply
+                temp["images"] = distribution.images
+                temp["status"] = distribution.status
+                temp["info"] = distribution.info
+                temp["featured_photo"] = distribution.featured_photo
+                temp["description"] = distribution.description
                 datas.append(temp)
             self.response.out.write(simplejson.dumps(datas))
 
@@ -843,12 +850,34 @@ class DistributionHandler(BaseHandler):
 
         }
 
+        urls = self.request.get("image_urls")
+        titles = self.request.get("image_titles")
+        captions = self.request.get("image_captions")
+        new_urls = simplejson.loads(urls)
+        new_titles = simplejson.loads(titles)
+        new_captions = simplejson.loads(captions)
+
+        images_datas = []
+        cnt = len(new_urls)
+        image_data = []
+        for i in range(0, cnt):
+            images = {}
+            images["src"] = new_urls[i]["src"]
+            images["image_title"] = new_titles[i]["image_title"]
+            images["image_caption"] = new_captions[i]["image_caption"]
+            image_data.append(images)
+
         data = {
             "date_of_distribution": datetime.datetime.strptime(self.request.get("date_of_distribution"), "%Y-%m-%d"), #1992-10-20
             "contact": self.request.get("contact"),
             "destinations": self.request.get("destinations"),
             "supply_goal": supply_goal,
-            "actual_supply": actual_supply
+            "actual_supply": actual_supply,
+            "images" : image_data,
+            "status" : self.request.get("status").strip().upper(),
+            "info": self.request.get("info"),
+            "featured_photo": self.request.get("featured_photo"),
+            "description": self.request.get("description")
         }
 
         add_distribution(data)
@@ -1140,7 +1169,7 @@ class APIUsersHandler(APIBaseHandler):
             data = {}
             data["users"] = users_json
             if more:
-                data["next_page"] = "http://api.bangonph.com/users/?cursor=" + next_cursor
+                data["next_page"] = "http://api.bangonph.com/v1/users/cursor=" + str(next_cursor.urlsafe())
             else:
                 data["next_page"] = False
             self.render(data)
@@ -1174,7 +1203,7 @@ class APILocationsHandler(APIBaseHandler):
             data = {}
             data["locations"] = locations_json
             if more:
-                data["next_page"] = "http://api.bangonph.com/locations/?cursor=" + next_cursor
+                data["next_page"] = "http://api.bangonph.com/v1/locations/cursor=" + str(next_cursor.urlsafe())
             else:
                 data["next_page"] = False
             self.render(data)
@@ -1182,7 +1211,7 @@ class APILocationsHandler(APIBaseHandler):
             location = Location.get_by_id(instance_id)
             self.render(location.to_object())
 
-    @oauthed_required
+
     def post(self, instance_id=None):
         needs = {
            "food": self.request.get("food"),
@@ -1219,7 +1248,8 @@ class APILocationsHandler(APIBaseHandler):
             "affected_count": self.request.get("affected_count"),
             "status_board": self.request.get("status_board"),
             "status": status, # json format
-            "hash_tag": hash_tag
+            "hash_tag": hash_tag,
+            "images": self.request.get("images")
         }
         if not instance_id:
             location = add_location(data)
@@ -1230,11 +1260,27 @@ class APILocationsHandler(APIBaseHandler):
 
     @oauthed_required
     def delete(self, instance_id=None):
-        location = ndb.Key("Location", instance_id)
-        location.delete()
-        data = {}
-        data["success"] = True
-        self.render(data)
+        resp = API_RESPONSE.copy()
+        resp["method"] = "delete"
+        if instance_id:
+            location = ndb.Key("Location", instance_id)
+            if location:
+                center.key.delete()
+                resp["description"] = "Successfully deleted the instance"
+            else:
+                resp['response'] = "invalid_instance"
+                resp['code'] = 404
+                resp['property'] = "delete_subscriber"
+                resp['description'] = "Instance id not valid"
+        else:
+            # missing params
+            resp['response'] = "missing_params"
+            resp['code'] = 406
+            resp['property'] = "params"
+            resp['description'] = "The request has missing parameters"
+
+        self.render(resp)
+        
 
 class APILContactsHandler(APIBaseHandler):
     def get(self, instance_id=None):
@@ -1277,7 +1323,7 @@ class APIPostsHandler(APIBaseHandler):
             data = {}
             data["posts"] = posts_json
             if more:
-                data["next_page"] = "http://api.bangonph.com/locations/?cursor=" + next_cursor
+                data["next_page"] = "http://api.bangonph.com/v1/locations/cursor=" + str(next_cursor.urlsafe())
             else:
                 data["next_page"] = False
             self.render(data)
@@ -1303,18 +1349,28 @@ class APIPostsHandler(APIBaseHandler):
             post = add_post(data, instance_id)
             self.render(post.to_object())
 
+    @oauthed_required
     def delete(self, instance_id=None):
+        resp = API_RESPONSE.copy()
+        resp["method"] = "delete"
         if instance_id:
-            try:
-                post = Post.get_by_id(int(instance_id))
-                post.key.delete()
-                data = {}
-                data["success"] = True
-                self.render(data)
-            except:
-                data = {}
-                data["success"] = False
-                self.render(data)
+            post = Post.get_by_id(int(instance_id))
+            if post:
+                center.key.delete()
+                resp["description"] = "Successfully deleted the instance"
+            else:
+                resp['response'] = "invalid_instance"
+                resp['code'] = 404
+                resp['property'] = "delete_subscriber"
+                resp['description'] = "Instance id not valid"
+        else:
+            # missing params
+            resp['response'] = "missing_params"
+            resp['code'] = 406
+            resp['property'] = "params"
+            resp['description'] = "The request has missing parameters"
+
+        self.render(resp)
 
 
 class APIDropOffCentersHandler(APIBaseHandler):
@@ -1336,7 +1392,7 @@ class APIDropOffCentersHandler(APIBaseHandler):
             data = {}
             data["dropOffCenters"] = centers_json
             if more:
-                data["next_page"] = "http://api.bangonph.com/locations/?cursor=" + next_cursor
+                data["next_page"] = "http://api.bangonph.com/v1/locations/cursor=" + str(next_cursor.urlsafe())
             else:
                 data["next_page"] = False
             self.render(data)
@@ -1345,6 +1401,7 @@ class APIDropOffCentersHandler(APIBaseHandler):
             if center:
                 self.render(center.to_object())
 
+    @oauthed_required
     def post(self, instance_id=None):
         data = {
             "drop_off_locations" : self.request.get("drop_off_locations").split(" "),
@@ -1367,9 +1424,28 @@ class APIDropOffCentersHandler(APIBaseHandler):
             centers = add_drop_off_centers(data, instance_id)
             self.render(centers.to_object())
 
-
+    @oauthed_required
     def delete(self, instance_id=None):
-        pass
+        resp = API_RESPONSE.copy()
+        resp["method"] = "delete"
+        if instance_id:
+            center = DropOffCenter.get_by_id(instance_id)
+            if center:
+                center.key.delete()
+                resp["description"] = "Successfully deleted the instance"
+            else:
+                resp['response'] = "invalid_instance"
+                resp['code'] = 404
+                resp['property'] = "delete_subscriber"
+                resp['description'] = "Instance id not valid"
+        else:
+            # missing params
+            resp['response'] = "missing_params"
+            resp['code'] = 406
+            resp['property'] = "params"
+            resp['description'] = "The request has missing parameters"
+
+        self.render(resp)
 
 
 class APISubscribersHandler(APIBaseHandler):
@@ -1391,7 +1467,7 @@ class APISubscribersHandler(APIBaseHandler):
             data = {}
             data["subscribers"] = subscribers_json
             if more:
-                data["next_page"] = "http://api.bangonph.com/subscribers/?cursor=" + next_cursor
+                data["next_page"] = "http://api.bangonph.com/v1/subscribers/cursor=" + str(next_cursor.urlsafe())
             else:
                 data["next_page"] = False
             self.render(data)
@@ -1497,7 +1573,12 @@ class APIEffortsHandler(APIBaseHandler):
                 else:
                     efforts, next_cursor, more = Distribution.query().fetch_page(25)
             else:
-                efforts, next_cursor, more = Distribution.query().fetch_page(25)
+                if self.request.get("filter_locations"):
+                    loc = slugify(self.request.get("filter_locations"))
+                    loc_key = Location.get_by_id(loc)
+                    efforts, next_cursor, more  = Distribution.query(Distribution.destinations == loc_key.key).fetch_page(25)
+                else:
+                    efforts, next_cursor, more = Distribution.query().fetch_page(25)
 
             for effort in efforts:
                 efforts_json.append(effort.to_object(self.request.get("expand").lower()))
@@ -1505,7 +1586,7 @@ class APIEffortsHandler(APIBaseHandler):
             data = {}
             data["efforts"] = efforts_json
             if more:
-                data["next_page"] = "http://api.bangonph.com/locations/?cursor=" + next_cursor
+                data["next_page"] = "http://api.bangonph.com/v1/locations/cursor=" + str(next_cursor.urlsafe())
             else:
                 data["next_page"] = False
             self.render(data)
@@ -1514,14 +1595,18 @@ class APIEffortsHandler(APIBaseHandler):
             if effort:
                 self.render(effort.to_object())
 
-    @oauthed_required
     def post(self, instance_id=None):
+        if self.request.get("date_of_distribution"):
+            date = datetime.datetime.strptime(self.request.get("date_of_distribution"), "%Y-%m-%d"), #1992-10-20
+        else:
+            date = None
         data = {
-            "date_of_distribution": datetime.datetime.strptime(self.request.get("date_of_distribution"), "%Y-%m-%d"), #1992-10-20
+            "date_of_distribution": date,
             "contact": self.request.get("contact"),
             "destinations": self.request.get("destinations"),
             "supply_goal": self.request.get("supply_goal"),
-            "actual_supply": self.request.get("actual_supply")
+            "actual_supply": self.request.get("actual_supply"),
+            "images": self.request.get("images")
         }
         if not instance_id:
             effort = add_distribution(data)
@@ -1530,15 +1615,28 @@ class APIEffortsHandler(APIBaseHandler):
             effort = add_distribution(data, instance_id)
             self.render(effort.to_object())
 
-
+    @oauthed_required
     def delete(self, instance_id=None):
+        resp = API_RESPONSE.copy()
+        resp["method"] = "delete"
         if instance_id:
             effort = Distribution.get_by_id(int(instance_id))
-            effort.key.delete()
+            if effort:
+                subscriber.key.delete()
+                resp["description"] = "Successfully deleted the instance"
+            else:
+                resp['response'] = "invalid_instance"
+                resp['code'] = 404
+                resp['property'] = "delete_subscriber"
+                resp['description'] = "Instance id not valid"
+        else:
+            # missing params
+            resp['response'] = "missing_params"
+            resp['code'] = 406
+            resp['property'] = "params"
+            resp['description'] = "The request has missing parameters"
 
-            data = {}
-            data["success"] = True
-            self.render(data)
+        self.render(resp)
 
 
 class APIContactsHandler(APIBaseHandler):
@@ -1560,7 +1658,7 @@ class APIContactsHandler(APIBaseHandler):
             data = {}
             data["locations"] = contacts_json
             if more:
-                data["next_page"] = "http://api.bangonph.com/contacts/?cursor=" + next_cursor
+                data["next_page"] = "http://api.bangonph.com/v1/contacts/cursor=" + str(next_cursor.urlsafe())
             else:
                 data["next_page"] = False
 
@@ -1587,13 +1685,99 @@ class APIContactsHandler(APIBaseHandler):
 
     @oauthed_required
     def delete(self, instance_id=None):
+        resp = API_RESPONSE.copy()
+        resp["method"] = "delete"
         if instance_id:
             contact = Contact.get_by_id(int(instance_id))
-            contact.key.delete()
+            if effort:
+                subscriber.key.delete()
+                resp["description"] = "Successfully deleted the instance"
+            else:
+                resp['response'] = "invalid_instance"
+                resp['code'] = 404
+                resp['property'] = "delete_subscriber"
+                resp['description'] = "Instance id not valid"
+        else:
+            # missing params
+            resp['response'] = "missing_params"
+            resp['code'] = 406
+            resp['property'] = "params"
+            resp['description'] = "The request has missing parameters"
+
+        self.render(resp)
+
+
+class APIDistributorsHandler(APIBaseHandler):
+    def get(self, instance_id=None):
+        distributors_json = []
+        if not instance_id:
+            if self.request.get("cursor"):
+                curs = Cursor(urlsafe=self.request.get("cursor"))
+                if curs:
+                    distributors, next_cursor, more = Distributor.query().fetch_page(25, start_cursor=curs)
+                else:
+                    distributors, next_cursor, more = Distributor.query().fetch_page(25)
+            else:
+                distributors, next_cursor, more = Distributor.query().fetch_page(25)
+
+            for distributor in distributors:
+                distributors_json.append(distributor.to_object())
 
             data = {}
-            data["success"] = True
+            data["distributors"] = distributors_json
+            if more:
+                data["next_page"] = "http://api.bangonph.com/v1/distributors/cursor=" + str(next_cursor.urlsafe())
+            else:
+                data["next_page"] = False
+
             self.render(data)
+        else:
+            contacts = Distributor.get_by_id(instance_id)
+            if contacts:
+                self.render(contacts.to_object())
+
+    @oauthed_required
+    def post(self, instance_id=None):
+        data = {
+            "email": self.request.get("email"),
+            "name": self.request.get("name"),
+            "contact_num": self.request.get("contact_num"),
+            "website": self.request.get("website"),
+            "facebook": self.request.get("facebook")
+        }
+        logging.critical(data)
+
+        if not instance_id:
+            distributor = add_distributor(data)
+            self.render(distributor.to_object())
+        else:
+            distributor = add_distributor(data, instance_id)
+            self.render(distributor.to_object())
+
+
+    @oauthed_required
+    def delete(self, instance_id=None):
+        resp = API_RESPONSE.copy()
+        resp["method"] = "delete"
+        if instance_id:
+            distributor = Distributor.get_by_id(int(instance_id))
+            if distributor:
+                distributor.key.delete()
+                resp["description"] = "Successfully deleted the instance"
+            else:
+                resp['response'] = "invalid_instance"
+                resp['code'] = 404
+                resp['property'] = "delete_subscriber"
+                resp['description'] = "Instance id not valid"
+        else:
+            # missing params
+            resp['response'] = "missing_params"
+            resp['code'] = 406
+            resp['property'] = "params"
+            resp['description'] = "The request has missing parameters"
+
+        self.render(resp)
+
 
 
 class UploadPage(BaseHandler):
@@ -1634,18 +1818,6 @@ app = webapp2.WSGIApplication([
         webapp2.Route('/', handler=PublicFrontPage, name="www-front"),
         webapp2.Route('/reliefoperations', handler=ReliefOperationsPage, name="www-reliefoperations"),
         webapp2.Route(r'/locations/<:.*>', handler=PublicLocationPage, name="www-locations"),
-        webapp2.Route('/distributions', handler=DistributionHandler, name="www-distributions"),
-        webapp2.Route('/distributions/fetch', handler=DistributionFetchHandler, name="www-distributions-fetch"),
-        webapp2.Route('/distributors', handler=DistributorHandler, name="www-distributors"),
-
-
-        webapp2.Route('/posts', handler=PostsHandler, name="www-post"),
-
-        webapp2.Route('/drop-off-center', handler=CentersHandler, name="www-centers"),
-
-
-        webapp2.Route('/subscribers', handler=SubscriberPage, name="www-subscribers"),
-
 
         # richmond:
         webapp2.Route('/s', handler=sampler, name="www-get-authorization-code"),
@@ -1665,6 +1837,9 @@ app = webapp2.WSGIApplication([
         webapp2.Route('/locations', handler=LocationHandler, name="www-locations"),
         webapp2.Route('/users', handler=UserHandler, name="www-users"),
         webapp2.Route('/posts', handler=PostsHandler, name="www-post"),
+        webapp2.Route('/distributions', handler=DistributionHandler, name="www-distributions"),
+        webapp2.Route('/distributions/fetch', handler=DistributionFetchHandler, name="www-distributions-fetch"),
+        webapp2.Route('/distributors', handler=DistributorHandler, name="www-distributors"),
 
         webapp2.Route('/contacts', handler=ContactHandler, name="www-contacts"),
         webapp2.Route('/drop-off-center', handler=CentersHandler, name="www-centers"),
@@ -1684,29 +1859,30 @@ app = webapp2.WSGIApplication([
         webapp2.Route(r'/<:.*>', ErrorHandler)
     ]),
 
-    routes.DomainRoute(r'<:api\.bangonph\.com>', [
-        webapp2.Route('/locations', handler=APILocationsHandler, name="api-locations"),
-        webapp2.Route('/users', handler=APIUsersHandler, name="api-users"),
-        webapp2.Route('/contacts', handler=APIContactsHandler, name="api-locations"),
-        webapp2.Route('/posts', handler=APIPostsHandler, name="api-locations"),
-        webapp2.Route('/drop-off-centers', handler=APIDropOffCentersHandler, name="api-locations"),
-        webapp2.Route('/subscribers', handler=APISubscribersHandler, name="api-subscribers"),
-        webapp2.Route('/orgs', handler=APIOrganizationsHandler, name="api-locations"),
-        webapp2.Route('/efforts', handler=APIEffortsHandler, name="api-locations"),
-
-        webapp2.Route(r'/locations/<:.*>', handler=APILocationsHandler, name="api-locations"),
-        webapp2.Route(r'/users/<:.*>', handler=APIUsersHandler, name="api-users"),
-        webapp2.Route(r'/contacts/<:.*>', handler=APIContactsHandler, name="api-locations"),
-        webapp2.Route(r'/posts/<:.*>', handler=APIPostsHandler, name="api-locations"),
-        webapp2.Route(r'/drop-off-centers/<:.*>', handler=APIDropOffCentersHandler, name="api-locations"),
-        webapp2.Route(r'/subscribers/<:.*>', handler=APISubscribersHandler, name="api-subscribers"),
-        webapp2.Route(r'/orgs/<:.*>', handler=APIOrganizationsHandler, name="api-locations"),
-        webapp2.Route(r'/efforts/<:.*>', handler=APIEffortsHandler, name="api-locations"),
+    routes.DomainRoute(r'<:api\.bangonph\.com|localhost>', [
+        webapp2.Route('/v1/locations', handler=APILocationsHandler, name="api-locations"),
+        webapp2.Route('/v1/users', handler=APIUsersHandler, name="api-users"),
+        webapp2.Route('/v1/contacts', handler=APIContactsHandler, name="api-locations"),
+        webapp2.Route('/v1/posts', handler=APIPostsHandler, name="api-locations"),
+        webapp2.Route('/v1/drop-off-centers', handler=APIDropOffCentersHandler, name="api-locations"),
+        webapp2.Route('/v1/subscribers', handler=APISubscribersHandler, name="api-subscribers"),
+        webapp2.Route('/v1/orgs', handler=APIOrganizationsHandler, name="api-locations"),
+        webapp2.Route('/v1/efforts', handler=APIEffortsHandler, name="api-locations"),
+        webapp2.Route('/v1/distributors', handler=APIDistributorsHandler, name="api-locations"),
 
 
+        webapp2.Route(r'/v1/distributors/<:.*>', handler=APIDistributorsHandler, name="api-locations"),
+        webapp2.Route(r'/v1/locations/<:.*>', handler=APILocationsHandler, name="api-locations"),
+        webapp2.Route(r'/v1/users/<:.*>', handler=APIUsersHandler, name="api-users"),
+        webapp2.Route(r'/v1/contacts/<:.*>', handler=APIContactsHandler, name="api-locations"),
+        webapp2.Route(r'/v1/posts/<:.*>', handler=APIPostsHandler, name="api-locations"),
+        webapp2.Route(r'/v1/drop-off-centers/<:.*>', handler=APIDropOffCentersHandler, name="api-locations"),
+        webapp2.Route(r'/v1/subscribers/<:.*>', handler=APISubscribersHandler, name="api-subscribers"),
+        webapp2.Route(r'/v1/orgs/<:.*>', handler=APIOrganizationsHandler, name="api-locations"),
+        webapp2.Route(r'/v1/efforts/<:.*>', handler=APIEffortsHandler, name="api-locations"),
 
         # richmond:
-        webapp2.Route('/oauth/authorize', handler=GetUserToken, name="api-get-user-token"),
+        webapp2.Route('/v1/oauth/authorize', handler=GetUserToken, name="api-get-user-token"),
         webapp2.Route('/s', handler=sampler, name="api-get-authorization-code"),
 
         webapp2.Route(r'/<:.*>', ErrorHandler)

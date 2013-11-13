@@ -760,7 +760,7 @@ class APILocationsHandler(APIBaseHandler):
 
 
     def post(self, instance_id=None):
-        if instance_id == "add":
+        if instance_id:
             needs = {
                "food": self.request.get("food"),
                 "water": self.request.get("water"),

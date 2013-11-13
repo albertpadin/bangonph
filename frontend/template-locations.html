@@ -81,14 +81,14 @@
                   </td>
                   <td>
                     <% _.each(this.status, function(item, name) { %>
-                      <% if (name == "power" && item == "true") { %>
-                        Power: Yes<br/>
+                      <% if (name == "power" && item != "") { %>
+                        Power: <%- item %><br/>
                       <% } %>
-                      <% if (name == "communication" && item == "true") { %>
-                        Communication: Yes<br/>
+                      <% if (name == "communication" && item != "") { %>
+                        Communication: <%- item %><br/>
                       <% } %>
-                      <% if (name == "water" && item == "true") { %>
-                        Water: Yes<br/>
+                      <% if (name == "water" && item != "") { %>
+                        Water: <%- item %><br/>
                       <% } %>
                     <% }) %>
                   </td>
@@ -134,55 +134,64 @@
           </div>
           <div class="panel-body">
             <p>
+              Location Name
               <input type="text" id="name" required="required" class="form-control" placeholder="Location Name">
             </p>
             <p>
+              Lat Long
               <input type="text" id="latlong" class="form-control" placeholder="Lat Long">
             </p>
             <p>
+              Featured Photo
               <input type="text" id="featured_photo" class="form-control" placeholder="Featured Photo">
             </p>
             <p>
+              Death Count
               <input type="text" id="death_count" class="form-control" placeholder="Death Count">
             </p>
             <p>
+              Affected Count
               <input type="text" id="affected_count"  class="form-control" placeholder="Affected Count">
             </p>
             <p>
+              Status Board
               <input type="text" id="status_board" class="form-control" placeholder="Status Board">
             </p>
             Needs:
             <p>
-              <input type="text" id="food" placeholder="Number of food"><br/>
+              Number of food<input type="text" id="food" placeholder="Number of food"><br/>
 
-              <input type="text" id="water"   placeholder="Number of water"><br/>
+              Number of water<input type="text" id="water"   placeholder="Number of water"><br/>
 
-              <input type="text" id="medicines" placeholder="Number of medicines"><br/>
+              Number of medicines<input type="text" id="medicines" placeholder="Number of medicines"><br/>
 
-              <input type="text" id="social_workers" placeholder="Number of social_workers"><br/>
+              Number of social_workers<input type="text" id="social_workers" placeholder="Number of social_workers"><br/>
 
-              <input type="text" id="medical_workers"  placeholder="Number of medical_workers"><br/>
+              Number of medical_workers<input type="text" id="medical_workers"  placeholder="Number of medical_workers"><br/>
 
-              <input type="text" id="shelter"   placeholder="Number of shelter"><br/>
+              Number of shelter<input type="text" id="shelter"   placeholder="Number of shelter"><br/>
 
-              <input type="text" id="formula"  placeholder="Number of formula"><br/>
+              Number of formula<input type="text" id="formula"  placeholder="Number of formula"><br/>
 
-              <input type="text" id="toiletries"   placeholder="Number of toiletries"><br/>
+              Number of toiletries<input type="text" id="toiletries"   placeholder="Number of toiletries"><br/>
 
-              <input type="text" id="flashlights"  placeholder="Number of flashlights"><br/>
+              Number of flashlights<input type="text" id="flashlights"  placeholder="Number of flashlights"><br/>
 
-              <input type="text" id="cloths" placeholder="Number of cloths"><br/>
+              Number of clothes<input type="text" id="cloths" placeholder="Number of clothes"><br/>
             </p>
             
             <p>
-              <input type="checkbox" name="status" id="status_power"/> Power
+              Power
+              <input type="text" id="status_power"/>
             </p>
 
             <p>
-              <input type="checkbox" name="status" id="status_communication"/> Communication
+              Communication
+              <input type="text" id="status_communication"/>
             </p>
             <p>
-              <input type="checkbox" name="status" id="status_water"/> Water
+              Water
+              <input type="text" id="status_water"/>
             </p>
             <p>
             <br/>
@@ -284,16 +293,18 @@
 
               <input type="text" id="cloths" <% _.each(this.needs, function(item, name) { if (name == "cloths") { %> value="<%- item %>" <% } }) %> placeholder="Number of cloths"><br/>
             </p>
-            
             <p>
-              <input type="checkbox" <% _.each(this.status, function(item, name) { if (name == "power" && item == "true") { %> checked <% } }) %>  name="status" id="status_power"/> Power
+              Power
+              <input type="text" <% _.each(this.status, function(item, name) { if (name == "power" && item != "") { %> value="<%- item %>" <% } }) %>  id="status_power"/>
             </p>
 
             <p>
-              <input type="checkbox" name="status"  <% _.each(this.status, function(item, name) { if (name == "communication" && item == "true") { %> checked <% } }) %>  id="status_communication"/> Communication
+              Communication
+              <input type="text" <% _.each(this.status, function(item, name) { if (name == "communication" && item != "") { %> value="<%- item %>" <% } }) %> id="status_communication"/>
             </p>
             <p>
-              <input type="checkbox" name="status" <% _.each(this.status, function(item, name) { if (name == "water" && item == "true") { %> checked <% } }) %>  id="status_water"/> Water
+              Water
+              <input type="text" id="status_water" <% _.each(this.status, function(item, name) { if (name == "water" && item != "") { %> value="<%- item %>" <% } }) %>/>
             </p>
             <% 
                 })

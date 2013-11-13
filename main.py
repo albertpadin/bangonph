@@ -760,39 +760,40 @@ class APILocationsHandler(APIBaseHandler):
 
 
     def post(self, instance_id=None):
-        needs = {
-           "food": self.request.get("food"),
-            "water": self.request.get("water"),
-            "medicines": self.request.get("medicines"),
-            "social_workers": self.request.get("social_workers"),
-            "medical_workers": self.request.get("medical_workers"),
-            "shelter": self.request.get("shelter"),
-            "formula": self.request.get("formula"),
-            "toiletries": self.request.get("toiletries"),
-            "flashlights": self.request.get("flashlights"),
-            "cloths": self.request.get("cloths"),
-        }
+        if instance_id == "add":
+            needs = {
+               "food": self.request.get("food"),
+                "water": self.request.get("water"),
+                "medicines": self.request.get("medicines"),
+                "social_workers": self.request.get("social_workers"),
+                "medical_workers": self.request.get("medical_workers"),
+                "shelter": self.request.get("shelter"),
+                "formula": self.request.get("formula"),
+                "toiletries": self.request.get("toiletries"),
+                "flashlights": self.request.get("flashlights"),
+                "cloths": self.request.get("cloths"),
+            }
 
-        status = {
-            "power": self.request.get("power"),
-            "communication": self.request.get("communication"),
-            "water": self.request.get("status_water")
-        }
+            status = {
+                "power": self.request.get("power"),
+                "communication": self.request.get("communication"),
+                "water": self.request.get("status_water")
+            }
 
-        data = {
-            "name": self.request.get("name"),
-            "needs": needs, # json format
-            "centers": self.request.get_all("centers"),
-            "latlong": self.request.get("latlong"),
-            "featured_photo": self.request.get("featured_photo"),
-            "death_count": self.request.get("death_count"),
-            "affected_count": self.request.get("affected_count"),
-            "status_board": self.request.get("status_board"),
-            "status": status # json format
-        }
+            data = {
+                "name": self.request.get("name"),
+                "needs": needs, # json format
+                "centers": self.request.get_all("centers"),
+                "latlong": self.request.get("latlong"),
+                "featured_photo": self.request.get("featured_photo"),
+                "death_count": self.request.get("death_count"),
+                "affected_count": self.request.get("affected_count"),
+                "status_board": self.request.get("status_board"),
+                "status": status # json format
+            }
 
-        location = add_location(data)
-        self.render(location.to_object())
+            location = add_location(data)
+            self.render(location.to_object())
 
     def delete(self, instance_id=None):
         pass
@@ -856,32 +857,31 @@ class APIPostsHandler(APIBaseHandler):
 
 class APIDropOffCentersHandler(APIBaseHandler):
     def get(self, instance_id=None):
-        if instance_id == "add":
-            centers_json = []
-            if not instance_id:
-                if self.request.get("cursor"):
-                    curs = Cursor(urlsafe=self.request.get("cursor"))
-                    if curs:
-                        centers, next_cursor, more = DropOffCenter.query().fetch_page(10, start_cursor=curs)
-                    else:
-                        centers, next_cursor, more = DropOffCenter.query().fetch_page(10)
+        centers_json = []
+        if not instance_id:
+            if self.request.get("cursor"):
+                curs = Cursor(urlsafe=self.request.get("cursor"))
+                if curs:
+                    centers, next_cursor, more = DropOffCenter.query().fetch_page(10, start_cursor=curs)
                 else:
                     centers, next_cursor, more = DropOffCenter.query().fetch_page(10)
-
-                for center in centers:
-                    centers_json.append(center.to_object())
-
-                data = {}
-                data["dropOffCenters"] = centers_json
-                if more:
-                    data["next_page"] = "http://api.bangonph.com/locations/?cursor=" + next_cursor
-                else:
-                    data["next_page"] = False
-                self.render(data)
             else:
-                center = DropOffCenter.get_by_id(instance_id)
-                if center:
-                    self.render(center.to_object())
+                centers, next_cursor, more = DropOffCenter.query().fetch_page(10)
+
+            for center in centers:
+                centers_json.append(center.to_object())
+
+            data = {}
+            data["dropOffCenters"] = centers_json
+            if more:
+                data["next_page"] = "http://api.bangonph.com/locations/?cursor=" + next_cursor
+            else:
+                data["next_page"] = False
+            self.render(data)
+        else:
+            center = DropOffCenter.get_by_id(instance_id)
+            if center:
+                self.render(center.to_object())
 
     def post(self, instance_id=None):
         pass

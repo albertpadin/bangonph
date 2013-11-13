@@ -4,7 +4,11 @@ var Distribution = Backbone.Model.extend({
     contact: "",
     destinations: "",
     supply_goal: "",
-    actual_supply: ""
+    actual_supply: "",
+    images: "",
+    status: "",
+    info: "",
+    featured_photo: ""
   }
 });
 
@@ -109,6 +113,9 @@ var AddDistribution = Backbone.View.extend({
         "date_of_distribution": _.escape($("#date_of_distribution").val()),
         "contact": _.escape($("#contact").val()),
         "destinations": _.escape($("#destinations").val()),
+        "status" : _.escape($("#status").val()),
+        "info": _.escape($("#info").val()),
+        "featured_photo": _.escape($("#featured_photo").val()),
 
         // supply goal
         "chk_supply_goal_food" : _.escape($("#supply_goal_food").val()),
@@ -172,5 +179,27 @@ var AddDistribution = Backbone.View.extend({
       }
     });
     return false;
+  }
+});
+
+var EditDistribution = Backbone.View.extend({
+  el: "#app",
+  template: _.template( $("#editDistributionsTemplate").html() ),
+  initialize: function() {
+    _.bindAll(this, "render", "contacts");
+  },
+  render: function() {
+    $(this.el).html( this.template() );
+  },
+  contacts: function() {
+    var self = this;
+    $.ajax({
+      type: "get",
+      url: "/distributions/fetch",
+      success: function(datas) {
+        var dd = JSON.parse(datas);
+        self.render(dd.contacts, dd.locations);
+      }
+    });
   }
 });

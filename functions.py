@@ -186,6 +186,15 @@ def add_distribution(data, instance_id=""):
     if data["images"]:
         distribution.images = data["images"]
 
+    if data["status"]:
+        distribution.status = data["status"]
+
+    if data["info"]:
+        distribution.info = data["info"]
+
+    if data["featured_photo"]:
+        distribution.featured_photo = data["featured_photo"]
+
     distribution.put()
 
     return distribution

@@ -133,6 +133,9 @@ class Distribution(ndb.Model):
     supply_goal = ndb.JsonProperty()
     actual_supply = ndb.JsonProperty()
     images = ndb.JsonProperty()
+    status = ndb.StringProperty()
+    info = ndb.TextProperty()
+    featured_photo = ndb.StringProperty()
 
 
     def to_object(self, expand=""):
@@ -142,6 +145,9 @@ class Distribution(ndb.Model):
         details["updated"] = str(self.updated)
         details["dateOfDistribution"] = str(self.date_of_distribution)
         details["images"] = self.images
+        details["status"] = self.status
+        details["info"] = self.info
+        details["featured_photo"] = self.featured_photo
 
         if expand == "contacts":
             contact_details = {}

@@ -23,6 +23,7 @@
             <th>Destinations</th>
             <th>Supply Goal</th>
             <th>Actual Supply</th>
+            <th>Images</th>
             <th>Action</th>
           </tr>
         </thead>
@@ -357,6 +358,22 @@
 
                   <% }) %>
                 </td>
+                <td>
+                  <% _.each(this.images, function(item, name, d) { %>
+                    <% _.each(item, function(data, name) { %>
+                        <% if (name == "src") { %>
+                         src: <%- data %><br/>
+                        <% } %>
+                        <% if (name == "image_title") { %>
+                         Title: <%- data %><br/>
+                        <% } %>
+                        <% if (name == "image_caption") { %>
+                         Caption: <%- data %><br/>
+                        <% } %>
+                      <% }) %>
+                    <hr/>
+                  <% }) %>
+                </td>
                 <td align='center'><a class="first">Edit</a> | <a class="last">Delete</a></td>
               </tr>
           <%
@@ -452,6 +469,30 @@
               <input type="text" id="actual_supply_toiletries_description" placeholder="Description"/> <br/>
               <input type="text" id="actual_supply_flashlights" placeholder="Number of Flashlights"/>
               <input type="text" id="actual_supply_flashlights_description" placeholder="Description"/> <br/>
+            </p>
+            <p>
+            <br/>
+              Images <a href="javascript:;" onclick="javascript:addimage()" class="btn btn-success addimage">Add More</a>
+              <table class="table imageTable">
+                <tbody id="image1">
+                  <tr>
+                    <th>Image 1</th>
+                    <th style="text-align: right;"><a href="javascript:;" rel="image1" onclick="$('#image1').remove();" class="removeimage">Remove</a></th>
+                  </tr>
+                  <tr>
+                    <td>Image URL</td>
+                    <td><input type="text" id="image_url_1" class="form-control image_url"/></td>
+                  </tr>
+                  <tr>
+                    <td>Title</td>
+                    <td><input type="text" id="image_title_1" class="form-control image_title"/></td>
+                  </tr>
+                  <tr>
+                    <td>Caption</td>
+                    <td><textarea id="image_caption_1" class="image_caption" style="width: 1002px; height: 73px; margin: 0px;"></textarea></td>
+                  </tr>
+                </tbody>
+              </table>
             </p>
             <p>
               <button type="submit" class="btn btn-primary">Submit</button> 

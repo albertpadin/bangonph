@@ -744,6 +744,7 @@ class DistributionHandler(BaseHandler):
                 temp["destinations"] = distribution.destinations.urlsafe()
                 temp["supply_goal"] = distribution.supply_goal
                 temp["actual_supply"] = distribution.actual_supply
+                temp["images"] = distribution.images
                 datas.append(temp)
             self.response.out.write(simplejson.dumps(datas))
 
@@ -843,12 +844,30 @@ class DistributionHandler(BaseHandler):
 
         }
 
+        urls = self.request.get("image_urls")
+        titles = self.request.get("image_titles")
+        captions = self.request.get("image_captions")
+        new_urls = simplejson.loads(urls)
+        new_titles = simplejson.loads(titles)
+        new_captions = simplejson.loads(captions)
+
+        images_datas = []
+        cnt = len(new_urls)
+        image_data = []
+        for i in range(0, cnt):
+            images = {}
+            images["src"] = new_urls[i]["src"]
+            images["image_title"] = new_titles[i]["image_title"]
+            images["image_caption"] = new_captions[i]["image_caption"]
+            image_data.append(images)
+
         data = {
             "date_of_distribution": datetime.datetime.strptime(self.request.get("date_of_distribution"), "%Y-%m-%d"), #1992-10-20
             "contact": self.request.get("contact"),
             "destinations": self.request.get("destinations"),
             "supply_goal": supply_goal,
-            "actual_supply": actual_supply
+            "actual_supply": actual_supply,
+            "images" : image_data
         }
 
         add_distribution(data)
@@ -1753,29 +1772,17 @@ class UploadHandler(blobstore_handlers.BlobstoreUploadHandler):
 
 
 app = webapp2.WSGIApplication([
-    routes.DomainRoute(r'<:gcdc2013-bangonph\.appspot\.com|www\.bangonph\.com|localhost>', [
+    routes.DomainRoute(r'<:gcdc2013-bangonph\.appspot\.com|www\.bangonph\.com>', [
         webapp2.Route('/', handler=PublicFrontPage, name="www-front"),
         webapp2.Route('/reliefoperations', handler=ReliefOperationsPage, name="www-reliefoperations"),
         webapp2.Route(r'/locations/<:.*>', handler=PublicLocationPage, name="www-locations"),
-        webapp2.Route('/distributions', handler=DistributionHandler, name="www-distributions"),
-        webapp2.Route('/distributions/fetch', handler=DistributionFetchHandler, name="www-distributions-fetch"),
-        webapp2.Route('/distributors', handler=DistributorHandler, name="www-distributors"),
-
-
-        webapp2.Route('/posts', handler=PostsHandler, name="www-post"),
-
-        webapp2.Route('/drop-off-center', handler=CentersHandler, name="www-centers"),
-
-
-        webapp2.Route('/subscribers', handler=SubscriberPage, name="www-subscribers"),
-
 
         # richmond:
         webapp2.Route('/s', handler=sampler, name="www-get-authorization-code"),
 
         webapp2.Route(r'/<:.*>', ErrorHandler)
     ]),
-    routes.DomainRoute(r'<:admin\.bangonph\.com>', [
+    routes.DomainRoute(r'<:admin\.bangonph\.com|localhost>', [
         webapp2.Route('/', handler=FrontPage, name="www-front"),
         webapp2.Route('/register', handler=RegisterPage, name="www-register"),
         webapp2.Route('/logout', handler=Logout, name="www-logout"),
@@ -1788,6 +1795,9 @@ app = webapp2.WSGIApplication([
         webapp2.Route('/locations', handler=LocationHandler, name="www-locations"),
         webapp2.Route('/users', handler=UserHandler, name="www-users"),
         webapp2.Route('/posts', handler=PostsHandler, name="www-post"),
+        webapp2.Route('/distributions', handler=DistributionHandler, name="www-distributions"),
+        webapp2.Route('/distributions/fetch', handler=DistributionFetchHandler, name="www-distributions-fetch"),
+        webapp2.Route('/distributors', handler=DistributorHandler, name="www-distributors"),
 
         webapp2.Route('/contacts', handler=ContactHandler, name="www-contacts"),
         webapp2.Route('/drop-off-center', handler=CentersHandler, name="www-centers"),

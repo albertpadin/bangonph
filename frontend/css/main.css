@@ -3,6 +3,18 @@
     margin-bottom: 0!important;
 }
 
+.mr20{
+    margin-right: 20px!important;
+}
+
+.mt0{
+    margin-top: 0!important;
+}
+
+.mt5{
+    margin-top: 5px!important;
+}
+
 .clear{
     clear: both;
 }
@@ -337,3 +349,31 @@ margin-right: 10px;
 
 }
 
+/*relief-operations page*/
+#relief-cover{
+    background: url(../img/cover-relief.jpg)!important;
+}
+
+.relief-logo{
+    float: left!important;
+    margin-right: 20px!important;
+    margin-top: 5px!important;
+}
+
+@media screen and (max-width: 500px) {
+    .relief-logo {
+        width: 64px;
+        margin-top: 21px!important;
+        margin-right: 9px!important;
+    }
+}
+
+@media screen and (max-width: 990px) {
+    .relief-logo {
+        margin-top: 22px!important;
+    }
+}
+
+
+
+/*end relief-operations page*/

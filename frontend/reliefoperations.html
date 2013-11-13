@@ -13,10 +13,14 @@
 
 
 {% block content %}
-  <div class="jumbotron">
+  <div id="relief-cover" class="jumbotron">
       <div class="container">
-        <h1>Tacloban</h1>
-        <p>Super Typhoon recently trampled our land, killed the cows & left us devasted. We are currently monitoring all the relief goods, making sure every place receives the goodies. Join us & feed the people!</p>
+        <img class="relief-logo" src="/img/logo-redcross.png" alt="">
+        <div>
+          <h2>Philippine Red Cross: <span class="emphasize">Operation Yolanda</span></h2>
+          <p>We are committed to provide quality life-saving services that protect the life and dignity especially of to victims of SuperTyphoon Yolanda. Let's save lives together.</p>
+        </div>
+        <a class="btn btn-primary btn-lg pull-right">Get Involved Now! »</a>
       </div>
     </div>
 
@@ -24,16 +28,17 @@
       <!-- Example row of columns -->
       <div class="row">
           <div class="col-lg-8 col-md-8">
+            <h3 class="mt0">What's Going On</h3>
             <div id="campaign-content-wrap">
-               <ul class="bxslider">
-                  <li><img src="http://s2.djyimg.com/n3/eet-content/uploads/2013/11/boracayisland1-603x450.jpg" title="test" alt="test" /></li>
-                  <li><img src="https://pbs.twimg.com/media/BYl9rPYCIAAmH05.jpg" title="test" alt="test" /></li>
-                </ul>
-
-                <div id="bx-pager">
-                  <a data-slide-index="0" href=""><img src="http://s2.djyimg.com/n3/eet-content/uploads/2013/11/boracayisland1-603x450.jpg" title="test" alt="test" />
-                  <a data-slide-index="1" href=""><img src="https://pbs.twimg.com/media/BYl9rPYCIAAmH05.jpg" title="test" alt="test" /></a>
-                </div>
+              <!-- <h3 class="mt0">Our Relief Operation</h3> -->
+              <ul class="bxslider">
+                <li><img src="http://newsinfo.inquirer.net/files/2013/10/bohol-earthquake-relief-supplies1.jpg" title="test" alt="test" /></li>
+                <li><img src="http://newsinfo.inquirer.net/files/2013/11/yolanda-relief-goods.jpg" title="test" alt="test" /></li>
+              </ul>
+              <div id="bx-pager">
+                <a data-slide-index="0" href=""><img src="http://newsinfo.inquirer.net/files/2013/10/bohol-earthquake-relief-supplies1.jpg" title="test" alt="test" /></a>
+                <a data-slide-index="1" href=""><img src="http://newsinfo.inquirer.net/files/2013/11/yolanda-relief-goods.jpg" title="test" alt="test" /></a>
+              </div>
             </div>
 
             <div class="col-lg-4 hide-on-big show-on-small">
@@ -47,53 +52,44 @@
                 <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
               </div>
               </div>
-
-
+              
+            <h4>Where We Are Heading</h4>
             <div class="side-wrap">
               <div class="status-item">
-              
-              
-              <div class="status-group">
-              <div class="status-entry">
-                <img class="icon" src="img/icon-deaths.png" alt="Deaths">
-                <span>100 Deaths</span>
+                    <img class="" src="img/preview-tacloban.jpg" alt="">
               </div>
-              <div class="status-entry">
-                <img class="icon" src="img/icon-family.png" alt="Families Affected">
-                <span>123+ Families Affected</span>
-              </div>
-              <div class="status-entry">
-                <img class="icon" src="img/icon-communication.png" alt="No Communication">
-                <span>No Communication</span>
-              </div>
-              <div class="status-entry">
-                <img class="icon" src="img/icon-water.png" alt="No Water">
-                <span>No Water</span>
-              </div>
-              <div class="status-entry">
-                <img class="icon" src="img/icon-electricity.png" alt="No Electricity">
-                <span>No Electricity</span>
-              </div>
-              <div class="status-entry">
-                <img class="icon" src="img/icon-medicine.png" alt="No Medicine">
-                <span>No Medicine</span>
-              </div>
-              <div class="status-entry">
-                <img class="icon" src="img/icon-clothes.png" alt="Needs Clothes">
-                <span>Needs Clothes</span>
-              </div>
-              <div class="status-entry">
-                <img class="icon" src="img/icon-food.png" alt="No Food">
-                <span>No Food</span>
-              </div>
-
-              </div>
-
-            <div class="clear"></div>
             </div>
+            
+            <h4>What We Need</h4>
+            <div class="side-wrap">
+              <div class="status-item">
+                <div class="status-group">
+                  <div class="status-entry">
+                    <img class="icon" src="img/icon-water.png" alt="900 Bottles of Water">
+                    <span>900 Bottles of Water</span>
+                  </div>
+                  <div class="status-entry">
+                    <img class="icon" src="img/icon-medicine.png" alt="100 First Aid Kits">
+                    <span>100 First Aid Kits</span>
+                  </div>
+                  <div class="status-entry">
+                    <img class="icon" src="img/icon-clothes.png" alt="Needs Clothes">
+                    <span>100 Boxes of Clothes</span>
+                  </div>
+                  <div class="status-entry">
+                    <img class="icon" src="img/icon-food.png" alt="1000 boxes of Canned Goods">
+                    <span>1000 Sacks of Rice</span>
+                  </div>
+                  <div class="status-entry">
+                    <img class="icon" src="img/icon-others.png" alt="1000 boxes of Canned Goods">
+                    <span>1000 Matchsticks</span>
+                  </div>
+                </div>
+              <div class="clear"></div>
+              </div>
             </div>
 
-
+            <h4>Operation Status</h4>
             <div class="side-wrap">
               <div class="status-item">
               
@@ -109,12 +105,12 @@
 
                 <div class="status-entry">
                 <img class="icon" src="img/icon-box.png" alt="Packs">
-                <span>20,000 packs needed</span>
+                <span>20,000 on the way</span>
               </div>
 
               <div class="status-entry">
                 <img class="icon" src="img/icon-box-open.png" alt="Packs">
-                <span>500 packs provided</span>
+                <span>500 delivered</span>
               </div>
               </div>
 
@@ -122,83 +118,19 @@
             </div>
             </div>
 
-            <br/>
-            <h4>Relief Efforts</h4>
-
-            <div class="side-wrap">
-              <div class="side-head needed">
-                Needs your help
-              </div>
-              <ul>
-                <li><a href="#"><img src="http://localhost:8080/img/icon-box.png" class="small-icon">&nbsp;<strong>10,000 packs</strong> -
-                 <span class="details">Ramon Aboitiz <span> 11/13/'13</span>
-                 </span>
-
-                 </a>
-                </li>
-
-                <li><a href="#ramon-aboitiz"><img src="http://localhost:8080/img/icon-box.png" class="small-icon">&nbsp;<strong>10,000 packs</strong> - 
-                 <span class="details">Ramon Aboitiz <span> 11/13/'13</span>
-                 </span>
-
-                 </a>
-                </li>
-              </ul>
-            </div>
-
-            <div class="side-wrap">
-              <div class="side-head ongoing">
-                Ongoing
-              </div>
-              <ul>
-                <li><a href="#"><img src="http://localhost:8080/img/icon-box.png" class="small-icon">&nbsp;<strong>10,000 packs</strong> - 
-                 <span class="details">Ramon Aboitiz <span> 11/13/'13</span>
-                 </span>
-
-                 </a>
-                </li>
-
-                <li><a href="#"><img src="http://localhost:8080/img/icon-box.png" class="small-icon">&nbsp;<strong>10,000 packs</strong> - 
-                 <span class="details">Ramon Aboitiz <span> 11/13/'13</span>
-                 </span>
-
-                 </a>
-                </li>
-              </ul>
-            </div>
-
-            <div class="side-wrap">
-              <div class="side-head done">
-                Done
-              </div>
-              <ul>
-                <li><a href="#"><img src="http://localhost:8080/img/icon-box-open.png" class="small-icon">&nbsp;<strong>10,000 packs</strong> - 
-                 <span class="details">Ramon Aboitiz <span> 11/13/'13</span>
-                 </span>
-
-                 </a>
-                </li>
-
-                <li><a href="#"><img src="http://localhost:8080/img/icon-box-open.png" class="small-icon">&nbsp;<strong>10,000 packs</strong> - 
-                 <span class="details">Ramon Aboitiz <span> 11/13/'13</span>
-                 </span>
-
-                 </a>
-                </li>
-              </ul>
-            </div>
-
           </div>
 
             <div id="content">
             <p>&nbsp;</p>
-            <a data-toggle="collapse" href="#collapseOne" class="donate-btn">Donate Cash</a>
-              <h3>Relief Operations</h3>
-              <span>Stand up, take part and get involved!</span>
-
-
-              <p>&nbsp;</p>
-              
+              <h3>Our Goals</h3>
+              <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+              <h3>Help Us Out</h3>
+              <p>
+                Bonifacio Drive, Port Area, PO Box 280, Manila 1018 <br>
+                Telephone: 527-0000 <br>
+                Fax: 527-0857 <br>
+                E-mail: prc@redcross.org.ph <br>
+              </p>
             
             <div id="collapseOne" class="panel-collapse collapse">
                   <div id="donations-wrap">
@@ -241,144 +173,10 @@
                   </div>
                 </div>
 
-
-              <div id="operations-wrap">
-                <div class="col-lg-4">
-                  <div class="operations-content">
-                    <img src="/img/logos/dswd.png" class="operations-img"><br/>
-                    <strong>Ramon Aboitiz</strong>
-                    <div class="operations-details">
-                      <strong>What we need</strong>
-                      <p>We need people recently trampled our land, killed the cows & left us devasted. We are currently monitoring all the relief goods, making sure every place receives the goodies. Join us & feed the people.</p>
-                      <strong>Goal</strong>
-                      <p>We need people recently trampled our land, killed the cows & left us devasted. We are currently monitoring.</p>
-
-
-                      <img class="icon" src="img/icon-box-open.png" alt="Packs">
-                      <span>20,000 packs provided</span><br/>
-                      <img class="icon" src="img/icon-box.png" alt="Packs">
-                      <span>20,000 packs needed</span>
-                      <br/><br/>
-
-                    </div>
-                    <a href="#" class="operations-btn">Get Involved</a>
-                  </div>
-                </div>
-                <div class="col-lg-4">
-                  <div class="operations-content">
-                  <img src="/img/logos/food-for-hungry.png" class="operations-img"><br/>
-                    <strong>Ramon Aboitiz</strong>
-                    <div class="operations-details">
-                      <strong>What we need</strong>
-                      <p>We need people recently trampled our land, killed the cows & left us devasted. We are currently monitoring all the relief goods, making sure every place receives the goodies. Join us & feed the people.</p>
-                      <strong>Goal</strong>
-                      <p>We need people recently trampled our land, killed the cows & left us devasted. We are currently monitoring.</p>
-
-
-                      <img class="icon" src="img/icon-box-open.png" alt="Packs">
-                      <span>20,000 packs provided</span><br/>
-                      <img class="icon" src="img/icon-box.png" alt="Packs">
-                      <span>20,000 packs needed</span>
-                      <br/><br/>
-
-                    </div>
-                    <a href="#" class="operations-btn">Get Involved</a>
-                  </div>
-                </div>
-                <div class="col-lg-4">
-                  <div class="operations-content">
-                  <img src="/img/logos/titays.png" class="operations-img"><br/>
-                    <strong>Ramon Aboitiz</strong>
-                    <div class="operations-details">
-                      <strong>What we need</strong>
-                      <p>We need people recently trampled our land, killed the cows & left us devasted. We are currently monitoring all the relief goods, making sure every place receives the goodies. Join us & feed the people.</p>
-                      <strong>Goal</strong>
-                      <p>We need people recently trampled our land, killed the cows & left us devasted. We are currently monitoring.</p>
-
-
-                      <img class="icon" src="img/icon-box-open.png" alt="Packs">
-                      <span>20,000 packs provided</span><br/>
-                      <img class="icon" src="img/icon-box.png" alt="Packs">
-                      <span>20,000 packs needed</span>
-                      <br/><br/>
-
-                    </div>
-                    <a href="#" class="operations-btn">Get Involved</a>
-                  </div>
-                </div>
-                <div class="clearfix"></div>
-                                <div class="col-lg-4">
-                  <div class="operations-content">
-                    <img src="/img/logos/dswd.png" class="operations-img"><br/>
-                    <strong>Ramon Aboitiz</strong>
-                    <div class="operations-details">
-                      <strong>What we need</strong>
-                      <p>We need people recently trampled our land, killed the cows & left us devasted. We are currently monitoring all the relief goods, making sure every place receives the goodies. Join us & feed the people.</p>
-                      <strong>Goal</strong>
-                      <p>We need people recently trampled our land, killed the cows & left us devasted. We are currently monitoring.</p>
-
-
-                      <img class="icon" src="img/icon-box-open.png" alt="Packs">
-                      <span>20,000 packs provided</span><br/>
-                      <img class="icon" src="img/icon-box.png" alt="Packs">
-                      <span>20,000 packs needed</span>
-                      <br/><br/>
-
-                    </div>
-                    <a href="#" class="operations-btn">Get Involved</a>
-                  </div>
-                </div>
-                <div class="col-lg-4">
-                  <div class="operations-content">
-                  <img src="/img/logos/food-for-hungry.png" class="operations-img"><br/>
-                    <strong>Ramon Aboitiz</strong>
-                    <div class="operations-details">
-                      <strong>What we need</strong>
-                      <p>We need people recently trampled our land, killed the cows & left us devasted. We are currently monitoring all the relief goods, making sure every place receives the goodies. Join us & feed the people.</p>
-                      <strong>Goal</strong>
-                      <p>We need people recently trampled our land, killed the cows & left us devasted. We are currently monitoring.</p>
-
-
-                      <img class="icon" src="img/icon-box-open.png" alt="Packs">
-                      <span>20,000 packs provided</span><br/>
-                      <img class="icon" src="img/icon-box.png" alt="Packs">
-                      <span>20,000 packs needed</span>
-                      <br/><br/>
-
-                    </div>
-                    <a href="#" class="operations-btn">Get Involved</a>
-                  </div>
-                </div>
-                <div class="col-lg-4">
-                  <div class="operations-content">
-                  <img src="/img/logos/titays.png" class="operations-img"><br/>
-                    <strong>Ramon Aboitiz</strong>
-                    <div class="operations-details">
-                      <strong>What we need</strong>
-                      <p>We need people recently trampled our land, killed the cows & left us devasted. We are currently monitoring all the relief goods, making sure every place receives the goodies. Join us & feed the people.</p>
-                      <strong>Goal</strong>
-                      <p>We need people recently trampled our land, killed the cows & left us devasted. We are currently monitoring.</p>
-
-
-                      <img class="icon" src="img/icon-box-open.png" alt="Packs">
-                      <span>20,000 packs provided</span><br/>
-                      <img class="icon" src="img/icon-box.png" alt="Packs">
-                      <span>20,000 packs needed</span>
-                      <br/><br/>
-
-                    </div>
-                    <a href="#" class="operations-btn">Get Involved</a>
-                  </div>
-                </div>
-                <div class="clearfix"></div>
-              </div>
-
             </div>
 
           </div>
           <div class="col-lg-4 col-md-4 hide-on-small">
-
-
             <div class="side-wrap hide-border">
               <div class="social-item">
                 <div class="fb-share-button" data-href="http://bangonphilippines.appspot.com/tacloban.html" data-type="button_count"></div>            
@@ -388,51 +186,46 @@
                 <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
               </div>
             </div>
-
+            <h4 class="mt0">Where We Are Heading</h4>
             <div class="side-wrap">
               <div class="status-item">
-              
-              
-              <div class="status-group">
-              <div class="status-entry">
-                <img class="icon" src="img/icon-deaths.png" alt="Deaths">
-                <span>100 Deaths</span>
+                <div class="status-group">
+                  <img src="img/preview-tacloban.jpg" alt="">
+                </div>
+              <div class="clear"></div>
               </div>
-              <div class="status-entry">
-                <img class="icon" src="img/icon-family.png" alt="Families Affected">
-                <span>123+ Families Affected</span>
-              </div>
-              <div class="status-entry">
-                <img class="icon" src="img/icon-communication.png" alt="No Communication">
-                <span>No Communication</span>
-              </div>
-              <div class="status-entry">
-                <img class="icon" src="img/icon-water.png" alt="No Water">
-                <span>No Water</span>
-              </div>
-              <div class="status-entry">
-                <img class="icon" src="img/icon-electricity.png" alt="No Electricity">
-                <span>No Electricity</span>
-              </div>
-              <div class="status-entry">
-                <img class="icon" src="img/icon-medicine.png" alt="No Medicine">
-                <span>No Medicine</span>
-              </div>
-              <div class="status-entry">
-                <img class="icon" src="img/icon-clothes.png" alt="Needs Clothes">
-                <span>Needs Clothes</span>
-              </div>
-              <div class="status-entry">
-                <img class="icon" src="img/icon-food.png" alt="No Food">
-                <span>No Food</span>
-              </div>
-
-              </div>
-
-            <div class="clear"></div>
             </div>
+            
+            <h4>What We Need</h4>
+            <div class="side-wrap">
+              <div class="status-item">
+                <div class="status-group">
+                  <div class="status-entry">
+                    <img class="icon" src="img/icon-water.png" alt="900 Bottles of Water">
+                    <span>900 Bottles of Water</span>
+                  </div>
+                  <div class="status-entry">
+                    <img class="icon" src="img/icon-medicine.png" alt="100 First Aid Kits">
+                    <span>100 First Aid Kits</span>
+                  </div>
+                  <div class="status-entry">
+                    <img class="icon" src="img/icon-clothes.png" alt="Needs Clothes">
+                    <span>100 Boxes of Clothes</span>
+                  </div>
+                  <div class="status-entry">
+                    <img class="icon" src="img/icon-food.png" alt="1000 boxes of Canned Goods">
+                    <span>1000 Sacks of Rice</span>
+                  </div>
+                  <div class="status-entry">
+                    <img class="icon" src="img/icon-others.png" alt="1000 boxes of Canned Goods">
+                    <span>1000 Matchsticks</span>
+                  </div>
+                </div>
+              <div class="clear"></div>
+              </div>
             </div>
 
+            <h4>Operation Status</h4>
             <div class="side-wrap">
               <div class="status-item">
               
@@ -448,12 +241,12 @@
 
                 <div class="status-entry">
                 <img class="icon" src="img/icon-box.png" alt="Packs">
-                <span>20,000 packs needed</span>
+                <span>10,000 on the way</span>
               </div>
 
               <div class="status-entry">
                 <img class="icon" src="img/icon-box-open.png" alt="Packs">
-                <span>500 packs provided</span>
+                <span>500 delivered</span>
               </div>
               </div>
 
@@ -462,70 +255,6 @@
             </div>
 
             <br/>
-            <h4>Relief Efforts</h4>
-
-            <div class="side-wrap">
-              <div class="side-head needed">
-                Needs your help
-              </div>
-              <ul>
-                <li><a href="#"><img src="http://localhost:8080/img/icon-box.png" class="small-icon">&nbsp;<strong>10,000 packs</strong> -
-                 <span class="details">Ramon Aboitiz <span> 11/13/'13</span>
-                 </span>
-
-                 </a>
-                </li>
-
-                <li><a href="#ramon-aboitiz"><img src="http://localhost:8080/img/icon-box.png" class="small-icon">&nbsp;<strong>10,000 packs</strong> - 
-                 <span class="details">Ramon Aboitiz <span> 11/13/'13</span>
-                 </span>
-
-                 </a>
-                </li>
-              </ul>
-            </div>
-
-            <div class="side-wrap">
-              <div class="side-head ongoing">
-                Ongoing
-              </div>
-              <ul>
-                <li><a href="#"><img src="http://localhost:8080/img/icon-box.png" class="small-icon">&nbsp;<strong>10,000 packs</strong> - 
-                 <span class="details">Ramon Aboitiz <span> 11/13/'13</span>
-                 </span>
-
-                 </a>
-                </li>
-
-                <li><a href="#"><img src="http://localhost:8080/img/icon-box.png" class="small-icon">&nbsp;<strong>10,000 packs</strong> - 
-                 <span class="details">Ramon Aboitiz <span> 11/13/'13</span>
-                 </span>
-
-                 </a>
-                </li>
-              </ul>
-            </div>
-
-            <div class="side-wrap">
-              <div class="side-head done">
-                Done
-              </div>
-              <ul>
-                <li><a href="#"><img src="http://localhost:8080/img/icon-box-open.png" class="small-icon">&nbsp;<strong>10,000 packs</strong> - 
-                 <span class="details">Ramon Aboitiz <span> 11/13/'13</span>
-                 </span>
-
-                 </a>
-                </li>
-
-                <li><a href="#"><img src="http://localhost:8080/img/icon-box-open.png" class="small-icon">&nbsp;<strong>10,000 packs</strong> - 
-                 <span class="details">Ramon Aboitiz <span> 11/13/'13</span>
-                 </span>
-
-                 </a>
-                </li>
-              </ul>
-            </div>
 
           </div>
 

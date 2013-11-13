@@ -1001,11 +1001,25 @@ class APIPostsHandler(APIBaseHandler):
             "phone": self.request.get("phone"),
             "message": self.request.get("message"),
         }
-        post = add_post(data)
-        self.render(post.to_object())
+        if not instance_id:
+            post = add_post(data)
+            self.render(post.to_object())
+        else:
+            post = add_post(data, instance_id)
+            self.render(post.to_object())
 
     def delete(self, instance_id=None):
-        pass
+        if instance_id:
+            try:
+                post = Post.get_by_id(int(instance_id))
+                post.key.delete()
+                data = {}
+                data["success"] = True
+                self.render(data)
+            except:
+                data = {}
+                data["success"] = False
+                self.render(data)
 
 
 class APIDropOffCentersHandler(APIBaseHandler):

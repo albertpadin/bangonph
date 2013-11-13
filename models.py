@@ -199,7 +199,7 @@ class Post(ndb.Model):
 
     def to_object(self):
         details = {}
-        details["meta"] = {"href": "http://api.bangonph.com/posts/?" + str(self.key.id())}
+        details["meta"] = {"href": "http://api.bangonph.com/posts/" + str(self.key.id())}
         details["created"] = str(self.created)
         details["updated"] = str(self.updated)
         details["name"] = self.name

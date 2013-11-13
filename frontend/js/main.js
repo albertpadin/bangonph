@@ -1,1 +1,1 @@
-
+$('.relief-orgs-group img').tooltip();

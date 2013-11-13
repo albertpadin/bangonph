@@ -760,43 +760,50 @@ class APILocationsHandler(APIBaseHandler):
 
 
     def post(self, instance_id=None):
+        needs = {
+           "food": self.request.get("food"),
+            "water": self.request.get("water"),
+            "medicines": self.request.get("medicines"),
+            "social_workers": self.request.get("social_workers"),
+            "medical_workers": self.request.get("medical_workers"),
+            "shelter": self.request.get("shelter"),
+            "formula": self.request.get("formula"),
+            "toiletries": self.request.get("toiletries"),
+            "flashlights": self.request.get("flashlights"),
+            "cloths": self.request.get("cloths"),
+        }
+
+        status = {
+            "power": self.request.get("power"),
+            "communication": self.request.get("communication"),
+            "water": self.request.get("status_water")
+        }
+
+        data = {
+            "name": self.request.get("name"),
+            "needs": needs, # json format
+            "centers": self.request.get_all("centers"),
+            "latlong": self.request.get("latlong"),
+            "featured_photo": self.request.get("featured_photo"),
+            "death_count": self.request.get("death_count"),
+            "affected_count": self.request.get("affected_count"),
+            "status_board": self.request.get("status_board"),
+            "status": status # json format
+        }
         if not instance_id:
-            needs = {
-               "food": self.request.get("food"),
-                "water": self.request.get("water"),
-                "medicines": self.request.get("medicines"),
-                "social_workers": self.request.get("social_workers"),
-                "medical_workers": self.request.get("medical_workers"),
-                "shelter": self.request.get("shelter"),
-                "formula": self.request.get("formula"),
-                "toiletries": self.request.get("toiletries"),
-                "flashlights": self.request.get("flashlights"),
-                "cloths": self.request.get("cloths"),
-            }
-
-            status = {
-                "power": self.request.get("power"),
-                "communication": self.request.get("communication"),
-                "water": self.request.get("status_water")
-            }
-
-            data = {
-                "name": self.request.get("name"),
-                "needs": needs, # json format
-                "centers": self.request.get_all("centers"),
-                "latlong": self.request.get("latlong"),
-                "featured_photo": self.request.get("featured_photo"),
-                "death_count": self.request.get("death_count"),
-                "affected_count": self.request.get("affected_count"),
-                "status_board": self.request.get("status_board"),
-                "status": status # json format
-            }
-
             location = add_location(data)
             self.render(location.to_object())
+        else:
+            location = add_location(data, instance_id)
+            self.render(location.to_object())
+
 
     def delete(self, instance_id=None):
-        pass
+        location = ndb.Key("Location", instance_id)
+        location.delete()
+        data = {}
+        data["success"] = True
+        self.render(data)
 
 class APILContactsHandler(APIBaseHandler):
     def get(self, instance_id=None):

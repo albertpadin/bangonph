@@ -103,9 +103,13 @@ def update_user(data):
     user.put()
     return user
 
-def add_location(data):
+def add_location(data, location_key=""):
     merge_name = data["name"].replace(" ", "-")
-    location = Location(id=merge_name.lower())
+
+    if location_key:
+        location = Location.get_by_id(location_key)
+    else:
+        location = Location(id=merge_name.lower())
 
     if data["name"]:
         location.name = data["name"]

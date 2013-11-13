@@ -16,7 +16,7 @@
         <div class="col-lg-4 col-md-6 col-sm-6 col">
             <div class="status-item">
               <!--<h3>{{ location.name }}</h3>-->
-              <img src="{{ location.featured_photo }}" alt="{{ location.name }}">
+              <img src="{{ location.featured_photo }}" alt="{{ location.name }}" onclick="self.location='/locations/{{ location.key.id() }}';" >
               <h6 class="mb0">Current Status:</h6>
               <div class="status-group">
                 <div class="status-entry">
@@ -88,7 +88,7 @@
                   <img src="img/thumb-jci.png" title="Junior Chamber International">
                 </div>
               <div>
-                <a class="btn btn-primary btn-block entry-btn" href="/{{ location.key.id() }}" title="{{ location.name }}" role="button"><span class="glyphicon glyphicon-circle-arrow-right"></span> Make a Change. Donate Now!  &raquo;</a>
+                <a class="btn btn-primary btn-block entry-btn" href="/locations/{{ location.key.id() }}" title="{{ location.name }}" role="button"><span class="glyphicon glyphicon-circle-arrow-right"></span> Make a Change. Donate Now!  &raquo;</a>
               </div>
             </div>
         </div>

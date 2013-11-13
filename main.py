@@ -655,33 +655,104 @@ class DistributionHandler(BaseHandler):
 
     def post(self):
         supply_goal = {
-            "food" : self.request.get("chk_supply_goal_food"),
-            "water" : self.request.get("chk_supply_goal_water"),
-            "medicines" : self.request.get("chk_supply_goal_medicines"),
-            "social_workers" : self.request.get("chk_supply_goal_social_workers"),
-            "medical_workers" : self.request.get("chk_supply_goal_medical_workers"),
-            "shelter" : self.request.get("chk_supply_goal_shelter"),
-            "formula" : self.request.get("chk_supply_goal_formula"),
-            "toiletries" : self.request.get("chk_supply_goal_toiletries"),
-            "flashlights" : self.request.get("chk_supply_goal_flashlights")
+            "food" : {
+                "food" : self.request.get("chk_supply_goal_food"),
+                "description" : self.request.get("chk_supply_goal_food_description")
+            },
+            "water" : 
+            {
+                "water" : self.request.get("chk_supply_goal_water"),
+                "description" : self.request.get("chk_supply_goal_wate_descriptionr")
+            },
+            "medicines" : {
+                "medicines" : self.request.get("chk_supply_goal_medicines"),
+                "description" : self.request.get("chk_supply_goal_medicines_description")
+            },
+            
+            "social_workers" : {
+                "social_workers" : self.request.get("chk_supply_goal_social_workers"),
+                "description" : self.request.get("chk_supply_goal_social_workers_description")
+            },
+
+            "medical_workers" : {
+                "medical_workers" : self.request.get("chk_supply_goal_medical_workers"),
+                "description" : self.request.get("chk_supply_goal_medical_workers_description")
+            },
+            
+            "shelter" : {
+                "shelter" : self.request.get("chk_supply_goal_shelter"),
+                "description" : self.request.get("chk_supply_goal_shelter_description")
+            },
+
+            "formula" : {
+                "formula" : self.request.get("chk_supply_goal_formula"),
+                "description" : self.request.get("chk_supply_goal_formula_description")
+            },
+            
+            "toiletries" : {
+                "toiletries" : self.request.get("chk_supply_goal_toiletries"),
+                "description" : self.request.get("chk_supply_goal_toiletries_description"),
+            },
+            
+            "flashlights" : {
+                "flashlights" : self.request.get("chk_supply_goal_flashlights"),
+                "description" : self.request.get("chk_supply_goal_flashlights_description")
+            }
+            
         }
 
         actual_supply = {
-            "food" : self.request.get("chk_actual_supply_food"),
-            "water" : self.request.get("chk_actual_supply_water"),
-            "medicines" : self.request.get("chk_actual_supply_medicines"),
-            "social_workers" : self.request.get("chk_actual_supply_social_workers"),
-            "medical_workers" : self.request.get("chk_actual_supply_medical_workers"),
-            "shelter" : self.request.get("chk_actual_supply_shelter"),
-            "formula" : self.request.get("chk_actual_supply_formula"),
-            "toiletries" : self.request.get("chk_actual_supply_toiletries"),
-            "flashlights" : self.request.get("chk_actual_supply_flashlights")
+            "food" : {
+                "food" : self.request.get("chk_actual_supply_food"),
+                "description" : self.request.get("chk_actual_supply_food_description")
+            },
+            
+            "water" : {
+                "water" : self.request.get("chk_actual_supply_water"),
+                "description" : self.request.get("chk_actual_supply_water_description")
+            },
+            
+            "medicines" : {
+                "medicines" : self.request.get("chk_actual_supply_medicines"),
+                "description" : self.request.get("chk_actual_supply_medicines_description")
+            },
+            
+            "social_workers" : {
+                "social_workers" : self.request.get("chk_actual_supply_social_workers"),
+                "description" : self.request.get("chk_actual_supply_social_workers_description")
+            },
+            
+            "medical_workers" : {
+                "medical_workers" : self.request.get("chk_actual_supply_medical_workers"),
+                "description" : self.request.get("chk_actual_supply_medical_workers_description"),
+            },
+            
+            "shelter" : {
+                "shelter" : self.request.get("chk_actual_supply_shelter"),
+                "description" : self.request.get("chk_actual_supply_shelter_description")
+            },
+            
+            "formula" : {
+                "formula" : self.request.get("chk_actual_supply_formula"),
+                "description" : self.request.get("chk_actual_supply_formula_description")
+            },
+            
+            "toiletries" : {
+                "toiletries" : self.request.get("chk_actual_supply_toiletries"),
+                "description" : self.request.get("chk_actual_supply_toiletries_description")
+            },
+            
+            "flashlights" : {
+                "flashlights" : self.request.get("chk_actual_supply_flashlights"),
+                "description" : self.request.get("chk_actual_supply_flashlights_description")
+            }
+            
         }
 
         data = {
             "date_of_distribution": datetime.datetime.strptime(self.request.get("date_of_distribution"), "%Y-%m-%d"), #1992-10-20
-            "contact": int(self.request.get("contact")),
-            "destinations": int(self.request.get("destinations")),
+            "contact": self.request.get("contact"),
+            "destinations": self.request.get("destinations"),
             "supply_goal": supply_goal,
             "actual_supply": actual_supply
         }
@@ -1324,7 +1395,7 @@ app = webapp2.WSGIApplication([
 
         webapp2.Route(r'/<:.*>', ErrorHandler)
     ]),
-    routes.DomainRoute(r'<:admin\.bangonph\.com|localhost>', [
+    routes.DomainRoute(r'<:admin\.bangonph\.com>', [
         webapp2.Route('/', handler=FrontPage, name="www-front"),
         webapp2.Route('/register', handler=RegisterPage, name="www-register"),
         webapp2.Route('/logout', handler=Logout, name="www-logout"),

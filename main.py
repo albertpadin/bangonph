@@ -1543,7 +1543,8 @@ class APIEffortsHandler(APIBaseHandler):
             else:
                 if self.request.get("filter_locations"):
                     loc = slugify(self.request.get("filter_locations"))
-                    efforts = Distribution.query(Distribution.destinations == loc).fetch(100)
+                    loc_key = Location.get_by_id(loc)
+                    efforts, next_cursor, more  = Distribution.query(Distribution.destinations == loc_key.key).fetch_page(25)
                 else:
                     efforts, next_cursor, more = Distribution.query().fetch_page(25)
 

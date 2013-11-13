@@ -181,6 +181,7 @@
 
               Number of clothes<input type="text" id="cloths" placeholder="Number of clothes"><br/>
             </p>
+            <br/>
             <p>
               Power
               <input type="text" id="status_power"/>
@@ -194,6 +195,23 @@
               Water
               <input type="text" id="status_water"/>
             </p>
+            <p>
+              medicines
+              <input type="text" id="status_medicines"/>
+            </p>
+            <p>
+              clothes
+              <input type="text" id="status_clothes"/>
+            </p>
+            <p>
+              foods
+              <input type="text" id="status_foods"/>
+            </p>
+            <p>
+              shelter
+              <input type="text" id="status_shelter"/>
+            </p>
+            <br/>
             <p>Hash Tag
               <input type="text" id="hash_tag"/>
             </p>
@@ -309,6 +327,22 @@
             <p>
               Water
               <input type="text" id="status_water" <% _.each(this.status, function(item, name) { if (name == "water" && item != "") { %> value="<%- item %>" <% } }) %>/>
+            </p>
+            <p>
+              medicines
+              <input type="text" <% _.each(this.status, function(item, name) { if (name == "medicines" && item != "") { %> value="<%- item %>" <% } }) %> id="status_medicines"/>
+            </p>
+            <p>
+              clothes
+              <input type="text" % _.each(this.status, function(item, name) { if (name == "cloths" && item != "") { %> value="<%- item %>" <% } }) %> id="status_clothes"/>
+            </p>
+            <p>
+              foods
+              <input type="text" % _.each(this.status, function(item, name) { if (name == "food" && item != "") { %> value="<%- item %>" <% } }) %> id="status_foods"/>
+            </p>
+            <p>
+              shelter
+              <input type="text" % _.each(this.status, function(item, name) { if (name == "shelter" && item != "") { %> value="<%- item %>" <% } }) %> id="status_shelter"/>
             </p>
             <% 
                 })

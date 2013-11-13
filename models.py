@@ -134,7 +134,7 @@ class Distribution(ndb.Model):
 
     def to_object(self, expand=""):
         details = {}
-        details["meta"] = {"href": "http://api.bangonph.com/efforts/?" + str(self.key.id())}
+        details["meta"] = {"href": "http://api.bangonph.com/efforts/" + str(self.key.id())}
         details["created"] = str(self.created)
         details["updated"] = str(self.updated)
         details["dateOfDistribution"] = str(self.date_of_distribution)

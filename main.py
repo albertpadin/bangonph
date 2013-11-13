@@ -1079,6 +1079,19 @@ class DistributorHandler(BaseHandler):
             if distributor:
                 distributor.key.delete()
             return
+
+        if self.request.get("id_edit"):
+            distributor = Distributor.get_by_id(int(self.request.get("id_edit")))
+            temp = {}
+            temp["id"] = distributor.key.id()
+            temp["name"] = distributor.name
+            temp["contact_num"] = distributor.contact_num
+            temp["email"] = distributor.email
+            temp["website"] = distributor.website
+            temp["facebook"] = distributor.facebook
+            
+            self.response.out.write(simplejson.dumps(temp))
+            return
         
         distributors = Distributor.query().fetch(100)
         if distributors:
@@ -1096,13 +1109,22 @@ class DistributorHandler(BaseHandler):
             self.response.out.write(simplejson.dumps(datas))
 
     def post(self):
-        distributor = Distributor()
-        distributor.name = self.request.get("name")
-        distributor.contact_num = self.request.get("contact_num")
-        distributor.email = self.request.get("email")
-        distributor.website = self.request.get("website")
-        distributor.facebook = self.request.get("facebook")
-        distributor.put()
+        if self.request.get('id'):
+            distributor = Distributor.get_by_id(int(self.request.get("id")))
+            distributor.name = self.request.get("name") 
+            distributor.contact_num = self.request.get("contact_num")
+            distributor.email = self.request.get("email")
+            distributor.website = self.request.get("website")
+            distributor.facebook = self.request.get("facebook")
+            distributor.put()
+        else:
+            distributor = Distributor()
+            distributor.name = self.request.get("name")
+            distributor.contact_num = self.request.get("contact_num")
+            distributor.email = self.request.get("email")
+            distributor.website = self.request.get("website")
+            distributor.facebook = self.request.get("facebook")
+            distributor.put()
 
 class CentersHandler(BaseHandler):
     @login_required

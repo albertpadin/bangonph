@@ -78,6 +78,9 @@
                       <% if (name == "toiletries") { %>
                         Toiletries: <%- item %><br/>
                       <% } %>
+                      <% if (name == "miscellaneous") { %>
+                        Miscellaneous: <%- item %><br/>
+                      <% } %>
                     <% }) %>
                   </td>
                   <td>
@@ -161,11 +164,11 @@
             </p>
             <p>
               Death Count
-              <input type="text" id="death_count" class="form-control" placeholder="Death Count">
+              <input type="text" id="death_count" required="required" class="form-control" placeholder="Death Count">
             </p>
             <p>
               Affected Count
-              <input type="text" id="affected_count"  class="form-control" placeholder="Affected Count">
+              <input type="text" id="affected_count" required="required" class="form-control" placeholder="Affected Count">
             </p>
             <p>
               Status Board
@@ -192,6 +195,8 @@
               Number of flashlights<input type="text" id="flashlights"  placeholder="Number of flashlights"><br/>
 
               Number of clothes<input type="text" id="cloths" placeholder="Number of clothes"><br/>
+
+              Miscellaneous<input type="text" id="miscellaneous" placeholder="Miscellaneous"><br/>
             </p>
             <br/>
             <p>
@@ -297,10 +302,10 @@
               <input type="text" id="featured_photo" value="<%- this.featured_photo %>" class="form-control" placeholder="Featured Photo">
             </p>
             <p>
-              <input type="text" id="death_count" value="<%- this.death_count %>" class="form-control" placeholder="Death Count">
+              <input type="text" id="death_count" required="required" value="<%- this.death_count %>" class="form-control" placeholder="Death Count">
             </p>
             <p>
-              <input type="text" id="affected_count" value="<%- this.affected_count %>"  class="form-control" placeholder="Affected Count">
+              <input type="text" id="affected_count" required="required" value="<%- this.affected_count %>"  class="form-control" placeholder="Affected Count">
             </p>
             <p>
               <input type="text" id="status_board" value="<%- this.status_board %>" class="form-control" placeholder="Status Board">
@@ -326,6 +331,8 @@
               <input type="text" id="flashlights" <% _.each(this.needs, function(item, name) { if (name == "flashlights") { %> value="<%- item %>" <% } }) %> placeholder="Number of flashlights"><br/>
 
               <input type="text" id="cloths" <% _.each(this.needs, function(item, name) { if (name == "cloths") { %> value="<%- item %>" <% } }) %> placeholder="Number of cloths"><br/>
+
+              <input type="text" <% _.each(this.needs, function(item, name) { if (name == "miscellaneous") { %> value="<%- item %>" <% } }) %> id="miscellaneous" placeholder="Miscellaneous"><br/>
             </p>
             <p>
               Power

@@ -625,7 +625,8 @@ class LocationHandler(BaseHandler):
                     "formula": self.request.get("formula"),
                     "toiletries": self.request.get("toiletries"),
                     "flashlights": self.request.get("flashlights"),
-                    "cloths": self.request.get("cloths")
+                    "cloths": self.request.get("cloths"),
+                    "miscellaneous" : self.request.get("miscellaneous")
                 }
 
                 status = {
@@ -693,6 +694,7 @@ class LocationHandler(BaseHandler):
                 "toiletries": self.request.get("toiletries"),
                 "flashlights": self.request.get("flashlights"),
                 "cloths": self.request.get("cloths"),
+                "miscellaneous" : self.request.get("miscellaneous")
             }
 
             status = {
@@ -1606,7 +1608,7 @@ class UploadHandler(blobstore_handlers.BlobstoreUploadHandler):
 
 
 app = webapp2.WSGIApplication([
-    routes.DomainRoute(r'<:gcdc2013-bangonph\.appspot\.com|www\.bangonph\.com|localhost>', [
+    routes.DomainRoute(r'<:gcdc2013-bangonph\.appspot\.com|localhost|www\.bangonph\.com>', [
         webapp2.Route('/', handler=FrontPage, name="www-front"),
         webapp2.Route('/public', handler=PublicFrontPage, name="www-front"),
         webapp2.Route('/locationsample', handler=LocationSamplePage, name="www-locationsample"),

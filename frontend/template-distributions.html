@@ -43,39 +43,160 @@
                 <td><%- this.destinations %></td>
                 <td>
                   <% _.each(this.supply_goal, function(item, name) { %>
-                    <%
-                       _.each(item, function(item, name) {
-                    %>
-                      <% if (name == "social_workers" && item != "") { %>
-                        Social Workers: <%- item %> <br/>
-                      <% } %>
-                      <% if (name == "medicines" && item != "") { %>
-                        Medicines: <%- item %> <br/>
-                      <% } %>
-                      <% if (name == "formula" && item != "") { %>
-                        Formula: <%- item %> <br/>
-                      <% } %>
-                      <% if (name == "food" && item != "") { %>
-                        Food: <%- item %> <br/>
-                      <% } %>
-                      <% if (name == "toiletries" && item != "") { %>
-                        Toiletries: <%- item %> <br/>
-                      <% } %>
-                      <% if (name == "flashlights" && item != "") { %>
-                        Flashlights: <%- item %> <br/>
-                      <% } %>
-                      <% if (name == "water" && item != "") { %>
-                        Water: <%- item %> <br/>
-                      <% } %>
-                      <% if (name == "medical_workers" && item != "") { %>
-                        Medical Workers: <%- item %> <br/>
-                      <% } %>
-                      <% if (name == "shelter" && item != "") { %>
-                        Shelter: <%- item %> <br/>
-                      <% } %>
-                    <%
-                      })
-                    %>
+                    
+                    <% if (name == "food") { %>
+                      <%
+                         _.each(item, function(itm, name) {
+                      %>
+                          <% if (name == "food") { %>
+                            food: <%- itm %>
+                          <% } %>
+                          <% if (name == "description") { %>
+                            Description: <%- itm %>
+                          <% } %>
+                          <br/>
+                      <%
+                        })
+                      %>
+                      <hr/>
+                    <% } %>
+
+                    <% if (name == "water") { %>
+                      <%
+                         _.each(item, function(itm, name) {
+                      %>
+                          <% if (name == "water") { %>
+                            water: <%- itm %>
+                          <% } %>
+                          <% if (name == "description") { %>
+                            Description: <%- itm %>
+                          <% } %>
+                          <br/>
+                      <%
+                        })
+                      %>
+                      <hr/>
+                    <% } %>
+
+                    <% if (name == "medical_workers") { %>
+                      <%
+                         _.each(item, function(itm, name) {
+                      %>
+                          <% if (name == "medical_workers") { %>
+                            medical_workers: <%- itm %>
+                          <% } %>
+                          <% if (name == "description") { %>
+                            Description: <%- itm %>
+                          <% } %>
+                          <br/>
+                      <%
+                        })
+                      %>
+                      <hr/>
+                    <% } %>
+
+                    <% if (name == "toiletries") { %>
+                      <%
+                         _.each(item, function(itm, name) {
+                      %>
+                          <% if (name == "toiletries") { %>
+                            toiletries: <%- itm %>
+                          <% } %>
+                          <% if (name == "description") { %>
+                            Description: <%- itm %>
+                          <% } %>
+                          <br/>
+                      <%
+                        })
+                      %>
+                      <hr/>
+                    <% } %>
+
+                    <% if (name == "flashlights") { %>
+                      <%
+                         _.each(item, function(itm, name) {
+                      %>
+                          <% if (name == "flashlights") { %>
+                            flashlights: <%- itm %>
+                          <% } %>
+                          <% if (name == "description") { %>
+                            Description: <%- itm %>
+                          <% } %>
+                          <br/>
+                      <%
+                        })
+                      %>
+                      <hr/>
+                    <% } %>
+
+                    <% if (name == "medicines") { %>
+                      <%
+                         _.each(item, function(itm, name) {
+                      %>
+                          <% if (name == "medicines") { %>
+                            medicines: <%- itm %>
+                          <% } %>
+                          <% if (name == "description") { %>
+                            Description: <%- itm %>
+                          <% } %>
+                          <br/>
+                      <%
+                        })
+                      %>
+                      <hr/>
+                    <% } %>
+
+                    <% if (name == "shelter") { %>
+                      <%
+                         _.each(item, function(itm, name) {
+                      %>
+                          <% if (name == "shelter") { %>
+                            shelter: <%- itm %>
+                          <% } %>
+                          <% if (name == "description") { %>
+                            Description: <%- itm %>
+                          <% } %>
+                          <br/>
+                      <%
+                        })
+                      %>
+                      <hr/>
+                    <% } %>
+
+                    <% if (name == "social_workers") { %>
+                      <%
+                         _.each(item, function(itm, name) {
+                      %>
+                          <% if (name == "social_workers") { %>
+                            social_workers: <%- itm %>
+                          <% } %>
+                          <% if (name == "description") { %>
+                            Description: <%- itm %>
+                          <% } %>
+                          <br/>
+                      <%
+                        })
+                      %>
+                      <hr/>
+                    <% } %>
+
+                    <% if (name == "formula") { %>
+                      <%
+                         _.each(item, function(itm, name) {
+                      %>
+                          <% if (name == "formula") { %>
+                            formula: <%- itm %>
+                          <% } %>
+                          <% if (name == "description") { %>
+                            Description: <%- itm %>
+                          <% } %>
+                          <br/>
+                      <%
+                        })
+                      %>
+                      <hr/>
+                    <% } %>
+
                   <% }) %>
                 </td>
                 <td>

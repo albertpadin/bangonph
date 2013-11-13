@@ -117,6 +117,10 @@ var AddLocation = Backbone.View.extend({
         "power": _.escape($("#status_power").val()),
         "communication": _.escape($("#status_communication").val()),
         "status_water": _.escape($("#status_water").val()),
+        "status_medicines": _.escape($("#status_medicines").val()),
+        "status_clothes": _.escape($("#status_clothes").val()),
+        "status_foods": _.escape($("#status_foods").val()),
+        "status_shelter": _.escape($("#status_shelter").val()),
         "hash_tag" : _.escape($("#hash_tag").val())
       },
       success: function() {
@@ -175,6 +179,10 @@ var EditLocation =  Backbone.View.extend({
         "power": _.escape($("#status_power").val()),
         "communication": _.escape($("#status_communication").val()),
         "status_water": _.escape($("#status_water").val()),
+        "status_medicines": _.escape($("#status_medicines").val()),
+        "status_clothes": _.escape($("#status_clothes").val()),
+        "status_foods": _.escape($("#status_foods").val()),
+        "status_shelter": _.escape($("#status_shelter").val()),
         "hash_tag" : _.escape($("#hash_tag").val())
       },
       success: function() {

@@ -175,7 +175,7 @@ def add_distribution(data, instance_id=""):
         distribution.contact = data["contact"]
 
     if data["destinations"]:
-        distribution.destinations = data["destinations"]
+        distribution.destinations = ndb.Key("Location", data["destinations"])
 
     if data["supply_goal"]:
         distribution.supply_goal = data["supply_goal"]

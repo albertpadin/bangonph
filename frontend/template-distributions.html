@@ -43,33 +43,15 @@
                 <td><%- this.destinations %></td>
                 <td>
                   <% _.each(this.supply_goal, function(item, name) { %>
-                    <% if (name == "water" && item != "") { %>
-                      Water: <%- item %><br/>
-                    <% } %>
-                    <% if (name == "food" && item != "") { %>
-                      Food: <%- item %><br/>
-                    <% } %>
-                    <% if (name == "shelter" && item != "") { %>
-                      Shelter: <%- item %><br/>
-                    <% } %>
-                    <% if (name == "formula" && item != "") { %>
-                      Formula: <%- item %><br/>
-                    <% } %>
-                    <% if (name == "medicines" && item != "") { %>
-                      Medicines: <%- item %><br/>
-                    <% } %>
-                    <% if (name == "toiletries" && item != "") { %>
-                      Toiletries: <%- item %><br/>
-                    <% } %>
-                    <% if (name == "flashlights" && item != "") { %>
-                      Flashlights: <%- item %><br/>
-                    <% } %>
-                    <% if (name == "medical_workers" && item != "") { %>
-                      Medical Workers: <%- item %><br/>
-                    <% } %>
-                    <% if (name == "social_workers" && item != "") { %>
-                      Social Workers: <%- item %><br/>
-                    <% } %>
+                    <%
+                       _.each(item, function(item, name) {
+                    %>
+                      <% if (item != "") { %>
+                        <%- name %> <%- item %> <hr/>
+                      <% } %>
+                    <%
+                      })
+                    %>
                   <% }) %>
                 </td>
                 <td>

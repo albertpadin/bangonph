@@ -104,17 +104,38 @@ def update_user(data):
     return user
 
 def add_location(data):
-    location = Location(id=data["name"].lower())
-    location.name = data["name"]
-    location.needs = data["needs"]
-    location.centers = data["centers"]
-    location.latlong = data["latlong"]
-    location.featured_photo = data["featured_photo"]
-    location.death_count = int(data["death_count"])
-    location.affected_count = int(data["affected_count"])
-    location.status_board = data["status_board"]
-    location.needs = data["needs"]
-    location.status = data["status"]
+    merge_name = data["name"].replace(" ", "-")
+    location = Location(id=merge_name.lower())
+
+    if data["name"]:
+        location.name = data["name"]
+
+    if data["needs"]:
+        location.needs = data["needs"]
+
+    if data["centers"]:
+        location.centers = data["centers"]
+
+    if data["latlong"]:
+        location.latlong = data["latlong"]
+
+    if data["featured_photo"]:
+        location.featured_photo = data["featured_photo"]
+
+    if data["death_count"]:
+        location.death_count = int(data["death_count"])
+
+    if data["affected_count"]:
+        location.affected_count = int(data["affected_count"])
+
+    if data["status_board"]:
+        location.status_board = data["status_board"]
+
+    if data["needs"]:
+        location.needs = data["needs"]
+
+    if data["status"]:
+        location.status = data["status"]
     
     location.put()
     return location

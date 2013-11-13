@@ -338,7 +338,7 @@ class LocationSamplePage(BaseHandler):
         self.render('frontend/locationsample.html')
 
 
-class LocationPage(BaseHandler):
+class PublicLocationPage(BaseHandler):
     def get(self, location_id=None):
         if not location_id:
             logging.error('No location ID')
@@ -1608,23 +1608,10 @@ class UploadHandler(blobstore_handlers.BlobstoreUploadHandler):
 
 
 app = webapp2.WSGIApplication([
-    routes.DomainRoute(r'<:gcdc2013-bangonph\.appspot\.com|localhost|www\.bangonph\.com>', [
-        webapp2.Route('/', handler=FrontPage, name="www-front"),
-        webapp2.Route('/public', handler=PublicFrontPage, name="www-front"),
-        webapp2.Route('/locationsample', handler=LocationSamplePage, name="www-locationsample"),
+    routes.DomainRoute(r'<:gcdc2013-bangonph\.appspot\.com|www\.bangonph\.com|localhost>', [
+        webapp2.Route('/', handler=PublicFrontPage, name="www-front"),
         webapp2.Route('/reliefoperations', handler=ReliefOperationsPage, name="www-reliefoperations"),
-        webapp2.Route('/register', handler=RegisterPage, name="www-register"),
-        webapp2.Route('/logout', handler=Logout, name="www-logout"),
-        webapp2.Route('/login', handler=LoginPage, name="www-login"),
-        webapp2.Route('/fblogin', handler=FBLoginPage, name="www-fblogin"),
-        webapp2.Route('/dashboard', handler=DashboardPage, name="www-dashboard"),
-        webapp2.Route('/cosmo', handler=CosmoPage, name="www-test"),
-
-        # leonard gwapo:
-        webapp2.Route('/locations', handler=LocationHandler, name="www-locations"),
-        webapp2.Route('/users', handler=UserHandler, name="www-users"),
-        webapp2.Route('/contacts', handler=ContactHandler, name="www-contacts"),
-        webapp2.Route(r'/locations/<:.*>', handler=LocationHandler, name="www-locations"),
+        webapp2.Route(r'/locations/<:.*>', handler=PublicLocationPage, name="www-locations"),
         webapp2.Route('/distributions', handler=DistributionHandler, name="www-distributions"),
         webapp2.Route('/distributions/fetch', handler=DistributionFetchHandler, name="www-distributions-fetch"),
         webapp2.Route('/distributors', handler=DistributorHandler, name="www-distributors"),

@@ -23,6 +23,22 @@ SECRET_SETTINGS = {
     "mandrill_key": "VOGMtY1YpD0bNmMIt2bMPQ"
 }
 
+OAUTH_RESP = {
+	"response": "ok", # ok||invalid_client||invalid_code||missing_params
+	"code": 200,  # 200||404||404||406
+	"success": {
+        "access_token": "",
+        "expires_in": "",
+        "token_code": ""
+    }
+}
+
+API_OAUTH_RESP = {
+	"response": "ok",
+	"code": 200,
+	"type": "",
+	"message": ""
+}
 
 # Local Settings
 import os

@@ -1108,7 +1108,11 @@ class APILocationsHandler(APIBaseHandler):
         status = {
             "power": self.request.get("power"),
             "communication": self.request.get("communication"),
-            "water": self.request.get("status_water")
+            "water": self.request.get("status_water"),
+            "medicines": self.request.get("status_medicines"),
+            "cloths": self.request.get("status_clothes"),
+            "food": self.request.get("status_foods"),
+            "shelter": self.request.get("status_shelter")
         }
 
         hash_tag = self.request.get("hash_tag").split(" ")

@@ -46,8 +46,32 @@
                     <%
                        _.each(item, function(item, name) {
                     %>
-                      <% if (item != "") { %>
-                        <%- name %> <%- item %> <hr/>
+                      <% if (name == "social_workers" && item != "") { %>
+                        Social Workers: <%- item %> <br/>
+                      <% } %>
+                      <% if (name == "medicines" && item != "") { %>
+                        Medicines: <%- item %> <br/>
+                      <% } %>
+                      <% if (name == "formula" && item != "") { %>
+                        Formula: <%- item %> <br/>
+                      <% } %>
+                      <% if (name == "food" && item != "") { %>
+                        Food: <%- item %> <br/>
+                      <% } %>
+                      <% if (name == "toiletries" && item != "") { %>
+                        Toiletries: <%- item %> <br/>
+                      <% } %>
+                      <% if (name == "flashlights" && item != "") { %>
+                        Flashlights: <%- item %> <br/>
+                      <% } %>
+                      <% if (name == "water" && item != "") { %>
+                        Water: <%- item %> <br/>
+                      <% } %>
+                      <% if (name == "medical_workers" && item != "") { %>
+                        Medical Workers: <%- item %> <br/>
+                      <% } %>
+                      <% if (name == "shelter" && item != "") { %>
+                        Shelter: <%- item %> <br/>
                       <% } %>
                     <%
                       })
@@ -56,33 +80,39 @@
                 </td>
                 <td>
                   <% _.each(this.actual_supply, function(item, name) { %>
-                    <% if (name == "water" && item != "") { %>
-                      Water: <%- item %><br/>
-                    <% } %>
-                    <% if (name == "food" && item != "") { %>
-                      Food: <%- item %><br/>
-                    <% } %>
-                    <% if (name == "shelter" && item != "") { %>
-                      Shelter: <%- item %><br/>
-                    <% } %>
-                    <% if (name == "formula" && item != "") { %>
-                      Formula: <%- item %><br/>
-                    <% } %>
-                    <% if (name == "medicines" && item != "") { %>
-                      Medicines: <%- item %><br/>
-                    <% } %>
-                    <% if (name == "toiletries" && item != "") { %>
-                      Toiletries: <%- item %><br/>
-                    <% } %>
-                    <% if (name == "flashlights" && item != "") { %>
-                      Flashlights: <%- item %><br/>
-                    <% } %>
-                    <% if (name == "medical_workers" && item != "") { %>
-                      Medical Workers: <%- item %><br/>
-                    <% } %>
-                    <% if (name == "social_workers" && item != "") { %>
-                      Social Workers: <%- item %><br/>
-                    <% } %>
+                    <%
+                       _.each(item, function(item, name) {
+                    %>
+                      <% if (name == "social_workers" && item != "") { %>
+                        Social Workers: <%- item %> <br/>
+                      <% } %>
+                      <% if (name == "medicines" && item != "") { %>
+                        Medicines: <%- item %> <br/>
+                      <% } %>
+                      <% if (name == "formula" && item != "") { %>
+                        Formula: <%- item %> <br/>
+                      <% } %>
+                      <% if (name == "food" && item != "") { %>
+                        Food: <%- item %> <br/>
+                      <% } %>
+                      <% if (name == "toiletries" && item != "") { %>
+                        Toiletries: <%- item %> <br/>
+                      <% } %>
+                      <% if (name == "flashlights" && item != "") { %>
+                        Flashlights: <%- item %> <br/>
+                      <% } %>
+                      <% if (name == "water" && item != "") { %>
+                        Water: <%- item %> <br/>
+                      <% } %>
+                      <% if (name == "medical_workers" && item != "") { %>
+                        Medical Workers: <%- item %> <br/>
+                      <% } %>
+                      <% if (name == "shelter" && item != "") { %>
+                        Shelter: <%- item %> <br/>
+                      <% } %>
+                    <%
+                      })
+                    %>
                   <% }) %>
                 </td>
                 <td align='center'><a class="first">Edit</a> | <a class="last">Delete</a></td>

@@ -49,10 +49,11 @@ class Location(ndb.Model):
     status_board = ndb.StringProperty()
     needs = ndb.JsonProperty()
     status = ndb.JsonProperty()
+    images = ndb.JsonProperty()
 
     def to_object(self, extended=""):
         details = {}
-        details["meta"] = {"href": "http://api.bangonph.com/locations/?" + str(self.key.id())}
+        details["meta"] = {"href": "http://api.bangonph.com/v1/locations/" + str(self.key.id())}
         details["created"] = str(self.created)
         details["updated"] = str(self.updated)
         details["latlong"] = self.latlong
@@ -62,7 +63,7 @@ class Location(ndb.Model):
         details["statusBoard"] = self.status_board
         details["needs"] = self.needs
         details["status"] = self.status
-
+        details["images"] = self.images
         return details
 
     

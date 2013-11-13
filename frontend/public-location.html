@@ -3,7 +3,7 @@
 {% block ogdetails %}
 
 <meta property="og:image" content="http://s2.djyimg.com/n3/eet-content/uploads/2013/11/treeCEBUYolanda-611x450.jpg"/>
-    <meta property="og:title" content="{{ location.name }}"/>
+    <meta property="og:title" content="{{ page_title }}"/>
     <meta property="og:url" content="{{ current_base_url }}"/>
 
 {% endblock %}
@@ -12,7 +12,7 @@
 {% block content %}
   <div class="jumbotron">
       <div class="container">
-        <h1>{{ location.name }}</h1>
+        <h1>{{ page_title }}</h1>
         <p>{% if location.description %}{{ location.description }}{% else %}Super Typhoon Yolanda hit the Philippines and left several towns devastated. Affecting more than 2 million people and killing over 2,000 and still counting. This is the live and developing story of how we rise again. Together.{% endif %}</p>
       </div>
     </div>
@@ -334,9 +334,11 @@
             </div>
 
             <br/>
-            <h4>Relief Efforts</h4>
+            <h4>Gathering Data on Relief Efforts</h4>
 
-            <div class="side-wrap">
+            <img src='/img/bangonph-ad1.png' title="Volunteer at #BangonPH" alt="Volunteer at #BangonPH" />
+
+            <!-- <div class="side-wrap">
               <div class="side-head needed">
                 Needs your help
               </div>
@@ -397,7 +399,7 @@
                  </a>
                 </li>
               </ul>
-            </div>
+            </div> -->
 
           </div>
 

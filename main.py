@@ -605,6 +605,21 @@ class LocationHandler(BaseHandler):
                     "shelter": self.request.get("status_shelter")
                 }
 
+                urls = self.request.get("image_urls")
+                titles = self.request.get("image_titles")
+                captions = self.request.get("image_captions")
+                new_urls = simplejson.loads(urls)
+                new_titles = simplejson.loads(titles)
+                new_captions = simplejson.loads(captions)
+
+                cnt = len(new_urls)
+                for i in range(0, cnt):
+                    images = {}
+                    images["src"] = new_urls[i]["src"]
+                    images["image_title"] = new_titles[i]["image_title"]
+                    images["image_caption"] = new_captions[i]["image_caption"]
+                    location.images.append(images)
+
                 location.name = self.request.get("name")
                 location.latlong = self.request.get("latlong")
                 location.featured_photo = self.request.get("featured_photo")

@@ -614,6 +614,7 @@ class LocationHandler(BaseHandler):
                 "water": self.request.get("status_water")
             }
 
+            hash_tag = self.request.get("hash_tag").split(" ")
             data = {
                 "name": self.request.get("name"),
                 "needs": needs, # json format
@@ -625,7 +626,7 @@ class LocationHandler(BaseHandler):
                 "status_board": self.request.get("status_board"),
                 "status": status,
                 "images": image_data, # json format
-                "hash_tag" : self.request.get("hash_tag")
+                "hash_tag" : hash_tag
             }
             add_location(data)
 
@@ -1046,7 +1047,7 @@ class APILocationsHandler(APIBaseHandler):
             location = Location.get_by_id(instance_id)
             self.render(location.to_object())
 
-
+    @oauthed_required
     def post(self, instance_id=None):
         needs = {
            "food": self.request.get("food"),
@@ -1067,6 +1068,8 @@ class APILocationsHandler(APIBaseHandler):
             "water": self.request.get("status_water")
         }
 
+        hash_tag = self.request.get("hash_tag").split(" ")
+
         data = {
             "name": self.request.get("name"),
             "needs": needs, # json format
@@ -1077,6 +1080,7 @@ class APILocationsHandler(APIBaseHandler):
             "affected_count": self.request.get("affected_count"),
             "status_board": self.request.get("status_board"),
             "status": status # json format
+            "hash_tag": hash_tag
         }
         if not instance_id:
             location = add_location(data)
@@ -1085,7 +1089,7 @@ class APILocationsHandler(APIBaseHandler):
             location = add_location(data, instance_id)
             self.render(location.to_object())
 
-
+    @oauthed_required
     def delete(self, instance_id=None):
         location = ndb.Key("Location", instance_id)
         location.delete()
@@ -1143,6 +1147,7 @@ class APIPostsHandler(APIBaseHandler):
             if post:
                 self.render(post.to_object())
 
+    @oauthed_required
     def post(self, instance_id=None):
         data = {
             "name": self.request.get("name"),
@@ -1248,6 +1253,7 @@ class APIEffortsHandler(APIBaseHandler):
             if effort:
                 self.render(effort.to_object())
 
+    @oauthed_required
     def post(self, instance_id=None):
         data = {
             "date_of_distribution": datetime.datetime.strptime(self.request.get("date_of_distribution"), "%Y-%m-%d"), #1992-10-20
@@ -1303,6 +1309,7 @@ class APIContactsHandler(APIBaseHandler):
             if contacts:
                 self.render(contacts.to_object())
 
+    @oauthed_required
     def post(self, instance_id=None):
         data = {}
         data["name"] = self.request.get("name")
@@ -1317,7 +1324,7 @@ class APIContactsHandler(APIBaseHandler):
             contact = add_contact(data, instance_id)
             self.render(contact.to_object())
 
-
+    @oauthed_required
     def delete(self, instance_id=None):
         if instance_id:
             contact = Contact.get_by_id(int(instance_id))

@@ -1,7 +1,7 @@
 import logging
 import webapp2, jinja2, os
 import datetime
-from models import User, Contact, Location, Distribution, Post, DropOffCenter, Subscriber
+from models import User, Contact, Location, Distribution, Post, DropOffCenter, Subscriber, Distributor
 import json as simplejson
 
 from google.appengine.ext import ndb
@@ -306,6 +306,31 @@ def add_contact(data, instance_id=""):
 
     contact.put()
     return contact
+
+
+def add_distributor(data, instance_id=""):
+    if instance_id:
+        distributor = Distributor.get_by_id(int(instance_id))
+    else:
+        distributor = Distributor()
+
+    if data["name"]:
+        distributor.name = data["name"]
+
+    if data["contact_num"]:
+        distributor.contact_num = data["contact_num"]
+
+    if data["email"]:
+        distributor.email = data["email"]
+    
+    if data["website"]:
+        distributor.website = data["website"]
+
+    if data["facebook"]:
+        distributor.facebook = data["facebook"]
+
+    distributor.put()
+    return distributor
 
 
 def log_trail(data):

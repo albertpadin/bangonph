@@ -1028,9 +1028,20 @@ class APIContactsHandler(APIBaseHandler):
             if contacts:
                 self.render(contacts.to_object())
 
-
     def post(self, instance_id=None):
-        pass
+        data = {}
+        data["name"] = self.request.get("name")
+        data["contacts"] = self.request.get("contacts")
+        data["email"] = self.request.get("email")
+        data["facebook"] = self.request.get("facebook")
+        data["twitter"] = self.request.get("twitter")
+        if not instance_id:
+            contact = add_contact(data)
+            self.render(contact.to_object())
+        else:
+            contact = add_contact(data, instance_id)
+            self.render(contact.to_object())
+
 
     def delete(self, instance_id=None):
         pass

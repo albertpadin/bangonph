@@ -1186,11 +1186,27 @@ class APILocationsHandler(APIBaseHandler):
 
     @oauthed_required
     def delete(self, instance_id=None):
-        location = ndb.Key("Location", instance_id)
-        location.delete()
-        data = {}
-        data["success"] = True
-        self.render(data)
+        resp = API_RESPONSE.copy()
+        resp["method"] = "delete"
+        if instance_id:
+            location = ndb.Key("Location", instance_id)
+            if location:
+                center.key.delete()
+                resp["description"] = "Successfully deleted the instance"
+            else:
+                resp['response'] = "invalid_instance"
+                resp['code'] = 404
+                resp['property'] = "delete_subscriber"
+                resp['description'] = "Instance id not valid"
+        else:
+            # missing params
+            resp['response'] = "missing_params"
+            resp['code'] = 406
+            resp['property'] = "params"
+            resp['description'] = "The request has missing parameters"
+
+        self.render(resp)
+        
 
 class APILContactsHandler(APIBaseHandler):
     def get(self, instance_id=None):
@@ -1259,18 +1275,28 @@ class APIPostsHandler(APIBaseHandler):
             post = add_post(data, instance_id)
             self.render(post.to_object())
 
+    @oauthed_required
     def delete(self, instance_id=None):
+        resp = API_RESPONSE.copy()
+        resp["method"] = "delete"
         if instance_id:
-            try:
-                post = Post.get_by_id(int(instance_id))
-                post.key.delete()
-                data = {}
-                data["success"] = True
-                self.render(data)
-            except:
-                data = {}
-                data["success"] = False
-                self.render(data)
+            post = Post.get_by_id(int(instance_id))
+            if post:
+                center.key.delete()
+                resp["description"] = "Successfully deleted the instance"
+            else:
+                resp['response'] = "invalid_instance"
+                resp['code'] = 404
+                resp['property'] = "delete_subscriber"
+                resp['description'] = "Instance id not valid"
+        else:
+            # missing params
+            resp['response'] = "missing_params"
+            resp['code'] = 406
+            resp['property'] = "params"
+            resp['description'] = "The request has missing parameters"
+
+        self.render(resp)
 
 
 class APIDropOffCentersHandler(APIBaseHandler):
@@ -1301,6 +1327,7 @@ class APIDropOffCentersHandler(APIBaseHandler):
             if center:
                 self.render(center.to_object())
 
+    @oauthed_required
     def post(self, instance_id=None):
         data = {
             "drop_off_locations" : self.request.get("drop_off_locations").split(" "),
@@ -1323,9 +1350,28 @@ class APIDropOffCentersHandler(APIBaseHandler):
             centers = add_drop_off_centers(data, instance_id)
             self.render(centers.to_object())
 
-
+    @oauthed_required
     def delete(self, instance_id=None):
-        pass
+        resp = API_RESPONSE.copy()
+        resp["method"] = "delete"
+        if instance_id:
+            center = DropOffCenter.get_by_id(instance_id)
+            if center:
+                center.key.delete()
+                resp["description"] = "Successfully deleted the instance"
+            else:
+                resp['response'] = "invalid_instance"
+                resp['code'] = 404
+                resp['property'] = "delete_subscriber"
+                resp['description'] = "Instance id not valid"
+        else:
+            # missing params
+            resp['response'] = "missing_params"
+            resp['code'] = 406
+            resp['property'] = "params"
+            resp['description'] = "The request has missing parameters"
+
+        self.render(resp)
 
 
 class APISubscribersHandler(APIBaseHandler):
@@ -1486,15 +1532,28 @@ class APIEffortsHandler(APIBaseHandler):
             effort = add_distribution(data, instance_id)
             self.render(effort.to_object())
 
-
+    @oauthed_required
     def delete(self, instance_id=None):
+        resp = API_RESPONSE.copy()
+        resp["method"] = "delete"
         if instance_id:
             effort = Distribution.get_by_id(int(instance_id))
-            effort.key.delete()
+            if effort:
+                subscriber.key.delete()
+                resp["description"] = "Successfully deleted the instance"
+            else:
+                resp['response'] = "invalid_instance"
+                resp['code'] = 404
+                resp['property'] = "delete_subscriber"
+                resp['description'] = "Instance id not valid"
+        else:
+            # missing params
+            resp['response'] = "missing_params"
+            resp['code'] = 406
+            resp['property'] = "params"
+            resp['description'] = "The request has missing parameters"
 
-            data = {}
-            data["success"] = True
-            self.render(data)
+        self.render(resp)
 
 
 class APIContactsHandler(APIBaseHandler):
@@ -1543,13 +1602,96 @@ class APIContactsHandler(APIBaseHandler):
 
     @oauthed_required
     def delete(self, instance_id=None):
+        resp = API_RESPONSE.copy()
+        resp["method"] = "delete"
         if instance_id:
             contact = Contact.get_by_id(int(instance_id))
-            contact.key.delete()
+            if effort:
+                subscriber.key.delete()
+                resp["description"] = "Successfully deleted the instance"
+            else:
+                resp['response'] = "invalid_instance"
+                resp['code'] = 404
+                resp['property'] = "delete_subscriber"
+                resp['description'] = "Instance id not valid"
+        else:
+            # missing params
+            resp['response'] = "missing_params"
+            resp['code'] = 406
+            resp['property'] = "params"
+            resp['description'] = "The request has missing parameters"
+
+        self.render(resp)
+
+
+class APIDistributorsHandler(APIBaseHandler):
+    def get(self, instance_id=None):
+        distributors_json = []
+        if not instance_id:
+            if self.request.get("cursor"):
+                curs = Cursor(urlsafe=self.request.get("cursor"))
+                if curs:
+                    distributors, next_cursor, more = Distributor.query().fetch_page(25, start_cursor=curs)
+                else:
+                    distributors, next_cursor, more = Distributor.query().fetch_page(25)
+            else:
+                distributors, next_cursor, more = Distributor.query().fetch_page(25)
+
+            for distributor in distributors:
+                distributors_json.append(distributor.to_object())
 
             data = {}
-            data["success"] = True
+            data["distributors"] = distributors_json
+            if more:
+                data["next_page"] = "http://api.bangonph.com/distributors/?cursor=" + next_cursor
+            else:
+                data["next_page"] = False
+
             self.render(data)
+        else:
+            contacts = Distributor.get_by_id(instance_id)
+            if contacts:
+                self.render(contacts.to_object())
+
+    def post(self, instance_id=None):
+        data = {
+            "email": self.request.get("email"),
+            "name": self.request.get("name"),
+            "contact_num": self.request.get("contact_num"),
+            "website": self.request.get("website"),
+            "facebook": self.request.get("facebook")
+        }
+        logging.critical(data)
+
+        if not instance_id:
+            distributor = add_distributor(data)
+            self.render(distributor.to_object())
+        else:
+            distributor = add_distributor(data, instance_id)
+            self.render(distributor.to_object())
+
+    def delete(self, instance_id=None):
+        resp = API_RESPONSE.copy()
+        resp["method"] = "delete"
+        if instance_id:
+            distributor = Distributor.get_by_id(int(instance_id))
+            if distributor:
+                distributor.key.delete()
+                resp["description"] = "Successfully deleted the instance"
+            else:
+                resp['response'] = "invalid_instance"
+                resp['code'] = 404
+                resp['property'] = "delete_subscriber"
+                resp['description'] = "Instance id not valid"
+        else:
+            # missing params
+            resp['response'] = "missing_params"
+            resp['code'] = 406
+            resp['property'] = "params"
+            resp['description'] = "The request has missing parameters"
+
+        self.render(resp)
+
 
 
 class UploadPage(BaseHandler):
@@ -1659,7 +1801,10 @@ app = webapp2.WSGIApplication([
         webapp2.Route('/subscribers', handler=APISubscribersHandler, name="api-subscribers"),
         webapp2.Route('/orgs', handler=APIOrganizationsHandler, name="api-locations"),
         webapp2.Route('/efforts', handler=APIEffortsHandler, name="api-locations"),
+        webapp2.Route('/distributors', handler=APIDistributorsHandler, name="api-locations"),
 
+
+        webapp2.Route(r'/distributors/<:.*>', handler=APIDistributorsHandler, name="api-locations"),
         webapp2.Route(r'/locations/<:.*>', handler=APILocationsHandler, name="api-locations"),
         webapp2.Route(r'/users/<:.*>', handler=APIUsersHandler, name="api-users"),
         webapp2.Route(r'/contacts/<:.*>', handler=APIContactsHandler, name="api-locations"),

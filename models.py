@@ -34,11 +34,23 @@ class Distributor(ndb.Model):
     updated = ndb.DateTimeProperty(auto_now=True)
     name = ndb.StringProperty()
     contact_num = ndb.StringProperty()
-    location = ndb.StringProperty()
     email = ndb.StringProperty()
     website = ndb.StringProperty()
-    contacts = ndb.KeyProperty()
     facebook = ndb.StringProperty()
+
+    def to_object(self):
+        details = {}
+        details["meta"] = {"href": "http://api.bangonph.com/distributors/" + str(self.key.id())}
+        details["created"] = str(self.created)
+        details["updated"] = str(self.updated)
+        details["email"] = self.email
+        details["name"] = self.name
+        details["id"] = self.key.id()
+        details["contact_num"] = self.contact_num
+        details["website"] = self.website
+        details["facebook"] = self.contact_num
+
+        return details
 
 
 class Location(ndb.Model):

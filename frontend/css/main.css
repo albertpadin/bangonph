@@ -84,3 +84,256 @@
 }
 
 /*end le styles*/
+
+/* CAMPAIGN PAGE */
+
+#campaign-content-wrap, #campaign-sidebar-wrap {
+    border: 1px solid #b6b6b6;
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    border-radius: 5px;
+    padding: 20px;
+}
+
+#bx-pager {
+    margin-top: -50px;
+}
+
+#bx-pager a img {
+width: 80px;
+height: 80px;
+}
+
+.bx-wrapper .bx-viewport {
+    -moz-box-shadow: none!important;
+    -webkit-box-shadow: none!important;
+    box-shadow: none!important;
+    border: none!important;
+    left: -5px;
+    background: #fff;
+}
+
+.donate-btn{
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    border-radius: 5px;
+    background: #428bca;
+    margin-right: 20px;
+    right: 0;
+    position: absolute;
+    color: #fff;
+    padding: 8px 12px;
+    margin-top: 27px;
+    font-size: 12px;
+}
+
+    .donate-btn:hover {
+        text-decoration: none;
+        color: #fff;
+        background: #286DA8;
+    }
+
+
+.side-wrap {
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    border-radius: 5px;
+    overflow: hidden;
+    border: 1px solid #b6b6b6;
+    margin-bottom: 10px;
+}
+
+    .side-wrap ul {
+        list-style: none;
+        padding: 0px;
+        margin: 0px;
+    }
+
+        .side-wrap ul li a{
+            float: left;
+            width: 100%;
+            padding: 10px 20px;
+            color: #000;
+        }
+
+        .side-wrap ul li a {
+            color: #000;
+            font-size: 12px;
+        }
+
+            .side-wrap ul li a span > span {
+                font-style: italic;
+                font-size: 11px;
+            }
+
+            .side-wrap ul li a:hover {
+                text-decoration: none;
+            }
+
+        .side-wrap ul li a:hover {
+            background: #f1f1f1!important;
+            color: #000;
+        }
+
+    .side-wrap .status-item {
+        border: none!important;
+        margin: 0px;
+    }
+
+    .side-wrap .status-entry {
+        padding-bottom: 7px;
+    }
+
+        .side-wrap .status-entry span {
+            font-weight: bold;
+            font-size: 12px;
+        }
+
+    .side-wrap .status-entry .icon {
+        margin-left: 0px;
+    }
+
+
+
+    .details {
+        font-size: 12px;
+    }
+
+.side-head {
+    border-bottom:  2px solid #3071a9;
+    padding: 15px 20px;
+    background: #d1ebff;
+    color: #206ea9;
+    font-weight: bold;
+    text-transform: uppercase;
+    font-size: 14px;
+
+}
+
+.side-head a {
+    text-decoration: none;
+}
+
+
+.ongoing {
+    background: url('/img/progressing.png') right no-repeat #ffead1!important;
+    color: #a97420;
+    border-bottom:  2px solid #a97420;
+}
+
+.needed {
+    background: url('/img/alert.png') right no-repeat #ffd1d3!important;
+    color: #a92020;
+    border-bottom:  2px solid #a92020;
+}
+
+.done {
+    background: url('/img/done.png') right no-repeat #d1ffd6!important;
+    color: #20a93a;
+    border-bottom:  2px solid #20a93a;
+}
+
+    .small-icon {
+        width: 16px;
+        height: 16px;
+    }
+
+
+.social-item {
+float: left;
+margin-right: 10px;
+
+}
+
+.hide-border {
+    border: none!important;
+    
+}
+
+#operations-wrap > div, #donations-wrap > div{
+    padding: 5px;
+}
+
+.operations-content {
+    border: 1px solid #b6b6b6;
+    padding: 10px;
+    border-radius: 6px;
+}
+
+.operations-content > strong {
+    margin-top: 5px;
+    display: inline-block;
+    margin-top: 5px;
+}
+
+    .operations-details > strong {
+        color: #37afd7;
+    }
+
+    .operations-details p {
+        font-size: 12px;
+    }
+
+    .operations-btn {
+        -webkit-border-radius: 5px;
+        -moz-border-radius: 5px;
+        border-radius: 5px;
+        font-weight: bold;
+        font-size: 11px;
+        text-transform: uppercase;
+        text-align: center;
+        display: inline-block;
+        color: #fff;
+        background: #d9534f;
+        width: 100%;
+        padding: 10px 0px;
+    }
+
+        .operations-btn:hover {
+            background: #BB3935;
+            text-decoration: none;
+            color: #fff;
+        }
+
+    .blue-btn {
+        background: #428bca!important;
+    }
+
+        .blue-btn:hover {
+            background: #286DA8!important;
+        }
+
+
+.operations-details strong {
+    font-size: 10px;
+    text-transform: uppercase;
+}
+
+.operations-details span {
+    font-size: 12px;
+    font-weight: bold;
+}
+
+
+.operations-details .icon {
+    margin-left: 0px;
+    margin-bottom: 5px;
+}
+
+.hide-on-big {
+    display: none;
+}
+
+@media screen and (max-width: 991px) {
+    .hide-on-small {
+        display: none;
+    }
+
+    .show-on-small {
+        display: block!important;
+        padding: 10px 0px 0px 0px;
+    }
+
+
+}
+

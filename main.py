@@ -1,6 +1,6 @@
 import webapp2, jinja2, os, calendar
 from webapp2_extras import routes
-from models import User, Contact, Location, Post, Distribution, File, Distributor
+from models import User, Contact, Location, Post, Distribution, File, Distributor, Subscriber
 from functions import *
 import json as simplejson
 import logging
@@ -18,9 +18,11 @@ from google.appengine.ext import blobstore
 from google.appengine.ext.webapp import blobstore_handlers
 from google.appengine.api import images
 
-from settings import SETTINGS
+from settings import SETTINGS, API_RESPONSE, API_RESPONSE_DATA
 from settings import SECRET_SETTINGS
 from settings import OAUTH_RESP, API_OAUTH_RESP
+
+from google.appengine.datastore.datastore_query import Cursor
 
 jinja_environment = jinja2.Environment(loader=jinja2.FileSystemLoader(os.path.dirname(__file__)), autoescape=True)
 
@@ -330,6 +332,17 @@ class PublicFrontPage(BaseHandler):
         self.render('frontend/public-front.html')
 
 
+class LocationSamplePage(BaseHandler):
+    def get(self):
+        self.tv["current_page"] = "LOCATIONSAMPLE"
+        self.render('frontend/locationsample.html')
+
+class ReliefOperationsPage(BaseHandler):
+    def get(self):
+        self.tv["current_page"] = "RELIEF_OPERATIONS"
+        self.render('frontend/reliefoperations.html')
+
+
 class RegisterPage(BaseHandler):
     def get(self):
         if self.user:
@@ -605,6 +618,21 @@ class LocationHandler(BaseHandler):
                     "shelter": self.request.get("status_shelter")
                 }
 
+                urls = self.request.get("image_urls")
+                titles = self.request.get("image_titles")
+                captions = self.request.get("image_captions")
+                new_urls = simplejson.loads(urls)
+                new_titles = simplejson.loads(titles)
+                new_captions = simplejson.loads(captions)
+
+                cnt = len(new_urls)
+                for i in range(0, cnt):
+                    images = {}
+                    images["src"] = new_urls[i]["src"]
+                    images["image_title"] = new_titles[i]["image_title"]
+                    images["image_caption"] = new_captions[i]["image_caption"]
+                    location.images.append(images)
+
                 location.name = self.request.get("name")
                 location.latlong = self.request.get("latlong")
                 location.featured_photo = self.request.get("featured_photo")
@@ -703,7 +731,7 @@ class DistributionHandler(BaseHandler):
                 "food" : self.request.get("chk_supply_goal_food"),
                 "description" : self.request.get("chk_supply_goal_food_description")
             },
-            "water" : 
+            "water" :
             {
                 "water" : self.request.get("chk_supply_goal_water"),
                 "description" : self.request.get("chk_supply_goal_wate_descriptionr")
@@ -712,7 +740,7 @@ class DistributionHandler(BaseHandler):
                 "medicines" : self.request.get("chk_supply_goal_medicines"),
                 "description" : self.request.get("chk_supply_goal_medicines_description")
             },
-            
+
             "social_workers" : {
                 "social_workers" : self.request.get("chk_supply_goal_social_workers"),
                 "description" : self.request.get("chk_supply_goal_social_workers_description")
@@ -722,7 +750,7 @@ class DistributionHandler(BaseHandler):
                 "medical_workers" : self.request.get("chk_supply_goal_medical_workers"),
                 "description" : self.request.get("chk_supply_goal_medical_workers_description")
             },
-            
+
             "shelter" : {
                 "shelter" : self.request.get("chk_supply_goal_shelter"),
                 "description" : self.request.get("chk_supply_goal_shelter_description")
@@ -732,17 +760,17 @@ class DistributionHandler(BaseHandler):
                 "formula" : self.request.get("chk_supply_goal_formula"),
                 "description" : self.request.get("chk_supply_goal_formula_description")
             },
-            
+
             "toiletries" : {
                 "toiletries" : self.request.get("chk_supply_goal_toiletries"),
                 "description" : self.request.get("chk_supply_goal_toiletries_description"),
             },
-            
+
             "flashlights" : {
                 "flashlights" : self.request.get("chk_supply_goal_flashlights"),
                 "description" : self.request.get("chk_supply_goal_flashlights_description")
             }
-            
+
         }
 
         actual_supply = {
@@ -750,47 +778,47 @@ class DistributionHandler(BaseHandler):
                 "food" : self.request.get("chk_actual_supply_food"),
                 "description" : self.request.get("chk_actual_supply_food_description")
             },
-            
+
             "water" : {
                 "water" : self.request.get("chk_actual_supply_water"),
                 "description" : self.request.get("chk_actual_supply_water_description")
             },
-            
+
             "medicines" : {
                 "medicines" : self.request.get("chk_actual_supply_medicines"),
                 "description" : self.request.get("chk_actual_supply_medicines_description")
             },
-            
+
             "social_workers" : {
                 "social_workers" : self.request.get("chk_actual_supply_social_workers"),
                 "description" : self.request.get("chk_actual_supply_social_workers_description")
             },
-            
+
             "medical_workers" : {
                 "medical_workers" : self.request.get("chk_actual_supply_medical_workers"),
                 "description" : self.request.get("chk_actual_supply_medical_workers_description"),
             },
-            
+
             "shelter" : {
                 "shelter" : self.request.get("chk_actual_supply_shelter"),
                 "description" : self.request.get("chk_actual_supply_shelter_description")
             },
-            
+
             "formula" : {
                 "formula" : self.request.get("chk_actual_supply_formula"),
                 "description" : self.request.get("chk_actual_supply_formula_description")
             },
-            
+
             "toiletries" : {
                 "toiletries" : self.request.get("chk_actual_supply_toiletries"),
                 "description" : self.request.get("chk_actual_supply_toiletries_description")
             },
-            
+
             "flashlights" : {
                 "flashlights" : self.request.get("chk_actual_supply_flashlights"),
                 "description" : self.request.get("chk_actual_supply_flashlights_description")
             }
-            
+
         }
 
         data = {
@@ -924,8 +952,8 @@ class PostsHandler(BaseHandler):
 # for testing purposes only
 class sampler(BaseHandler):
     def get(self):
-        import calendar
-        self.response.out.write(calendar.timegm(datetime.datetime.now().timetuple()))
+
+        self.response.out.write(self.request.uri)
 
 class ErrorHandler(BaseHandler):
     def get(self, page):
@@ -976,6 +1004,26 @@ class APIBaseHandler(webapp2.RequestHandler):
                 return user_token.user.get()
 
         return False
+
+    @property
+    def params(self):
+        params = {}
+        for arg in self.request.arguments():
+            values = self.request.get_all(arg)
+            if len(values) > 1:
+                params[arg] = values
+            else:
+                params[arg] = values[0]
+        return params
+
+    @property
+    def base_uri(self):
+        if "?" in self.request.uri:
+            base_uri = self.request.uri[0:(self.request.uri.find('?'))]
+        else:
+            base_uri = self.request.uri
+
+        return base_uri
 
     def render(self, response_body):
         self.response.headers["Content-Type"] = "application/json"
@@ -1282,14 +1330,116 @@ class APIDropOffCentersHandler(APIBaseHandler):
 
 class APISubscribersHandler(APIBaseHandler):
     def get(self, instance_id=None):
-        pass
+        subscribers_json = []
+        if not instance_id:
+            if self.request.get("cursor"):
+                curs = Cursor(urlsafe=self.request.get("cursor"))
+                if curs:
+                    subscribers, next_cursor, more = Subscriber.query().fetch_page(10, start_cursor=curs)
+                else:
+                    subscribers, next_cursor, more = Subscriber.query().fetch_page(10)
+            else:
+                subscribers, next_cursor, more = Subscriber.query().fetch_page(10)
 
+            for subscriber in subscribers:
+                subscribers_json.append(subscriber.to_object())
+
+            data = {}
+            data["subscribers"] = subscribers_json
+            if more:
+                data["next_page"] = "http://api.bangonph.com/subscribers/?cursor=" + next_cursor
+            else:
+                data["next_page"] = False
+            self.render(data)
+        else:
+            center = Subscriber.get_by_id(long(instance_id))
+            if center:
+                self.render(center.to_object(self.request.get('expand')))
+
+    @oauthed_required
     def post(self, instance_id=None):
-        pass
+        resp = API_RESPONSE.copy()
+        data = API_RESPONSE_DATA.copy()
+        if check_all_keys(["name", "email", "fb_id"], self.params):
+            if instance_id:
+                resp["method"] = "edit"
+                exist = Subscriber.get_by_id(long(instance_id))
+                if exist:
+                    # edit instance
+                    subscriber = add_subcriber(self.params, instance_id)
+                    if subscriber:
+                        distribution = subscriber.distribution.get() if subscriber.distribution else None # get the id of the parent
+                        resp["description"] = "Successfully edited the subscriber"
+                        data["id"] = str(subscriber.key.id())
+                        data["name"] = str(subscriber.name)
+                        data["instance_id"] = str(subscriber.key.id())
+                        data["meta"]["href"] = str(self.base_uri + "/" + str(subscriber.key.id()))
+                        if distribution: # if naay gi subscribe for now lang
+                            data["parent"]["meta"]["href"] = str(currenturl + "/drop-off-centers/" + str(distribution.key.id()))
+                        resp["data"] = data
+                    else:
+                        # foolsafe, failsafe, watever!
+                        resp['response'] = "cannot_edit"
+                        resp['code'] = 500
+                        resp['property'] = "add_subcriber"
+                        resp['description'] = "Server cannot create the instance"
+                else:
+                    # instance doesnt exist
+                    resp['response'] = "invalid_instance"
+                    resp['code'] = 404
+                    resp['property'] = "instance_id"
+                    resp['description'] = "Instance id missing or not valid"
+            else:
+                resp["method"] = "create"
+                # new instance
+                subscriber = add_subcriber(self.params)
+                if subscriber:
+                    distribution = subscriber.distribution.get() if subscriber.distribution else None # get the id of the parent
+                    resp["description"] = "Successfully created the instance"
+                    data["id"] = str(subscriber.key.id())
+                    data["name"] = str(subscriber.name)
+                    data["instance_id"] = str(subscriber.key.id())
+                    data["meta"]["href"] = str(self.base_uri + "/" + str(subscriber.key.id()))
+                    if distribution: # if naay gi subscribe for now lang
+                        data["parent"]["meta"]["href"] = str(currenturl + "/drop-off-centers/" + str(distribution.key.id()))
+                    resp["data"] = data
+                else:
+                    # foolsafe, failsafe, watever!
+                    resp['response'] = "cannot_create"
+                    resp['code'] = 500
+                    resp['property'] = "add_subcriber"
+                    resp['description'] = "Server cannot create the instance"
+        else:
+            # missing params
+            resp['response'] = "missing_params"
+            resp['code'] = 406
+            resp['property'] = "params"
+            resp['description'] = "The request has missing parameters"
 
+        self.render(resp)
+
+    @oauthed_required
     def delete(self, instance_id=None):
-        pass
+        resp = API_RESPONSE.copy()
+        resp["method"] = "delete"
+        if instance_id:
+            subscriber = Subscriber.get_by_id(long(instance_id))
+            if subscriber:
+                subscriber.key.delete()
+                resp["description"] = "Successfully deleted the instance"
+            else:
+                resp['response'] = "invalid_instance"
+                resp['code'] = 404
+                resp['property'] = "delete_subscriber"
+                resp['description'] = "Instance id not valid"
+        else:
+            # missing params
+            resp['response'] = "missing_params"
+            resp['code'] = 406
+            resp['property'] = "params"
+            resp['description'] = "The request has missing parameters"
 
+        self.render(resp)
 
 class APIEffortsHandler(APIBaseHandler):
     def get(self, instance_id=None):
@@ -1439,6 +1589,8 @@ app = webapp2.WSGIApplication([
     routes.DomainRoute(r'<:gcdc2013-bangonph\.appspot\.com|www\.bangonph\.com>', [
         webapp2.Route('/', handler=FrontPage, name="www-front"),
         webapp2.Route('/public', handler=PublicFrontPage, name="www-front"),
+        webapp2.Route('/locationsample', handler=LocationSamplePage, name="www-locationsample"),
+        webapp2.Route('/reliefoperations', handler=ReliefOperationsPage, name="www-reliefoperations"),
         webapp2.Route('/register', handler=RegisterPage, name="www-register"),
         webapp2.Route('/logout', handler=Logout, name="www-logout"),
         webapp2.Route('/login', handler=LoginPage, name="www-login"),
@@ -1504,7 +1656,7 @@ app = webapp2.WSGIApplication([
         webapp2.Route('/contacts', handler=APIContactsHandler, name="api-locations"),
         webapp2.Route('/posts', handler=APIPostsHandler, name="api-locations"),
         webapp2.Route('/drop-off-centers', handler=APIDropOffCentersHandler, name="api-locations"),
-        webapp2.Route('/subscribers', handler=APISubscribersHandler, name="api-locations"),
+        webapp2.Route('/subscribers', handler=APISubscribersHandler, name="api-subscribers"),
         webapp2.Route('/orgs', handler=APIOrganizationsHandler, name="api-locations"),
         webapp2.Route('/efforts', handler=APIEffortsHandler, name="api-locations"),
 
@@ -1513,7 +1665,7 @@ app = webapp2.WSGIApplication([
         webapp2.Route(r'/contacts/<:.*>', handler=APIContactsHandler, name="api-locations"),
         webapp2.Route(r'/posts/<:.*>', handler=APIPostsHandler, name="api-locations"),
         webapp2.Route(r'/drop-off-centers/<:.*>', handler=APIDropOffCentersHandler, name="api-locations"),
-        webapp2.Route(r'/subscribers/<:.*>', handler=APISubscribersHandler, name="api-locations"),
+        webapp2.Route(r'/subscribers/<:.*>', handler=APISubscribersHandler, name="api-subscribers"),
         webapp2.Route(r'/orgs/<:.*>', handler=APIOrganizationsHandler, name="api-locations"),
         webapp2.Route(r'/efforts/<:.*>', handler=APIEffortsHandler, name="api-locations"),
 

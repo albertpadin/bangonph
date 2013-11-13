@@ -155,11 +155,28 @@ var EditLocation =  Backbone.View.extend({
     });
   },
   editLocation: function() {
+    var obj_image_url = [];
+    $(".image_url").each(function() {
+        obj_image_url.push({"src": $(this).val()});
+    });
+
+    var obj_image_title = [];
+    $(".image_title").each(function() {
+        obj_image_title.push({"image_title": $(this).val()});
+    });
+    
+    var obj_image_caption = [];
+    $(".image_caption").each(function() {
+        obj_image_caption.push({"image_caption": $(this).val()});
+    });
     $.ajax({
       type: "post",
       url: "/locations",
       data: {
         "id": $("#id").val(),
+        "image_urls" : JSON.stringify(obj_image_url),
+        "image_titles" : JSON.stringify(obj_image_title),
+        "image_captions" : JSON.stringify(obj_image_caption),
         "name": _.escape($("#name").val()),
         "latlong": _.escape($("#latlong").val()),
         "featured_photo": _.escape($("#featured_photo").val()),

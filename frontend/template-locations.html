@@ -229,7 +229,7 @@
             </p>
             <p>
             <br/>
-              Images <a href="javascript:;" class="btn btn-success addimage">Add More</a>
+              Images <a href="javascript:;" onclick="javascript:addimage()" class="btn btn-success addimage">Add More</a>
               <table class="table imageTable">
                 <tbody id="image1">
                   <tr>
@@ -362,6 +362,30 @@
             %>
             <p>Hash Tag
               <input type="text" value="<%- this.hash_tag %>" id="hash_tag"/>
+            </p>
+            <p>
+            <br/>
+              Images <a href="javascript:;" onclick="javascript:addimage2()" class="btn btn-success addimage">Add More</a>
+              <table class="table imageTable">
+                <tbody id="image1">
+                  <tr>
+                    <th>Image 1</th>
+                    <th style="text-align: right;"><a href="javascript:;" rel="image1" onclick="$('#image1').remove();" class="removeimage">Remove</a></th>
+                  </tr>
+                  <tr>
+                    <td>Image URL</td>
+                    <td><input type="text" id="image_url_1" class="form-control image_url"/></td>
+                  </tr>
+                  <tr>
+                    <td>Title</td>
+                    <td><input type="text" id="image_title_1" class="form-control image_title"/></td>
+                  </tr>
+                  <tr>
+                    <td>Caption</td>
+                    <td><textarea id="image_caption_1" class="image_caption" style="width: 1002px; height: 73px; margin: 0px;"></textarea></td>
+                  </tr>
+                </tbody>
+              </table>
             </p>
             <p>
               <button type="submit" class="btn btn-primary">Submit</button> 

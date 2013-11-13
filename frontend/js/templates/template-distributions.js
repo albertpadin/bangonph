@@ -20,7 +20,17 @@ var DistributionView = Backbone.View.extend({
     _.bindAll(this, "render", "distributions");
   },
   render: function(response) {
+    var self = this;
     $(this.el).html( this.template({ distributions: response }) );
+    $("#distributionsGrid tr[data-id]").each(function(){
+      var id = $(this).attr("data-id");
+      $(this).find("a.first").click(function() {
+        self.editDistribution(id);
+      });
+      $(this).find("a.last").click(function() {
+        self.deleteDistribution(id);
+      });
+    });
   },
   distributions: function() {
     var self = this;
@@ -30,6 +40,23 @@ var DistributionView = Backbone.View.extend({
         self.render(datas.toJSON());
       }
     });
+  },
+  editDistribution: function(id) {
+    console.log(id);
+  },
+  deleteDistribution: function(id) {
+    if (confirm("Are you sure to delete?")) {
+      var collection = new DistributionCollection();
+      collection.fetch({
+        data: { id_delete: id },
+        success: function(data) {
+          $('#distributionsGrid tr[data-id="' + id + '"]').fadeOut('fast');
+        },
+        error: function() {
+          $('#distributionsGrid tr[data-id="' + id + '"]').fadeOut('fast');
+        }
+      });
+    }
   }
 });
 

@@ -26,6 +26,18 @@
 
 /*overwritten bootstrap*/
 
+.navbar-brand{
+    max-height: 40px;
+    overflow: visible;
+    padding-top: 0;
+    padding-bottom: 0;
+}
+
+.navbar-brand > img{
+    height: 43px;
+    margin-top: 3px;
+}
+
 .jumbotron{
     background: url(../img/cover.jpg);
     background-repeat: no-repeat;

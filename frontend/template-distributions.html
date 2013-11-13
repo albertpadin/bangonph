@@ -543,11 +543,19 @@
         </div>
         <div class="panel panel-default">
           <div class="panel-heading">
-            <h3 class="panel-title"><strong>New Distribution</strong></h3>
+            <h3 class="panel-title"><strong>Edit Distribution</strong></h3>
           </div>
           <div class="panel-body">
+            <%
+              if(!$.isEmptyObject(distribution)) {
+                $.each(distribution, function() {
+            %>
+            <input type="hidden" value="<%- this.id %>" id="id"/>
             <p>
-              <input type="date" id="date_of_distribution" required="required" class="form-control" placeholder="Date of Distribution">
+              <textarea type="text" id="description" class="form-control" placeholder="Short Description"><%- this.description %></textarea>
+            </p>
+            <p>
+              <input type="date" id="date_of_distribution" value="<%- this.date_of_distribution %>" required="required" class="form-control" placeholder="Date of Distribution">
             </p>
             <p>
               <select id="contact" required="required" class="form-control">
@@ -574,6 +582,9 @@
                 }
               %>
               </select>
+            </p>
+            <p>
+              <input type="text" value="<%- this.featured_photo %>" placeholder="Featured Photo" class="form-control" id="featured_photo"/>
             </p>
             <p>
               Supply Goal<br/>
@@ -617,6 +628,18 @@
               <input type="text" id="actual_supply_flashlights" placeholder="Number of Flashlights"/>
               <input type="text" id="actual_supply_flashlights_description" placeholder="Description"/> <br/>
             </p>
+            <p>
+            Status
+            <input type="text" value="<%- this.status %>" id="status"/>
+            </p>
+            <p>
+            Info
+            <textarea id="info" style="margin: 0px; width: 1066px; height: 175px;"><%- this.info %></textarea>
+            </p>
+            <%
+                })
+              }
+            %>
             <p>
             <br/>
               Images <a href="javascript:;" onclick="javascript:addimage()" class="btn btn-success addimage">Add More</a>

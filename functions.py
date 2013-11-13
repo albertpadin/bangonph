@@ -67,6 +67,10 @@ def send_reset_password_email(user, token):
         return False
         
 
+def slugify(value):
+    return value.strip().lower().replace(' ','-').replace("'","").replace('"','').replace(",","").replace('--','-').replace('.','').replace('@','').replace('!','').replace('$','').replace('*','').replace('&','and').replace('(','').replace(')','').replace('+','plus').replace('=','').replace(':','').replace(';','').replace('<','').replace('>','').replace('/','').replace('?','').replace('~','').replace('`','')
+
+
 def get_all_user(data):
     users = User.query(User.email != data).fetch(100)
     if users:
@@ -103,13 +107,21 @@ def update_user(data):
     user.put()
     return user
 
-def add_location(data, location_key=""):
-    merge_name = data["name"].replace(" ", "-")
 
+def add_location(data, location_key=""):
     if location_key:
         location = Location.get_by_id(location_key)
     else:
-        location = Location(id=merge_name.lower())
+        location_id = slugify(data["name"])
+        temp_location_id = location_id
+        while True:
+            count = 1
+            if Location.get_by_id(temp_location_id):
+                temp_location_id = location_id + str(count)
+                count += 1
+            else:
+                location = Location(id=temp_location_id)
+                break
 
     if data["name"]:
         location.name = data["name"]
@@ -140,7 +152,7 @@ def add_location(data, location_key=""):
 
     if data["status"]:
         location.status = data["status"]
-    
+
     location.put()
     return location
 
@@ -155,7 +167,17 @@ def add_destribution(data):
     return distribution
 
 def add_drop_off_centers(data):
-    center = DropOffCenter(id=data["name"].lower())
+    center_id = slugify(data["name"])
+    temp_center_id = center_id
+    while True:
+        count = 1
+        if DropOffCenter.get_by_id(temp_center_id):
+            temp_center_id = center_id + str(count)
+            count += 1
+        else:
+            center = DropOffCenter(id=temp_center_id)
+            break
+
     center.drop_off_locations = data["drop_off_locations"]
     center.distributor = data["distributor"]
     center.address = data["address"]

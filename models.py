@@ -1,4 +1,5 @@
 from google.appengine.ext import ndb
+import logging
 import time
 
 
@@ -105,15 +106,52 @@ class Distribution(ndb.Model):
     created = ndb.DateTimeProperty(auto_now_add=True)
     updated = ndb.DateTimeProperty(auto_now=True)
     date_of_distribution = ndb.DateTimeProperty()
-    contact = ndb.KeyProperty()
+    contact = ndb.StringProperty()
     destinations = ndb.KeyProperty()
     supply_goal = ndb.JsonProperty()
     actual_supply = ndb.JsonProperty()
 
 
-    def to_object(self):
+    def to_object(self, expand=""):
         details = {}
-        details["key"] = self.key.urlsafe()
+        details["meta"] = {"href": "http://api.bangonph.com/efforts/?" + str(self.key.id())}
+        details["created"] = str(self.created)
+        details["updated"] = str(self.updated)
+        details["dateOfDistribution"] = str(self.date_of_distribution)
+
+        if expand == "contacts":
+            contact_details = {}
+            cont = self.contact.get()
+            contact_details["contact_details"] = cont.to_object()
+            details["contact"] = contact_details
+        else:
+            if self.contact:
+                data = {}
+                data["meta"] = {"href": "http://api.bangonph.com/contacts/" + str(self.contact.urlsafe())}
+                details["contact"] = data
+            else:
+                details["contact"] = ""
+
+
+
+        if expand == "destinations":
+            destination_details = {}
+            logging.critical(self.destinations)
+            location = self.destinations.get()
+            destination_details["destination_details"] = location.to_object()
+            details["destination"] = destination_details
+        else:
+            if self.destinations:
+                data = {}
+                data["meta"] = {"href": "http://api.bangonph.com/contacts/" + str(self.destinations.urlsafe())}
+                details["destinations"] = data
+            else:
+                details["destinations"] = ""
+
+
+
+        details["supply_goal"] = self.supply_goal
+        details["actual_supply"] = self.actual_supply
 
         return details
 

@@ -595,7 +595,7 @@ class DistributionHandler(BaseHandler):
             "actual_supply": actual_supply
         }
 
-        add_destribution(data)
+        add_distribution(data)
 
 class DistributionFetchHandler(BaseHandler):
     @login_required
@@ -946,13 +946,57 @@ class APISubscribersHandler(APIBaseHandler):
 
 class APIEffortsHandler(APIBaseHandler):
     def get(self, instance_id=None):
-        pass
+        efforts_json = []
+        logging.critical(self.request.get("expand"))
+        if not instance_id:
+            if self.request.get("cursor"):
+                curs = Cursor(urlsafe=self.request.get("cursor"))
+                if curs:
+                    efforts, next_cursor, more = Distribution.query().fetch_page(10, start_cursor=curs)
+                else:
+                    efforts, next_cursor, more = Distribution.query().fetch_page(10)
+            else:
+                efforts, next_cursor, more = Distribution.query().fetch_page(10)
+
+            for effort in efforts:
+                efforts_json.append(effort.to_object(self.request.get("expand").lower()))
+
+            data = {}
+            data["efforts"] = efforts_json
+            if more:
+                data["next_page"] = "http://api.bangonph.com/locations/?cursor=" + next_cursor
+            else:
+                data["next_page"] = False
+            self.render(data)
+        else:
+            effort = Distribution.get_by_id(instance_id)
+            if effort:
+                self.render(effort.to_object())
 
     def post(self, instance_id=None):
-        pass
+        data = {
+            "date_of_distribution": datetime.datetime.strptime(self.request.get("date_of_distribution"), "%Y-%m-%d"), #1992-10-20
+            "contact": self.request.get("contact"),
+            "destinations": self.request.get("destinations"),
+            "supply_goal": self.request.get("supply_goal"),
+            "actual_supply": self.request.get("actual_supply")
+        }
+        if not instance_id:
+            effort = add_distribution(data)
+            self.render(effort.to_object())
+        else:
+            effort = add_distribution(data, instance_id)
+            self.render(effort.to_object())
+
 
     def delete(self, instance_id=None):
-        pass
+        if instance_id:
+            effort = Distribution.get_by_id(int(instance_id))
+            effort.key.delete()
+
+            data = {}
+            data["success"] = True
+            self.render(data)
 
 
 class APIContactsHandler(APIBaseHandler):
@@ -993,7 +1037,7 @@ class APIContactsHandler(APIBaseHandler):
 
 
 app = webapp2.WSGIApplication([
-    routes.DomainRoute(r'<:gcdc2013-bangonph\.appspot\.com|localhost|www\.bangonph\.com>', [
+    routes.DomainRoute(r'<:gcdc2013-bangonph\.appspot\.com|www\.bangonph\.com>', [
         webapp2.Route('/', handler=FrontPage, name="www-front"),
         webapp2.Route('/public', handler=PublicFrontPage, name="www-front"),
         webapp2.Route('/register', handler=RegisterPage, name="www-register"),

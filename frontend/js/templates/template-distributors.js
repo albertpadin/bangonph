@@ -18,8 +18,53 @@ var DistributorCollection = Backbone.Collection.extend({
 var DistributorView = Backbone.View.extend({
   el: "#app",
   template: _.template( $("#distributorsTemplate").html() ),
-  render: function() {
-    $(this.el).html( this.template() );
+  initialize: function() {
+    _.bindAll(this, "render", "distributors")
+  },
+  render: function(response) {
+    var self = this;
+    $(this.el).html( this.template({ distributors: response }) );
+    $('#distributorsGrid tr[data-id]').each(function(){
+      var id = $(this).attr("data-id");
+      $(this).find("a.first").click(function(){
+        self.editDistributor(id);
+      });
+      $(this).find('a.last').click(function(){
+        self.deleteDistributor(id);
+      });
+    });
+  },
+  distributors: function(){
+    var self = this;
+    var distributorsCollection = new DistributorCollection();
+    distributorsCollection.fetch({
+      success: function(datas){
+        self.render(datas.toJSON());
+      }
+    });
+
+  },
+  deleteDistributor: function(id){
+    if ( confirm('Are you sure to delete?')) {
+      
+     var collection = new DistributorCollection();
+      collection.fetch({
+        data: { id_delete: id },
+        success: function(data) {
+          
+          $(".success-message").hide();
+          $(".error-message").fadeIn("fast");
+          $("#title").text('Unable to delete. Try again.');
+        },
+        error: function() {
+          $('#distributorsGrid tr[data-id="' + id + '"]').fadeOut('fast');
+          $(".error-message").hide();
+          $(".success-message").fadeIn("fast");
+          $("#title").text('Successfully deleted.');
+        }
+      });
+
+    }
   }
 });
 

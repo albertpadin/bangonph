@@ -15,7 +15,7 @@
       </div>
 
       <h4>Distributions <a class="btn btn-success" href="#distributor/new">New</a></h4>
-      <table id="contactsGrid" class="table table-striped table-bordered table-hover">
+      <table id="distributorsGrid" class="table table-striped table-bordered table-hover">
         <thead>
           <tr>
             <th>Name</th>
@@ -29,6 +29,27 @@
           </tr>
         </thead>
         <tbody>
+          <%  
+            if ($.isEmptyObject(distributors)) { 
+          %>
+              <tr><td colspan='8'>No Record Found</td></tr>
+          <% } else { 
+              $.each(distributors, function () { 
+          %>
+              <tr class="active" data-name="<%- _.unescape(this.name) %>" data-id="<%- this.id %>">
+                  <td><%- _.unescape(this.name) %></td>
+                  <td><%- _.unescape(this.contact_num) %></td>
+                  <td><%- _.unescape(this.location) %></td>
+                  <td><%- _.unescape(this.email) %></td>
+                  <td><%- _.unescape(this.website) %></td>
+                  <td><%- _.unescape(this.contacts) %></td>
+                  <td><%- _.unescape(this.facebook) %></td>
+                  <td align='center'><a class="first">Edit</a> | <a class="last">Delete</a></td>
+              </tr>
+          <%    
+              })
+            }
+          %>
         </tbody>
       </table>
 
@@ -45,7 +66,7 @@
         </div>
         <div class="panel panel-default">
           <div class="panel-heading">
-            <h3 class="panel-title"><strong>New Distribution</strong></h3>
+            <h3 class="panel-title"><strong>New Distributor</strong></h3>
           </div>
           <div class="panel-body">
             <p>

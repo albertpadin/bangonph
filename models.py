@@ -40,6 +40,19 @@ class Distributor(ndb.Model):
     contacts = ndb.KeyProperty()
     facebook = ndb.StringProperty()
 
+    def to_object(self):
+        details = {}
+        details["name"] = self.name
+        details["contact_num"] = self.contact_num
+        details["location"] = self.location
+        details["email"] = self.email
+        details["website"] = self.website
+        details["contacts"] = self.contacts
+        details["facebook"] = self.facebook
+
+        return details
+
+
 
 class Location(ndb.Model):
     created = ndb.DateTimeProperty(auto_now_add=True)

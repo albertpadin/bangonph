@@ -70,6 +70,8 @@ class Location(ndb.Model):
         details["status"] = self.status
         details["images"] = self.images
         details["hash_tag"] = self.hash_tag
+        details["packs_needed"] = '20,000'
+        details["packs_provided"] = '5,000'
         return details
 
 

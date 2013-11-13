@@ -337,6 +337,26 @@ class LocationSamplePage(BaseHandler):
         self.tv["current_page"] = "LOCATIONSAMPLE"
         self.render('frontend/locationsample.html')
 
+
+class LocationPage(BaseHandler):
+    def get(self, location_id=None):
+        if not location_id:
+            logging.error('No location ID')
+            self.redirect('/')
+            return
+
+        location = Location.get_by_id(location_id)
+        if not location:
+            logging.error('No location found')
+            self.redirect('/')
+            return
+
+        self.tv['location'] = location.to_object()
+        self.tv['page_title'] = location.name
+
+        self.render('frontend/public-location.html')
+
+
 class ReliefOperationsPage(BaseHandler):
     def get(self):
         self.tv["current_page"] = "RELIEF_OPERATIONS"
@@ -1586,7 +1606,7 @@ class UploadHandler(blobstore_handlers.BlobstoreUploadHandler):
 
 
 app = webapp2.WSGIApplication([
-    routes.DomainRoute(r'<:gcdc2013-bangonph\.appspot\.com|www\.bangonph\.com>', [
+    routes.DomainRoute(r'<:gcdc2013-bangonph\.appspot\.com|www\.bangonph\.com|localhost>', [
         webapp2.Route('/', handler=FrontPage, name="www-front"),
         webapp2.Route('/public', handler=PublicFrontPage, name="www-front"),
         webapp2.Route('/locationsample', handler=LocationSamplePage, name="www-locationsample"),
@@ -1602,7 +1622,7 @@ app = webapp2.WSGIApplication([
         webapp2.Route('/locations', handler=LocationHandler, name="www-locations"),
         webapp2.Route('/users', handler=UserHandler, name="www-users"),
         webapp2.Route('/contacts', handler=ContactHandler, name="www-contacts"),
-        webapp2.Route('/locations', handler=LocationHandler, name="www-locations"),
+        webapp2.Route(r'/locations/<:.*>', handler=LocationHandler, name="www-locations"),
         webapp2.Route('/distributions', handler=DistributionHandler, name="www-distributions"),
         webapp2.Route('/distributions/fetch', handler=DistributionFetchHandler, name="www-distributions-fetch"),
         webapp2.Route('/distributors', handler=DistributorHandler, name="www-distributors"),
@@ -1650,7 +1670,7 @@ app = webapp2.WSGIApplication([
         webapp2.Route(r'/<:.*>', ErrorHandler)
     ]),
 
-    routes.DomainRoute(r'<:api\.bangonph\.com|localhost>', [
+    routes.DomainRoute(r'<:api\.bangonph\.com>', [
         webapp2.Route('/locations', handler=APILocationsHandler, name="api-locations"),
         webapp2.Route('/users', handler=APIUsersHandler, name="api-users"),
         webapp2.Route('/contacts', handler=APIContactsHandler, name="api-locations"),

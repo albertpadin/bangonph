@@ -40,8 +40,15 @@ API_OAUTH_RESP = {
 	"message": ""
 }
 
+# ------------
+"""
+	-- please put created response, e.g. "ok", "invalid_instance", etc.
+	ok - success
+	invalid_instance - instance not found, or incorrect instance id
+"""
+#-------------
 
-API_RESPONSE_ = {
+API_RESPONSE = {
 	"response": "ok",
 	"code": 200,
 	"data": {

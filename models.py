@@ -220,6 +220,9 @@ class LogActivity(ndb.Model):
     action = ndb.StringProperty()
 
 
-
-
-
+class File(ndb.Model):
+    title = ndb.StringProperty()
+    blob_key = ndb.BlobKeyProperty()
+    img_serving = ndb.StringProperty()
+    created = ndb.DateTimeProperty(auto_now_add=True)
+    updated = ndb.DateTimeProperty(auto_now=True)

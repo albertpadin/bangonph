@@ -403,3 +403,14 @@ height: 80px;
 
 
 /*end relief-operations page*/
+
+
+.location-front-feature-photo {
+    opacity: 0.95;
+}
+
+.location-front-feature-photo:hover {
+    cursor: hand;
+    cursor: pointer;
+    opacity: 1;
+}

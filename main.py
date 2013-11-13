@@ -1,6 +1,6 @@
 import webapp2, jinja2, os, calendar
 from webapp2_extras import routes
-from models import User, Contact, Location, Post, Distribution, File
+from models import User, Contact, Location, Post, Distribution, File, Distributor
 from functions import *
 import json as simplejson
 import logging
@@ -720,6 +720,22 @@ class DistributionFetchHandler(BaseHandler):
             temp_type["locations"] = datas_locations
         self.response.out.write(simplejson.dumps(temp_type))
 
+class DistributorHandler(BaseHandler):
+    @login_required
+    def get(self):
+        pass
+
+    def post(self):
+        distributor = Distributor()
+        distributor.name = self.request.get("name")
+        distributor.contact_num = self.request.get("contact_num")
+        distributor.location = self.request.get("location")
+        distributor.email = self.request.get("email")
+        distributor.website = self.request.get("website")
+        distributor.contacts = ndb.Key("Distributor", self.request.get("contacts"))
+        distributor.facebook = self.request.get("facebook")
+        distributor.put()
+
 class CentersHandler(BaseHandler):
     @login_required
     def get(self):
@@ -1271,7 +1287,7 @@ class UploadHandler(blobstore_handlers.BlobstoreUploadHandler):
 
 
 app = webapp2.WSGIApplication([
-    routes.DomainRoute(r'<:gcdc2013-bangonph\.appspot\.com|www\.bangonph\.com>', [
+    routes.DomainRoute(r'<:gcdc2013-bangonph\.appspot\.com|localhost|www\.bangonph\.com>', [
         webapp2.Route('/', handler=FrontPage, name="www-front"),
         webapp2.Route('/public', handler=PublicFrontPage, name="www-front"),
         webapp2.Route('/register', handler=RegisterPage, name="www-register"),
@@ -1288,6 +1304,7 @@ app = webapp2.WSGIApplication([
         webapp2.Route('/locations', handler=LocationHandler, name="www-locations"),
         webapp2.Route('/distributions', handler=DistributionHandler, name="www-distributions"),
         webapp2.Route('/distributions/fetch', handler=DistributionFetchHandler, name="www-distributions-fetch"),
+        webapp2.Route('/distributors', handler=DistributorHandler, name="www-distributors"),
 
 
         webapp2.Route('/posts', handler=PostsHandler, name="www-post"),

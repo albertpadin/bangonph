@@ -856,31 +856,32 @@ class APIPostsHandler(APIBaseHandler):
 
 class APIDropOffCentersHandler(APIBaseHandler):
     def get(self, instance_id=None):
-        centers_json = []
-        if not instance_id:
-            if self.request.get("cursor"):
-                curs = Cursor(urlsafe=self.request.get("cursor"))
-                if curs:
-                    centers, next_cursor, more = DropOffCenter.query().fetch_page(10, start_cursor=curs)
+        if instance_id == "add":
+            centers_json = []
+            if not instance_id:
+                if self.request.get("cursor"):
+                    curs = Cursor(urlsafe=self.request.get("cursor"))
+                    if curs:
+                        centers, next_cursor, more = DropOffCenter.query().fetch_page(10, start_cursor=curs)
+                    else:
+                        centers, next_cursor, more = DropOffCenter.query().fetch_page(10)
                 else:
                     centers, next_cursor, more = DropOffCenter.query().fetch_page(10)
-            else:
-                centers, next_cursor, more = DropOffCenter.query().fetch_page(10)
 
-            for center in centers:
-                centers_json.append(center.to_object())
+                for center in centers:
+                    centers_json.append(center.to_object())
 
-            data = {}
-            data["dropOffCenters"] = centers_json
-            if more:
-                data["next_page"] = "http://api.bangonph.com/locations/?cursor=" + next_cursor
+                data = {}
+                data["dropOffCenters"] = centers_json
+                if more:
+                    data["next_page"] = "http://api.bangonph.com/locations/?cursor=" + next_cursor
+                else:
+                    data["next_page"] = False
+                self.render(data)
             else:
-                data["next_page"] = False
-            self.render(data)
-        else:
-            center = DropOffCenter.get_by_id(instance_id)
-            if center:
-                self.render(center.to_object())
+                center = DropOffCenter.get_by_id(instance_id)
+                if center:
+                    self.render(center.to_object())
 
     def post(self, instance_id=None):
         pass

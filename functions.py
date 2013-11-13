@@ -156,9 +156,9 @@ def add_location(data, location_key=""):
     location.put()
     return location
 
-def add_distribution(data, instance_id):
+def add_distribution(data, instance_id=""):
     if instance_id:
-        distribution = Distribution.get_by_id(instance_id)
+        distribution = Distribution.get_by_id(int(instance_id))
     else:
         distribution = Distribution()
 
@@ -166,10 +166,10 @@ def add_distribution(data, instance_id):
         distribution.date_of_distribution = data["date_of_distribution"]
 
     if data["contact"]:
-        distribution.contact = ndb.Key('Contact', int(data["contact"]))
+        distribution.contact = ndb.Key('Contact', data["contact"])
 
     if data["destinations"]:
-        distribution.destinations = ndb.Key('Location', int(data["destinations"]))
+        distribution.destinations = ndb.Key('Location', data["destinations"])
 
     if data["supply_goal"]:
         distribution.supply_goal = data["supply_goal"]

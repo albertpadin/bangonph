@@ -1,4 +1,5 @@
 from google.appengine.ext import ndb
+import logging
 import time
 
 
@@ -105,7 +106,7 @@ class Distribution(ndb.Model):
     created = ndb.DateTimeProperty(auto_now_add=True)
     updated = ndb.DateTimeProperty(auto_now=True)
     date_of_distribution = ndb.DateTimeProperty()
-    contact = ndb.KeyProperty()
+    contact = ndb.StringProperty()
     destinations = ndb.KeyProperty()
     supply_goal = ndb.JsonProperty()
     actual_supply = ndb.JsonProperty()
@@ -120,18 +121,35 @@ class Distribution(ndb.Model):
 
         if expand == "contacts":
             contact_details = {}
-            cont = ndb.Key("Contact", self.contact).get()
+            cont = self.contact.get()
             contact_details["contact_details"] = cont.to_object()
+            details["contact"] = contact_details
         else:
-            details["contact"] = self.contact
+            if self.contact:
+                data = {}
+                data["meta"] = {"href": "http://api.bangonph.com/contacts/" + str(self.contact.urlsafe())}
+                details["contact"] = data
+            else:
+                details["contact"] = ""
+
+
 
         if expand == "destinations":
             destination_details = {}
-            location = ndb.Key("Location", self.destinations).get()
+            logging.critical(self.destinations)
+            location = self.destinations.get()
             destination_details["destination_details"] = location.to_object()
+            details["destination"] = destination_details
         else:
-            details["destinations"] = self.destinations
-            
+            if self.destinations:
+                data = {}
+                data["meta"] = {"href": "http://api.bangonph.com/contacts/" + str(self.destinations.urlsafe())}
+                details["destinations"] = data
+            else:
+                details["destinations"] = ""
+
+
+
         details["supply_goal"] = self.supply_goal
         details["actual_supply"] = self.actual_supply
 

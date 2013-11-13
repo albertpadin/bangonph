@@ -84,10 +84,28 @@ var AddDistribution = Backbone.View.extend({
     });
   },
   addDistribution: function() {
+    var obj_image_url = [];
+    $(".image_url").each(function() {
+        obj_image_url.push({"src": $(this).val()});
+    });
+
+    var obj_image_title = [];
+    $(".image_title").each(function() {
+        obj_image_title.push({"image_title": $(this).val()});
+    });
+    
+    var obj_image_caption = [];
+    $(".image_caption").each(function() {
+        obj_image_caption.push({"image_caption": $(this).val()});
+    });
+
     $.ajax({
       type: "post",
       url: "/distributions",
       data: {
+        "image_urls" : JSON.stringify(obj_image_url),
+        "image_titles" : JSON.stringify(obj_image_title),
+        "image_captions" : JSON.stringify(obj_image_caption),
         "date_of_distribution": _.escape($("#date_of_distribution").val()),
         "contact": _.escape($("#contact").val()),
         "destinations": _.escape($("#destinations").val()),

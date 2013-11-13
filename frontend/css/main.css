@@ -15,6 +15,10 @@
     margin-top: 5px!important;
 }
 
+.mt-16{
+    margin-top: -16px!important;
+}
+
 .clear{
     clear: both;
 }
@@ -262,11 +266,13 @@ height: 80px;
         height: 16px;
     }
 
+.social-media{
+
+}
 
 .social-item {
-float: left;
-margin-right: 10px;
-
+    float: left;
+    margin-right: 10px;
 }
 
 .hide-border {
@@ -282,12 +288,20 @@ margin-right: 10px;
     border: 1px solid #b6b6b6;
     padding: 10px;
     border-radius: 6px;
+    text-align: center;
+}
+
+.operations-content > img{
+    border-radius: 5px;
 }
 
 .operations-content > strong {
     margin-top: 5px;
     display: inline-block;
-    margin-top: 5px;
+}
+
+.operations-content > a {
+    margin-top: 3px;
 }
 
     .operations-details > strong {

@@ -25,3 +25,9 @@ indexes:
   - name: client
   - name: user
   - name: expires
+
+- kind: UserToken
+  properties:
+  - name: code
+  - name: created
+    direction: desc

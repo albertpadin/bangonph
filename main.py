@@ -1,4 +1,4 @@
-import webapp2, jinja2, os
+import webapp2, jinja2, os, calendar
 from webapp2_extras import routes
 from models import User, Contact, Location, Post, Distribution
 from functions import *
@@ -11,12 +11,13 @@ import datetime
 import hashlib
 import base64
 import facebook
-from oauth_models import Client
+from oauth_models import *
 
 from google.appengine.api import urlfetch
 
 from settings import SETTINGS
 from settings import SECRET_SETTINGS
+from settings import OAUTH_RESP, API_OAUTH_RESP
 
 jinja_environment = jinja2.Environment(loader=jinja2.FileSystemLoader(os.path.dirname(__file__)), autoescape=True)
 
@@ -725,23 +726,11 @@ class PostsHandler(BaseHandler):
         add_post(data)
 
 
-class GetAuthorizationCode(BaseHandler):
-    def post(self):
-        from oauth import AuthorizationProvider as provider
-        self.provider = provider()
-        if self.request.body:
-            body = simplejson.loads(self.request.body)
-            response = self.provider.get_authorization_code(body['client_id'], body['user_id'], body['redirect_url'])
-
-            self.response.headers.update(response.headers)
-            self.response.out.write(response.content)
-            # self.response.out = response.raw
-
-
 # for testing purposes only
 class sampler(BaseHandler):
     def get(self):
-        pass
+        import calendar
+        self.response.out.write(calendar.timegm(datetime.datetime.now().timetuple()))
 
 class ErrorHandler(BaseHandler):
     def get(self, page):
@@ -749,14 +738,100 @@ class ErrorHandler(BaseHandler):
 
 # API Handlers
 
+
+def oauthed_required(fn):
+    '''So we can decorate any RequestHandler with #@login_required'''
+    def wrapper(self, *args):
+        resp = API_OAUTH_RESP.copy()
+        if not self.request.get('access_token'):
+            resp["response"] = "missing_params"
+            resp["code"] = 406
+            resp["type"] = "APIAuthException"
+            resp["message"] = "The request has missing parameters: access_token"
+        else:
+            access_token = self.request.get('access_token')
+            if not self.current_user:
+                resp["response"] = "unauthorized"
+                resp["code"] = 401
+                resp["type"] = "APIAuthException"
+                resp["message"] = "This request is unauthorized"
+            else:
+                user_token = UserToken.get_by_id(access_token)
+                if user_token.expires < datetime.datetime.now():
+                    resp["response"] = "expired"
+                    resp["code"] = 401
+                    resp["type"] = "APIAuthException"
+                    resp["message"] = "Authentication has expired"
+                else:
+                    return fn(self, *args)
+        self.render(resp)
+    return wrapper
+
+
 class APIBaseHandler(webapp2.RequestHandler):
     def __init__(self, request=None, response=None):
         self.initialize(request, response)
+
+    @property # to get current user: self.current_user
+    def current_user(self):
+        access_token = self.request.get('access_token') if self.request.get('access_token') else None
+        if access_token:
+            user_token = UserToken.get_by_id(access_token)
+            if user_token:
+                return user_token.user.get()
+
+        return False
 
     def render(self, response_body):
         self.response.headers["Content-Type"] = "application/json"
 
         self.response.out.write(simplejson.dumps(response_body))
+
+
+class GetUserToken(APIBaseHandler):
+    @oauthed_required
+    def get(self):
+        logging.info(self.current_user)
+
+    def post(self):
+        resp = OAUTH_RESP.copy()
+        if self.request.get('token_code') and self.request.get('secret_key') and self.request.get('client_id'):
+            token_code = self.request.get('token_code')
+            secret_key = self.request.get('secret_key')
+            client_id = self.request.get('client_id')
+
+            user_token = UserToken.query(UserToken.code == token_code).get()
+            if user_token:
+                client = user_token.client.get()
+                if client:
+                    if client.secret_key == secret_key and client.client_id == client_id:
+                        if user_token.expires > datetime.datetime.now():
+                            # success, reply with access_token!
+                            resp["success"]["access_token"] = str(user_token.token)
+                            resp["success"]["expires_in"] = int(calendar.timegm(user_token.expires.timetuple()))
+                            resp["success"]["token_code"] = str(token_code)
+                        else:
+                            #  expired oauth
+                            resp["response"] = "token_expired"
+                            resp["code"] = 401
+                    else:
+                        #  invalid client
+                        resp["response"] = "invalid_client"
+                        resp["code"] = 404
+                else:
+                    # invalid client
+                    resp["response"] = "invalid_client"
+                    resp["code"] = 404
+            else:
+                #invalid token_code
+                resp["response"] = "invalid_code"
+                resp["code"] = 404
+        else:
+            # missing params
+            resp["response"] = "missing_params"
+            resp["code"] = 406
+
+        self.render(resp)
 
 
 class APIUsersHandler(APIBaseHandler):
@@ -771,7 +846,7 @@ class APIUsersHandler(APIBaseHandler):
                     users, next_cursor, more = User.query().fetch_page(100)
             else:
                 users, next_cursor, more = User.query().fetch_page(100)
-                
+
             for user in users:
                 users_json.append(user.to_object())
 
@@ -1109,7 +1184,6 @@ app = webapp2.WSGIApplication([
 
 
         # richmond:
-        webapp2.Route('/get_authorization_code', handler=GetAuthorizationCode, name="www-get-authorization-code"),
         webapp2.Route('/s', handler=sampler, name="www-get-authorization-code"),
 
         webapp2.Route(r'/<:.*>', ErrorHandler)
@@ -1136,7 +1210,6 @@ app = webapp2.WSGIApplication([
 
 
         # richmond:
-        webapp2.Route('/get_authorization_code', handler=GetAuthorizationCode, name="www-get-authorization-code"),
         webapp2.Route('/s', handler=sampler, name="www-get-authorization-code"),
 
         webapp2.Route(r'/<:.*>', ErrorHandler)
@@ -1164,7 +1237,7 @@ app = webapp2.WSGIApplication([
 
 
         # richmond:
-        webapp2.Route('/get_authorization_code', handler=GetAuthorizationCode, name="api-get-authorization-code"),
+        webapp2.Route('/oauth/authorize', handler=GetUserToken, name="api-get-user-token"),
         webapp2.Route('/s', handler=sampler, name="api-get-authorization-code"),
 
         webapp2.Route(r'/<:.*>', ErrorHandler)

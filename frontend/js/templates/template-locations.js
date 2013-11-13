@@ -9,7 +9,8 @@ var Locations = Backbone.Model.extend({
     needs: "",
     centers: "",
     status: "",
-    images: ""
+    images: "",
+    hash_tag: ""
   }
 });
 
@@ -113,9 +114,10 @@ var AddLocation = Backbone.View.extend({
         "toiletries": _.escape($("#toiletries").val()),
         "flashlights": _.escape($("#flashlights").val()),
         "cloths": _.escape($("#cloths").val()),
-        "power": _.escape($("#status_power").is(':checked')),
-        "communication": _.escape($("#status_communication").is(':checked')),
-        "status_water": $("#status_water").is(":checked")
+        "power": _.escape($("#status_power").val()),
+        "communication": _.escape($("#status_communication").val()),
+        "status_water": _.escape($("#status_water").val()),
+        "hash_tag" : _.escape($("#hash_tag").val())
       },
       success: function() {
         window.location.hash = "#locations";
@@ -170,9 +172,10 @@ var EditLocation =  Backbone.View.extend({
         "toiletries": _.escape($("#toiletries").val()),
         "flashlights": _.escape($("#flashlights").val()),
         "cloths": _.escape($("#cloths").val()),
-        "power": _.escape($("#status_power").is(':checked')),
-        "communication": _.escape($("#status_communication").is(':checked')),
-        "status_water": $("#status_water").is(":checked")
+        "power": _.escape($("#status_power").val()),
+        "communication": _.escape($("#status_communication").val()),
+        "status_water": _.escape($("#status_water").val()),
+        "hash_tag" : _.escape($("#hash_tag").val())
       },
       success: function() {
         window.location.hash = "#locations";

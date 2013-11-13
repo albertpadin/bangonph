@@ -156,6 +156,9 @@ def add_location(data, location_key=""):
     if data["images"]:
         location.images = data["images"]
 
+    if data["hash_tag"]:
+        location.hash_tag = data["hash_tag"]
+
     location.put()
     return location
 

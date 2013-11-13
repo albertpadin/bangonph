@@ -1,6 +1,6 @@
 import webapp2, jinja2, os, calendar
 from webapp2_extras import routes
-from models import User, Contact, Location, Post, Distribution, File
+from models import User, Contact, Location, Post, Distribution, File, Distributor
 from functions import *
 import json as simplejson
 import logging
@@ -520,6 +520,7 @@ class LocationHandler(BaseHandler):
                 temp["status_board"] = location.status_board
                 temp["needs"] = location.needs
                 temp["status"] = location.status
+                temp["hash_tag"] = location.hash_tag
                 self.response.out.write(simplejson.dumps(temp))
             return
 
@@ -538,6 +539,7 @@ class LocationHandler(BaseHandler):
                 temp["needs"] = location.needs
                 temp["status"] = location.status
                 temp["images"] = location.images
+                temp["hash_tag"] = location.hash_tag
                 datas.append(temp)
             self.response.out.write(simplejson.dumps(datas))
 
@@ -572,6 +574,7 @@ class LocationHandler(BaseHandler):
                 location.status_board = self.request.get("status_board")
                 location.needs = needs
                 location.status = status
+                location.hash_tag = self.request.get("hash_tag")
                 location.put()
 
         else:
@@ -621,7 +624,8 @@ class LocationHandler(BaseHandler):
                 "affected_count": self.request.get("affected_count"),
                 "status_board": self.request.get("status_board"),
                 "status": status,
-                "images": image_data # json format
+                "images": image_data, # json format
+                "hash_tag" : self.request.get("hash_tag")
             }
             add_location(data)
 
@@ -790,6 +794,22 @@ class DistributionFetchHandler(BaseHandler):
                 datas_locations.append(temp)
             temp_type["locations"] = datas_locations
         self.response.out.write(simplejson.dumps(temp_type))
+
+class DistributorHandler(BaseHandler):
+    @login_required
+    def get(self):
+        pass
+
+    def post(self):
+        distributor = Distributor()
+        distributor.name = self.request.get("name")
+        distributor.contact_num = self.request.get("contact_num")
+        distributor.location = self.request.get("location")
+        distributor.email = self.request.get("email")
+        distributor.website = self.request.get("website")
+        distributor.contacts = ndb.Key("Distributor", self.request.get("contacts"))
+        distributor.facebook = self.request.get("facebook")
+        distributor.put()
 
 class CentersHandler(BaseHandler):
     @login_required
@@ -1359,6 +1379,7 @@ app = webapp2.WSGIApplication([
         webapp2.Route('/locations', handler=LocationHandler, name="www-locations"),
         webapp2.Route('/distributions', handler=DistributionHandler, name="www-distributions"),
         webapp2.Route('/distributions/fetch', handler=DistributionFetchHandler, name="www-distributions-fetch"),
+        webapp2.Route('/distributors', handler=DistributorHandler, name="www-distributors"),
 
 
         webapp2.Route('/posts', handler=PostsHandler, name="www-post"),

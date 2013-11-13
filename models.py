@@ -51,6 +51,7 @@ class Location(ndb.Model):
     needs = ndb.JsonProperty()
     status = ndb.JsonProperty()
     images = ndb.JsonProperty()
+    hash_tag = ndb.StringProperty()
 
     def to_object(self, extended=""):
         details = {}
@@ -66,6 +67,7 @@ class Location(ndb.Model):
         details["needs"] = self.needs
         details["status"] = self.status
         details["images"] = self.images
+        details["hash_tag"] = self.hash_tag
         return details
 
     

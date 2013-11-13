@@ -19,6 +19,7 @@ class User(ndb.Model):
         details["updated"] = str(self.updated)
         details["email"] = self.email
         details["name"] = self.name
+        details["id"] = self.key.id()
         details["contacts"] = self.contacts
         details["permissions"] = self.permissions
         
@@ -57,6 +58,7 @@ class Location(ndb.Model):
         details["created"] = str(self.created)
         details["updated"] = str(self.updated)
         details["latlong"] = self.latlong
+        details["id"] = self.key.id()
         details["featured_photo"] = self.featured_photo
         details["death_count"] = self.death_count
         details["affectedCount"] = self.affected_count
@@ -99,6 +101,7 @@ class DropOffCenter(ndb.Model):
         details["facebook"] = self.facebook
         details["contacts"] = self.contacts
         details["email"] = self.email
+        details["id"] = self.key.id()
 
         return details
 
@@ -150,7 +153,7 @@ class Distribution(ndb.Model):
                 details["destinations"] = ""
 
 
-
+        details["id"] = self.key.id()
         details["supply_goal"] = self.supply_goal
         details["actual_supply"] = self.actual_supply
 
@@ -181,7 +184,7 @@ class Contact(ndb.Model):
         details["email"] = self.email
         details["facebook"] = self.facebook
         details["twitter"] = self.twitter
-        
+        details["id"] = self.key.id()
         return details
 
 class Post(ndb.Model):
@@ -196,7 +199,7 @@ class Post(ndb.Model):
 
     def to_object(self):
         details = {}
-        details["meta"] = {"href": "http://api.bangonph.com/posts/?" + str(self.key.id())}
+        details["meta"] = {"href": "http://api.bangonph.com/posts/" + str(self.key.id())}
         details["created"] = str(self.created)
         details["updated"] = str(self.updated)
         details["name"] = self.name

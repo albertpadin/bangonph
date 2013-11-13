@@ -220,14 +220,29 @@ def add_subcriber(data):
     subscriber.put()
     return subscriber
     
-def add_post(data):
-    post = Post()
-    post.name = data["name"]
-    post.email = data["email"]
-    post.twitter = data["twitter"]
-    post.facebook = data["facebook"]
-    post.phone = data["phone"]
-    post.message = data["message"]
+def add_post(data, instance_id=""):
+    if instance_id:
+        post = Post.get_by_id(instance_id)
+    else:
+        post = Post()
+
+    if data["name"]:
+        post.name = data["name"]
+
+    if data["email"]:
+        post.email = data["email"]
+
+    if data["twitter"]:
+        post.twitter = data["twitter"]
+
+    if data["facebook"]:
+        post.facebook = data["facebook"]
+    
+    if data["phone"]:
+        post.phone = data["phone"]
+
+    if data["message"]:
+        post.message = data["message"]
 
     post.put()
     return post

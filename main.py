@@ -918,7 +918,16 @@ class APIPostsHandler(APIBaseHandler):
                 self.render(post.to_object())
 
     def post(self, instance_id=None):
-        pass
+        data = {
+            "name": self.request.get("name"),
+            "email": self.request.get("email"),
+            "twitter": self.request.get("twitter"),
+            "facebook": self.request.get("facebook"),
+            "phone": self.request.get("phone"),
+            "message": self.request.get("message"),
+        }
+        post = add_post(data)
+        self.render(post.to_object())
 
     def delete(self, instance_id=None):
         pass

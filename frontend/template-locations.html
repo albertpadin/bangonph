@@ -35,7 +35,7 @@
           <%  
             if ($.isEmptyObject(locations)) { 
           %>
-              <tr><td colspan='10'>No Record Found</td></tr>
+              <tr><td colspan='11'>No Record Found</td></tr>
           <% } else { 
               $.each(locations, function () { 
           %>
@@ -90,6 +90,18 @@
                       <% } %>
                       <% if (name == "water" && item != "") { %>
                         Water: <%- item %><br/>
+                      <% } %>
+                      <% if (name == "cloths" && item != "") { %>
+                        Cloths: <%- item %><br/>
+                      <% } %>
+                      <% if (name == "medicines" && item != "") { %>
+                        Medicines: <%- item %><br/>
+                      <% } %>
+                      <% if (name == "shelter" && item != "") { %>
+                        Shelter: <%- item %><br/>
+                      <% } %>
+                      <% if (name == "food" && item != "") { %>
+                        Food: <%- item %><br/>
                       <% } %>
                     <% }) %>
                   </td>
@@ -334,15 +346,15 @@
             </p>
             <p>
               clothes
-              <input type="text" % _.each(this.status, function(item, name) { if (name == "cloths" && item != "") { %> value="<%- item %>" <% } }) %> id="status_clothes"/>
+              <input type="text" <% _.each(this.status, function(item, name) { if (name == "cloths" && item != "") { %> value="<%- item %>" <% } }) %> id="status_clothes"/>
             </p>
             <p>
               foods
-              <input type="text" % _.each(this.status, function(item, name) { if (name == "food" && item != "") { %> value="<%- item %>" <% } }) %> id="status_foods"/>
+              <input type="text" <% _.each(this.status, function(item, name) { if (name == "food" && item != "") { %> value="<%- item %>" <% } }) %> id="status_foods"/>
             </p>
             <p>
               shelter
-              <input type="text" % _.each(this.status, function(item, name) { if (name == "shelter" && item != "") { %> value="<%- item %>" <% } }) %> id="status_shelter"/>
+              <input type="text" <% _.each(this.status, function(item, name) { if (name == "shelter" && item != "") { %> value="<%- item %>" <% } }) %> id="status_shelter"/>
             </p>
             <% 
                 })

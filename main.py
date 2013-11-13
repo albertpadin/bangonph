@@ -536,7 +536,7 @@ class LocationHandler(BaseHandler):
     def get(self):
         delete_id = self.request.get("id_delete")
         if delete_id:
-            location = Location.get_by_id(int(delete_id))
+            location = Location.get_by_id(delete_id)
             if location:
                 location.key.delete()
             return
@@ -613,7 +613,7 @@ class LocationHandler(BaseHandler):
                 location.status_board = self.request.get("status_board")
                 location.needs = needs
                 location.status = status
-                location.hash_tag = self.request.get("hash_tag")
+                location.hash_tag = self.request.get("hash_tag").split(" ")
                 location.put()
 
         else:

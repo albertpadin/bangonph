@@ -137,41 +137,41 @@
               <input type="text" id="name" required="required" class="form-control" placeholder="Location Name">
             </p>
             <p>
-              <input type="text" id="latlong" required="required" class="form-control" placeholder="Lat Long">
+              <input type="text" id="latlong" class="form-control" placeholder="Lat Long">
             </p>
             <p>
-              <input type="text" id="featured_photo" required="required" class="form-control" placeholder="Featured Photo">
+              <input type="text" id="featured_photo" class="form-control" placeholder="Featured Photo">
             </p>
             <p>
-              <input type="text" id="death_count" required="required" class="form-control" placeholder="Death Count">
+              <input type="text" id="death_count" class="form-control" placeholder="Death Count">
             </p>
             <p>
-              <input type="text" id="affected_count" required="required" class="form-control" placeholder="Affected Count">
+              <input type="text" id="affected_count"  class="form-control" placeholder="Affected Count">
             </p>
             <p>
-              <input type="text" id="status_board" required="required" class="form-control" placeholder="Status Board">
+              <input type="text" id="status_board" class="form-control" placeholder="Status Board">
             </p>
             Needs:
             <p>
-              <input type="text" id="food" required="required" class="form-control" placeholder="Number of food">
+              <input type="text" id="food" placeholder="Number of food"><br/>
 
-              <input type="text" id="water" required="required" class="form-control" placeholder="Number of water">
+              <input type="text" id="water"   placeholder="Number of water"><br/>
 
-              <input type="text" id="medicines" required="required" class="form-control" placeholder="Number of medicines">
+              <input type="text" id="medicines" placeholder="Number of medicines"><br/>
 
-              <input type="text" id="social_workers" required="required" class="form-control" placeholder="Number of social_workers">
+              <input type="text" id="social_workers" placeholder="Number of social_workers"><br/>
 
-              <input type="text" id="medical_workers" required="required" class="form-control" placeholder="Number of medical_workers">
+              <input type="text" id="medical_workers"  placeholder="Number of medical_workers"><br/>
 
-              <input type="text" id="shelter" required="required" class="form-control" placeholder="Number of shelter">
+              <input type="text" id="shelter"   placeholder="Number of shelter"><br/>
 
-              <input type="text" id="formula" required="required" class="form-control" placeholder="Number of formula">
+              <input type="text" id="formula"  placeholder="Number of formula"><br/>
 
-              <input type="text" id="toiletries" required="required" class="form-control" placeholder="Number of toiletries">
+              <input type="text" id="toiletries"   placeholder="Number of toiletries"><br/>
 
-              <input type="text" id="flashlights" required="required" class="form-control" placeholder="Number of flashlights">
+              <input type="text" id="flashlights"  placeholder="Number of flashlights"><br/>
 
-              <input type="text" id="cloths" required="required" class="form-control" placeholder="Number of cloths">
+              <input type="text" id="cloths" placeholder="Number of cloths"><br/>
             </p>
             
             <p>
@@ -208,6 +208,97 @@
                 </tbody>
               </table>
             </p>
+            <p>
+              <button type="submit" class="btn btn-primary">Submit</button> 
+              <a href="#locations" class="btn btn-default">Cancel</a> 
+              <div style="display:none" class="alert alert-dismissable alert-success success-message">
+                <button type="button" class="close" data-dismiss="alert">&times;</button>
+                <strong>Well done!</strong> New contact has been added.
+              </div>
+              <div style="display:none" class="alert alert-dismissable alert-danger error-message">
+                <button type="button" class="close" data-dismiss="alert">&times;</button>
+                <strong>Oh snap!</strong> Unable to add new contact. Try again.
+              </div>
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </form>
+</script>
+
+
+<script type="text/template" id="editLocationTemplate">
+  <form enctype="multipart/form-data" class="bs-example form-horizontal" id="frmEditLocation">
+    <div class="row" style="margin-top: -50px;">
+      <div class="col-lg-12">
+        <div class="page-header" style="border-bottom: none!important">
+        </div>
+        <div class="panel panel-default">
+          <div class="panel-heading">
+            <h3 class="panel-title"><strong>Edit Location</strong></h3>
+          </div>
+          <div class="panel-body">
+            <%
+              if (!$.isEmptyObject(location)) { 
+                $.each(location, function() {
+            %>             
+            <input type="hidden" id="id" value="<%- this.id %>"/>
+            <p>
+              <input type="text" id="name" value="<%- this.name %>" required="required" class="form-control" placeholder="Location Name">
+            </p>
+            <p>
+              <input type="text" id="latlong" value="<%- this.latlong %>" class="form-control" placeholder="Lat Long">
+            </p>
+            <p>
+              <input type="text" id="featured_photo" value="<%- this.featured_photo %>" class="form-control" placeholder="Featured Photo">
+            </p>
+            <p>
+              <input type="text" id="death_count" value="<%- this.death_count %>" class="form-control" placeholder="Death Count">
+            </p>
+            <p>
+              <input type="text" id="affected_count" value="<%- this.affected_count %>"  class="form-control" placeholder="Affected Count">
+            </p>
+            <p>
+              <input type="text" id="status_board" value="<%- this.status_board %>" class="form-control" placeholder="Status Board">
+            </p>
+            Needs:
+            <p>
+              <input type="text" <% _.each(this.needs, function(item, name) { if (name == "food") { %> value="<%- item %>" <% } }) %> id="food" placeholder="Number of food"><br/>
+
+              <input type="text" id="water" <% _.each(this.needs, function(item, name) { if (name == "water") { %> value="<%- item %>" <% } }) %>  placeholder="Number of water"><br/>
+
+              <input type="text" id="medicines" <% _.each(this.needs, function(item, name) { if (name == "medicines") { %> value="<%- item %>" <% } }) %> placeholder="Number of medicines"><br/>
+
+              <input type="text" id="social_workers" <% _.each(this.needs, function(item, name) { if (name == "social_workers") { %> value="<%- item %>" <% } }) %> placeholder="Number of social_workers"><br/>
+
+              <input type="text" id="medical_workers" <% _.each(this.needs, function(item, name) { if (name == "medical_workers") { %> value="<%- item %>" <% } }) %>  placeholder="Number of medical_workers"><br/>
+
+              <input type="text" id="shelter" <% _.each(this.needs, function(item, name) { if (name == "shelter") { %> value="<%- item %>" <% } }) %>  placeholder="Number of shelter"><br/>
+
+              <input type="text" id="formula" <% _.each(this.needs, function(item, name) { if (name == "formula") { %> value="<%- item %>" <% } }) %> placeholder="Number of formula"><br/>
+
+              <input type="text" id="toiletries" <% _.each(this.needs, function(item, name) { if (name == "toiletries") { %> value="<%- item %>" <% } }) %>  placeholder="Number of toiletries"><br/>
+
+              <input type="text" id="flashlights" <% _.each(this.needs, function(item, name) { if (name == "flashlights") { %> value="<%- item %>" <% } }) %> placeholder="Number of flashlights"><br/>
+
+              <input type="text" id="cloths" <% _.each(this.needs, function(item, name) { if (name == "cloths") { %> value="<%- item %>" <% } }) %> placeholder="Number of cloths"><br/>
+            </p>
+            
+            <p>
+              <input type="checkbox" <% _.each(this.status, function(item, name) { if (name == "power" && item == "true") { %> checked <% } }) %>  name="status" id="status_power"/> Power
+            </p>
+
+            <p>
+              <input type="checkbox" name="status"  <% _.each(this.status, function(item, name) { if (name == "communication" && item == "true") { %> checked <% } }) %>  id="status_communication"/> Communication
+            </p>
+            <p>
+              <input type="checkbox" name="status" <% _.each(this.status, function(item, name) { if (name == "water" && item == "true") { %> checked <% } }) %>  id="status_water"/> Water
+            </p>
+            <% 
+                })
+              }
+            %>
             <p>
               <button type="submit" class="btn btn-primary">Submit</button> 
               <a href="#locations" class="btn btn-default">Cancel</a> 

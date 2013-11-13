@@ -1,5 +1,5 @@
-application: backboneph
-version: 1
+application: gcdc2013-bangonph
+version: master111320132014
 runtime: python27
 api_version: 1
 threadsafe: true

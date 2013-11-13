@@ -1122,7 +1122,7 @@ class APILocationsHandler(APIBaseHandler):
             "death_count": self.request.get("death_count"),
             "affected_count": self.request.get("affected_count"),
             "status_board": self.request.get("status_board"),
-            "status": status # json format
+            "status": status, # json format
             "hash_tag": hash_tag
         }
         if not instance_id:

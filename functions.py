@@ -170,6 +170,7 @@ def add_distribution(data, instance_id=""):
 
     if data["date_of_distribution"]:
         distribution.date_of_distribution = data["date_of_distribution"]
+        
 
     if data["contact"]:
         distribution.contact = data["contact"]

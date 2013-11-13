@@ -232,13 +232,29 @@ def add_post(data):
     post.put()
     return post
 
-def add_contact(data):
-    contact = Contact()
-    contact.name = data["name"]
-    contact.contacts = data["contacts"]
-    contact.email = data["email"]
-    contact.facebook = data["facebook"]
-    contact.twitter = data["twitter"]
+def add_contact(data, instance_id=""):
+    if instance_id:
+        contact = Contact.get_by_id(int(instance_id))
+    else:
+        contact = Contact()
+
+    if data["name"]:
+        contact.name = data["name"]
+
+    if data["contacts"]:
+        if contact.contacts:
+            contact.contacts.append(data["contacts"])
+        else:
+            contact.contacts = [data["contacts"]]
+
+    if data["email"]:
+        contact.email = data["email"]
+
+    if data["facebook"]:
+        contact.facebook = data["facebook"]
+
+    if data["twitter"]:
+        contact.twitter = data["twitter"]
 
     contact.put()
     return contact

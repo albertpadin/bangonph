@@ -173,14 +173,13 @@ class Contact(ndb.Model):
 
     def to_object(self, extended=""):
         details = {}
-        details["meta"] = {"href": "http://api.bangonph.com/contacts/?" + str(self.key.id())}
+        details["meta"] = {"href": "http://api.bangonph.com/contacts/" + str(self.key.id())}
         details["created"] = str(self.created)
         details["updated"] = str(self.updated)
         details["name"] = self.name
         details["contacts"] = self.contacts
         details["email"] = self.email
         details["facebook"] = self.facebook
-        details["statusBoard"] = self.status_board
         details["twitter"] = self.twitter
         
         return details

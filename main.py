@@ -1054,16 +1054,34 @@ class APIContactsHandler(APIBaseHandler):
             if contacts:
                 self.render(contacts.to_object())
 
-
     def post(self, instance_id=None):
-        pass
+        data = {}
+        data["name"] = self.request.get("name")
+        data["contacts"] = self.request.get("contacts")
+        data["email"] = self.request.get("email")
+        data["facebook"] = self.request.get("facebook")
+        data["twitter"] = self.request.get("twitter")
+        if not instance_id:
+            contact = add_contact(data)
+            self.render(contact.to_object())
+        else:
+            contact = add_contact(data, instance_id)
+            self.render(contact.to_object())
+
 
     def delete(self, instance_id=None):
-        pass
+        if instance_id:
+            contact = Contact.get_by_id(int(instance_id))
+            contact.key.delete()
+
+            data = {}
+            data["success"] = True
+            self.render(data)
+
 
 
 app = webapp2.WSGIApplication([
-    routes.DomainRoute(r'<:gcdc2013-bangonph\.appspot\.com|www\.bangonph\.com|localhost>', [
+    routes.DomainRoute(r'<:gcdc2013-bangonph\.appspot\.com|www\.bangonph\.com>', [
         webapp2.Route('/', handler=FrontPage, name="www-front"),
         webapp2.Route('/public', handler=PublicFrontPage, name="www-front"),
         webapp2.Route('/register', handler=RegisterPage, name="www-register"),
@@ -1124,7 +1142,7 @@ app = webapp2.WSGIApplication([
         webapp2.Route(r'/<:.*>', ErrorHandler)
     ]),
 
-    routes.DomainRoute(r'<:api\.bangonph\.com>', [
+    routes.DomainRoute(r'<:api\.bangonph\.com|localhost>', [
         webapp2.Route('/locations', handler=APILocationsHandler, name="api-locations"),
         webapp2.Route('/users', handler=APIUsersHandler, name="api-users"),
         webapp2.Route('/contacts', handler=APIContactsHandler, name="api-locations"),

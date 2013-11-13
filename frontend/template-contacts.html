@@ -1,0 +1,154 @@
+<script type="text/template" id="contactTemplate">
+<div class="row" style="margin-top: -50px;">
+  <div class="col-lg-12">
+    <div class="bs-example table-responsive page-header" style="margin: 70px 0 21px!important; border-bottom: none!important">
+
+      <hr/>
+
+      <div style="display:none" class="alert alert-dismissable alert-success success-message">
+        <button type="button" class="close" data-dismiss="alert">&times;</button>
+        <strong>Well done!</strong> <span id="title"></span>
+      </div>
+      <div style="display:none" class="alert alert-dismissable alert-danger error-message">
+        <button type="button" class="close" data-dismiss="alert">&times;</button>
+        <strong>Oh snap!</strong> <span id="title"></span>
+      </div>
+
+      <h4>Contacts <a class="btn btn-success" href="#contact/new">New</a></h4>
+      <table id="contactsGrid" class="table table-striped table-bordered table-hover">
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Contacts</th>
+            <th>Email</th>
+            <th>Facebook</th>
+            <th>Twitter</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          <%  
+            if ($.isEmptyObject(contacts)) { 
+          %>
+              <tr><td colspan='6'>No Record Found</td></tr>
+          <% } else { 
+              $.each(contacts, function () { 
+          %>
+              <tr class="active" data-name="<%- _.unescape(this.name) %>" data-id="<%- this.id %>">
+                  <td><%- _.unescape(this.name) %></td>
+                  <td><%- _.unescape(this.contacts) %></td>
+                  <td><%- _.unescape(this.email) %></td>
+                  <td><%- _.unescape(this.facebook) %></td>
+                  <td><%- _.unescape(this.twitter) %></td>
+                  <td align='center'><a class="first">Edit</a> | <a class="last">Delete</a></td>
+              </tr>
+          <%    
+              })
+            }
+          %>
+        </tbody>
+      </table>
+
+    </div>
+  </div>
+</div>
+</script>
+
+<script type="text/template" id="addContactTemplate">
+  <form class="bs-example form-horizontal" id="frmAddContact">
+    <div class="row" style="margin-top: -50px;">
+      <div class="col-lg-12">
+        <div class="page-header" style="border-bottom: none!important">
+        </div>
+        <div class="panel panel-default">
+          <div class="panel-heading">
+            <h3 class="panel-title"><strong>New Contact</strong></h3>
+          </div>
+          <div class="panel-body">
+            <p>
+              <input type="text" id="fname" required="required" class="form-control" placeholder="Full Name">
+            </p>
+            <p>
+              <input type="text" id="contacts" required="required" class="form-control" placeholder="Contacts (separated by commas)">
+            </p>
+            <p>
+              <input type="email" id="email" required="required" class="form-control" placeholder="Email">
+            </p>
+            <p>
+              <input type="text" id="facebook" required="required" class="form-control" placeholder="Enter Facebook URL">
+            </p>
+            <p>
+              <input type="text" id="twitter" required="required" class="form-control" placeholder="Enter Twitter URL">
+            </p>
+            <p>
+              <button type="submit" class="btn btn-primary">Submit</button> 
+              <a href="#contacts" class="btn btn-default">Cancel</a> 
+              <div style="display:none" class="alert alert-dismissable alert-success success-message">
+                <button type="button" class="close" data-dismiss="alert">&times;</button>
+                <strong>Well done!</strong> New contact has been added.
+              </div>
+              <div style="display:none" class="alert alert-dismissable alert-danger error-message">
+                <button type="button" class="close" data-dismiss="alert">&times;</button>
+                <strong>Oh snap!</strong> Unable to add new contact. Try again.
+              </div>
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </form>
+</script>
+
+<script type="text/template" id="editContactTemplate">
+  <form class="bs-example form-horizontal" id="frmEditContact">
+    <div class="row" style="margin-top: -50px;">
+      <div class="col-lg-12">
+        <div class="page-header" style="border-bottom: none!important">
+        </div>
+        <div class="panel panel-default">
+          <div class="panel-heading">
+            <h3 class="panel-title"><strong>Edit Contact</strong></h3>
+          </div>
+          <div class="panel-body">
+            <% 
+              if (!$.isEmptyObject(contact)) { 
+                $.each(contact, function() {
+            %>
+                <input type="hidden" id="id" value="<%- this.id %>">
+                <p>
+                  <input type="text" id="fname" class="form-control" required="required" placeholder="Full Name" value="<%- _.unescape(this.name) %>">
+                </p>
+                <p>
+                  <input type="text" id="contacts" required="required" class="form-control" placeholder="Contacts (separated by commas)" value="<%- _.unescape(this.contacts) %>">
+                </p>
+                <p>
+                  <input type="email" id="email" required="required" class="form-control" placeholder="Email" value="<%- _.unescape(this.email) %>">
+                </p>
+                <p>
+                  <input type="text" id="facebook" required="required" class="form-control" placeholder="Enter Facebook URL" value="<%- _.unescape(this.facebook) %>">
+                </p>
+                <p>
+                  <input type="text" id="twitter" required="required" class="form-control" placeholder="Enter Twitter URL" value="<%- _.unescape(this.twitter) %>">
+                </p>
+                <p>
+                  <button type="submit" class="btn btn-primary">Submit</button> 
+                  <a href="#contacts" class="btn btn-default">Cancel</a>
+                  <div style="display:none" class="alert alert-dismissable alert-success success-message">
+                    <button type="button" class="close" data-dismiss="alert">&times;</button>
+                    <strong>Well done!</strong> Successfully updated.
+                  </div>
+                  <div style="display:none" class="alert alert-dismissable alert-danger error-message">
+                    <button type="button" class="close" data-dismiss="alert">&times;</button>
+                    <strong>Oh snap!</strong> Unable to update. Try again.
+                  </div>
+                </p>
+            <%    
+                })
+              }
+            %>
+          </div>
+        </div>
+      </div>
+    </div>
+  </form>
+</script>

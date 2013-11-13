@@ -1,6 +1,6 @@
 import webapp2, jinja2, os
 from webapp2_extras import routes
-from models import *
+from models import User, Contact, Location, Post, Distribution
 from functions import *
 import json as simplejson
 import logging
@@ -548,15 +548,51 @@ class LocationHandler(BaseHandler):
 class DistributionHandler(BaseHandler):
     @login_required
     def get(self):
-        pass
+        distributions = Distribution.query().fetch(100)
+        if distributions:
+            datas = []
+            for distribution in distributions:
+                temp = {}
+                temp["id"] = distribution.key.id()
+                temp["date_of_distribution"] = str(distribution.date_of_distribution.strftime("%m/%d/%Y"))
+                temp["contact"] = distribution.contact.urlsafe()
+                temp["destinations"] = distribution.destinations.urlsafe()
+                temp["supply_goal"] = distribution.supply_goal
+                temp["actual_supply"] = distribution.actual_supply
+                datas.append(temp)
+            self.response.out.write(simplejson.dumps(datas))
 
     def post(self):
+        supply_goal = {
+            "food" : self.request.get("chk_supply_goal_food"),
+            "water" : self.request.get("chk_supply_goal_water"),
+            "medicines" : self.request.get("chk_supply_goal_medicines"),
+            "social_workers" : self.request.get("chk_supply_goal_social_workers"),
+            "medical_workers" : self.request.get("chk_supply_goal_medical_workers"),
+            "shelter" : self.request.get("chk_supply_goal_shelter"),
+            "formula" : self.request.get("chk_supply_goal_formula"),
+            "toiletries" : self.request.get("chk_supply_goal_toiletries"),
+            "flashlights" : self.request.get("chk_supply_goal_flashlights")
+        }
+
+        actual_supply = {
+            "food" : self.request.get("chk_actual_supply_food"),
+            "water" : self.request.get("chk_actual_supply_water"),
+            "medicines" : self.request.get("chk_actual_supply_medicines"),
+            "social_workers" : self.request.get("chk_actual_supply_social_workers"),
+            "medical_workers" : self.request.get("chk_actual_supply_medical_workers"),
+            "shelter" : self.request.get("chk_actual_supply_shelter"),
+            "formula" : self.request.get("chk_actual_supply_formula"),
+            "toiletries" : self.request.get("chk_actual_supply_toiletries"),
+            "flashlights" : self.request.get("chk_actual_supply_flashlights")
+        }
+
         data = {
             "date_of_distribution": datetime.datetime.strptime(self.request.get("date_of_distribution"), "%Y-%m-%d"), #1992-10-20
             "contact": int(self.request.get("contact")),
             "destinations": int(self.request.get("destinations")),
-            "supply_goal": self.request.get("supply_goal"),
-            "actual_supply": self.request.get("actual_supply")
+            "supply_goal": supply_goal,
+            "actual_supply": actual_supply
         }
 
         add_destribution(data)
@@ -957,7 +993,7 @@ class APIContactsHandler(APIBaseHandler):
 
 
 app = webapp2.WSGIApplication([
-    routes.DomainRoute(r'<:gcdc2013-bangonph\.appspot\.com|www\.bangonph\.com>', [
+    routes.DomainRoute(r'<:gcdc2013-bangonph\.appspot\.com|localhost|www\.bangonph\.com>', [
         webapp2.Route('/', handler=FrontPage, name="www-front"),
         webapp2.Route('/public', handler=PublicFrontPage, name="www-front"),
         webapp2.Route('/register', handler=RegisterPage, name="www-register"),

@@ -625,6 +625,13 @@ class LocationHandler(BaseHandler):
 class DistributionHandler(BaseHandler):
     @login_required
     def get(self):
+        id_delete = self.request.get("id_delete")
+        if id_delete:
+            distribution = Distribution.get_by_id(int(id_delete))
+            if distribution:
+                distribution.key.delete()
+            return
+
         distributions = Distribution.query().fetch(100)
         if distributions:
             datas = []

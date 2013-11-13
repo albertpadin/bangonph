@@ -337,6 +337,26 @@ class LocationSamplePage(BaseHandler):
         self.tv["current_page"] = "LOCATIONSAMPLE"
         self.render('frontend/locationsample.html')
 
+
+class PublicLocationPage(BaseHandler):
+    def get(self, location_id=None):
+        if not location_id:
+            logging.error('No location ID')
+            self.redirect('/')
+            return
+
+        location = Location.get_by_id(location_id)
+        if not location:
+            logging.error('No location found')
+            self.redirect('/')
+            return
+
+        self.tv['location'] = location.to_object()
+        self.tv['page_title'] = location.name
+
+        self.render('frontend/public-location.html')
+
+
 class ReliefOperationsPage(BaseHandler):
     def get(self):
         self.tv["current_page"] = "RELIEF_OPERATIONS"
@@ -605,7 +625,8 @@ class LocationHandler(BaseHandler):
                     "formula": self.request.get("formula"),
                     "toiletries": self.request.get("toiletries"),
                     "flashlights": self.request.get("flashlights"),
-                    "cloths": self.request.get("cloths")
+                    "cloths": self.request.get("cloths"),
+                    "miscellaneous" : self.request.get("miscellaneous")
                 }
 
                 status = {
@@ -673,6 +694,7 @@ class LocationHandler(BaseHandler):
                 "toiletries": self.request.get("toiletries"),
                 "flashlights": self.request.get("flashlights"),
                 "cloths": self.request.get("cloths"),
+                "miscellaneous" : self.request.get("miscellaneous")
             }
 
             status = {
@@ -1731,23 +1753,10 @@ class UploadHandler(blobstore_handlers.BlobstoreUploadHandler):
 
 
 app = webapp2.WSGIApplication([
-    routes.DomainRoute(r'<:gcdc2013-bangonph\.appspot\.com|www\.bangonph\.com>', [
-        webapp2.Route('/', handler=FrontPage, name="www-front"),
-        webapp2.Route('/public', handler=PublicFrontPage, name="www-front"),
-        webapp2.Route('/locationsample', handler=LocationSamplePage, name="www-locationsample"),
+    routes.DomainRoute(r'<:gcdc2013-bangonph\.appspot\.com|www\.bangonph\.com|localhost>', [
+        webapp2.Route('/', handler=PublicFrontPage, name="www-front"),
         webapp2.Route('/reliefoperations', handler=ReliefOperationsPage, name="www-reliefoperations"),
-        webapp2.Route('/register', handler=RegisterPage, name="www-register"),
-        webapp2.Route('/logout', handler=Logout, name="www-logout"),
-        webapp2.Route('/login', handler=LoginPage, name="www-login"),
-        webapp2.Route('/fblogin', handler=FBLoginPage, name="www-fblogin"),
-        webapp2.Route('/dashboard', handler=DashboardPage, name="www-dashboard"),
-        webapp2.Route('/cosmo', handler=CosmoPage, name="www-test"),
-
-        # leonard gwapo:
-        webapp2.Route('/locations', handler=LocationHandler, name="www-locations"),
-        webapp2.Route('/users', handler=UserHandler, name="www-users"),
-        webapp2.Route('/contacts', handler=ContactHandler, name="www-contacts"),
-        webapp2.Route('/locations', handler=LocationHandler, name="www-locations"),
+        webapp2.Route(r'/locations/<:.*>', handler=PublicLocationPage, name="www-locations"),
         webapp2.Route('/distributions', handler=DistributionHandler, name="www-distributions"),
         webapp2.Route('/distributions/fetch', handler=DistributionFetchHandler, name="www-distributions-fetch"),
         webapp2.Route('/distributors', handler=DistributorHandler, name="www-distributors"),
@@ -1816,8 +1825,6 @@ app = webapp2.WSGIApplication([
         webapp2.Route(r'/v1/subscribers/<:.*>', handler=APISubscribersHandler, name="api-subscribers"),
         webapp2.Route(r'/v1/orgs/<:.*>', handler=APIOrganizationsHandler, name="api-locations"),
         webapp2.Route(r'/v1/efforts/<:.*>', handler=APIEffortsHandler, name="api-locations"),
-
-
 
         # richmond:
         webapp2.Route('/v1/oauth/authorize', handler=GetUserToken, name="api-get-user-token"),

@@ -748,6 +748,7 @@ class DistributionHandler(BaseHandler):
                 temp["status"] = distribution.status
                 temp["info"] = distribution.info
                 temp["featured_photo"] = distribution.featured_photo
+                temp["description"] = distribution.description
                 datas.append(temp)
             self.response.out.write(simplejson.dumps(datas))
 
@@ -873,7 +874,8 @@ class DistributionHandler(BaseHandler):
             "images" : image_data,
             "status" : self.request.get("status").strip().upper(),
             "info": self.request.get("info"),
-            "featured_photo": self.request.get("featured_photo")
+            "featured_photo": self.request.get("featured_photo"),
+            "description": self.request.get("description")
         }
 
         add_distribution(data)

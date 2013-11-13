@@ -136,6 +136,7 @@ class Distribution(ndb.Model):
     status = ndb.StringProperty()
     info = ndb.TextProperty()
     featured_photo = ndb.StringProperty()
+    description = ndb.TextProperty()
 
 
     def to_object(self, expand=""):
@@ -148,6 +149,7 @@ class Distribution(ndb.Model):
         details["status"] = self.status
         details["info"] = self.info
         details["featured_photo"] = self.featured_photo
+        details["description"] = self.description
 
         if expand == "contacts":
             contact_details = {}

@@ -755,132 +755,258 @@ class DistributionHandler(BaseHandler):
             self.response.out.write(simplejson.dumps(datas))
 
     def post(self):
-        supply_goal = {
-            "food" : {
-                "food" : self.request.get("chk_supply_goal_food"),
-                "description" : self.request.get("chk_supply_goal_food_description")
-            },
-            "water" :
-            {
-                "water" : self.request.get("chk_supply_goal_water"),
-                "description" : self.request.get("chk_supply_goal_wate_descriptionr")
-            },
-            "medicines" : {
-                "medicines" : self.request.get("chk_supply_goal_medicines"),
-                "description" : self.request.get("chk_supply_goal_medicines_description")
-            },
+        if self.request.get("id"):
+            distribution = Distribution.get_by_id(int(self.request.get("id")))
+            if distribution:
+                supply_goal = {
+                    "food" : {
+                        "food" : self.request.get("chk_supply_goal_food"),
+                        "description" : self.request.get("chk_supply_goal_food_description")
+                    },
+                    "water" :
+                    {
+                        "water" : self.request.get("chk_supply_goal_water"),
+                        "description" : self.request.get("chk_supply_goal_wate_descriptionr")
+                    },
+                    "medicines" : {
+                        "medicines" : self.request.get("chk_supply_goal_medicines"),
+                        "description" : self.request.get("chk_supply_goal_medicines_description")
+                    },
 
-            "social_workers" : {
-                "social_workers" : self.request.get("chk_supply_goal_social_workers"),
-                "description" : self.request.get("chk_supply_goal_social_workers_description")
-            },
+                    "social_workers" : {
+                        "social_workers" : self.request.get("chk_supply_goal_social_workers"),
+                        "description" : self.request.get("chk_supply_goal_social_workers_description")
+                    },
 
-            "medical_workers" : {
-                "medical_workers" : self.request.get("chk_supply_goal_medical_workers"),
-                "description" : self.request.get("chk_supply_goal_medical_workers_description")
-            },
+                    "medical_workers" : {
+                        "medical_workers" : self.request.get("chk_supply_goal_medical_workers"),
+                        "description" : self.request.get("chk_supply_goal_medical_workers_description")
+                    },
 
-            "shelter" : {
-                "shelter" : self.request.get("chk_supply_goal_shelter"),
-                "description" : self.request.get("chk_supply_goal_shelter_description")
-            },
+                    "shelter" : {
+                        "shelter" : self.request.get("chk_supply_goal_shelter"),
+                        "description" : self.request.get("chk_supply_goal_shelter_description")
+                    },
 
-            "formula" : {
-                "formula" : self.request.get("chk_supply_goal_formula"),
-                "description" : self.request.get("chk_supply_goal_formula_description")
-            },
+                    "formula" : {
+                        "formula" : self.request.get("chk_supply_goal_formula"),
+                        "description" : self.request.get("chk_supply_goal_formula_description")
+                    },
 
-            "toiletries" : {
-                "toiletries" : self.request.get("chk_supply_goal_toiletries"),
-                "description" : self.request.get("chk_supply_goal_toiletries_description"),
-            },
+                    "toiletries" : {
+                        "toiletries" : self.request.get("chk_supply_goal_toiletries"),
+                        "description" : self.request.get("chk_supply_goal_toiletries_description"),
+                    },
 
-            "flashlights" : {
-                "flashlights" : self.request.get("chk_supply_goal_flashlights"),
-                "description" : self.request.get("chk_supply_goal_flashlights_description")
+                    "flashlights" : {
+                        "flashlights" : self.request.get("chk_supply_goal_flashlights"),
+                        "description" : self.request.get("chk_supply_goal_flashlights_description")
+                    }
+
+                }
+
+                actual_supply = {
+                    "food" : {
+                        "food" : self.request.get("chk_actual_supply_food"),
+                        "description" : self.request.get("chk_actual_supply_food_description")
+                    },
+
+                    "water" : {
+                        "water" : self.request.get("chk_actual_supply_water"),
+                        "description" : self.request.get("chk_actual_supply_water_description")
+                    },
+
+                    "medicines" : {
+                        "medicines" : self.request.get("chk_actual_supply_medicines"),
+                        "description" : self.request.get("chk_actual_supply_medicines_description")
+                    },
+
+                    "social_workers" : {
+                        "social_workers" : self.request.get("chk_actual_supply_social_workers"),
+                        "description" : self.request.get("chk_actual_supply_social_workers_description")
+                    },
+
+                    "medical_workers" : {
+                        "medical_workers" : self.request.get("chk_actual_supply_medical_workers"),
+                        "description" : self.request.get("chk_actual_supply_medical_workers_description"),
+                    },
+
+                    "shelter" : {
+                        "shelter" : self.request.get("chk_actual_supply_shelter"),
+                        "description" : self.request.get("chk_actual_supply_shelter_description")
+                    },
+
+                    "formula" : {
+                        "formula" : self.request.get("chk_actual_supply_formula"),
+                        "description" : self.request.get("chk_actual_supply_formula_description")
+                    },
+
+                    "toiletries" : {
+                        "toiletries" : self.request.get("chk_actual_supply_toiletries"),
+                        "description" : self.request.get("chk_actual_supply_toiletries_description")
+                    },
+
+                    "flashlights" : {
+                        "flashlights" : self.request.get("chk_actual_supply_flashlights"),
+                        "description" : self.request.get("chk_actual_supply_flashlights_description")
+                    }
+
+                }
+
+                urls = self.request.get("image_urls")
+                titles = self.request.get("image_titles")
+                captions = self.request.get("image_captions")
+                new_urls = simplejson.loads(urls)
+                new_titles = simplejson.loads(titles)
+                new_captions = simplejson.loads(captions)
+
+                cnt = len(new_urls)
+                image_data = []
+                for i in range(0, cnt):
+                    images = {}
+                    images["src"] = new_urls[i]["src"]
+                    images["image_title"] = new_titles[i]["image_title"]
+                    images["image_caption"] = new_captions[i]["image_caption"]
+                    distribution.images.append(images)
+
+                distribution.date_of_distribution = datetime.datetime.strptime(self.request.get("date_of_distribution"), "%Y-%m-%d")
+                distribution.contact = self.request.get("contact")
+                distribution.destinations = ndb.Key("Location", self.request.get("destinations"))
+                distribution.supply_goal =supply_goal
+                distribution.actual_supply = actual_supply
+                distribution.status = self.request.get("status").strip().upper()
+                distribution.info = self.request.get("info")
+                distribution.featured_photo = self.request.get("featured_photo")
+                distribution.description = self.request.get("description")
+                distribution.put()
+
+        else:
+            supply_goal = {
+                "food" : {
+                    "food" : self.request.get("chk_supply_goal_food"),
+                    "description" : self.request.get("chk_supply_goal_food_description")
+                },
+                "water" :
+                {
+                    "water" : self.request.get("chk_supply_goal_water"),
+                    "description" : self.request.get("chk_supply_goal_wate_descriptionr")
+                },
+                "medicines" : {
+                    "medicines" : self.request.get("chk_supply_goal_medicines"),
+                    "description" : self.request.get("chk_supply_goal_medicines_description")
+                },
+
+                "social_workers" : {
+                    "social_workers" : self.request.get("chk_supply_goal_social_workers"),
+                    "description" : self.request.get("chk_supply_goal_social_workers_description")
+                },
+
+                "medical_workers" : {
+                    "medical_workers" : self.request.get("chk_supply_goal_medical_workers"),
+                    "description" : self.request.get("chk_supply_goal_medical_workers_description")
+                },
+
+                "shelter" : {
+                    "shelter" : self.request.get("chk_supply_goal_shelter"),
+                    "description" : self.request.get("chk_supply_goal_shelter_description")
+                },
+
+                "formula" : {
+                    "formula" : self.request.get("chk_supply_goal_formula"),
+                    "description" : self.request.get("chk_supply_goal_formula_description")
+                },
+
+                "toiletries" : {
+                    "toiletries" : self.request.get("chk_supply_goal_toiletries"),
+                    "description" : self.request.get("chk_supply_goal_toiletries_description"),
+                },
+
+                "flashlights" : {
+                    "flashlights" : self.request.get("chk_supply_goal_flashlights"),
+                    "description" : self.request.get("chk_supply_goal_flashlights_description")
+                }
+
             }
 
-        }
+            actual_supply = {
+                "food" : {
+                    "food" : self.request.get("chk_actual_supply_food"),
+                    "description" : self.request.get("chk_actual_supply_food_description")
+                },
 
-        actual_supply = {
-            "food" : {
-                "food" : self.request.get("chk_actual_supply_food"),
-                "description" : self.request.get("chk_actual_supply_food_description")
-            },
+                "water" : {
+                    "water" : self.request.get("chk_actual_supply_water"),
+                    "description" : self.request.get("chk_actual_supply_water_description")
+                },
 
-            "water" : {
-                "water" : self.request.get("chk_actual_supply_water"),
-                "description" : self.request.get("chk_actual_supply_water_description")
-            },
+                "medicines" : {
+                    "medicines" : self.request.get("chk_actual_supply_medicines"),
+                    "description" : self.request.get("chk_actual_supply_medicines_description")
+                },
 
-            "medicines" : {
-                "medicines" : self.request.get("chk_actual_supply_medicines"),
-                "description" : self.request.get("chk_actual_supply_medicines_description")
-            },
+                "social_workers" : {
+                    "social_workers" : self.request.get("chk_actual_supply_social_workers"),
+                    "description" : self.request.get("chk_actual_supply_social_workers_description")
+                },
 
-            "social_workers" : {
-                "social_workers" : self.request.get("chk_actual_supply_social_workers"),
-                "description" : self.request.get("chk_actual_supply_social_workers_description")
-            },
+                "medical_workers" : {
+                    "medical_workers" : self.request.get("chk_actual_supply_medical_workers"),
+                    "description" : self.request.get("chk_actual_supply_medical_workers_description"),
+                },
 
-            "medical_workers" : {
-                "medical_workers" : self.request.get("chk_actual_supply_medical_workers"),
-                "description" : self.request.get("chk_actual_supply_medical_workers_description"),
-            },
+                "shelter" : {
+                    "shelter" : self.request.get("chk_actual_supply_shelter"),
+                    "description" : self.request.get("chk_actual_supply_shelter_description")
+                },
 
-            "shelter" : {
-                "shelter" : self.request.get("chk_actual_supply_shelter"),
-                "description" : self.request.get("chk_actual_supply_shelter_description")
-            },
+                "formula" : {
+                    "formula" : self.request.get("chk_actual_supply_formula"),
+                    "description" : self.request.get("chk_actual_supply_formula_description")
+                },
 
-            "formula" : {
-                "formula" : self.request.get("chk_actual_supply_formula"),
-                "description" : self.request.get("chk_actual_supply_formula_description")
-            },
+                "toiletries" : {
+                    "toiletries" : self.request.get("chk_actual_supply_toiletries"),
+                    "description" : self.request.get("chk_actual_supply_toiletries_description")
+                },
 
-            "toiletries" : {
-                "toiletries" : self.request.get("chk_actual_supply_toiletries"),
-                "description" : self.request.get("chk_actual_supply_toiletries_description")
-            },
+                "flashlights" : {
+                    "flashlights" : self.request.get("chk_actual_supply_flashlights"),
+                    "description" : self.request.get("chk_actual_supply_flashlights_description")
+                }
 
-            "flashlights" : {
-                "flashlights" : self.request.get("chk_actual_supply_flashlights"),
-                "description" : self.request.get("chk_actual_supply_flashlights_description")
             }
 
-        }
+            urls = self.request.get("image_urls")
+            titles = self.request.get("image_titles")
+            captions = self.request.get("image_captions")
+            new_urls = simplejson.loads(urls)
+            new_titles = simplejson.loads(titles)
+            new_captions = simplejson.loads(captions)
 
-        urls = self.request.get("image_urls")
-        titles = self.request.get("image_titles")
-        captions = self.request.get("image_captions")
-        new_urls = simplejson.loads(urls)
-        new_titles = simplejson.loads(titles)
-        new_captions = simplejson.loads(captions)
+            images_datas = []
+            cnt = len(new_urls)
+            image_data = []
+            for i in range(0, cnt):
+                images = {}
+                images["src"] = new_urls[i]["src"]
+                images["image_title"] = new_titles[i]["image_title"]
+                images["image_caption"] = new_captions[i]["image_caption"]
+                image_data.append(images)
 
-        images_datas = []
-        cnt = len(new_urls)
-        image_data = []
-        for i in range(0, cnt):
-            images = {}
-            images["src"] = new_urls[i]["src"]
-            images["image_title"] = new_titles[i]["image_title"]
-            images["image_caption"] = new_captions[i]["image_caption"]
-            image_data.append(images)
+            data = {
+                "date_of_distribution": datetime.datetime.strptime(self.request.get("date_of_distribution"), "%Y-%m-%d"), #1992-10-20
+                "contact": self.request.get("contact"),
+                "destinations": self.request.get("destinations"),
+                "supply_goal": supply_goal,
+                "actual_supply": actual_supply,
+                "images" : image_data,
+                "status" : self.request.get("status").strip().upper(),
+                "info": self.request.get("info"),
+                "featured_photo": self.request.get("featured_photo"),
+                "description": self.request.get("description")
+            }
 
-        data = {
-            "date_of_distribution": datetime.datetime.strptime(self.request.get("date_of_distribution"), "%Y-%m-%d"), #1992-10-20
-            "contact": self.request.get("contact"),
-            "destinations": self.request.get("destinations"),
-            "supply_goal": supply_goal,
-            "actual_supply": actual_supply,
-            "images" : image_data,
-            "status" : self.request.get("status").strip().upper(),
-            "info": self.request.get("info"),
-            "featured_photo": self.request.get("featured_photo"),
-            "description": self.request.get("description")
-        }
-
-        add_distribution(data)
+            add_distribution(data)
 
 class DistributionFetchHandler(BaseHandler):
     @login_required
@@ -899,6 +1025,60 @@ class DistributionFetchHandler(BaseHandler):
                 temp["twitter"] = contact.twitter
                 datas_contacts.append(temp)
             temp_type["contacts"] = datas_contacts
+
+        datas_locations = []
+        locations = Location.query().fetch(100)
+        if locations:
+            for location in locations:
+                temp = {}
+                temp["id"] = location.key.id()
+                temp["name"] = location.name
+                temp["latlong"] = location.latlong
+                temp["featured_photo"] = location.featured_photo
+                temp["death_count"] = location.death_count
+                temp["affected_count"] = location.affected_count
+                temp["status_board"] = location.status_board
+                temp["needs"] = location.needs
+                temp["status"] = location.status
+                datas_locations.append(temp)
+            temp_type["locations"] = datas_locations
+        self.response.out.write(simplejson.dumps(temp_type))
+
+class DistributionFetch2Handler(BaseHandler):
+    @login_required
+    def get(self):
+        datas_contacts = []
+        temp_type = {}
+        contacts = Contact.query().fetch(100)
+        if contacts:
+            for contact in contacts:
+                temp = {}
+                temp["id"] = contact.key.id()
+                temp["name"] = contact.name
+                temp["contacts"] = contact.contacts
+                temp["email"] = contact.email
+                temp["facebook"] = contact.facebook
+                temp["twitter"] = contact.twitter
+                datas_contacts.append(temp)
+            temp_type["contacts"] = datas_contacts
+
+        datas_distribution = []
+        distribution = Distribution.get_by_id(int(self.request.get("id")))
+        if distribution:
+            temp = {}
+            temp["id"] = distribution.key.id()
+            temp["date_of_distribution"] = str(distribution.date_of_distribution.strftime("%Y-%m-%d")) # 2004-01-14
+            temp["contact"] = distribution.contact
+            temp["destinations"] = distribution.destinations.urlsafe()
+            temp["supply_goal"] = distribution.supply_goal
+            temp["actual_supply"] = distribution.actual_supply
+            temp["images"] = distribution.images
+            temp["status"] = distribution.status
+            temp["info"] = distribution.info
+            temp["featured_photo"] = distribution.featured_photo
+            temp["description"] = distribution.description
+            datas_distribution.append(temp)
+            temp_type["distribution"] = datas_distribution
 
         datas_locations = []
         locations = Location.query().fetch(100)
@@ -1835,6 +2015,7 @@ app = webapp2.WSGIApplication([
         webapp2.Route('/posts', handler=PostsHandler, name="www-post"),
         webapp2.Route('/distributions', handler=DistributionHandler, name="www-distributions"),
         webapp2.Route('/distributions/fetch', handler=DistributionFetchHandler, name="www-distributions-fetch"),
+        webapp2.Route('/distributions/fetch/2', handler=DistributionFetch2Handler, name="www-distributions-fetch2"),
         webapp2.Route('/distributors', handler=DistributorHandler, name="www-distributors"),
 
         webapp2.Route('/contacts', handler=ContactHandler, name="www-contacts"),

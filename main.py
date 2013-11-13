@@ -330,6 +330,17 @@ class PublicFrontPage(BaseHandler):
         self.render('frontend/public-front.html')
 
 
+class LocationSamplePage(BaseHandler):
+    def get(self):
+        self.tv["current_page"] = "LOCATIONSAMPLE"
+        self.render('frontend/locationsample.html')
+
+class ReliefOperationsPage(BaseHandler):
+    def get(self):
+        self.tv["current_page"] = "RELIEF_OPERATIONS"
+        self.render('frontend/reliefoperations.html')
+
+
 class RegisterPage(BaseHandler):
     def get(self):
         if self.user:
@@ -1419,6 +1430,8 @@ app = webapp2.WSGIApplication([
     routes.DomainRoute(r'<:gcdc2013-bangonph\.appspot\.com|localhost|www\.bangonph\.com>', [
         webapp2.Route('/', handler=FrontPage, name="www-front"),
         webapp2.Route('/public', handler=PublicFrontPage, name="www-front"),
+        webapp2.Route('/locationsample', handler=LocationSamplePage, name="www-locationsample"),
+        webapp2.Route('/reliefoperations', handler=ReliefOperationsPage, name="www-reliefoperations"),
         webapp2.Route('/register', handler=RegisterPage, name="www-register"),
         webapp2.Route('/logout', handler=Logout, name="www-logout"),
         webapp2.Route('/login', handler=LoginPage, name="www-login"),

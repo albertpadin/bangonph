@@ -632,7 +632,7 @@ class DistributionHandler(BaseHandler):
                 temp = {}
                 temp["id"] = distribution.key.id()
                 temp["date_of_distribution"] = str(distribution.date_of_distribution.strftime("%m/%d/%Y"))
-                temp["contact"] = distribution.contact.urlsafe()
+                temp["contact"] = distribution.contact
                 temp["destinations"] = distribution.destinations.urlsafe()
                 temp["supply_goal"] = distribution.supply_goal
                 temp["actual_supply"] = distribution.actual_supply

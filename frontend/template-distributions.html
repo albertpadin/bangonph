@@ -137,7 +137,7 @@
                 if(!$.isEmptyObject(contacts)) {
                   $.each(contacts, function() {
               %>
-                <option value="<%- this.id %>"><%- this.name %></option>
+                <option value="<%- this.name %>"><%- this.name %></option>
               <%
                   })
                 }
@@ -159,27 +159,45 @@
             </p>
             <p>
               Supply Goal<br/>
-              <input type="text" id="chk_supply_goal_food" placeholder="Number of Food"/> <br/>
-              <input type="text" id="chk_supply_goal_water" placeholder="Number of Water"/> <br/>
-              <input type="text" id="chk_supply_goal_medicines" placeholder="Number of Medicines"/> <br/>
-              <input type="text" id="chk_supply_goal_social_workers" placeholder="Number of Social Workers"/>  <br/>
-              <input type="text" id="chk_supply_goal_medical_workers" placeholder="Number of Medical Workers"/>  <br/>
-              <input type="text" id="chk_supply_goal_shelter" placeholder="Number of Shelter"/> <br/>
-              <input type="text" id="chk_supply_goal_formula" placeholder="Number of Formula"/> <br/>
-              <input type="text" id="chk_supply_goal_toiletries" placeholder="Number of Toiletries"/> <br/>
-              <input type="text" id="chk_supply_goal_flashlights" placeholder="Number of Flashlights"/> 
+              <input type="text" id="supply_goal_food" placeholder="Number of Food"/>
+              <input type="text" id="supply_goal_food_description" placeholder="Description"/> <br/>
+              <input type="text" id="supply_goal_water" placeholder="Number of Water"/>
+              <input type="text" id="supply_goal_water_description" placeholder="Description"/> <br/>
+              <input type="text" id="supply_goal_medicines" placeholder="Number of Medicines"/>
+              <input type="text" id="supply_goal_medicines_description" placeholder="Description"/>  <br/>
+              <input type="text" id="supply_goal_social_workers" placeholder="Number of Social Workers"/>
+              <input type="text" id="supply_goal_social_workers_description" placeholder="Description"/>   <br/>
+              <input type="text" id="supply_goal_medical_workers" placeholder="Number of Medical Workers"/>
+              <input type="text" id="supply_goal_medical_workers_description" placeholder="Description"/>   <br/>
+              <input type="text" id="supply_goal_shelter" placeholder="Number of Shelter"/>
+              <input type="text" id="supply_goal_shelter_description" placeholder="Description"/>  <br/>
+              <input type="text" id="supply_goal_formula" placeholder="Number of Formula"/>
+              <input type="text" id="supply_goal_formula_description" placeholder="Description"/>  <br/>
+              <input type="text" id="supply_goal_toiletries" placeholder="Number of Toiletries"/>
+              <input type="text" id="supply_goal_toiletries_description" placeholder="Description"/>  <br/>
+              <input type="text" id="supply_goal_flashlights" placeholder="Number of Flashlights"/>
+              <input type="text" id="supply_goal_flashlights_description" placeholder="Description"/> 
             </p>
             <p>
               Actual Supply<br/>
-              <input type="text" id="chk_actual_supply_food" placeholder="Number of Food"/> <br/>
-              <input type="text" id="chk_actual_supply_water" placeholder="Number of Water"/> <br/>
-              <input type="text" id="chk_actual_supply_medicines" placeholder="Number of Medicines"/> <br/>
-              <input type="text" id="chk_actual_supply_social_workers" placeholder="Number of Social Workers"/>  <br/>
-              <input type="text" id="chk_actual_supply_medical_workers" placeholder="Number of Medical Workers"/>  <br/>
-              <input type="text" id="chk_actual_supply_shelter" placeholder="Number of Shelter"/> <br/>
-              <input type="text" id="chk_actual_supply_formula" placeholder="Number of Formula"/><br/>
-              <input type="text" id="chk_actual_supply_toiletries" placeholder="Number of Toiletries"/> <br/>
-              <input type="text" id="chk_actual_supply_flashlights" placeholder="Number of Flashlights"/>
+              <input type="text" id="actual_supply_food" placeholder="Number of Food"/>
+              <input type="text" id="actual_supply_food_description" placeholder="Description"/> <br/>
+              <input type="text" id="actual_supply_water" placeholder="Number of Water"/>
+              <input type="text" id="actual_supply_water_description" placeholder="Description"/> <br/>
+              <input type="text" id="actual_supply_medicines" placeholder="Number of Medicines"/>
+              <input type="text" id="actual_supply_medicines_description" placeholder="Description"/> <br/>
+              <input type="text" id="actual_supply_social_workers" placeholder="Number of Social Workers"/>
+              <input type="text" id="actual_supply_social_workers_description" placeholder="Description"/> <br/>
+              <input type="text" id="actual_supply_medical_workers" placeholder="Number of Medical Workers"/>
+              <input type="text" id="actual_supply_medical_workers_description" placeholder="Description"/> <br/>
+              <input type="text" id="actual_supply_shelter" placeholder="Number of Shelter"/>
+              <input type="text" id="actual_supply_shelter_description" placeholder="Description"/> <br/>
+              <input type="text" id="actual_supply_formula" placeholder="Number of Formula"/>
+              <input type="text" id="actual_supply_formula_description" placeholder="Description"/> <br/>
+              <input type="text" id="actual_supply_toiletries" placeholder="Number of Toiletries"/>
+              <input type="text" id="actual_supply_toiletries_description" placeholder="Description"/> <br/>
+              <input type="text" id="actual_supply_flashlights" placeholder="Number of Flashlights"/>
+              <input type="text" id="actual_supply_flashlights_description" placeholder="Description"/> <br/>
             </p>
             <p>
               <button type="submit" class="btn btn-primary">Submit</button> 

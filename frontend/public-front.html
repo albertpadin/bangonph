@@ -3,9 +3,9 @@
 {% block content %}
   <div class="jumbotron">
       <div class="container">
-        <h1>Typhoon Yolanda</h1>
-        <p>Super Typhoon recently trampled our land, killed the cows & left us devasted. We are currently monitoring all the relief goods, making sure every place receives the goodies. Join us & feed the people!</p>
-        <p><a class="btn btn-primary btn-lg pull-right">See how you can help &raquo;</a></p>
+        <h1>#BangonPH</h1>
+        <p>Super Typhoon Yolanda hit the Philippines and left several towns devastated. Affecting more than 2 million people and killing over 2,000 and still counting. This is the live and developing story of how we rise again. Together.</p>
+        <!-- <p><a class="btn btn-primary btn-lg pull-right">See how you can help &raquo;</a></p> -->
       </div>
     </div>
 
@@ -21,35 +21,35 @@
               <div class="status-group">
                 <div class="status-entry">
                   <img class="icon" src="/img/icon-deaths.png" alt="Deaths">
-                  <span>{{ location.death_count }} Deaths</span>
+                  <span>{% if location.death_count %}{{ location.death_count|with_commas }} Deaths{% else %}Gathering Data{% endif %}</span>
                 </div>
                 <div class="status-entry">
                   <img class="icon" src="/img/icon-family.png" alt="Families Affected">
-                  <span>{{ location.affected_count }} Families Affected</span>
+                  <span>{% if location.affected_count %}{{ location.affected_count|with_commas }} Families Affected{% else %}Gathering Data{% endif %}</span>
                 </div>
                 <div class="status-entry">
                   <img class="icon" src="/img/icon-communication.png" alt="No Communication">
-                  <span>{{ location.status.communication }}</span>
+                  <span>{% if location.status.communication %}{{ location.status.communication }}{% else %}Gathering Data{% endif %}</span>
                 </div>
                 <div class="status-entry">
                   <img class="icon" src="/img/icon-water.png" alt="No Water">
-                  <span>{{ location.status.water }}</span>
+                  <span>{% if location.status.water %}{{ location.status.water }}{% else %}Gathering Data{% endif %}</span>
                 </div>
                 <div class="status-entry">
                   <img class="icon" src="/img/icon-electricity.png" alt="No Electricity">
-                  <span>{{ location.status.power }}</span>
+                  <span>{% if location.status.water %}{{ location.status.power }}{% else %}Gathering Data{% endif %}</span>
                 </div>
                 <div class="status-entry">
                   <img class="icon" src="/img/icon-medicine.png" alt="No Medicine">
-                  <span>{{ location.status.medicine }}</span>
+                  <span>{% if location.status.medicine %}{{ location.status.medicine }}{% else %}Gathering Data{% endif %}</span>
                 </div>
                 <div class="status-entry">
                   <img class="icon" src="/img/icon-clothes.png" alt="Needs Clothes">
-                  <span>{{ location.status.clothes }}</span>
+                  <span>{% if location.status.clothes %}{{ location.status.clothes }}{% else %}Gathering Data{% endif %}</span>
                 </div>
                 <div class="status-entry">
                   <img class="icon" src="/img/icon-food.png" alt="No Food">
-                  <span>{{ location.status.food }}</span>
+                  <span>{% if location.status.food %}{{ location.status.food }}{% else %}Gathering Data{% endif %}</span>
                 </div>
               </div>
               <div class="clear"></div>
@@ -79,16 +79,16 @@
                 </div>
               </div>
               -->
-              <div class="clear"></div>
+              <div class="clear"></div><!-- 
               <h6>Active Relief Orgs:</h6>
                 <div class="relief-orgs-group">
                   <img src="/img/thumb-dswd.png" title="DSWD">
                   <img src="/img/thumb-redcross.png" title="Philippine Red Cross">
                   <img src="/img/thumb-rafi.png" title="Ramon Aboitiz Foundation, Inc.">
                   <img src="/img/thumb-jci.png" title="Junior Chamber International">
-                </div>
+                </div> -->
               <div>
-                <a class="btn btn-primary btn-block entry-btn" href="/locations/{{ location.key.id() }}" title="{{ location.name }}" role="button"><span class="glyphicon glyphicon-circle-arrow-right"></span> Make a Change. Donate Now!  &raquo;</a>
+                <a class="btn btn-primary btn-block entry-btn" href="/locations/{{ location.key.id() }}" title="{{ location.name }}" role="button"><span class="glyphicon glyphicon-circle-arrow-right"></span> Get Involved. Donate Now!  &raquo;</a>
               </div>
             </div>
         </div>

@@ -183,6 +183,9 @@ def add_distribution(data, instance_id=""):
     if data["actual_supply"]:
         distribution.actual_supply = data["actual_supply"]
 
+    if data["images"]:
+        distribution.images = data["images"]
+
     distribution.put()
 
     return distribution

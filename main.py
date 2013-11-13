@@ -647,26 +647,39 @@ class ErrorHandler(BaseHandler):
 
 class APIBaseHandler(webapp2.RequestHandler):
     def __init__(self, request=None, response=None):
-        pass
+        self.initialize(request, response)
 
-    def render(self, template_path=None, force=False):
-        self.response.out.write(simplejson.dumps(self.tv))
+    def render(self, response_body):
+        self.response.headers["Content-Type"] = "application/json"
 
-
-class APILocationsHandler(APIBaseHandler):
-    def get(self, instance_id=None):
-        pass
-
-    def post(self, instance_id=None):
-        pass
-
-    def delete(self, instance_id=None):
-        pass
+        self.response.out.write(simplejson.dumps(response_body))
 
 
 class APIUsersHandler(APIBaseHandler):
     def get(self, instance_id=None):
-        pass
+        users_json = []
+        if not instance_id:
+            if self.request.get("cursor"):
+                curs = Cursor(urlsafe=self.request.get("cursor"))
+                if curs:
+                    users, next_cursor, more = User.query().fetch_page(20, start_cursor=curs)
+            else:
+                users, next_cursor, more = User.query().fetch_page(100)
+                
+                for user in users:
+                    users_json.append(user.to_object())
+
+                data = {}
+                data["users"] = users_json
+                if more:
+                    data["next_page"] = "http://api.bangonph.com/users/?cursor=" + next_cursor
+                else:
+                    data["next_page"] = False
+                self.render(data)
+        else:
+            user = User.get_by_id(instance_id)
+            users_json.append(user.to_object())
+            self.render(users_json)
 
     def post(self, instance_id=None):
         pass
@@ -674,6 +687,37 @@ class APIUsersHandler(APIBaseHandler):
     def delete(self, instance_id=None):
         pass
 
+class APILocationsHandler(APIBaseHandler):
+    def get(self, instance_id=None):
+        locations_json = []
+        if not instance_id:
+            if self.request.get("cursor"):
+                curs = Cursor(urlsafe=self.request.get("cursor"))
+                if curs:
+                    locations, next_cursor, more = Location.query().fetch_page(10, start_cursor=curs)
+            else:
+                locations, next_cursor, more = Location.query().fetch_page(10)
+
+                for location in locations:
+                    locations_json.append(location.to_object())
+
+                data = {}
+                data["locations"] = locations_json
+                if more:
+                    data["next_page"] = "http://api.bangonph.com/locations/?cursor=" + next_cursor
+                else:
+                    data["next_page"] = False
+                self.render(data)
+        else:
+            location = Location.get_by_id(instance_id)
+            self.render(location.to_object())
+
+
+    def post(self, instance_id=None):
+        pass
+
+    def delete(self, instance_id=None):
+        pass
 
 class APILContactsHandler(APIBaseHandler):
     def get(self, instance_id=None):
@@ -753,7 +797,7 @@ class APIContactsHandler(APIBaseHandler):
 
 
 app = webapp2.WSGIApplication([
-    routes.DomainRoute(r'<:gcdc2013-bangonph\.appspot\.com|localhost|www\.bangonph\.com>', [
+    routes.DomainRoute(r'<:gcdc2013-bangonph\.appspot\.com|www\.bangonph\.com>', [
         webapp2.Route('/', handler=FrontPage, name="www-front"),
         webapp2.Route('/public', handler=PublicFrontPage, name="www-front"),
         webapp2.Route('/register', handler=RegisterPage, name="www-register"),
@@ -812,10 +856,11 @@ app = webapp2.WSGIApplication([
 
         webapp2.Route(r'/<:.*>', ErrorHandler)
     ]),
-    routes.DomainRoute('api.bangonph.com', [
+
+    routes.DomainRoute(r'<:api\.bangonph\.com|localhost>', [
         # leonard gwapo:
         webapp2.Route('/locations/', handler=APILocationsHandler, name="api-locations"),
-        webapp2.Route('/users/', handler=APIUsersHandler, name="api-locations"),
+        webapp2.Route('/users/', handler=APIUsersHandler, name="api-users"),
         webapp2.Route('/contacts/', handler=APIContactsHandler, name="api-locations"),
         webapp2.Route('/posts/', handler=APIPostsHandler, name="api-locations"),
         webapp2.Route('/drop-off-centers/', handler=APIDropOffCentersHandler, name="api-locations"),
@@ -824,7 +869,7 @@ app = webapp2.WSGIApplication([
         webapp2.Route('/efforts/', handler=APIEffortsHandler, name="api-locations"),
 
         webapp2.Route(r'/locations/<:.*>', handler=APILocationsHandler, name="api-locations"),
-        webapp2.Route(r'/users/<:.*>', handler=APIUsersHandler, name="api-locations"),
+        webapp2.Route(r'/users/<:.*>', handler=APIUsersHandler, name="api-users"),
         webapp2.Route(r'/contacts/<:.*>', handler=APIContactsHandler, name="api-locations"),
         webapp2.Route(r'/posts/<:.*>', handler=APIPostsHandler, name="api-locations"),
         webapp2.Route(r'/drop-off-centers/<:.*>', handler=APIDropOffCentersHandler, name="api-locations"),

@@ -13,12 +13,17 @@ class User(ndb.Model):
     
     def to_object(self):
         details = {}
-        details["created"] = int(time.mktime(self.created.timetuple()))
-        details["updated"] = int(time.mktime(self.updated.timetuple()))
+        details["meta"] = {"href": "http://api.bangonph.com/users/?" + self.key.id()}
+        details["created"] = str(self.created)
+        details["updated"] = str(self.updated)
         details["email"] = self.email
         details["name"] = self.name
+        details["contacts"] = self.contacts
+        details["permissions"] = self.permissions
         
         return details
+        
+
 
 class Distributor(ndb.Model):
     created = ndb.DateTimeProperty(auto_now_add=True)
@@ -43,6 +48,22 @@ class Location(ndb.Model):
     status_board = ndb.StringProperty()
     needs = ndb.JsonProperty()
     status = ndb.JsonProperty()
+
+    def to_object(self, extended=""):
+        details = {}
+        details["meta"] = {"href": "http://api.bangonph.com/locations/?" + str(self.key.id())}
+        details["created"] = str(self.created)
+        details["updated"] = str(self.updated)
+        details["latlong"] = self.latlong
+        details["featured_photo"] = self.featured_photo
+        details["death_count"] = self.death_count
+        details["affected_count"] = self.affected_count
+        details["status_board"] = self.status_board
+        details["needs"] = self.needs
+        details["status"] = self.status
+
+        return details
+
     
 
 class DropOffCenter(ndb.Model):

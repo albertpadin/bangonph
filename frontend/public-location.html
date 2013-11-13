@@ -23,13 +23,15 @@
           <div class="col-lg-8 col-md-8">
             <div id="campaign-content-wrap">
                <ul class="bxslider">
-                  <li><img src="http://s2.djyimg.com/n3/eet-content/uploads/2013/11/boracayisland1-603x450.jpg" title="test" alt="test" /></li>
-                  <li><img src="https://pbs.twimg.com/media/BYl9rPYCIAAmH05.jpg" title="test" alt="test" /></li>
+                {% for image in location.images %}
+                  <li><img src="{{ image.src }}" title="{{ image.title }}" alt="{{ image.caption }}" /></li>
+                {% endfor %}
                 </ul>
 
                 <div id="bx-pager">
-                  <a data-slide-index="0" href=""><img src="http://s2.djyimg.com/n3/eet-content/uploads/2013/11/boracayisland1-603x450.jpg" title="test" alt="test" />
-                  <a data-slide-index="1" href=""><img src="https://pbs.twimg.com/media/BYl9rPYCIAAmH05.jpg" title="test" alt="test" /></a>
+                  {% for image in location.images %}
+                  <a data-slide-index="{{ loop.index0 }}" href=""><img src="{{ image.src }}" title="{{ image.title }}" alt="{{ image.caption }}" />
+                {% endfor %}
                 </div>
             </div>
 

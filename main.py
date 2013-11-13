@@ -1334,14 +1334,14 @@ class APISubscribersHandler(APIBaseHandler):
         data = API_RESPONSE_DATA.copy()
         if check_all_keys(["name", "email", "fb_id"], self.params):
             if instance_id:
-                exist = Subscriber.get_by_id(instance_id)
+                resp["method"] = "edit"
+                exist = Subscriber.get_by_id(long(instance_id))
                 if exist:
                     # edit instance
                     subscriber = add_subcriber(self.params, instance_id)
                     if subscriber:
                         distribution = subscriber.distribution.get() if subscriber.distribution else None # get the id of the parent
                         resp["description"] = "Successfully edited the subscriber"
-                        resp["type"] = "edit"
                         data["id"] = str(subscriber.key.id())
                         data["name"] = str(subscriber.name)
                         data["instance_id"] = str(subscriber.key.id())
@@ -1354,7 +1354,7 @@ class APISubscribersHandler(APIBaseHandler):
                         resp['response'] = "cannot_edit"
                         resp['code'] = 500
                         resp['property'] = "add_subcriber"
-                        resp['description'] = "Server cannot create the subscriber"
+                        resp['description'] = "Server cannot create the instance"
                 else:
                     # instance doesnt exist
                     resp['response'] = "invalid_instance"
@@ -1362,12 +1362,12 @@ class APISubscribersHandler(APIBaseHandler):
                     resp['property'] = "instance_id"
                     resp['description'] = "Instance id missing or not valid"
             else:
+                resp["method"] = "create"
                 # new instance
                 subscriber = add_subcriber(self.params)
                 if subscriber:
                     distribution = subscriber.distribution.get() if subscriber.distribution else None # get the id of the parent
-                    resp["description"] = "Successfully created the subscriber"
-                    resp["type"] = "create"
+                    resp["description"] = "Successfully created the instance"
                     data["id"] = str(subscriber.key.id())
                     data["name"] = str(subscriber.name)
                     data["instance_id"] = str(subscriber.key.id())
@@ -1380,7 +1380,7 @@ class APISubscribersHandler(APIBaseHandler):
                     resp['response'] = "cannot_create"
                     resp['code'] = 500
                     resp['property'] = "add_subcriber"
-                    resp['description'] = "Server cannot create the subscriber"
+                    resp['description'] = "Server cannot create the instance"
         else:
             # missing params
             resp['response'] = "missing_params"
@@ -1390,9 +1390,28 @@ class APISubscribersHandler(APIBaseHandler):
 
         self.render(resp)
 
+    @oauthed_required
     def delete(self, instance_id=None):
-        pass
+        resp = API_RESPONSE.copy()
+        resp["method"] = "delete"
+        if instance_id:
+            subscriber = Subscriber.get_by_id(long(instance_id))
+            if subscriber:
+                subscriber.key.delete()
+                resp["description"] = "Successfully deleted the instance"
+            else:
+                resp['response'] = "invalid_instance"
+                resp['code'] = 404
+                resp['property'] = "delete_subscriber"
+                resp['description'] = "Instance id not valid"
+        else:
+            # missing params
+            resp['response'] = "missing_params"
+            resp['code'] = 406
+            resp['property'] = "params"
+            resp['description'] = "The request has missing parameters"
 
+        self.render(resp)
 
 class APIEffortsHandler(APIBaseHandler):
     def get(self, instance_id=None):

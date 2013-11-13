@@ -60,6 +60,7 @@ API_RESPONSE = {
 	"code": 200,
 	"data": {},
 	"type": "",
+	"method": "",
 	"property": "",
 	"description": ""
 }

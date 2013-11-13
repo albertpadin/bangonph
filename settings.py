@@ -42,36 +42,46 @@ API_OAUTH_RESP = {
 
 # ------------
 """
-	-- please put created response, e.g. "ok", "invalid_instance", etc.
-	ok - success
-	invalid_instance - instance not found, or incorrect instance id
+	### FOR DOCUMENTATION PURPOSES ###
+
+	*** please put created response, e.g. "ok", "invalid_instance", etc. ***
+	start:
+	format: {response_string} ({code}) - {description}
+
+	ok (200) - success
+	invalid_instance (404) - instance not found, or incorrect instance id
+	cannot_create (500) - i dont even know what happened!
+	missing_params (406) - missing parameterssss
 """
 #-------------
 
 API_RESPONSE = {
 	"response": "ok",
 	"code": 200,
-	"data": {
-		"meta": {
-			"href": "",
-		},
-		"parent": {
-			"meta": {
-				"href": "",
-			}
-		},
-		"children": {
-			"meta": {
-				"href": "",
-			}
-		},
-		"id": "",
-		"name": "",
-		"instance_id": ""
-	},
+	"data": {},
 	"type": "",
+	"method": "",
 	"property": "",
 	"description": ""
+}
+
+API_RESPONSE_DATA = {
+	"meta": {
+		"href": "", # uri of the instance
+	},
+	"parent": {
+		"meta": {
+			"href": "", # uri of the parent model or instance
+		}
+	},
+	"children": {
+		"meta": {
+			"href": "", # uri for the children instances if any
+		}
+	},
+	"id": "", # i dont know, for now same as instance id
+	"name": "", # general name for indentity or frontend display purposes
+	"instance_id": "" # model instance id
 }
 
 # Local Settings

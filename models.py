@@ -1,7 +1,9 @@
 from google.appengine.ext import ndb
 import logging
-import time
+import time, os
+from settings import API_RESPONSE, API_RESPONSE_DATA
 
+currenturl = str(os.environ['wsgi.url_scheme'])+"://"+str(os.environ['HTTP_HOST'])+"/"
 
 class User(ndb.Model):
     created = ndb.DateTimeProperty(auto_now_add=True)
@@ -11,7 +13,7 @@ class User(ndb.Model):
     name = ndb.StringProperty()
     contacts = ndb.StringProperty()
     permissions = ndb.StringProperty()
-    
+
     def to_object(self):
         details = {}
         details["meta"] = {"href": "http://api.bangonph.com/users/?" + self.key.id()}
@@ -22,9 +24,9 @@ class User(ndb.Model):
         details["id"] = self.key.id()
         details["contacts"] = self.contacts
         details["permissions"] = self.permissions
-        
+
         return details
-        
+
 
 
 class Distributor(ndb.Model):
@@ -70,7 +72,7 @@ class Location(ndb.Model):
         details["hash_tag"] = self.hash_tag
         return details
 
-    
+
 
 class DropOffCenter(ndb.Model):
     created = ndb.DateTimeProperty(auto_now_add=True)
@@ -169,7 +171,23 @@ class Subscriber(ndb.Model):
     name = ndb.StringProperty()
     email = ndb.StringProperty()
     fb_id = ndb.StringProperty()
-    distribution = ndb.KeyProperty()
+    distribution = ndb.KeyProperty(kind="Distribution")
+
+    def to_object(self, expand=None):
+    	details = API_RESPONSE.copy()
+    	data = {}
+    	details["type"] = "read"
+    	data["name"] = self.name
+    	data["email"] = self.email
+    	data["fb_id"] = self.fb_id
+    	distribution = self.distribution.get()
+    	if expand:
+    		data["distribution"] = distribution.to_object()
+    	else:
+    		meta = {"href": str(currenturl + "/efforts/" + str(distribution.key.id()))}
+    		data["distribution"] = {"meta": meta}
+    	details["data"] = data
+    	return details
 
 class Contact(ndb.Model):
     created = ndb.DateTimeProperty(auto_now_add=True)
@@ -213,7 +231,7 @@ class Post(ndb.Model):
         details["facebook"] = self.facebook
         details["phone"] = self.phone
         details["message"] = self.message
-        
+
         return details
 
 

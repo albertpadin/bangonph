@@ -25,6 +25,41 @@ from settings import OAUTH_RESP, API_OAUTH_RESP
 jinja_environment = jinja2.Environment(loader=jinja2.FileSystemLoader(os.path.dirname(__file__)), autoescape=True)
 
 
+def with_commas(n_raw):
+    try:
+        n_raw = int(n_raw)
+    except:
+        return False
+
+    if n_raw < 100:
+        return str(n_raw)
+
+    n = str(n_raw).strip()
+
+    length = len(n)
+
+    m = length % 3
+    commas = length / 3
+
+    if m == 0:
+        commas -= 1
+
+    i = 0
+    output = ""
+    while i <= commas:
+        if i == commas:
+            output = whole[-3:] + output
+        else:
+            output = "," + whole[-3:] + output
+        whole = whole[:-3]
+        i+=1
+
+    return output
+
+
+jinja_environment.filters['with_commas'] = with_commas
+
+
 def login_required(fn):
     '''So we can decorate any RequestHandler with #@login_required'''
     def wrapper(self, *args):

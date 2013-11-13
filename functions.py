@@ -1,7 +1,7 @@
 import logging
 import webapp2, jinja2, os
 import datetime
-from models import User, Contact, Location, Distribution, Post, Subscriber
+from models import User, Contact, Location, Distribution, Post, DropOffCenter, Subscriber
 import json as simplejson
 
 from google.appengine.ext import ndb
@@ -189,7 +189,7 @@ def add_distribution(data, instance_id=""):
 
 def add_drop_off_centers(data, instance_id=""):
     if instance_id:
-        center = DropOffCenter.get_by_id(temp_center_id)
+        center = DropOffCenter.get_by_id(instance_id)
     else:
         center_id = slugify(data["name"])
         temp_center_id = center_id

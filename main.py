@@ -1303,8 +1303,8 @@ class APIDropOffCentersHandler(APIBaseHandler):
 
     def post(self, instance_id=None):
         data = {
-            "drop_off_locations" : self.request.get("drop_off_locations"),
-            "distributor" : self.request.get("distributor"),
+            "drop_off_locations" : self.request.get("drop_off_locations").split(" "),
+            "distributor" : self.request.get("distributor").split(", "),
             "address" : self.request.get("address"),
             "name" : self.request.get("name"),
             "latlong" : self.request.get("latlong"),
@@ -1318,8 +1318,10 @@ class APIDropOffCentersHandler(APIBaseHandler):
         }
         if not instance_id:
             centers = add_drop_off_centers(data)
-            self.render()
-
+            self.render(centers.to_object())
+        else:
+            centers = add_drop_off_centers(data, instance_id)
+            self.render(centers.to_object())
 
 
     def delete(self, instance_id=None):

@@ -1288,7 +1288,7 @@ app = webapp2.WSGIApplication([
         webapp2.Route(r'/<:.*>', ErrorHandler)
     ]),
 
-    routes.DomainRoute(r'<:api\.bangonph\.com|localhost>', [
+    routes.DomainRoute(r'<:api\.bangonph\.com>', [
         webapp2.Route('/locations', handler=APILocationsHandler, name="api-locations"),
         webapp2.Route('/users', handler=APIUsersHandler, name="api-users"),
         webapp2.Route('/contacts', handler=APIContactsHandler, name="api-locations"),

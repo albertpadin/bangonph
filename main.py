@@ -1512,7 +1512,13 @@ class APIPostsHandler(APIBaseHandler):
                 else:
                     posts, next_cursor, more = Post.query().fetch_page(25)
             else:
-                posts, next_cursor, more = Post.query().fetch_page(25)
+                if self.request.get_all("filter_post_type"):
+                    filter_type = self.request.get_all("filter_post_type")[0].upper()
+                    date_now = datetime.datetime.now() + datetime.timedelta(hours=8)
+                    
+                    posts, next_cursor, more = Post.query(Post.post_type.IN([filter_type]), Post.expiry >= date_now).order(-Post.expiry).fetch_page(100)
+                else:
+                    posts, next_cursor, more = Post.query().fetch_page(25)
 
             for post in posts:
                 posts_json.append(post.to_object())
@@ -1538,7 +1544,7 @@ class APIPostsHandler(APIBaseHandler):
                 resp['response'] = "date has invalid format"
                 resp['code'] = 404
                 resp['property'] = "delete_subscriber"
-                resp['description'] = "Use this format (YYYY-mm-dd)"
+                resp['description'] = "Use this format (YYYY-mm-dd H:M:S)"
 
                 return
         else:
@@ -1553,7 +1559,7 @@ class APIPostsHandler(APIBaseHandler):
             "facebook": self.request.get("facebook"),
             "phone": self.request.get("phone"),
             "message": self.request.get("message"),
-            "post_type": self.request.get("post_type"),
+            "post_type": self.request.get_all("post_type"),
             "expiry": expiry,
             "status": self.request.get("status"),
             "location": self.request.get_all("location"),
@@ -2039,7 +2045,7 @@ app = webapp2.WSGIApplication([
 
         webapp2.Route(r'/<:.*>', ErrorHandler)
     ]),
-    routes.DomainRoute(r'<:admin\.bangonph\.com|localhost>', [
+    routes.DomainRoute(r'<:admin\.bangonph\.com>', [
         webapp2.Route('/', handler=FrontPage, name="www-front"),
         webapp2.Route('/register', handler=RegisterPage, name="www-register"),
         webapp2.Route('/logout', handler=Logout, name="www-logout"),
@@ -2075,7 +2081,7 @@ app = webapp2.WSGIApplication([
         webapp2.Route(r'/<:.*>', ErrorHandler)
     ]),
 
-    routes.DomainRoute(r'<:api\.bangonph\.com>', [
+    routes.DomainRoute(r'<:api\.bangonph\.com|localhost>', [
         webapp2.Route('/v1/locations', handler=APILocationsHandler, name="api-locations"),
         webapp2.Route('/v1/users', handler=APIUsersHandler, name="api-users"),
         webapp2.Route('/v1/contacts', handler=APIContactsHandler, name="api-locations"),

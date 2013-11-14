@@ -20,6 +20,12 @@ indexes:
   - name: client
   - name: expires
 
+- kind: Post
+  properties:
+  - name: post_type
+  - name: expiry
+    direction: desc
+
 - kind: UserToken
   properties:
   - name: client

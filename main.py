@@ -566,6 +566,7 @@ class LocationHandler(BaseHandler):
                 temp["needs"] = location.needs
                 temp["status"] = location.status
                 temp["hash_tag"] = location.hash_tag
+                temp["featured"] = location.featured
                 self.response.out.write(simplejson.dumps(temp))
             return
 
@@ -587,6 +588,7 @@ class LocationHandler(BaseHandler):
                 temp["status"] = location.status
                 temp["images"] = location.images
                 temp["hash_tag"] = location.hash_tag
+                temp["featured"] = location.featured
                 datas.append(temp)
             self.response.out.write(simplejson.dumps(datas))
 
@@ -658,6 +660,13 @@ class LocationHandler(BaseHandler):
                 location.needs = needs
                 location.status = status
                 location.hash_tag = self.request.get("hash_tag").split(" ")
+                featured_yes_no = ""
+                if self.request.get("featured"):
+                    if self.request.get("featured") == "True":
+                        featured_yes_no = True
+                    else:
+                        featured_yes_no = False
+                location.featured = featured_yes_no
                 location.put()
 
         else:
@@ -704,6 +713,14 @@ class LocationHandler(BaseHandler):
             }
 
             hash_tag = self.request.get("hash_tag").split(" ")
+
+            featured_yes_no = ""
+            if self.request.get("featured"):
+                if self.request.get("featured") == "True":
+                    featured_yes_no = True
+                else:
+                    featured_yes_no = False
+
             data = {
                 "name": self.request.get("name"),
                 "needs": needs, # json format
@@ -717,7 +734,8 @@ class LocationHandler(BaseHandler):
                 "status_board": self.request.get("status_board"),
                 "status": status,
                 "images": image_data, # json format
-                "hash_tag" : hash_tag
+                "hash_tag" : hash_tag,
+                "featured" : featured_yes_no
             }
             add_location(data)
 

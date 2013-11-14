@@ -12,7 +12,8 @@ var Locations = Backbone.Model.extend({
     centers: "",
     status: "",
     images: "",
-    hash_tag: ""
+    hash_tag: "",
+    featured: ""
   }
 });
 
@@ -126,7 +127,8 @@ var AddLocation = Backbone.View.extend({
         "status_clothes": _.escape($("#status_clothes").val()),
         "status_foods": _.escape($("#status_foods").val()),
         "status_shelter": _.escape($("#status_shelter").val()),
-        "hash_tag" : _.escape($("#hash_tag").val())
+        "hash_tag" : _.escape($("#hash_tag").val()),
+        "featured" : document.querySelector('input[name="featured"]:checked').value
       },
       success: function() {
         window.location.hash = "#locations";
@@ -208,7 +210,8 @@ var EditLocation =  Backbone.View.extend({
         "status_clothes": _.escape($("#status_clothes").val()),
         "status_foods": _.escape($("#status_foods").val()),
         "status_shelter": _.escape($("#status_shelter").val()),
-        "hash_tag" : _.escape($("#hash_tag").val())
+        "hash_tag" : _.escape($("#hash_tag").val()),
+        "featured" : document.querySelector('input[name="featured"]:checked').value
       },
       success: function() {
         window.location.hash = "#locations";

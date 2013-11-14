@@ -165,6 +165,9 @@ def add_location(data, location_key=""):
     if data["hash_tag"]:
         location.hash_tag = data["hash_tag"]
 
+    if data["featured"]:
+        location.featured = data["featured"]
+
     location.put()
     return location
 

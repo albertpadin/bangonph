@@ -71,6 +71,7 @@ class Location(ndb.Model):
     status = ndb.JsonProperty()
     images = ndb.JsonProperty()
     hash_tag = ndb.StringProperty(repeated=True)
+    featured = ndb.BooleanProperty(default=False)
 
     def to_object(self, extended=""):
         details = {}

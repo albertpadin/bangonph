@@ -224,11 +224,14 @@ def add_drop_off_centers(data, instance_id=""):
                 center = DropOffCenter(id=temp_center_id)
                 break
 
+    if data["name"]:
+        center.name = data["name"]
+
     if data["drop_off_locations"]:
-        center.drop_off_locations = data["drop_off_locations"]
+        center.drop_off_locations = data["drop_off_locations"].split(", ")
 
     if data["distributor"]:
-        center.distributor = data["distributor"]
+        center.distributor = data["distributor"].split(", ")
 
     if data["address"]:
         center.address = data["address"]
@@ -237,7 +240,7 @@ def add_drop_off_centers(data, instance_id=""):
         center.latlong = data["latlong"]
 
     if data["destinations"]:
-        center.destinations = data["destinations"]
+        center.destinations = data["destinations"].split(", ")
 
     if data["schedule"]:
         center.schedule = data["schedule"]
@@ -249,7 +252,7 @@ def add_drop_off_centers(data, instance_id=""):
         center.facebook = data["facebook"]
 
     if data["contacts"]:
-        center.contacts = data["contacts"]
+        center.contacts = data["contacts"].split(", ")
 
     if data["email"]:
         center.email = data["email"]

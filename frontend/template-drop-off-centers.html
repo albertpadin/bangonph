@@ -1,0 +1,221 @@
+<script type="text/template" id="drop-off-centersTemplate">
+<div class="row" style="margin-top: -50px;">
+  <div class="col-lg-12">
+    <div class="bs-example table-responsive page-header" style="margin: 70px 0 21px!important; border-bottom: none!important">
+
+      <hr/>
+
+      <div style="display:none" class="alert alert-dismissable alert-success success-message">
+        <button type="button" class="close" data-dismiss="alert">&times;</button>
+        <strong>Well done!</strong> <span id="title"></span>
+      </div>
+      <div style="display:none" class="alert alert-dismissable alert-danger error-message">
+        <button type="button" class="close" data-dismiss="alert">&times;</button>
+        <strong>Oh snap!</strong> <span id="title"></span>
+      </div>
+
+      <h4>Drop-off Centers <a class="btn btn-success" href="#drop-off-center/new">New</a></h4>
+      <table id="dropOffGrid" class="table table-striped table-bordered table-hover">
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Drop Off Locations</th>
+            <th>Distributors</th>
+            <th>Address</th>
+            <th>Lat Long</th>
+            <th>Destinations</th>
+            <th>Schedule</th>
+            <th>Twitter</th>
+            <th>Facebook</th>
+            <th>Contacts</th>
+            <th>Email</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          <%
+            if ($.isEmptyObject(dropoffcenters)) {
+          %>
+          <tr>
+            <td colspan="12">No Record found.</td>
+          </tr>
+          <%
+            } else {
+              $.each(dropoffcenters, function() {
+          %>
+          <tr class="active" data-id="<%- this.id %>">
+            <td><%- this.name %></td>
+            <td><%- this.drop_off_locations %></td>
+            <td><%- this.distributor %></td>
+            <td><%- this.address %></td>
+            <td><%- this.latlong %></td>
+            <td><%- this.destinations %></td>
+            <td><%- this.schedule %></td>
+            <td><%- this.twitter %></td>
+            <td><%- this.facebook %></td>
+            <td><%- this.contacts %></td>
+            <td><%- this.email %></td>
+            <td align='center'><a class="first">Edit</a> | <a class="last">Delete</a></td>
+          </tr>
+          <%
+              })
+            }
+          %>
+        </tbody>
+      </table>
+
+    </div>
+  </div>
+</div>
+</script>
+
+<script type="text/template" id="addDrop-off-centersTemplate">
+  <form enctype="multipart/form-data" class="bs-example form-horizontal" id="frmAddDropOffCenter">
+    <div class="row" style="margin-top: -50px;">
+      <div class="col-lg-12">
+        <div class="page-header" style="border-bottom: none!important">
+        </div>
+        <div class="panel panel-default">
+          <div class="panel-heading">
+            <h3 class="panel-title"><strong>New Drop-off Center</strong></h3>
+          </div>
+          <div class="panel-body">
+            <p>
+              Full Name
+              <input type="text" id="name" required="required" class="form-control" placeholder="Full Name">
+            </p>
+            <p>
+            Drop Off Locations (separated by commas)
+              <input type="text" id="drop_off_locations" class="form-control" placeholder="Drop Off Locations (separated by commas)">
+            </p>
+            <p>
+            Distributors (separated by commas)
+              <input type="text" id="distributors" class="form-control" placeholder="Distributors (separated by commas)">
+            </p>
+            <p>
+            Address
+              <input type="text" id="address" class="form-control" placeholder="Address">
+            </p>
+            <p>
+            Lat Long
+              <input type="text" id="latlong" class="form-control" placeholder="Lat Long">
+            </p>
+            <p>
+            Destinations (separated by commas)
+              <input type="text" id="destinations" class="form-control" placeholder="Destinations (separated by commas)">
+            </p>
+            <p>
+            Schedule
+              <input type="text" id="schedule" class="form-control" placeholder="Schedule">
+            </p>
+            <p>
+            Twitter
+              <input type="text" id="twitter" class="form-control" placeholder="Twitter">
+            </p>
+            <p>
+            Facebook
+              <input type="text" id="facebook" class="form-control" placeholder="Facebook">
+            </p>
+            <p>
+            Contacts (separated by commas)
+              <input type="text" id="contacts" class="form-control" placeholder="Contacts (separated by commas)">
+            </p>
+            <p>
+            Email
+              <input type="email" id="email" class="form-control" placeholder="Email">
+            </p>
+            <p>
+              <button type="submit" class="btn btn-primary">Submit</button> 
+              <a href="#drop-off-centers" class="btn btn-default">Cancel</a> 
+              <div style="display:none" class="alert alert-dismissable alert-success success-message">
+                <button type="button" class="close" data-dismiss="alert">&times;</button>
+                <strong>Well done!</strong> New contact has been added.
+              </div>
+              <div style="display:none" class="alert alert-dismissable alert-danger error-message">
+                <button type="button" class="close" data-dismiss="alert">&times;</button>
+                <strong>Oh snap!</strong> Unable to add new contact. Try again.
+              </div>
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </form>
+</script>
+
+
+<script type="text/template" id="editDrop-off-centersTemplate">
+  <form enctype="multipart/form-data" class="bs-example form-horizontal" id="frmEditDropOffCenter">
+    <div class="row" style="margin-top: -50px;">
+      <div class="col-lg-12">
+        <div class="page-header" style="border-bottom: none!important">
+        </div>
+        <div class="panel panel-default">
+          <div class="panel-heading">
+            <h3 class="panel-title"><strong>Edit Drop-off Center</strong></h3>
+          </div>
+          <div class="panel-body">
+            <% 
+              if (!$.isEmptyObject(drop)) {
+                $.each(drop, function() {
+            %>
+            <input type="hidden" id="id" value="<%- this.id %>"/>
+            <p>
+            Full Name
+              <input type="text" id="name" value="<%- this.name %>" required="required" class="form-control" placeholder="Full Name">
+            </p>
+            <p>
+            Drop Off Locations (separated by commas)
+              <input type="text" id="drop_off_locations" value="<%- this.drop_off_locations %>" class="form-control" placeholder="Drop Off Locations (separated by commas)">
+            </p>
+            <p>
+            Distributors (separated by commas)
+              <input type="text" id="distributors" value="<%- this.distributor %>" class="form-control" placeholder="Distributors (separated by commas)">
+            </p>
+            <p>Address
+              <input type="text" id="address" value="<%- this.address %>" class="form-control" placeholder="Address">
+            </p>
+            <p>
+            Lat Long
+              <input type="text" id="latlong" value="<%- this.latlong %>" class="form-control" placeholder="Lat Long">
+            </p>
+            <p>Destinations (separated by commas)
+              <input type="text" id="destinations" value="<%- this.destinations %>"  class="form-control" placeholder="Destinations (separated by commas)">
+            </p>
+            <p>Schedule
+              <input type="text" id="schedule" value="<%- this.schedule %>" class="form-control" placeholder="Schedule">
+            </p>
+            <p>Twitter
+              <input type="text" id="twitter" value="<%- this.twitter %>" class="form-control" placeholder="Twitter">
+            </p>
+            <p>Facebook
+              <input type="text" id="facebook" value="<%- this.facebook %>" class="form-control" placeholder="Facebook">
+            </p>
+            <p>Contacts (separated by commas)
+              <input type="text" id="contacts" value="<%- this.contacts %>" class="form-control" placeholder="Contacts (separated by commas)">
+            </p>
+            <p>Email
+              <input type="email" id="email" value="<%- this.email %>" class="form-control" placeholder="Email">
+            </p>
+            <%
+                })
+              }
+            %>
+            <p>
+              <button type="submit" class="btn btn-primary">Submit</button> 
+              <a href="#drop-off-centers" class="btn btn-default">Cancel</a> 
+              <div style="display:none" class="alert alert-dismissable alert-success success-message">
+                <button type="button" class="close" data-dismiss="alert">&times;</button>
+                <strong>Well done!</strong> New contact has been added.
+              </div>
+              <div style="display:none" class="alert alert-dismissable alert-danger error-message">
+                <button type="button" class="close" data-dismiss="alert">&times;</button>
+                <strong>Oh snap!</strong> Unable to add new contact. Try again.
+              </div>
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </form>
+</script>

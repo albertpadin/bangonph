@@ -1,6 +1,6 @@
 import webapp2, jinja2, os, calendar
 from webapp2_extras import routes
-from models import User, Contact, Location, Post, Distribution, File, Distributor, Subscriber
+from models import User, Contact, Location, Post, Distribution, File, Distributor, Subscriber, DropOffCenter
 from functions import *
 import json as simplejson
 import logging
@@ -1171,22 +1171,82 @@ class DistributorHandler(BaseHandler):
 class CentersHandler(BaseHandler):
     @login_required
     def get(self):
-        pass
-    def post(self):
-        data = {
-            "drop_off_locations": self.request.get("drop_of_locations"),
-            "distributor": self.request.get("distributor"),
-            "address": self.request.get("address"),
-            "latlong": self.request.get("latlong"),
-            "destinations": self.request.get("destinations"),
-            "schedule": self.request.get("schedule"),
-            "twitter": self.request.get("twitter"),
-            "facebook": self.request.get("facebook"),
-            "contacts": self.request.get("contacts"),
-            "email": self.request.get("email"),
-        }
+        if self.request.get("id_delete"):
+            drop = DropOffCenter.get_by_id(self.request.get("id_delete"))
+            if drop:
+                drop.key.delete()
+            return
 
-        add_drop_off_centers(data)
+        if self.request.get("id_edit"):
+            drop = DropOffCenter.get_by_id(self.request.get("id_edit"))
+            if drop:
+                temp = {}
+                temp["id"] = drop.key.id()
+                temp["name"] = drop.name
+                temp["drop_off_locations"] = drop.drop_off_locations
+                temp["distributor"] = drop.distributor
+                temp["address"] = drop.address
+                temp["latlong"] = drop.latlong
+                temp["destinations"] = drop.destinations
+                temp["schedule"] = drop.schedule
+                temp["twitter"] = drop.twitter
+                temp["facebook"] = drop.facebook
+                temp["contacts"] = drop.contacts
+                temp["email"] = drop.email
+                self.response.out.write(simplejson.dumps(temp))
+                return
+
+        dropOffCenters = DropOffCenter.query().order(-DropOffCenter.created).fetch(100)
+        if dropOffCenters:
+            datas = []
+            for drop in dropOffCenters:
+                temp = {}
+                temp["id"] = drop.key.id()
+                temp["name"] = drop.name
+                temp["drop_off_locations"] = drop.drop_off_locations
+                temp["distributor"] = drop.distributor
+                temp["address"] = drop.address
+                temp["latlong"] = drop.latlong
+                temp["destinations"] = drop.destinations
+                temp["schedule"] = drop.schedule
+                temp["twitter"] = drop.twitter
+                temp["facebook"] = drop.facebook
+                temp["contacts"] = drop.contacts
+                temp["email"] = drop.email
+                datas.append(temp)
+            self.response.out.write(simplejson.dumps(datas))
+    def post(self):
+        if self.request.get("id"):
+            drop = DropOffCenter.get_by_id(self.request.get('id'))
+            if drop:
+                drop.name = self.request.get("name")
+                drop.drop_off_locations = self.request.get("drop_off_locations").split(", ")
+                drop.distributor = self.request.get("distributors").split(", ")
+                drop.address = self.request.get("address")
+                drop.latlong = self.request.get("latlong")
+                drop.destinations = self.request.get("destinations").split(", ")
+                drop.schedule = self.request.get("schedule")
+                drop.twitter = self.request.get("twitter")
+                drop.facebook = self.request.get("facebook")
+                drop.contacts = self.request.get("contacts").split(", ")
+                drop.email = self.request.get("email")
+                drop.put()
+        else:
+            data = {
+                "name" : self.request.get("name"),
+                "drop_off_locations": self.request.get("drop_off_locations"),
+                "distributor": self.request.get("distributors"),
+                "address": self.request.get("address"),
+                "latlong": self.request.get("latlong"),
+                "destinations": self.request.get("destinations"),
+                "schedule": self.request.get("schedule"),
+                "twitter": self.request.get("twitter"),
+                "facebook": self.request.get("facebook"),
+                "contacts": self.request.get("contacts"),
+                "email": self.request.get("email"),
+            }
+
+            add_drop_off_centers(data)
 
 class SubscriberPage(BaseHandler):
     @login_required
@@ -2037,7 +2097,7 @@ app = webapp2.WSGIApplication([
         webapp2.Route('/distributors', handler=DistributorHandler, name="www-distributors"),
 
         webapp2.Route('/contacts', handler=ContactHandler, name="www-contacts"),
-        webapp2.Route('/drop-off-center', handler=CentersHandler, name="www-centers"),
+        webapp2.Route('/drop-off-centers', handler=CentersHandler, name="www-centers"),
 
 
         webapp2.Route('/subscribers', handler=SubscriberPage, name="www-subscribers"),

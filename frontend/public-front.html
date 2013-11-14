@@ -192,3 +192,22 @@
       </div>
     </div>
 {% endblock %}
+
+
+{% block bottomjs %}
+        <script src="/js/jquery-draggable.js"></script>
+        <script src="/js/jquery.slimscroll.min.js"></script>
+        <script>
+          $(function(){
+              $('.feed-wrap').slimScroll({
+                  height: '420px'
+              });
+          });
+        </script>
+        <script>
+          $('#myTab a').click(function (e) {
+            e.preventDefault()
+            $(this).tab('show')
+          })
+        </script>
+{% endblock %}

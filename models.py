@@ -271,10 +271,17 @@ class Post(ndb.Model):
         details["post_type"] = self.post_type
         details["expiry"] = str(self.expiry)
         details["status"] = self.status
+        details["locations_id"] = self.locations
         details["id"] = self.key.id()
 
+        if self.locations:
+            locations = []
+            for loc in self.locations:
+                location_details = Location.get_by_id(loc)
+                locations.append(location_details.name)
+            details["location_names"] = locations
+        
         return details
-
 
 
 class LogActivity(ndb.Model):

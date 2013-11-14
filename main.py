@@ -570,7 +570,7 @@ class LocationHandler(BaseHandler):
                 self.response.out.write(simplejson.dumps(temp))
             return
 
-        locations = Location.query().order(-Location.created).fetch(300)
+        locations = Location.query().order(-Location.name).fetch(300)
         if locations:
             datas = []
             for location in locations:

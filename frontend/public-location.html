@@ -55,11 +55,11 @@
               <div class="status-group">
               <div class="status-entry">
                   <img class="icon" src="/img/icon-deaths.png" alt="Deaths">
-                  <span>{% if location.death_count %}{{ location.death_count|with_commas }} Deaths{% else %}Gathering Data{% endif %}</span>
+                  <span>{% if location.death_count_text %}{{ location.death_count_text }}{% else %}{% if location.death_count %}{{ location.death_count|with_commas }} Deaths{% else %}Gathering Data{% endif %}{% endif %}</span>
                 </div>
                 <div class="status-entry">
                   <img class="icon" src="/img/icon-family.png" alt="Families Affected">
-                  <span>{% if location.affected_count %}{{ location.affected_count|with_commas }} Families Affected{% else %}Gathering Data{% endif %}</span>
+                  <span>{% if location.affected_count_text %}{{ location.affected_count_text }}{% else %}{% if location.affected_count %}{{ location.affected_count|with_commas }} Deaths{% else %}Gathering Data{% endif %}{% endif %}</span>
                 </div>
                 <div class="status-entry">
                   <img class="icon" src="/img/icon-communication.png" alt="No Communication">
@@ -268,11 +268,11 @@
               <div class="status-group">
               <div class="status-entry">
                   <img class="icon" src="/img/icon-deaths.png" alt="Deaths">
-                  <span>{% if location.death_count %}{{ location.death_count|with_commas }} Deaths{% else %}Gathering Data{% endif %}</span>
+                  <span>{% if location.death_count_text %}{{ location.death_count_text }}{% else %}{% if location.death_count %}{{ location.death_count|with_commas }} Deaths{% else %}Gathering Data{% endif %}{% endif %}</span>
                 </div>
                 <div class="status-entry">
                   <img class="icon" src="/img/icon-family.png" alt="Families Affected">
-                  <span>{% if location.affected_count %}{{ location.affected_count|with_commas }} Families Affected{% else %}Gathering Data{% endif %}</span>
+                  <span>{% if location.affected_count_text %}{{ location.affected_count_text }}{% else %}{% if location.affected_count %}{{ location.affected_count|with_commas }} Deaths{% else %}Gathering Data{% endif %}{% endif %}</span>
                 </div>
                 <div class="status-entry">
                   <img class="icon" src="/img/icon-communication.png" alt="No Communication">

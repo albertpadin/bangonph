@@ -11,6 +11,7 @@ import datetime
 import hashlib
 import base64
 import facebook
+import pusher
 from oauth_models import *
 
 from google.appengine.api import urlfetch
@@ -1647,6 +1648,13 @@ class APIPostsHandler(APIBaseHandler):
         else:
             post = add_post(data, instance_id)
             self.render(post.to_object())
+
+        p = pusher.Pusher(
+          app_id='59383',
+          key='e0a2a1c8316b9baddc9b',
+          secret='474177f7aea8c983a7d1'
+        )
+        p['feeds'].trigger('new_post', data)
 
     def delete(self, instance_id=None):
         resp = API_RESPONSE.copy()

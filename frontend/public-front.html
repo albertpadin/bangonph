@@ -25,7 +25,399 @@
 
     <div class="container">
       <!-- Example row of columns -->
+      <script src="http://js.pusher.com/2.1/pusher.min.js"></script>
+      <script type="text/javascript">
+      $.ajax({
+          type: 'GET',
+          url: '/v1/posts',
+        })
+        .success(function(data) {
+          //get the posts here
+          console.log(data);
+        });
+
+        //pusher
+        var pusher = new Pusher('e0a2a1c8316b9baddc9b');
+        var channel = pusher.subscribe('feeds');
+        channel.bind('new_post', function(data) {
+          //do something when the new data is triggered
+          console.log(data);
+        });
+      </script>
       <div class="row">
+        <div class="col-lg-6 col-md-6 col-sm-6 col feed">
+       <strong>Needs</strong>
+       <span class="pull-right"><a href="#" class="see-more-btn">see more</a></span>
+       
+       <ul class="nav nav-pills">
+          <li class="active"><a href="#all" data-toggle="tab">All</a></li>
+          <li><a href="#transpo" data-toggle="tab">Transpo</a></li>
+          <li><a href="#volunteers" data-toggle="tab">Volunteers</a></li>
+          <li><a href="#relief-goods" data-toggle="tab">Relief Goods</a></li>
+        </ul>
+        <div class="tab-content">
+
+          <div class="tab-pane active" id="all">
+             <ul class="feed-wrap">
+
+                <li class="all">
+                  <a href="#">
+                    <strong>dan allen pantinople</strong>
+                    <p><span class="label label-default">tacloban</span><span class="label label-info">needs transpo</span>Super Typhoon Yolanda hit the Philippines and left several towns devastated. Affecting more than 2 million people and killing over 2,000 and still counting. This is the live and developing story of how we rise again.
+
+                    <br/><span class="date-time">Nov 14, 2013 - 2:19pm <span class="pull-right"><a href="#share" class="share-btn">Share</a></span></span>
+                    </p>
+                  </a>
+                </li>
+                <li class="all">
+                  <a href="#">
+                    <strong>dan allen pantinople</strong>
+                    <p><span class="label label-success">needs volunteers</span>Super Typhoon Yolanda hit the Philippines and left several towns devastated. Affecting more than 2 million people and killing over 2,000 and still counting. This is the live and developing story of how we rise again.
+
+                    <br/><span class="date-time">Nov 14, 2013 - 2:19pm <span class="pull-right"><a href="#share" class="share-btn">Share</a></span></span>
+                    </p>
+                  </a>
+                </li>
+                <li class="all">
+                  <a href="#">
+                    <strong>dan allen pantinople</strong>
+                    <p><span class="label label-danger">needs relief goods</span>Super Typhoon Yolanda hit the Philippines and left several towns devastated. Affecting more than 2 million people and killing over 2,000 and still counting. This is the live and developing story of how we rise again.
+
+                    <br/><span class="date-time">Nov 14, 2013 - 2:19pm <span class="pull-right"><a href="#share" class="share-btn">Share</a></span></span>
+                    </p>
+                  </a>
+                </li>
+                <li class="all">
+                  <a href="#">
+                    <strong>dan allen pantinople</strong>
+                    <p><span class="label label-info">needs transpo</span>Super Typhoon Yolanda hit the Philippines and left several towns devastated. Affecting more than 2 million people and killing over 2,000 and still counting. This is the live and developing story of how we rise again.
+
+                    <br/><span class="date-time">Nov 14, 2013 - 2:19pm <span class="pull-right"><a href="#share" class="share-btn">Share</a></span></span>
+                    </p>
+                  </a>
+                </li>
+
+             </ul>
+          </div>
+
+          <div class="tab-pane" id="transpo">
+             <ul class="feed-wrap">
+
+                <li class="transpo">
+                  <a href="#">
+                    <strong>dan allen pantinople</strong>
+                    <p><span class="label label-info">needs transpo</span>Super Typhoon Yolanda hit the Philippines and left several towns devastated. Affecting more than 2 million people and killing over 2,000 and still counting. This is the live and developing story of how we rise again.
+
+                    <br/><span class="date-time">Nov 14, 2013 - 2:19pm <span class="pull-right"><a href="#share" class="share-btn">Share</a></span></span>
+                    </p>
+                  </a>
+                </li>
+                <li class="transpo">
+                  <a href="#">
+                    <strong>dan allen pantinople</strong>
+                    <p><span class="label label-info">needs transpo</span>Super Typhoon Yolanda hit the Philippines and left several towns devastated. Affecting more than 2 million people and killing over 2,000 and still counting. This is the live and developing story of how we rise again.
+
+                    <br/><span class="date-time">Nov 14, 2013 - 2:19pm <span class="pull-right"><a href="#share" class="share-btn">Share</a></span></span>
+                    </p>
+                  </a>
+                </li>
+                <li class="transpo">
+                  <a href="#">
+                    <strong>dan allen pantinople</strong>
+                    <p><span class="label label-info">needs transpo</span>Super Typhoon Yolanda hit the Philippines and left several towns devastated. Affecting more than 2 million people and killing over 2,000 and still counting. This is the live and developing story of how we rise again.
+
+                    <br/><span class="date-time">Nov 14, 2013 - 2:19pm <span class="pull-right"><a href="#share" class="share-btn">Share</a></span></span>
+                    </p>
+                  </a>
+                </li>
+                <li class="transpo">
+                  <a href="#">
+                    <strong>dan allen pantinople</strong>
+                    <p><span class="label label-info">needs transpo</span>Super Typhoon Yolanda hit the Philippines and left several towns devastated. Affecting more than 2 million people and killing over 2,000 and still counting. This is the live and developing story of how we rise again.
+
+                    <br/><span class="date-time">Nov 14, 2013 - 2:19pm <span class="pull-right"><a href="#share" class="share-btn">Share</a></span></span>
+                    </p>
+                  </a>
+                </li>
+
+             </ul>
+          </div>
+
+          <div class="tab-pane" id="volunteers">
+             <ul class="feed-wrap">
+
+                <li class="volunteers">
+                  <a href="#">
+                    <strong>dan allen pantinople</strong>
+                    <p><span class="label label-success">needs volunteers</span>Super Typhoon Yolanda hit the Philippines and left several towns devastated. Affecting more than 2 million people and killing over 2,000 and still counting. This is the live and developing story of how we rise again.
+
+                    <br/><span class="date-time">Nov 14, 2013 - 2:19pm <span class="pull-right"><a href="#share" class="share-btn">Share</a></span></span>
+                    </p>
+                  </a>
+                </li>
+                <li class="volunteers">
+                  <a href="#">
+                    <strong>dan allen pantinople</strong>
+                    <p><span class="label label-success">needs volunteers</span>Super Typhoon Yolanda hit the Philippines and left several towns devastated. Affecting more than 2 million people and killing over 2,000 and still counting. This is the live and developing story of how we rise again.
+
+                    <br/><span class="date-time">Nov 14, 2013 - 2:19pm <span class="pull-right"><a href="#share" class="share-btn">Share</a></span></span>
+                    </p>
+                  </a>
+                </li>
+                <li class="volunteers">
+                  <a href="#">
+                    <strong>dan allen pantinople</strong>
+                    <p><span class="label label-success">needs volunteers</span>Super Typhoon Yolanda hit the Philippines and left several towns devastated. Affecting more than 2 million people and killing over 2,000 and still counting. This is the live and developing story of how we rise again.
+
+                    <br/><span class="date-time">Nov 14, 2013 - 2:19pm <span class="pull-right"><a href="#share" class="share-btn">Share</a></span></span>
+                    </p>
+                  </a>
+                </li>
+                <li class="volunteers">
+                  <a href="#">
+                    <strong>dan allen pantinople</strong>
+                    <p><span class="label label-success">needs volunteers</span>Super Typhoon Yolanda hit the Philippines and left several towns devastated. Affecting more than 2 million people and killing over 2,000 and still counting. This is the live and developing story of how we rise again.
+
+                    <br/><span class="date-time">Nov 14, 2013 - 2:19pm <span class="pull-right"><a href="#share" class="share-btn">Share</a></span></span>
+                    </p>
+                  </a>
+                </li>
+
+             </ul>
+          </div>
+
+          <div class="tab-pane" id="relief-goods">
+             <ul class="feed-wrap">
+
+                <li class="relief-goods">
+                  <a href="#">
+                    <strong>dan allen pantinople</strong>
+                    <p><span class="label label-danger">needs relief goods</span>Super Typhoon Yolanda hit the Philippines and left several towns devastated. Affecting more than 2 million people and killing over 2,000 and still counting. This is the live and developing story of how we rise again.
+
+                    <br/><span class="date-time">Nov 14, 2013 - 2:19pm <span class="pull-right"><a href="#share" class="share-btn">Share</a></span></span>
+                    </p>
+                  </a>
+                </li>
+                <li class="relief-goods">
+                  <a href="#">
+                    <strong>dan allen pantinople</strong>
+                    <p><span class="label label-danger">needs relief goods</span>Super Typhoon Yolanda hit the Philippines and left several towns devastated. Affecting more than 2 million people and killing over 2,000 and still counting. This is the live and developing story of how we rise again.
+
+                    <br/><span class="date-time">Nov 14, 2013 - 2:19pm <span class="pull-right"><a href="#share" class="share-btn">Share</a></span></span>
+                    </p>
+                  </a>
+                </li>
+                <li class="relief-goods">
+                  <a href="#">
+                    <strong>dan allen pantinople</strong>
+                    <p><span class="label label-danger">needs relief goods</span>Super Typhoon Yolanda hit the Philippines and left several towns devastated. Affecting more than 2 million people and killing over 2,000 and still counting. This is the live and developing story of how we rise again.
+
+                    <br/><span class="date-time">Nov 14, 2013 - 2:19pm <span class="pull-right"><a href="#share" class="share-btn">Share</a></span></span>
+                    </p>
+                  </a>
+                </li>
+                <li class="relief-goods">
+                  <a href="#">
+                    <strong>dan allen pantinople</strong>
+                    <p><span class="label label-danger">needs relief goods</span>Super Typhoon Yolanda hit the Philippines and left several towns devastated. Affecting more than 2 million people and killing over 2,000 and still counting. This is the live and developing story of how we rise again.
+
+                    <br/><span class="date-time">Nov 14, 2013 - 2:19pm <span class="pull-right"><a href="#share" class="share-btn">Share</a></span></span>
+                    </p>
+                  </a>
+                </li>
+
+             </ul>
+          </div>
+
+
+    
+       </div>
+        
+      </div>
+      <div class="col-lg-6 col-md-6 col-sm-6 col feed">
+       <strong>Have</strong>
+       <span class="pull-right"><a href="#" class="see-more-btn">see more</a></span>
+       
+       <ul class="nav nav-pills">
+          <li class="active"><a href="#all-have" data-toggle="tab">All</a></li>
+          <li><a href="#transpo-have" data-toggle="tab">Transpo</a></li>
+          <li><a href="#volunteers-have" data-toggle="tab">Volunteers</a></li>
+          <li><a href="#relief-goods-have" data-toggle="tab">Relief Goods</a></li>
+        </ul>
+        <div class="tab-content">
+
+          <div class="tab-pane active" id="all-have">
+             <ul class="feed-wrap">
+
+                <li class="all-have">
+                  <a href="#">
+                    <strong>dan allen pantinople</strong>
+                    <p><span class="label label-info">needs transpo</span>Super Typhoon Yolanda hit the Philippines and left several towns devastated. Affecting more than 2 million people and killing over 2,000 and still counting. This is the live and developing story of how we rise again.
+
+                    <br/><span class="date-time">Nov 14, 2013 - 2:19pm <span class="pull-right"><a href="#share" class="share-btn">Share</a></span></span>
+                    </p>
+                  </a>
+                </li>
+                <li class="all-have">
+                  <a href="#">
+                    <strong>dan allen pantinople</strong>
+                    <p><span class="label label-success">needs volunteers</span>Super Typhoon Yolanda hit the Philippines and left several towns devastated. Affecting more than 2 million people and killing over 2,000 and still counting. This is the live and developing story of how we rise again.
+
+                    <br/><span class="date-time">Nov 14, 2013 - 2:19pm <span class="pull-right"><a href="#share" class="share-btn">Share</a></span></span>
+                    </p>
+                  </a>
+                </li>
+                <li class="all-have">
+                  <a href="#">
+                    <strong>dan allen pantinople</strong>
+                    <p><span class="label label-danger">needs relief goods</span>Super Typhoon Yolanda hit the Philippines and left several towns devastated. Affecting more than 2 million people and killing over 2,000 and still counting. This is the live and developing story of how we rise again.
+
+                    <br/><span class="date-time">Nov 14, 2013 - 2:19pm <span class="pull-right"><a href="#share" class="share-btn">Share</a></span></span>
+                    </p>
+                  </a>
+                </li>
+                <li class="all-have">
+                  <a href="#">
+                    <strong>dan allen pantinople</strong>
+                    <p><span class="label label-info">needs transpo</span>Super Typhoon Yolanda hit the Philippines and left several towns devastated. Affecting more than 2 million people and killing over 2,000 and still counting. This is the live and developing story of how we rise again.
+
+                    <br/><span class="date-time">Nov 14, 2013 - 2:19pm <span class="pull-right"><a href="#share" class="share-btn">Share</a></span></span>
+                    </p>
+                  </a>
+                </li>
+
+             </ul>
+          </div>
+
+          <div class="tab-pane" id="transpo-have">
+             <ul class="feed-wrap">
+
+                <li class="transpo-have">
+                  <a href="#">
+                    <strong>dan allen pantinople</strong>
+                    <p><span class="label label-info">needs transpo</span>Super Typhoon Yolanda hit the Philippines and left several towns devastated. Affecting more than 2 million people and killing over 2,000 and still counting. This is the live and developing story of how we rise again.
+
+                    <br/><span class="date-time">Nov 14, 2013 - 2:19pm <span class="pull-right"><a href="#share" class="share-btn">Share</a></span></span>
+                    </p>
+                  </a>
+                </li>
+                <li class="transpo-have">
+                  <a href="#">
+                    <strong>dan allen pantinople</strong>
+                    <p><span class="label label-info">needs transpo</span>Super Typhoon Yolanda hit the Philippines and left several towns devastated. Affecting more than 2 million people and killing over 2,000 and still counting. This is the live and developing story of how we rise again.
+
+                    <br/><span class="date-time">Nov 14, 2013 - 2:19pm <span class="pull-right"><a href="#share" class="share-btn">Share</a></span></span>
+                    </p>
+                  </a>
+                </li>
+                <li class="transpo-have">
+                  <a href="#">
+                    <strong>dan allen pantinople</strong>
+                    <p><span class="label label-info">needs transpo</span>Super Typhoon Yolanda hit the Philippines and left several towns devastated. Affecting more than 2 million people and killing over 2,000 and still counting. This is the live and developing story of how we rise again.
+
+                    <br/><span class="date-time">Nov 14, 2013 - 2:19pm <span class="pull-right"><a href="#share" class="share-btn">Share</a></span></span>
+                    </p>
+                  </a>
+                </li>
+                <li class="transpo-have">
+                  <a href="#">
+                    <strong>dan allen pantinople</strong>
+                    <p><span class="label label-info">needs transpo</span>Super Typhoon Yolanda hit the Philippines and left several towns devastated. Affecting more than 2 million people and killing over 2,000 and still counting. This is the live and developing story of how we rise again.
+
+                    <br/><span class="date-time">Nov 14, 2013 - 2:19pm <span class="pull-right"><a href="#share" class="share-btn">Share</a></span></span>
+                    </p>
+                  </a>
+                </li>
+
+             </ul>
+          </div>
+
+          <div class="tab-pane" id="volunteers-have">
+             <ul class="feed-wrap">
+
+                <li class="volunteers-have">
+                  <a href="#">
+                    <strong>dan allen pantinople</strong>
+                    <p><span class="label label-success">needs volunteers</span>Super Typhoon Yolanda hit the Philippines and left several towns devastated. Affecting more than 2 million people and killing over 2,000 and still counting. This is the live and developing story of how we rise again.
+
+                    <br/><span class="date-time">Nov 14, 2013 - 2:19pm <span class="pull-right"><a href="#share" class="share-btn">Share</a></span></span>
+                    </p>
+                  </a>
+                </li>
+                <li class="volunteers-have">
+                  <a href="#">
+                    <strong>dan allen pantinople</strong>
+                    <p><span class="label label-success">needs volunteers</span>Super Typhoon Yolanda hit the Philippines and left several towns devastated. Affecting more than 2 million people and killing over 2,000 and still counting. This is the live and developing story of how we rise again.
+
+                    <br/><span class="date-time">Nov 14, 2013 - 2:19pm <span class="pull-right"><a href="#share" class="share-btn">Share</a></span></span>
+                    </p>
+                  </a>
+                </li>
+                <li class="volunteers-have">
+                  <a href="#">
+                    <strong>dan allen pantinople</strong>
+                    <p><span class="label label-success">needs volunteers</span>Super Typhoon Yolanda hit the Philippines and left several towns devastated. Affecting more than 2 million people and killing over 2,000 and still counting. This is the live and developing story of how we rise again.
+
+                    <br/><span class="date-time">Nov 14, 2013 - 2:19pm <span class="pull-right"><a href="#share" class="share-btn">Share</a></span></span>
+                    </p>
+                  </a>
+                </li>
+                <li class="volunteers-have">
+                  <a href="#">
+                    <strong>dan allen pantinople</strong>
+                    <p><span class="label label-success">needs volunteers</span>Super Typhoon Yolanda hit the Philippines and left several towns devastated. Affecting more than 2 million people and killing over 2,000 and still counting. This is the live and developing story of how we rise again.
+
+                    <br/><span class="date-time">Nov 14, 2013 - 2:19pm <span class="pull-right"><a href="#share" class="share-btn">Share</a></span></span>
+                    </p>
+                  </a>
+                </li>
+
+             </ul>
+          </div>
+
+          <div class="tab-pane" id="relief-goods-have">
+             <ul class="feed-wrap">
+
+                <li class="relief-goods-have">
+                  <a href="#">
+                    <strong>dan allen pantinople</strong>
+                    <p><span class="label label-danger">needs relief goods</span>Super Typhoon Yolanda hit the Philippines and left several towns devastated. Affecting more than 2 million people and killing over 2,000 and still counting. This is the live and developing story of how we rise again.
+
+                    <br/><span class="date-time">Nov 14, 2013 - 2:19pm <span class="pull-right"><a href="#share" class="share-btn">Share</a></span></span>
+                    </p>
+                  </a>
+                </li>
+                <li class="relief-goods-have">
+                  <a href="#">
+                    <strong>dan allen pantinople</strong>
+                    <p><span class="label label-danger">needs relief goods</span>Super Typhoon Yolanda hit the Philippines and left several towns devastated. Affecting more than 2 million people and killing over 2,000 and still counting. This is the live and developing story of how we rise again.
+
+                    <br/><span class="date-time">Nov 14, 2013 - 2:19pm <span class="pull-right"><a href="#share" class="share-btn">Share</a></span></span>
+                    </p>
+                  </a>
+                </li>
+                <li class="relief-goods-have">
+                  <a href="#">
+                    <strong>dan allen pantinople</strong>
+                    <p><span class="label label-danger">needs relief goods</span>Super Typhoon Yolanda hit the Philippines and left several towns devastated. Affecting more than 2 million people and killing over 2,000 and still counting. This is the live and developing story of how we rise again.
+
+                    <br/><span class="date-time">Nov 14, 2013 - 2:19pm <span class="pull-right"><a href="#share" class="share-btn">Share</a></span></span>
+                    </p>
+                  </a>
+                </li>
+                <li class="relief-goods-have">
+                  <a href="#">
+                    <strong>dan allen pantinople</strong>
+                    <p><span class="label label-danger">needs relief goods</span>Super Typhoon Yolanda hit the Philippines and left several towns devastated. Affecting more than 2 million people and killing over 2,000 and still counting. This is the live and developing story of how we rise again.
+
+                    <br/><span class="date-time">Nov 14, 2013 - 2:19pm <span class="pull-right"><a href="#share" class="share-btn">Share</a></span></span>
+                    </p>
+                  </a>
+                </li>
+
+             </ul>
+          </div>
+          
         {% for location in featured_locations %}
         <div class="col-lg-4 col-md-6 col-sm-6 col">
             <div class="status-item">
@@ -107,6 +499,7 @@
             </div>
         </div>
         {% endfor %}
+      
 
         {% for location in locations %}
         <div class="col-lg-4 col-md-6 col-sm-6 col">

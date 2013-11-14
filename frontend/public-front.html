@@ -50,17 +50,20 @@
        <span class="pull-right"><a href="#" class="see-more-btn">see more</a></span>
 
 
-         <div class="feed-input">
-         <form>
-          <input type="text" name="name" placeholder="name">
-          <textarea placeholder="what do you need.." name="message"></textarea> 
-          <input type="text" name="deadline" placeholder="when do you need it">
-          <input type="text" name="contact" placeholder="contact details">
-          <input type="hidden" name="comment">
+      <div class="feed-input">
+           <form>
+              
+              <textarea placeholder="what do you need.." name="message" class="text-input"></textarea>
+              <input type="date" name="deadline" placeholder="when do you need it" class="hidden">
+              <input type="text" name="location" placeholder="what place is this for" class="hidden">
+              <input type="text" name="name" placeholder="what is your name" class="hidden">
+              <input type="text" name="contact" placeholder="leave your contact details" class="hidden">
+              <input type="hidden" name="comment">
+             
+                <a href="#" class="btn btn-default hidden cancel-btn">Cancel</a>
+                <input type="submit" value="Post" class="btn btn-primary hidden submit-btn">
 
-          <input type="submit" value="post" class="btn btn-primary">
           </form>
-
          </div>
 
 
@@ -122,9 +125,21 @@
        <strong>Have</strong>
        <span class="pull-right"><a href="#" class="see-more-btn">see more</a></span>
        
-      <div class="feed-input">
-        <input type="text" placeholder="post what you have..">
-      </div>
+         <div class="feed-input">
+           <form>
+              
+              <textarea placeholder="what do you have.." name="message" class="text-input"></textarea>
+              <input type="date" name="deadline" placeholder="until when is it available" class="hidden"> 
+              <input type="text" name="location" placeholder="where is it" class="hidden">
+              <input type="text" name="name" placeholder="what is your name" class="hidden">
+              <input type="text" name="contact" placeholder="leave your contact details" class="hidden">
+              <input type="hidden" name="comment">
+             
+                <a href="#" class="btn btn-default hidden cancel-btn">Cancel</a>
+                <input type="submit" value="Post" class="btn btn-primary hidden submit-btn">
+
+          </form>
+         </div>
 
        <ul class="nav nav-pills">
           <li class="active"><a href="#all-have" data-toggle="tab">All</a></li>
@@ -141,7 +156,7 @@
                 <li class="all-have">
                   <a href="#">
                     <strong>dan allen pantinople</strong>
-                    <p><span class="label label-info">needs transpo</span>Super Typhoon Yolanda hit the Philippines and left several towns devastated. Affecting more than 2 million people and killing over 2,000 and still counting. This is the live and developing story of how we rise again.
+                    <p><span class="label label-info">needs transpo</span>Super Typhoon .ing story of how we rise again.
 
                     <br/><span class="date-time">Nov 14, 2013 - 2:19pm <span class="pull-right"><a href="#share" class="share-btn">Share</a></span></span>
                     </p>
@@ -285,5 +300,18 @@
             e.preventDefault()
             $(this).tab('show')
           })
+        </script>
+        <script>
+          $(".text-input").focus(function(){
+            $(this).closest("form").find(".hidden").removeClass("hidden").addClass("show");
+            $(this).closest("div").addClass("shadowed");
+          });
+          
+          $(".cancel-btn").click(function(e){
+            e.preventDefault()
+            $(this).closest("form").find(".show").removeClass("show").addClass("hidden");
+            $(this).closest("div").removeClass("shadowed");
+          });
+
         </script>
 {% endblock %}

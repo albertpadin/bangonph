@@ -855,14 +855,28 @@ class DistributionHandler(BaseHandler):
                 new_titles = simplejson.loads(titles)
                 new_captions = simplejson.loads(captions)
 
-                cnt = len(new_urls)
-                image_data = []
-                for i in range(0, cnt):
-                    images = {}
-                    images["src"] = new_urls[i]["src"]
-                    images["image_title"] = new_titles[i]["image_title"]
-                    images["image_caption"] = new_captions[i]["image_caption"]
-                    distribution.images.append(images)
+                if distribution.images:
+                    cnt = len(new_urls)
+                    image_data = []
+                    for i in range(0, cnt):
+                        if new_urls[i]["src"] != "" or new_titles[i]["image_title"] != "" or new_captions[i]["image_caption"] != "":
+                            images = {}
+                            images["src"] = new_urls[i]["src"]
+                            images["image_title"] = new_titles[i]["image_title"]
+                            images["image_caption"] = new_captions[i]["image_caption"]
+                            distribution.images.append(images)
+                else:
+                    images_datas = []
+                    cnt = len(new_urls)
+                    image_data = []
+                    for i in range(0, cnt):
+                        if new_urls[i]["src"] != "" or new_titles[i]["image_title"] != "" or new_captions[i]["image_caption"] != "":
+                            images = {}
+                            images["src"] = new_urls[i]["src"]
+                            images["image_title"] = new_titles[i]["image_title"]
+                            images["image_caption"] = new_captions[i]["image_caption"]
+                            image_data.append(images)
+                    distribution.images = image_data
 
                 distribution.date_of_distribution = datetime.datetime.strptime(self.request.get("date_of_distribution"), "%Y-%m-%d")
                 distribution.contact = self.request.get("contact")
@@ -982,11 +996,12 @@ class DistributionHandler(BaseHandler):
             cnt = len(new_urls)
             image_data = []
             for i in range(0, cnt):
-                images = {}
-                images["src"] = new_urls[i]["src"]
-                images["image_title"] = new_titles[i]["image_title"]
-                images["image_caption"] = new_captions[i]["image_caption"]
-                image_data.append(images)
+                if new_urls[i]["src"] != "" or new_titles[i]["image_title"] != "" or new_captions[i]["image_caption"] != "":
+                    images = {}
+                    images["src"] = new_urls[i]["src"]
+                    images["image_title"] = new_titles[i]["image_title"]
+                    images["image_caption"] = new_captions[i]["image_caption"]
+                    image_data.append(images)
 
             data = {
                 "date_of_distribution": datetime.datetime.strptime(self.request.get("date_of_distribution"), "%Y-%m-%d"), #1992-10-20

@@ -1736,7 +1736,7 @@ class APIPostsHandler(APIBaseHandler):
             try:
                 self.params["expiry"] = datetime.datetime.strptime(self.request.get("expiry"), "%Y-%m-%d %H:%M:%S") #1992-10-20
             except:
-                resp['response'] = "invalid_expiry"
+                resp['response'] = "invalid_date_format"
                 resp['code'] = 406
                 resp['property'] = "expiry"
                 resp['description'] = "Use this format (YYYY-mm-dd H:M:S)"
@@ -1932,7 +1932,7 @@ class APISubscribersHandler(APIBaseHandler):
     def post(self, instance_id=None):
         resp = API_RESPONSE.copy()
         data = API_RESPONSE_DATA.copy()
-        if check_all_keys(["name", "email", "fb_id", "distribution"], self.params):
+        if check_all_keys(["name", "email", "distribution"], self.params):
             if instance_id:
                 resp["method"] = "edit"
                 exist = Subscriber.get_by_id(long(instance_id))
@@ -2005,15 +2005,26 @@ class APISubscribersHandler(APIBaseHandler):
 
 class APIEffortsHandler(APIBaseHandler):
     def get(self, instance_id=None):
+        resp = API_RESPONSE.copy()
+        resp["method"] = "get"
+        failed = False
         efforts_json = []
         logging.critical(self.request.get("expand"))
         if not instance_id:
             if self.request.get("cursor"):
-                curs = Cursor(urlsafe=self.request.get("cursor"))
-                if curs:
-                    efforts, next_cursor, more = Distribution.query().fetch_page(25, start_cursor=curs)
+                try:
+                    curs = Cursor(urlsafe=self.request.get("cursor"))
+                except Exception, e:
+                    resp['response'] = "invalid_cursor"
+                    resp['code'] = 406
+                    resp['property'] = "cursor"
+                    resp['description'] = "Invalid cursor"
+                    failed = True
                 else:
-                    efforts, next_cursor, more = Distribution.query().fetch_page(25)
+                    if curs:
+                        efforts, next_cursor, more = Distribution.query().fetch_page(25, start_cursor=curs)
+                    else:
+                        efforts, next_cursor, more = Distribution.query().fetch_page(25)
             else:
                 if self.request.get("filter_locations"):
                     loc = slugify(self.request.get("filter_locations"))
@@ -2025,45 +2036,86 @@ class APIEffortsHandler(APIBaseHandler):
             for effort in efforts:
                 efforts_json.append(effort.to_object(self.request.get("expand").lower()))
 
-            data = {}
-            data["efforts"] = efforts_json
-            if more:
-                data["next_page"] = "http://api.bangonph.com/v1/locations?cursor=" + str(next_cursor.urlsafe())
-            else:
-                data["next_page"] = False
-            self.render(data)
+            if not failed:
+                data = {}
+                data["efforts"] = efforts_json
+                if more:
+                    data["next_page"] = "http://api.bangonph.com/v1/locations?cursor=" + str(next_cursor.urlsafe())
+                else:
+                    data["next_page"] = False
+
+                resp["description"] = "List of instances"
+                resp["property"] = "efforts"
+                resp["data"] = data
         else:
             effort = Distribution.get_by_id(instance_id)
             if effort:
                 self.render(effort.to_object())
 
-    @oauthed_required
     def post(self, instance_id=None):
+        resp = API_RESPONSE.copy()
         if self.request.get("date_of_distribution"):
-            date = datetime.datetime.strptime(self.request.get("date_of_distribution"), "%Y-%m-%d"), #1992-10-20
+            try:
+                date = datetime.datetime.strptime(self.request.get("date_of_distribution"), "%Y-%m-%d"), #1992-10-20
+            except:
+                resp['response'] = "invalid_date_format"
+                resp['code'] = 406
+                resp['property'] = "date_of_distribution"
+                resp['description'] = "Use this format (YYYY-mm-dd H:M:S)"
         else:
             date = None
-        data = {
-            "date_of_distribution": date,
-            "contact": self.request.get("contact"),
-            "destinations": self.request.get("destinations"),
-            "supply_goal": self.request.get("supply_goal"),
-            "actual_supply": self.request.get("actual_supply"),
-            "images": self.request.get("images")
-        }
+        # data = {
+        #     "date_of_distribution": date,
+        #     "contact": self.request.get("contact"),
+        #     "destinations": self.request.get("destinations"),
+        #     "supply_goal": self.request.get("supply_goal"),
+        #     "actual_supply": self.request.get("actual_supply"),
+        #     "images": self.request.get("images")
+        # }
+
+        self.params["date_of_distribution"] = date
+
         if not instance_id:
-            effort = add_distribution(data)
-            self.render(effort.to_object())
+            resp["method"] = "create"
+            effort = add_distribution(self.params)
+            if effort:
+                resp["description"] = "Successfully created the instance"
+                resp["data"] = effort.to_object()
+            else:
+                # foolsafe, failsafe, watever!
+                resp['response'] = "cannot_create"
+                resp['code'] = 500
+                resp['property'] = "add_distribution"
+                resp['description'] = "Server cannot create the instance"
+
         else:
-            effort = add_distribution(data, instance_id)
-            self.render(effort.to_object())
+            resp["method"] = "edit"
+            exist = Distribution.get_by_id(long(instance_id))
+            if exist:
+                effort = add_distribution(self.params, instance_id)
+                if effort:
+                    resp["description"] = "Successfully edited the instance"
+                    resp["data"] = effort.to_object()
+                else:
+                    # didnt edi but imposible
+                    resp['response'] = "cannot_edit"
+                    resp['code'] = 500
+                    resp['property'] = "add_distribution"
+                    resp['description'] = "Server cannot create the instance"
+            else:
+                resp['response'] = "invalid_instance"
+                resp['code'] = 404
+                resp['property'] = "instance_id"
+                resp['description'] = "Instance id missing or not valid"
+
+        self.render(resp)
 
     @oauthed_required
     def delete(self, instance_id=None):
         resp = API_RESPONSE.copy()
         resp["method"] = "delete"
         if instance_id:
-            effort = Distribution.get_by_id(int(instance_id))
+            effort = Distribution.get_by_id(long(instance_id))
             if effort:
                 subscriber.key.delete()
                 resp["description"] = "Successfully deleted the instance"
@@ -2257,7 +2309,7 @@ class UploadHandler(blobstore_handlers.BlobstoreUploadHandler):
 
 
 app = webapp2.WSGIApplication([
-    routes.DomainRoute(r'<:gcdc2013-bangonph\.appspot\.com|localhost|www\.bangonph\.com>', [
+    routes.DomainRoute(r'<:gcdc2013-bangonph\.appspot\.com|www\.bangonph\.com>', [
         webapp2.Route('/', handler=PublicFrontPage, name="www-front"),
         webapp2.Route('/reliefoperations', handler=ReliefOperationsPage, name="www-reliefoperations"),
         webapp2.Route(r'/locations/<:.*>', handler=PublicLocationPage, name="www-locations"),
@@ -2306,7 +2358,7 @@ app = webapp2.WSGIApplication([
         webapp2.Route(r'/<:.*>', ErrorHandler)
     ]),
 
-    routes.DomainRoute(r'<:api\.bangonph\.com>', [
+    routes.DomainRoute(r'<:api\.bangonph\.com|localhost>', [
         webapp2.Route('/v1/locations', handler=APILocationsHandler, name="api-locations"),
         webapp2.Route('/v1/users', handler=APIUsersHandler, name="api-users"),
         webapp2.Route('/v1/contacts', handler=APIContactsHandler, name="api-locations"),

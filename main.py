@@ -2136,54 +2136,107 @@ class APIEffortsHandler(APIBaseHandler):
 
 class APIContactsHandler(APIBaseHandler):
     def get(self, instance_id=None):
+        resp = API_RESPONSE.copy()
+        resp["method"] = "get"
+        failed = False
         contacts_json = []
         if not instance_id:
             if self.request.get("cursor"):
-                curs = Cursor(urlsafe=self.request.get("cursor"))
-                if curs:
-                    contacts, next_cursor, more = Contact.query().fetch_page(25, start_cursor=curs)
+                try:
+                    curs = Cursor(urlsafe=self.request.get("cursor"))
+                except Exception, e:
+                    resp['response'] = "invalid_cursor"
+                    resp['code'] = 406
+                    resp['property'] = "cursor"
+                    resp['description'] = "Invalid cursor"
+                    failed = True
                 else:
-                    contacts, next_cursor, more = Contact.query().fetch_page(25)
+                    if curs:
+                        contacts, next_cursor, more = Contact.query().fetch_page(25, start_cursor=curs)
+                    else:
+                        contacts, next_cursor, more = Contact.query().fetch_page(25)
             else:
                 contacts, next_cursor, more = Contact.query().fetch_page(25)
 
-            for contact in contacts:
-                contacts_json.append(contact.to_object())
+            if not failed:
+                for contact in contacts:
+                    contacts_json.append(contact.to_object())
 
-            data = {}
-            data["locations"] = contacts_json
-            if more:
-                data["next_page"] = "http://api.bangonph.com/v1/contacts?cursor=" + str(next_cursor.urlsafe())
-            else:
-                data["next_page"] = False
+                data = {}
+                data["locations"] = contacts_json
+                if more:
+                    data["next_page"] = "http://api.bangonph.com/v1/contacts?cursor=" + str(next_cursor.urlsafe())
+                else:
+                    data["next_page"] = False
 
-            self.render(data)
+                resp["description"] = "List of instances"
+                resp["property"] = "contacts"
+                resp["data"] = data
         else:
             contacts = Contact.get_by_id(instance_id)
             if contacts:
-                self.render(contacts.to_object())
+                resp["description"] = "Instance data"
+                resp["property"] = "posts"
+                resp["data"] = contacts.to_object()
+            else:
+                # instance dont exist
+                resp['response'] = "invalid_instance"
+                resp['code'] = 404
+                resp['property'] = "instance_id"
+                resp['description'] = "Instance id missing or not valid"
+
+        self.render(resp)
 
     @oauthed_required
     def post(self, instance_id=None):
-        data = {}
-        data["name"] = self.request.get("name")
-        data["contacts"] = self.request.get("contacts")
-        data["email"] = self.request.get("email")
-        data["facebook"] = self.request.get("facebook")
-        data["twitter"] = self.request.get("twitter")
+        resp = API_RESPONSE.copy()
+        # data = {}
+        # data["name"] = self.request.get("name")
+        # data["contacts"] = self.request.get("contacts")
+        # data["email"] = self.request.get("email")
+        # data["facebook"] = self.request.get("facebook")
+        # data["twitter"] = self.request.get("twitter")
+
         if not instance_id:
-            contact = add_contact(data)
-            self.render(contact.to_object())
+            resp["method"] = "create"
+            contact = add_contact(self.params)
+            if contact:
+                resp["description"] = "Successfully edited the instance"
+                resp["data"] = contact.to_object()
+            else:
+                # foolsafe, failsafe, watever!
+                resp['response'] = "cannot_create"
+                resp['code'] = 500
+                resp['property'] = "add_contact"
+                resp['description'] = "Server cannot create the instance"
         else:
-            contact = add_contact(data, instance_id)
-            self.render(contact.to_object())
+            resp["method"] = "edit"
+            exist = Contact.get_by_id(int(instance_id))
+            if exist:
+                contact = add_contact(self.params, instance_id)
+                if contact:
+                    resp["description"] = "Successfully edited the instance"
+                    resp["data"] = contact.to_object()
+                else:
+                    resp['response'] = "cannot_edit"
+                    resp['code'] = 500
+                    resp['property'] = "add_contact"
+                    resp['description'] = "Server cannot create the instance"
+            else:
+                # instance dont exist but imposible
+                resp['response'] = "invalid_instance"
+                resp['code'] = 404
+                resp['property'] = "instance_id"
+                resp['description'] = "Instance id missing or not valid"
+
+        self.render(resp)
 
     @oauthed_required
     def delete(self, instance_id=None):
         resp = API_RESPONSE.copy()
         resp["method"] = "delete"
         if instance_id:
-            contact = Contact.get_by_id(int(instance_id))
+            contact = Contact.get_by_id(long(instance_id))
             if effort:
                 subscriber.key.delete()
                 resp["description"] = "Successfully deleted the instance"

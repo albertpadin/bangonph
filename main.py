@@ -1718,7 +1718,7 @@ class APIPostsHandler(APIBaseHandler):
             else:
                 if self.request.get_all("filter_post_type"):
                     filter_type = self.request.get_all("filter_post_type")[0].upper()
-                    date_now = datetime.datetime.now() + datetime.timedelta(hours=8)
+                    date_now = datetime.datetime.now() - datetime.timedelta(hours=24)
 
                     posts, next_cursor, more = Post.query(Post.post_type.IN([filter_type]), Post.expiry >= date_now).order(-Post.expiry).fetch_page(100)
                 else:
@@ -1760,16 +1760,16 @@ class APIPostsHandler(APIBaseHandler):
         resp = API_RESPONSE.copy()
         if self.request.get("expiry"):
             try:
-                expiry = datetime.datetime.strptime(self.request.get("expiry"), "%Y-%m-%d %H:%M:%S") #1992-10-20
+                expiry = datetime.datetime.strptime(self.request.get("expiry"), "%m/%d/%Y") #1992-10-20
             except:
                 resp['response'] = "invalid_date_format"
                 resp['code'] = 406
                 resp['property'] = "expiry"
-                resp['description'] = "Use this format (YYYY-mm-dd H:M:S)"
+                resp['description'] = "Use this format (mm/dd/yyyy)"
 
                 return
         else:
-            expiry = None
+            expiry = datetime.datetime.now() + datetime.timedelta(days=7)
 
         data = {
             "name": self.request.get("name"),
@@ -1781,7 +1781,7 @@ class APIPostsHandler(APIBaseHandler):
             "post_type": self.request.get_all("post_type"),
             "expiry": expiry,
             "status": self.request.get("status"),
-            "location": self.request.get_all("location"),
+            "location": self.request.get("location"),
         }
         # use self.params
         if not instance_id:

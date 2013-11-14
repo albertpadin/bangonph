@@ -3,6 +3,7 @@
 {% block ogdetails %}<meta property="og:image" content="http://www.bangonph.com/img/bangon-ph-black.png"/>{% endblock %}
 
 {% block content %}
+    <link rel="stylesheet" href="/css/datepicker.css">
     <div class="jumbotron">
       <div class="container">
         <h1>Let's Coordinate our Relief Efforts</h1>
@@ -24,175 +25,89 @@
     </div>
 
     <div class="container">
-      <!-- Example row of columns -->
-      <script src="http://js.pusher.com/2.1/pusher.min.js"></script>
-      <script type="text/javascript">
-      $.ajax({
-          type: 'GET',
-          url: '/v1/posts',
-        })
-        .success(function(data) {
-          //get the posts here
-          console.log(data);
-        });
-
-        //pusher
-        var pusher = new Pusher('e0a2a1c8316b9baddc9b');
-        var channel = pusher.subscribe('feeds');
-        channel.bind('new_post', function(data) {
-          //do something when the new data is triggered
-          console.log(data);
-        });
-      </script>
+      
       <div class="row">
         <div class="col-lg-6 col-md-6 col-sm-6 col feed">
-       <strong>Needs</strong>
-       <span class="pull-right"><a href="#" class="see-more-btn">see more</a></span>
+       <strong>Need Anything? Post it here!</strong>
+       <!-- <span class="pull-right"><a href="/posts" class="see-more-btn">see more</a></span> -->
 
 
       <div class="feed-input">
-           <form>
-              
-              <textarea placeholder="what do you need.." name="message" class="text-input"></textarea>
-              <input type="date" name="deadline" placeholder="when do you need it" class="hidden">
-              <input type="text" name="location" placeholder="what place is this for" class="hidden">
-              <input type="text" name="name" placeholder="what is your name" class="hidden">
-              <input type="text" name="contact" placeholder="leave your contact details" class="hidden">
-              <input type="hidden" name="comment">
-             
-                <a href="#" class="btn btn-default hidden cancel-btn">Cancel</a>
-                <input type="submit" value="Post" class="btn btn-primary hidden submit-btn">
+         <form id="post_need">
+            
+            <textarea placeholder="what do you need.." name="message" class="text-input"></textarea>
+            <input type="text" name="expiry" placeholder="show this until what date" class="datepicker hidden">
+            <input type="text" name="location" placeholder="what place is this for" class="hidden">
+            <input type="text" name="name" placeholder="what is your name" class="hidden">
+            <input type="text" name="phone" placeholder="leave your contact details" class="hidden">
+            <input type="text" style="display: none;" name="comment">
+            <input type="hidden" name="post_type" value="NEED" />
+           
+              <a href="#" class="btn btn-default hidden cancel-btn">Cancel</a>
+              <input type="submit" value="Post" id="post_need_submit" class="btn btn-primary hidden submit-btn">
 
-          </form>
-         </div>
+        </form>
+       </div>
 
-
+        
        <ul class="nav nav-pills">
-          <li class="active"><a href="#all" data-toggle="tab">All</a></li>
+         <!--  <li class="active"><a href="#all" data-toggle="tab">All</a></li>
           <li><a href="#transpo" data-toggle="tab">Transpo</a></li>
           <li><a href="#volunteers" data-toggle="tab">Volunteers</a></li>
-          <li><a href="#relief-goods" data-toggle="tab">Relief Goods</a></li>
+          <li><a href="#relief-goods" data-toggle="tab">Relief Goods</a></li> -->
         </ul>
         <div class="tab-content">
 
           <div class="tab-pane active" id="all">
-             <ul class="feed-wrap">
+             <ul id="post_need_feed" class="feed-wrap">
 
-                <li class="all">
-                  <a href="#">
-                    <strong>dan allen pantinople</strong>
-                    <p><span class="label label-default">tacloban</span><span class="label label-info">needs transpo</span>Super Typhoon Yolanda hit the Philippines and left several towns devastated. Affecting more than 2 million people and killing over 2,000 and still counting. This is the live and developing story of how we rise again.
-
-                    <br/><span class="date-time">Nov 14, 2013 - 2:19pm <span class="pull-right"><a href="#share" class="share-btn">Share</a></span></span>
-                    </p>
-                  </a>
-                </li>
-                <li class="all">
-                  <a href="#">
-                    <strong>dan allen pantinople</strong>
-                    <p><span class="label label-success">needs volunteers</span>Super Typhoon Yolanda hit the Philippines and left several towns devastated. Affecting more than 2 million people and killing over 2,000 and still counting. This is the live and developing story of how we rise again.
-
-                    <br/><span class="date-time">Nov 14, 2013 - 2:19pm <span class="pull-right"><a href="#share" class="share-btn">Share</a></span></span>
-                    </p>
-                  </a>
-                </li>
-                <li class="all">
-                  <a href="#">
-                    <strong>dan allen pantinople</strong>
-                    <p><span class="label label-danger">needs relief goods</span>Super Typhoon Yolanda hit the Philippines and left several towns devastated. Affecting more than 2 million people and killing over 2,000 and still counting. This is the live and developing story of how we rise again.
-
-                    <br/><span class="date-time">Nov 14, 2013 - 2:19pm <span class="pull-right"><a href="#share" class="share-btn">Share</a></span></span>
-                    </p>
-                  </a>
-                </li>
-                <li class="all">
-                  <a href="#">
-                    <strong>dan allen pantinople</strong>
-                    <p><span class="label label-info">needs transpo</span>Super Typhoon Yolanda hit the Philippines and left several towns devastated. Affecting more than 2 million people and killing over 2,000 and still counting. This is the live and developing story of how we rise again.
-
-                    <br/><span class="date-time">Nov 14, 2013 - 2:19pm <span class="pull-right"><a href="#share" class="share-btn">Share</a></span></span>
-                    </p>
-                  </a>
-                </li>
+                
 
              </ul>
           </div>
-
-       </div>
+        </div>
       </div>
 
       <div class="col-lg-6 col-md-6 col-sm-6 col feed">
-       <strong>Have</strong>
-       <span class="pull-right"><a href="#" class="see-more-btn">see more</a></span>
+       <strong>What can you donate? Let us know!</strong>
+       <!-- <span class="pull-right"><a href="/posts" class="see-more-btn">see more</a></span> -->
        
          <div class="feed-input">
-           <form>
+           <form id="post_have">
               
               <textarea placeholder="what do you have.." name="message" class="text-input"></textarea>
-              <input type="date" name="deadline" placeholder="until when is it available" class="hidden"> 
+              <input type="text" name="expiry" placeholder="until when is it available" class="datepicker hidden"> 
               <input type="text" name="location" placeholder="where is it" class="hidden">
               <input type="text" name="name" placeholder="what is your name" class="hidden">
-              <input type="text" name="contact" placeholder="leave your contact details" class="hidden">
-              <input type="hidden" name="comment">
-             
-                <a href="#" class="btn btn-default hidden cancel-btn">Cancel</a>
-                <input type="submit" value="Post" class="btn btn-primary hidden submit-btn">
+              <input type="text" name="phone" placeholder="leave your contact details" class="hidden">
+              <input type="text" style="display: none;" name="comment">
+              <input type="hidden" name="post_type" value="HAVE" />
+           
+              <a href="#" class="btn btn-default hidden cancel-btn">Cancel</a>
+              <input type="submit" value="Post" id="post_have_submit" class="btn btn-primary hidden submit-btn">
 
-          </form>
-         </div>
+        </form>
+       </div>
 
        <ul class="nav nav-pills">
-          <li class="active"><a href="#all-have" data-toggle="tab">All</a></li>
+          <!-- <li class="active"><a href="#all-have" data-toggle="tab">All</a></li>
           <li><a href="#transpo-have" data-toggle="tab">Transpo</a></li>
           <li><a href="#volunteers-have" data-toggle="tab">Volunteers</a></li>
-          <li><a href="#relief-goods-have" data-toggle="tab">Relief Goods</a></li>
+          <li><a href="#relief-goods-have" data-toggle="tab">Relief Goods</a></li> -->
         </ul>
 
         <div class="tab-content">
 
           <div class="tab-pane active" id="all-have">
-             <ul class="feed-wrap">
+             <ul class="feed-wrap" id="post_have_feed">
 
-                <li class="all-have">
-                  <a href="#">
-                    <strong>dan allen pantinople</strong>
-                    <p><span class="label label-info">needs transpo</span>Super Typhoon .ing story of how we rise again.
-
-                    <br/><span class="date-time">Nov 14, 2013 - 2:19pm <span class="pull-right"><a href="#share" class="share-btn">Share</a></span></span>
-                    </p>
-                  </a>
-                </li>
-                <li class="all-have">
-                  <a href="#">
-                    <strong>dan allen pantinople</strong>
-                    <p><span class="label label-success">needs volunteers</span>Super Typhoon Yolanda hit the Philippines and left several towns devastated. Affecting more than 2 million people and killing over 2,000 and still counting. This is the live and developing story of how we rise again.
-
-                    <br/><span class="date-time">Nov 14, 2013 - 2:19pm <span class="pull-right"><a href="#share" class="share-btn">Share</a></span></span>
-                    </p>
-                  </a>
-                </li>
-                <li class="all-have">
-                  <a href="#">
-                    <strong>dan allen pantinople</strong>
-                    <p><span class="label label-danger">needs relief goods</span>Super Typhoon Yolanda hit the Philippines and left several towns devastated. Affecting more than 2 million people and killing over 2,000 and still counting. This is the live and developing story of how we rise again.
-
-                    <br/><span class="date-time">Nov 14, 2013 - 2:19pm <span class="pull-right"><a href="#share" class="share-btn">Share</a></span></span>
-                    </p>
-                  </a>
-                </li>
-                <li class="all-have">
-                  <a href="#">
-                    <strong>dan allen pantinople</strong>
-                    <p><span class="label label-info">needs transpo</span>Super Typhoon Yolanda hit the Philippines and left several towns devastated. Affecting more than 2 million people and killing over 2,000 and still counting. This is the live and developing story of how we rise again.
-
-                    <br/><span class="date-time">Nov 14, 2013 - 2:19pm <span class="pull-right"><a href="#share" class="share-btn">Share</a></span></span>
-                    </p>
-                  </a>
-                </li>
+                
 
              </ul>
 
-                </div>
+          </div>
+        </div>
+      </div>
       <div class="clearfix"></div>
           
         {% for location in featured_locations %}
@@ -368,6 +283,10 @@
 {% block bottomjs %}
         <script src="/js/jquery-draggable.js"></script>
         <script src="/js/jquery.slimscroll.min.js"></script>
+        <script src="/js/bootstrap-datepicker.js"></script>
+        <script>
+            $('.datepicker').datepicker();
+        </script>
         <script>
           $(function(){
               $('.feed-wrap').slimScroll({
@@ -394,4 +313,111 @@
           });
 
         </script>
+        <script src="http://js.pusher.com/2.1/pusher.min.js"></script>
+      <script type="text/javascript">
+      $(document).ready(function(){
+
+        $.ajax({
+          type: 'GET',
+          url: '/api/posts',
+        })
+        .success(function(data) {
+          //get the posts here
+          for(i=0;i<data.data.posts.length;i++){
+            data2 = data.data.posts[i];
+            d = '<li class="all ' + data2.post_type + '">';
+            /*d += '<a href="/' + data2.id + '">';*/
+            d += '<strong>' + data2.name + '</strong>';
+            d += '<p>';
+            if(data2.location){
+              d += '<span class="label label-default">' + data2.location + '</span>';
+            }/*
+            if(data2.post_type){
+              d += '<span class="label label-info">' + data2.post_type + '</span>'
+            }*/
+            d += data2.message;
+            /*d += '<br/><span class="date-time">' + data2.expiry_friendly + '<span class="pull-right"><a href="/posts/' + data2.id + '" class="share-btn">View</a></span></span></p></a></li>';*/
+            d += '<br/><span class="date-time">' + data2.expiry_friendly + '</span></p></li>';
+
+            if(data2.post_type){
+              if(data2.post_type == "NEED"){
+                $("#post_need_feed").prepend(d);
+              }
+              else {
+                $("#post_have_feed").prepend(d);
+              }
+            }
+            else {
+              $("#post_need_feed").prepend(d);
+            }
+
+          }
+          
+        });
+
+      });
+
+        //pusher
+        var pusher = new Pusher('e0a2a1c8316b9baddc9b');
+        var channel = pusher.subscribe('feeds');
+        channel.bind('new_post', function(data) {
+          //do something when the new data is triggered
+          console.log(data);
+          for(i=0;i<data.data.posts.length;i++){
+            data2 = data.data.posts[i];
+            d = '<li class="all ' + data2.post_type + '">';
+            /*d += '<a href="/' + data2.id + '">';*/
+            d += '<strong>' + data2.name + '</strong>';
+            d += '<p>';
+            if(data2.location){
+              d += '<span class="label label-default">' + data2.location + '</span>';
+            }/*
+            if(data2.post_type){
+              d += '<span class="label label-info">' + data2.post_type + '</span>'
+            }*/
+            d += data2.message;
+            /*d += '<br/><span class="date-time">' + data2.expiry_friendly + '<span class="pull-right"><a href="/posts/' + data2.id + '" class="share-btn">View</a></span></span></p></a></li>';*/
+            d += '<br/><span class="date-time">' + data2.expiry_friendly + '</span></p></li>';
+
+            if(data2.post_type){
+              if(data2.post_type == "NEED"){
+                $("#post_need_feed").prepend(d);
+              }
+              else {
+                $("#post_have_feed").prepend(d);
+              }
+            }
+            else {
+              $("#post_need_feed").prepend(d);
+            }
+
+          }
+        });
+      </script>
+      <script type="text/javascript">
+      $("#post_need").submit(function(e){
+        e.preventDefault();
+        $("#post_need_submit").attr('disabled','disabled');
+        $.post( "/api/posts", $("#post_need").serialize(), function( data ) {
+          console.log(data);
+          $("#post_need").find("input[type=text], textarea").val("");
+          $("#post_need_submit").removeAttr('disabled');
+            $("#post_need").find(".show").removeClass("show").addClass("hidden");
+            $("#post_need").closest("div").removeClass("shadowed");
+        });
+      });
+
+      $("#post_have").submit(function(e){
+        e.preventDefault();
+        $("#post_have_submit").attr('disabled','disabled');
+        $.post( "/api/posts", $("#post_have").serialize(), function( data ) {
+          console.log(data);
+          $("#post_have").find("input[type=text], textarea").val("");
+          $("#post_have_submit").removeAttr('disabled');
+          $("#post_have").find(".show").removeClass("show").addClass("hidden");
+            $("#post_have").closest("div").removeClass("shadowed");
+        });
+      });
+
+      </script>
 {% endblock %}

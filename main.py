@@ -1128,10 +1128,10 @@ class DistributorHandler(BaseHandler):
             temp["website"] = distributor.website
             temp["facebook"] = distributor.facebook
             temp["contact_details"] = distributor.contact_details
-            
+
             self.response.out.write(simplejson.dumps(temp))
             return
-        
+
         distributors = Distributor.query().fetch(100)
         if distributors:
             datas = []
@@ -1144,14 +1144,14 @@ class DistributorHandler(BaseHandler):
                 temp["website"] = distributor.website
                 temp["facebook"] = distributor.facebook
                 temp["contact_details"] = distributor.contact_details
-                
+
                 datas.append(temp)
             self.response.out.write(simplejson.dumps(datas))
 
     def post(self):
         if self.request.get('id'):
             distributor = Distributor.get_by_id(int(self.request.get("id")))
-            distributor.name = self.request.get("name") 
+            distributor.name = self.request.get("name")
             distributor.contact_num = self.request.get("contact_num")
             distributor.email = self.request.get("email")
             distributor.website = self.request.get("website")
@@ -1475,9 +1475,9 @@ class APILocationsHandler(APIBaseHandler):
         resp = API_RESPONSE.copy()
         resp["method"] = "delete"
         if instance_id:
-            location = ndb.Key("Location", instance_id)
+            location = Location.get_by_id(instance_id)
             if location:
-                center.key.delete()
+                location.key.delete()
                 resp["description"] = "Successfully deleted the instance"
             else:
                 resp['response'] = "invalid_instance"
@@ -1492,7 +1492,7 @@ class APILocationsHandler(APIBaseHandler):
             resp['description'] = "The request has missing parameters"
 
         self.render(resp)
-        
+
 
 class APILContactsHandler(APIBaseHandler):
     def get(self, instance_id=None):
@@ -1597,7 +1597,7 @@ class APIPostsHandler(APIBaseHandler):
             else:
                 resp['response'] = "invalid_instance"
                 resp['code'] = 404
-                resp['property'] = "delete_subscriber"
+                resp['property'] = "delete_post"
                 resp['description'] = "Instance id not valid"
         else:
             # missing params
@@ -1672,7 +1672,7 @@ class APIDropOffCentersHandler(APIBaseHandler):
             else:
                 resp['response'] = "invalid_instance"
                 resp['code'] = 404
-                resp['property'] = "delete_subscriber"
+                resp['property'] = "delete_center"
                 resp['description'] = "Instance id not valid"
         else:
             # missing params
@@ -1714,65 +1714,21 @@ class APISubscribersHandler(APIBaseHandler):
 
     @oauthed_required
     def post(self, instance_id=None):
-        resp = API_RESPONSE.copy()
-        data = API_RESPONSE_DATA.copy()
-        if check_all_keys(["name", "email", "fb_id"], self.params):
-            if instance_id:
-                resp["method"] = "edit"
-                exist = Subscriber.get_by_id(long(instance_id))
-                if exist:
-                    # edit instance
-                    subscriber = add_subcriber(self.params, instance_id)
-                    if subscriber:
-                        distribution = subscriber.distribution.get() if subscriber.distribution else None # get the id of the parent
-                        resp["description"] = "Successfully edited the subscriber"
-                        data["id"] = str(subscriber.key.id())
-                        data["name"] = str(subscriber.name)
-                        data["instance_id"] = str(subscriber.key.id())
-                        data["meta"]["href"] = str(self.base_uri + "/" + str(subscriber.key.id()))
-                        if distribution: # if naay gi subscribe for now lang
-                            data["parent"]["meta"]["href"] = str(currenturl + "/drop-off-centers/" + str(distribution.key.id()))
-                        resp["data"] = data
-                    else:
-                        # foolsafe, failsafe, watever!
-                        resp['response'] = "cannot_edit"
-                        resp['code'] = 500
-                        resp['property'] = "add_subcriber"
-                        resp['description'] = "Server cannot create the instance"
-                else:
-                    # instance doesnt exist
-                    resp['response'] = "invalid_instance"
-                    resp['code'] = 404
-                    resp['property'] = "instance_id"
-                    resp['description'] = "Instance id missing or not valid"
-            else:
-                resp["method"] = "create"
-                # new instance
+        if check_all_keys(["name", "email", "fb_id", "distribution"], self.params):
+            if not instance_id:
                 subscriber = add_subcriber(self.params)
-                if subscriber:
-                    distribution = subscriber.distribution.get() if subscriber.distribution else None # get the id of the parent
-                    resp["description"] = "Successfully created the instance"
-                    data["id"] = str(subscriber.key.id())
-                    data["name"] = str(subscriber.name)
-                    data["instance_id"] = str(subscriber.key.id())
-                    data["meta"]["href"] = str(self.base_uri + "/" + str(subscriber.key.id()))
-                    if distribution: # if naay gi subscribe for now lang
-                        data["parent"]["meta"]["href"] = str(currenturl + "/drop-off-centers/" + str(distribution.key.id()))
-                    resp["data"] = data
-                else:
-                    # foolsafe, failsafe, watever!
-                    resp['response'] = "cannot_create"
-                    resp['code'] = 500
-                    resp['property'] = "add_subcriber"
-                    resp['description'] = "Server cannot create the instance"
+            else:
+                subscriber = add_subcriber(self.params, instance_id)
+            self.render(subscriber.to_object(self.request.get("expand")))
         else:
+            resp = API_RESPONSE.copy()
             # missing params
             resp['response'] = "missing_params"
             resp['code'] = 406
             resp['property'] = "params"
             resp['description'] = "The request has missing parameters"
 
-        self.render(resp)
+            self.render(resp)
 
     @oauthed_required
     def delete(self, instance_id=None):
@@ -2087,7 +2043,7 @@ app = webapp2.WSGIApplication([
         webapp2.Route('/upload/handler', handler=UploadHandler, name="www-upload-handler"),
         webapp2.Route('/distributors', handler=DistributorHandler, name="www-distributors"),
         webapp2.Route('/distributions/fetch', handler=DistributionFetchHandler, name="www-distributions-fetch"),
-        
+
 
 
         # richmond:

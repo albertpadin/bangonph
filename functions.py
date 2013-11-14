@@ -176,7 +176,7 @@ def add_distribution(data, instance_id=""):
 
     if data["date_of_distribution"]:
         distribution.date_of_distribution = data["date_of_distribution"]
-        
+
 
     if data["contact"]:
         distribution.contact = data["contact"]
@@ -269,8 +269,8 @@ def add_subcriber(data, instance_id=""):
         subscriber.email = data["email"]
     if data["fb_id"]:
         subscriber.fb_id = data["fb_id"]
-    # if data["distribution"]:
-    #     subscriber.distribution = ndb.Key("Distribution", data["distribution"])
+    if data["distribution"]:
+        subscriber.distribution = ndb.Key("Distribution", data["distribution"])
 
     subscriber.put()
     return subscriber
@@ -364,7 +364,7 @@ def add_distributor(data, instance_id=""):
 
     if data["email"]:
         distributor.email = data["email"]
-    
+
     if data["website"]:
         distributor.website = data["website"]
 

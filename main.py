@@ -1089,6 +1089,7 @@ class DistributorHandler(BaseHandler):
             temp["email"] = distributor.email
             temp["website"] = distributor.website
             temp["facebook"] = distributor.facebook
+            temp["contact_details"] = distributor.contact_details
             
             self.response.out.write(simplejson.dumps(temp))
             return
@@ -1104,6 +1105,7 @@ class DistributorHandler(BaseHandler):
                 temp["email"] = distributor.email
                 temp["website"] = distributor.website
                 temp["facebook"] = distributor.facebook
+                temp["contact_details"] = distributor.contact_details
                 
                 datas.append(temp)
             self.response.out.write(simplejson.dumps(datas))
@@ -1116,6 +1118,7 @@ class DistributorHandler(BaseHandler):
             distributor.email = self.request.get("email")
             distributor.website = self.request.get("website")
             distributor.facebook = self.request.get("facebook")
+            distributor.contact_details = self.request.get("contact_details")
             distributor.put()
         else:
             distributor = Distributor()
@@ -1124,6 +1127,7 @@ class DistributorHandler(BaseHandler):
             distributor.email = self.request.get("email")
             distributor.website = self.request.get("website")
             distributor.facebook = self.request.get("facebook")
+            distributor.contact_details = self.request.get("contact_details")
             distributor.put()
 
 class CentersHandler(BaseHandler):

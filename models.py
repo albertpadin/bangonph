@@ -252,7 +252,7 @@ class Post(ndb.Model):
     facebook = ndb.StringProperty()
     phone = ndb.StringProperty()
     message = ndb.TextProperty()
-    post_type = ndb.StringProperty(repeated=True) # need or have (transpo, people, goods)
+    post_type = ndb.StringProperty(repeated=True) # need or have (transpo, people, goods, needs, have )
     expiry = ndb.DateTimeProperty()
     status = ndb.StringProperty(default="ACTIVE") # expired cancelled active
     location = ndb.KeyProperty(repeated=True)

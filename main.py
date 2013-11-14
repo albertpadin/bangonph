@@ -331,6 +331,21 @@ class PublicLocationPage(BaseHandler):
 
         self.render('frontend/public-location.html')
 
+    def post(self, location_id=None):
+        subscriber = Subscriber(id=self.request.get("email"))
+        subscriber.email = self.request.get("email")
+
+        if self.request.get("subscribe_location"):
+            loc = Location.get_by_id(location_id)
+            subscriber.location = loc.key
+
+        if self.request.get("subscribe_all"):
+            subscriber.all_updates = True
+
+        subscriber.put()
+        logging.critical(subscriber)
+        self.redirect("/locations/"+location_id)
+
 
 class ReliefOperationsPage(BaseHandler):
     def get(self):
@@ -1857,6 +1872,7 @@ class APIEffortsHandler(APIBaseHandler):
             if effort:
                 self.render(effort.to_object())
 
+    @oauthed_required
     def post(self, instance_id=None):
         if self.request.get("date_of_distribution"):
             date = datetime.datetime.strptime(self.request.get("date_of_distribution"), "%Y-%m-%d"), #1992-10-20
@@ -2076,7 +2092,7 @@ class UploadHandler(blobstore_handlers.BlobstoreUploadHandler):
 
 
 app = webapp2.WSGIApplication([
-    routes.DomainRoute(r'<:gcdc2013-bangonph\.appspot\.com|www\.bangonph\.com>', [
+    routes.DomainRoute(r'<:gcdc2013-bangonph\.appspot\.com|localhost|www\.bangonph\.com>', [
         webapp2.Route('/', handler=PublicFrontPage, name="www-front"),
         webapp2.Route('/reliefoperations', handler=ReliefOperationsPage, name="www-reliefoperations"),
         webapp2.Route(r'/locations/<:.*>', handler=PublicLocationPage, name="www-locations"),
@@ -2086,7 +2102,7 @@ app = webapp2.WSGIApplication([
 
         webapp2.Route(r'/<:.*>', ErrorHandler)
     ]),
-    routes.DomainRoute(r'<:admin\.bangonph\.com|localhost>', [
+    routes.DomainRoute(r'<:admin\.bangonph\.com>', [
         webapp2.Route('/', handler=FrontPage, name="www-front"),
         webapp2.Route('/register', handler=RegisterPage, name="www-register"),
         webapp2.Route('/logout', handler=Logout, name="www-logout"),
@@ -2122,7 +2138,7 @@ app = webapp2.WSGIApplication([
         webapp2.Route(r'/<:.*>', ErrorHandler)
     ]),
 
-    routes.DomainRoute(r'<:api\.bangonph\.com|localhost>', [
+    routes.DomainRoute(r'<:api\.bangonph\.com>', [
         webapp2.Route('/v1/locations', handler=APILocationsHandler, name="api-locations"),
         webapp2.Route('/v1/users', handler=APIUsersHandler, name="api-users"),
         webapp2.Route('/v1/contacts', handler=APIContactsHandler, name="api-locations"),

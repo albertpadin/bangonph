@@ -1,42 +1,3 @@
-var DropOffCenterView = Backbone.View.extend({
-  el: "#app",
-  template: _.template( $("#drop-off-centersTemplate").html() ),
-  render: function() {
-    $(this.el).html( this.template() );
-  }
-});
-
-var AddDropOffCenter = Backbone.View.extend({
-  el: "#app",
-  template: _.template( $("#addDrop-off-centersTemplate").html() ),
-  events: {
-    "submit form#frmAddDropOffCenter" : "addDropOff"
-  },
-  render: function() {
-    $(this.el).html( this.template() );
-  },
-  addDropOff: function() {
-    $.ajax({
-      type: "post",
-      url: "/drop-off-centers",
-      data: {
-        "name" : _.escape($("#fname").val()),
-        "latlong" : _.escape($("#latlong").val()),
-        "destinations" : _.escape($("#destinations").val()),
-        "schedule" : _.escape($("#schedule").val()),
-        "twitter" : _.escape($("#twitter").val()),
-        "facebook" : _.escape($("#facebook").val()),
-        "phone" : _.escape($("#phone").val()),
-        "email" : _.escape($("#email").val()),
-      },
-      success: function() {
-        window.location.hash = "#drop-off-centers";
-      }
-    });
-    return false;
-  }
-});
-
 var ResourcesView = Backbone.View.extend({
   el: "#app",
   template: _.template( $("#resourcesTemplate").html() ),
@@ -143,6 +104,7 @@ var Router = Backbone.Router.extend({
 
         "drop-off-centers" : "renderDropOffCenterPage",
         "drop-off-center/new" : "renderAddDropOffCenterPage",
+        "drop-off-center/edit/:id" : "renderEditDropOffCenterPage",
 
         "resources" : "renderResourcesPage",
 
@@ -224,9 +186,14 @@ var Router = Backbone.Router.extend({
 
     renderDropOffCenterPage: function() {
       dropOffCenterView.render();
+      dropOffCenterView.drops();
     },
     renderAddDropOffCenterPage: function() {
       addDropOffCenter.render();
+    },
+    renderEditDropOffCenterPage: function(id) {
+      editDropOffCenter.render();
+      editDropOffCenter.dropoff(id);
     },
 
     renderResourcesPage: function() {
@@ -269,6 +236,7 @@ var editDistributor = new EditDistributor();
 
 var dropOffCenterView = new DropOffCenterView();
 var addDropOffCenter = new AddDropOffCenter();
+var editDropOffCenter = new EditDropOffCenter();
 
 var resourcesView = new ResourcesView();
 

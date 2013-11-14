@@ -10,3 +10,5 @@ BangonPH is a disaster relief coordination platform that collates all the data o
 With the use of this platform and several volunteers, we hope to help guide relief operations nationwide.
 
 This can also be used as a platform for other disasters or calamities that may happen in the future.
+
+Note: We've submitted this app as an entry to Google Cloud Developer Challenge. Any prize money that we win from this competition will be used to fund the further development of this disaster relief coordination platform.

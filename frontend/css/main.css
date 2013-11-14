@@ -431,7 +431,7 @@ height: 80px;
     }
 
     .feed .nav {
-        padding: 5px 0px;
+        padding: 10px 0px;
     }
 
     .feed .nav li a {
@@ -457,6 +457,34 @@ height: 80px;
             border: 1px solid #5bc0de;
             color: #5bc0de;
         }
+
+    .feed-input {
+        z-index: 9999;
+        background: #f1f1f1;
+        padding: 10px;
+        border-radius: 5px;
+        margin-top: 10px;
+    }
+
+    .feed-wrapper {
+        position: absolute;
+    }
+
+    .feed-input input[type="text"], .feed-input textarea {
+        width: 100%;
+        padding: 5px 10px;
+        border-radius: 5px;
+        border: 1px solid #ccc;
+        margin-bottom: 5px;
+
+    }
+
+/*    .feed-input input[type="submit"] {
+        margin-top: -35px;
+        position: absolute;
+        right: 0;
+        margin-right: 34px;
+    }*/
 
 
 

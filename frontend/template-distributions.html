@@ -19,13 +19,8 @@
         <thead>
           <tr>
             <th>Date of Distribution</th>
-            <th>Description</th>
             <th>Contact</th>
             <th>Destinations</th>
-            <th>Featured Photo</th>
-            <th>Supply Goal</th>
-            <th>Actual Supply</th>
-            <th>Images</th>
             <th>Info</th>
             <th>Status</th>
             <th>Action</th>
@@ -44,11 +39,9 @@
           %>
               <tr class="active" data-id="<%- this.id %>">
                 <td><%- this.date_of_distribution %></td>
-                <td><%- this.description %></td>
                 <td><%- this.contact %></td>
                 <td><%- this.destinations %></td>
-                <td><%- this.featured_photo %></td>
-                <td>
+                <!-- <td>
                   <% _.each(this.supply_goal, function(item, name) { %>
                     
                     <% if (name == "food") { %>
@@ -379,7 +372,7 @@
                       <% }) %>
                     <hr/>
                   <% }) %>
-                </td>
+                </td> -->
                 <td><%- this.info %></td>
                 <td><%- this.status %></td>
                 <td align='center'><a class="first">Edit</a> | <a class="last">Delete</a></td>

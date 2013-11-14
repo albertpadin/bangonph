@@ -1458,31 +1458,56 @@ class GetUserToken(APIBaseHandler):
 
 class APIUsersHandler(APIBaseHandler):
     def get(self, instance_id=None):
+        resp = API_RESPONSE.copy()
+        resp["method"] = "get"
+        failed = False
         users_json = []
         if not instance_id:
             if self.request.get("cursor"):
-                curs = Cursor(urlsafe=self.request.get("cursor"))
-                if curs:
-                    users, next_cursor, more = User.query().fetch_page(25, start_cursor=curs)
+                try:
+                    curs = Cursor(urlsafe=self.request.get("cursor"))
+                except Exception, e:
+                    resp['response'] = "invalid_cursor"
+                    resp['code'] = 406
+                    resp['property'] = "cursor"
+                    resp['description'] = "Invalid cursor"
+                    failed = True
                 else:
-                    users, next_cursor, more = User.query().fetch_page(25)
+                    if curs:
+                        users, next_cursor, more = User.query().fetch_page(25, start_cursor=curs)
+                    else:
+                        users, next_cursor, more = User.query().fetch_page(25)
             else:
                 users, next_cursor, more = User.query().fetch_page(25)
 
-            for user in users:
-                users_json.append(user.to_object())
+            if not failed:
+                for user in users:
+                    users_json.append(user.to_object())
 
-            data = {}
-            data["users"] = users_json
-            if more:
-                data["next_page"] = "http://api.bangonph.com/v1/users?cursor=" + str(next_cursor.urlsafe())
-            else:
-                data["next_page"] = False
-            self.render(data)
+                data = {}
+                data["users"] = users_json
+                if more:
+                    data["next_page"] = "http://api.bangonph.com/v1/users?cursor=" + str(next_cursor.urlsafe())
+                else:
+                    data["next_page"] = False
+
+                resp["description"] = "List of instances"
+                resp["property"] = "posts"
+                resp["data"] = data
         else:
             user = User.get_by_id(instance_id)
-            users_json.append(user.to_object())
-            self.render(users_json)
+            if user:
+                resp["description"] = "Instance data"
+                resp["property"] = "user"
+                resp["data"] = user.to_object()
+            else:
+                # instance dont exist
+                resp['response'] = "invalid_instance"
+                resp['code'] = 404
+                resp['property'] = "instance_id"
+                resp['description'] = "Instance id missing or not valid"
+
+        self.render(resp)
 
     def post(self, instance_id=None):
         pass

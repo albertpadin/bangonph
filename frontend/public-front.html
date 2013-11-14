@@ -25,8 +25,27 @@
 
     <div class="container">
       <!-- Example row of columns -->
+      <script src="http://js.pusher.com/2.1/pusher.min.js"></script>
+      <script type="text/javascript">
+      $.ajax({
+          type: 'GET',
+          url: '/v1/posts',
+        })
+        .success(function(data) {
+          //get the posts here
+          console.log(data);
+        });
+
+        //pusher
+        var pusher = new Pusher('e0a2a1c8316b9baddc9b');
+        var channel = pusher.subscribe('feeds');
+        channel.bind('new_post', function(data) {
+          //do something when the new data is triggered
+          console.log(data);
+        });
+      </script>
       <div class="row">
-      <div class="col-lg-4 col-md-6 col-sm-6 col feed">
+      <div class="col-lg-6 col-md-6 col-sm-6 col feed">
        <strong>Needs</strong>
        <span class="pull-right"><a href="#" class="see-more-btn">see more</a></span>
        
@@ -215,7 +234,7 @@
        </div>
         
       </div>
-      <div class="col-lg-4 col-md-6 col-sm-6 col feed">
+      <div class="col-lg-6 col-md-6 col-sm-6 col feed">
        <strong>Have</strong>
        <span class="pull-right"><a href="#" class="see-more-btn">see more</a></span>
        

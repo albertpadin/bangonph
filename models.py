@@ -3,7 +3,7 @@ import logging
 import time, os
 from settings import API_RESPONSE, API_RESPONSE_DATA
 
-currenturl = str(os.environ['wsgi.url_scheme'])+"://"+str(os.environ['HTTP_HOST'])+"/"
+currenturl = str(os.environ['wsgi.url_scheme'])+"://"+str(os.environ['HTTP_HOST'])
 
 class User(ndb.Model):
     created = ndb.DateTimeProperty(auto_now_add=True)
@@ -41,7 +41,7 @@ class Distributor(ndb.Model):
 
     def to_object(self):
         details = {}
-        
+
         details["meta"] = {"href": "http://api.bangonph.com/v1/distributors/" + str(self.key.id())}
         details["created"] = str(self.created)
         details["updated"] = str(self.updated)
@@ -207,20 +207,19 @@ class Subscriber(ndb.Model):
     all_updates = ndb.BooleanProperty(default=False)
 
     def to_object(self, expand=None):
-    	details = API_RESPONSE.copy()
     	data = {}
-    	details["type"] = "read"
+    	data["meta"] = {"href": str(currenturl + "/v1/subscribers/" + str(self.key.id()))}
     	data["name"] = self.name
     	data["email"] = self.email
     	data["fb_id"] = self.fb_id
     	distribution = self.distribution.get()
     	if expand:
-    		data["distribution"] = distribution.to_object()
+    		if expand == "distribution":
+    			data["distribution"] = distribution.to_object()
     	else:
     		meta = {"href": str(currenturl + "/efforts/" + str(distribution.key.id()))}
     		data["distribution"] = {"meta": meta}
-    	details["data"] = data
-    	return details
+    	return data
 
 class Contact(ndb.Model):
     created = ndb.DateTimeProperty(auto_now_add=True)

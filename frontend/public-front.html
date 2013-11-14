@@ -26,6 +26,88 @@
     <div class="container">
       <!-- Example row of columns -->
       <div class="row">
+        {% for location in featured_locations %}
+        <div class="col-lg-4 col-md-6 col-sm-6 col">
+            <div class="status-item">
+              <!--<h3>{{ location.name }}</h3>-->
+              <img class='location-front-feature-photo' src="{{ location.featured_photo }}" alt="{{ location.name }}" onclick="self.location='/locations/{{ location.key.id() }}';" >
+              <h6 class="mb0">Current Status:</h6>
+              <div class="status-group">
+                <div class="status-entry">
+                  <img class="icon" src="/img/icon-deaths.png" alt="Deaths">
+                  <span>{% if location.death_count_text %}{{ location.death_count_text }}{% else %}{% if location.death_count %}{{ location.death_count|with_commas }} Deaths{% else %}Gathering Data{% endif %}{% endif %}</span>
+                </div>
+                <div class="status-entry">
+                  <img class="icon" src="/img/icon-family.png" alt="Families Affected">
+                  <span>{% if location.affected_count_text %}{{ location.affected_count_text }}{% else %}{% if location.affected_count %}{{ location.affected_count|with_commas }} Families Affected{% else %}Gathering Data{% endif %}{% endif %}</span>
+                </div>
+                <div class="status-entry">
+                  <img class="icon" src="/img/icon-communication.png" alt="No Communication">
+                  <span>{% if location.status.communication %}{{ location.status.communication }}{% else %}Gathering Data{% endif %}</span>
+                </div>
+                <div class="status-entry">
+                  <img class="icon" src="/img/icon-water.png" alt="No Water">
+                  <span>{% if location.status.water %}{{ location.status.water }}{% else %}Gathering Data{% endif %}</span>
+                </div>
+                <div class="status-entry">
+                  <img class="icon" src="/img/icon-electricity.png" alt="No Electricity">
+                  <span>{% if location.status.water %}{{ location.status.power }}{% else %}Gathering Data{% endif %}</span>
+                </div>
+                <div class="status-entry">
+                  <img class="icon" src="/img/icon-medicine.png" alt="No Medicine">
+                  <span>{% if location.status.medicine %}{{ location.status.medicine }}{% else %}Gathering Data{% endif %}</span>
+                </div>
+                <div class="status-entry">
+                  <img class="icon" src="/img/icon-clothes.png" alt="Needs Clothes">
+                  <span>{% if location.status.clothes %}{{ location.status.clothes }}{% else %}Gathering Data{% endif %}</span>
+                </div>
+                <div class="status-entry">
+                  <img class="icon" src="/img/icon-food.png" alt="No Food">
+                  <span>{% if location.status.food %}{{ location.status.food }}{% else %}Gathering Data{% endif %}</span>
+                </div>
+              </div>
+              <div class="clear"></div>
+              <h6>Relief Aid Status:</h6>
+              <div class="progress">
+                <div class="progress-bar progress-bar-danger" role="progressbar" aria-valuenow="30" aria-valuemin="0" aria-valuemax="100" style="width: 30%">
+                  <span class="sr-only">Gathering Data...</span>
+                </div>
+              </div>
+              <!--
+              <div class="status-group">
+                <div class="status-entry">
+                  <img class="icon" src="/img/icon-pledged.png" alt="Relief Goods Pledged">
+                  <span>0 Packs Pledged</span>
+                </div>
+                <div class="status-entry">
+                  <img class="icon" src="/img/icon-delivered.png" alt="Relief Goods Delivered">
+                  <span>0 Packs Delivered</span>
+                </div>
+                <div class="status-entry">
+                  <img class="icon" src="/img/icon-distributed.png" alt="Relief Goods Distributed">
+                  <span>0 Packs Distributed</span>
+                </div>
+                <div class="status-entry">
+                  <img class="icon" src="/img/icon-needed.png" alt="Relief Goods Needed">
+                  <span class="emphasize">0 Packs Needed</span>
+                </div>
+              </div>
+              -->
+              <div class="clear"></div><!-- 
+              <h6>Active Relief Orgs:</h6>
+                <div class="relief-orgs-group">
+                  <img src="/img/thumb-dswd.png" title="DSWD">
+                  <img src="/img/thumb-redcross.png" title="Philippine Red Cross">
+                  <img src="/img/thumb-rafi.png" title="Ramon Aboitiz Foundation, Inc.">
+                  <img src="/img/thumb-jci.png" title="Junior Chamber International">
+                </div> -->
+              <div>
+                <a class="btn btn-primary btn-block entry-btn" href="/locations/{{ location.key.id() }}" title="{{ location.name }}" role="button"><span class="glyphicon glyphicon-circle-arrow-right"></span> Get Involved. Donate Now!  &raquo;</a>
+              </div>
+            </div>
+        </div>
+        {% endfor %}
+
         {% for location in locations %}
         <div class="col-lg-4 col-md-6 col-sm-6 col">
             <div class="status-item">

@@ -1570,26 +1570,26 @@ class APILocationsHandler(APIBaseHandler):
 
         hash_tag = self.request.get("hash_tag").split(" ")
 
-        # data = {
-        #     "name": self.request.get("name"),
-        #     "needs": needs, # json format
-        #     "centers": self.request.get_all("centers"),
-        #     "latlong": self.request.get("latlong"),
-        #     "featured_photo": self.request.get("featured_photo"),
-        #     "death_count": self.request.get("death_count"),
-        #     "affected_count": self.request.get("affected_count"),
-        #     "status_board": self.request.get("status_board"),
-        #     "status": status, # json format
-        #     "hash_tag": hash_tag,
-        #     "images": self.request.get("images")
-        # }
-        self.params["needs"] = needs
-        self.params["status"] = status
-        self.params["hash_tag"] = hash_tag
+        data = {
+            "name": self.request.get("name"),
+            "needs": needs, # json format
+            "centers": self.request.get_all("centers"),
+            "latlong": self.request.get("latlong"),
+            "featured_photo": self.request.get("featured_photo"),
+            "death_count": self.request.get("death_count"),
+            "affected_count": self.request.get("affected_count"),
+            "status_board": self.request.get("status_board"),
+            "status": status, # json format
+            "hash_tag": hash_tag,
+            "images": self.request.get("images")
+        }
+        # self.params["needs"] = needs
+        # self.params["status"] = status
+        # self.params["hash_tag"] = hash_tag
 
         if not instance_id:
             resp["method"] = "create"
-            location = add_location(self.params)
+            location = add_location(data)
             if location:
                 resp["description"] = "Successfully created the instance"
                 resp["data"] = location.to_object()
@@ -1603,7 +1603,7 @@ class APILocationsHandler(APIBaseHandler):
             resp["method"] = "edit"
             exist = Location.get_by_id(instance_id)
             if exist:
-                location = add_location(self.params, instance_id)
+                location = add_location(data, instance_id)
                 if location:
                     resp["description"] = "Successfully edited the instance"
                     resp["data"] = location.to_object()
@@ -2064,20 +2064,20 @@ class APIEffortsHandler(APIBaseHandler):
                 resp['description'] = "Use this format (YYYY-mm-dd H:M:S)"
         else:
             date = None
-        # data = {
-        #     "date_of_distribution": date,
-        #     "contact": self.request.get("contact"),
-        #     "destinations": self.request.get("destinations"),
-        #     "supply_goal": self.request.get("supply_goal"),
-        #     "actual_supply": self.request.get("actual_supply"),
-        #     "images": self.request.get("images")
-        # }
+        data = {
+            "date_of_distribution": date,
+            "contact": self.request.get("contact"),
+            "destinations": self.request.get("destinations"),
+            "supply_goal": self.request.get("supply_goal"),
+            "actual_supply": self.request.get("actual_supply"),
+            "images": self.request.get("images")
+        }
 
-        self.params["date_of_distribution"] = date
+        # self.params["date_of_distribution"] = date
 
         if not instance_id:
             resp["method"] = "create"
-            effort = add_distribution(self.params)
+            effort = add_distribution(data)
             if effort:
                 resp["description"] = "Successfully created the instance"
                 resp["data"] = effort.to_object()
@@ -2092,7 +2092,7 @@ class APIEffortsHandler(APIBaseHandler):
             resp["method"] = "edit"
             exist = Distribution.get_by_id(long(instance_id))
             if exist:
-                effort = add_distribution(self.params, instance_id)
+                effort = add_distribution(data, instance_id)
                 if effort:
                     resp["description"] = "Successfully edited the instance"
                     resp["data"] = effort.to_object()
@@ -2190,16 +2190,16 @@ class APIContactsHandler(APIBaseHandler):
     @oauthed_required
     def post(self, instance_id=None):
         resp = API_RESPONSE.copy()
-        # data = {}
-        # data["name"] = self.request.get("name")
-        # data["contacts"] = self.request.get("contacts")
-        # data["email"] = self.request.get("email")
-        # data["facebook"] = self.request.get("facebook")
-        # data["twitter"] = self.request.get("twitter")
+        data = {}
+        data["name"] = self.request.get("name")
+        data["contacts"] = self.request.get("contacts")
+        data["email"] = self.request.get("email")
+        data["facebook"] = self.request.get("facebook")
+        data["twitter"] = self.request.get("twitter")
 
         if not instance_id:
             resp["method"] = "create"
-            contact = add_contact(self.params)
+            contact = add_contact(data)
             if contact:
                 resp["description"] = "Successfully edited the instance"
                 resp["data"] = contact.to_object()
@@ -2213,7 +2213,7 @@ class APIContactsHandler(APIBaseHandler):
             resp["method"] = "edit"
             exist = Contact.get_by_id(int(instance_id))
             if exist:
-                contact = add_contact(self.params, instance_id)
+                contact = add_contact(data, instance_id)
                 if contact:
                     resp["description"] = "Successfully edited the instance"
                     resp["data"] = contact.to_object()
@@ -2257,35 +2257,60 @@ class APIContactsHandler(APIBaseHandler):
 
 class APIDistributorsHandler(APIBaseHandler):
     def get(self, instance_id=None):
+        resp = API_RESPONSE.copy()
+        resp["method"] = "get"
+        failed = False
         distributors_json = []
         if not instance_id:
             if self.request.get("cursor"):
-                curs = Cursor(urlsafe=self.request.get("cursor"))
-                if curs:
-                    distributors, next_cursor, more = Distributor.query().fetch_page(25, start_cursor=curs)
+                try:
+                    curs = Cursor(urlsafe=self.request.get("cursor"))
+                except Exception, e:
+                    resp['response'] = "invalid_cursor"
+                    resp['code'] = 406
+                    resp['property'] = "cursor"
+                    resp['description'] = "Invalid cursor"
+                    failed = True
                 else:
-                    distributors, next_cursor, more = Distributor.query().fetch_page(25)
+                    if curs:
+                        distributors, next_cursor, more = Distributor.query().fetch_page(25, start_cursor=curs)
+                    else:
+                        distributors, next_cursor, more = Distributor.query().fetch_page(25)
             else:
                 distributors, next_cursor, more = Distributor.query().fetch_page(25)
 
-            for distributor in distributors:
-                distributors_json.append(distributor.to_object())
+            if not failed:
+                for distributor in distributors:
+                    distributors_json.append(distributor.to_object())
 
-            data = {}
-            data["distributors"] = distributors_json
-            if more:
-                data["next_page"] = "http://api.bangonph.com/v1/distributors?cursor=" + str(next_cursor.urlsafe())
-            else:
-                data["next_page"] = False
+                data = {}
+                data["distributors"] = distributors_json
+                if more:
+                    data["next_page"] = "http://api.bangonph.com/v1/distributors?cursor=" + str(next_cursor.urlsafe())
+                else:
+                    data["next_page"] = False
 
-            self.render(data)
+                resp["description"] = "List of instances"
+                resp["property"] = "posts"
+                resp["data"] = data
         else:
-            contacts = Distributor.get_by_id(instance_id)
-            if contacts:
-                self.render(contacts.to_object())
+            distributers = Distributor.get_by_id(instance_id)
+            if distributers:
+                resp["description"] = "Instance data"
+                resp["property"] = "distributers"
+                resp["data"] = distributers.to_object()
+            else:
+                # instance dont exist
+                resp['response'] = "invalid_instance"
+                resp['code'] = 404
+                resp['property'] = "instance_id"
+                resp['description'] = "Instance id missing or not valid"
+
+        self.render(resp)
 
     @oauthed_required
     def post(self, instance_id=None):
+        resp = API_RESPONSE.copy()
         data = {
             "email": self.request.get("email"),
             "name": self.request.get("name"),
@@ -2293,14 +2318,43 @@ class APIDistributorsHandler(APIBaseHandler):
             "website": self.request.get("website"),
             "facebook": self.request.get("facebook")
         }
+
         logging.critical(data)
 
         if not instance_id:
+            resp["method"] = "create"
             distributor = add_distributor(data)
-            self.render(distributor.to_object())
+            if distributor:
+                resp["description"] = "Successfully edited the instance"
+                resp["data"] = distributor.to_object()
+            else:
+                # foolsafe, failsafe, watever!
+                resp['response'] = "cannot_create"
+                resp['code'] = 500
+                resp['property'] = "add_distributor"
+                resp['description'] = "Server cannot create the instance"
         else:
-            distributor = add_distributor(data, instance_id)
-            self.render(distributor.to_object())
+            resp["method"] = "edit"
+            exist = Distributor.get_by_id(long(instance_id))
+            if exist:
+                distributor = add_distributor(data, instance_id)
+                if distributor:
+                    resp["description"] = "Successfully edited the instance"
+                    resp["data"] = distributor.to_object()
+                else:
+                    # didnt edi but imposible
+                    resp['response'] = "cannot_edit"
+                    resp['code'] = 500
+                    resp['property'] = "add_distributor"
+                    resp['description'] = "Server cannot edit the instance"
+            else:
+                # instance dont exist but imposible
+                resp['response'] = "invalid_instance"
+                resp['code'] = 404
+                resp['property'] = "instance_id"
+                resp['description'] = "Instance id missing or not valid"
+
+        self.render(resp)
 
 
     @oauthed_required
@@ -2308,7 +2362,7 @@ class APIDistributorsHandler(APIBaseHandler):
         resp = API_RESPONSE.copy()
         resp["method"] = "delete"
         if instance_id:
-            distributor = Distributor.get_by_id(int(instance_id))
+            distributor = Distributor.get_by_id(long(instance_id))
             if distributor:
                 distributor.key.delete()
                 resp["description"] = "Successfully deleted the instance"

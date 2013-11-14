@@ -23,6 +23,7 @@
             <th>Deatch Count Text</th>
             <th>Affected Count Text</th>
             <th>Hash Tag</th>
+            <th>Featured</th>
             <th>Action</th>
           </tr>
         </thead>
@@ -118,6 +119,7 @@
                     <% }) %>
                   </td> -->
                   <td><%- _.unescape(this.hash_tag) %></td>
+                  <td><%- _.unescape(this.featured) %></td>
                   <td align='center'><a class="first">Edit</a> | <a class="last">Delete</a></td>
               </tr>
           <%    
@@ -232,6 +234,11 @@
             <br/>
             <p>Hash Tag
               <input type="text" id="hash_tag"/>
+            </p>
+            <p>
+              Featured
+              <input type="radio" name="featured" value="True"/> Yes
+              <input type="radio" name="featured" value="False"/> No
             </p>
             <p>
             <br/>
@@ -381,9 +388,14 @@ Miscellaneous
             <% 
                 })
               }
-            %>
+            %><br/>
             <p>Hash Tag
               <input type="text" value="<%- this.hash_tag %>" id="hash_tag"/>
+            </p>
+            <p>
+              Featured
+              <input type="radio" name="featured" value="True"/> Yes
+              <input type="radio" name="featured" value="False"/> No
             </p>
             <p>
             <br/>

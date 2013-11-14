@@ -270,15 +270,18 @@ class Post(ndb.Model):
         details["post_type"] = self.post_type
         details["expiry"] = str(self.expiry)
         details["status"] = self.status
-        details["locations_id"] = self.locations
+        details["locations_id"] = self.location
         details["id"] = self.key.id()
 
-        if self.locations:
-            locations = []
+        locations = []
+        if self.location:
             for loc in self.locations:
                 location_details = Location.get_by_id(loc)
                 locations.append(location_details.name)
-            details["location_names"] = locations
+            if locations:
+                details["location_names"] = locations
+            else:
+                details["location_names"] = ""
         
         return details
 

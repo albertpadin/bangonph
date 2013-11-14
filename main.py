@@ -1654,7 +1654,7 @@ class APIPostsHandler(APIBaseHandler):
           key='e0a2a1c8316b9baddc9b',
           secret='474177f7aea8c983a7d1'
         )
-        p['feeds'].trigger('new_post', data)
+        p['feeds'].trigger('new_post', post.to_object())
 
     def delete(self, instance_id=None):
         resp = API_RESPONSE.copy()
@@ -2086,7 +2086,7 @@ app = webapp2.WSGIApplication([
 
         webapp2.Route(r'/<:.*>', ErrorHandler)
     ]),
-    routes.DomainRoute(r'<:admin\.bangonph\.com|localhost>', [
+    routes.DomainRoute(r'<:admin\.bangonph\.com>', [
         webapp2.Route('/', handler=FrontPage, name="www-front"),
         webapp2.Route('/register', handler=RegisterPage, name="www-register"),
         webapp2.Route('/logout', handler=Logout, name="www-logout"),

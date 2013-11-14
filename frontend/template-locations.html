@@ -22,7 +22,9 @@
             <th>Latlong</th>
             <th>Featured Photo</th>
             <th>Death Count</th>
+            <th>Deatch Count Text</th>
             <th>Affected Count</th>
+            <th>Affected Count Text</th>
             <th>Status Board</th>
             <th>Needs</th>
             <th>Status</th>
@@ -44,7 +46,9 @@
                   <td><%- _.unescape(this.latlong) %></td>
                   <td><%- _.unescape(this.featured_photo) %></td>
                   <td><%- _.unescape(this.death_count) %></td>
+                  <td><%- _.unescape(this.death_count_text) %></td>
                   <td><%- _.unescape(this.affected_count) %></td>
+                  <td><%- _.unescape(this.affected_count_text) %></td>
                   <td><%- _.unescape(this.status_board) %></td>
                   <td>
                     <% _.each(this.needs, function(item, name) { %>
@@ -167,8 +171,16 @@
               <input type="text" id="death_count" required="required" class="form-control" placeholder="Death Count">
             </p>
             <p>
+              Death Count Text
+              <input type="text" id="death_count_text" class="form-control" placeholder="Death Count Text">
+            </p>
+            <p>
               Affected Count
               <input type="text" id="affected_count" required="required" class="form-control" placeholder="Affected Count">
+            </p>
+            <p>
+              Affected Count Text
+              <input type="text" id="affected_count_text" class="form-control" placeholder="Affected Count Text">
             </p>
             <p>
               Status Board
@@ -305,7 +317,15 @@
               <input type="text" id="death_count" required="required" value="<%- this.death_count %>" class="form-control" placeholder="Death Count">
             </p>
             <p>
+              Death Count Text
+              <input type="text" id="death_count_text" value="<%- this.death_count_text %>" class="form-control" placeholder="Death Count Text">
+            </p>
+            <p>
               <input type="text" id="affected_count" required="required" value="<%- this.affected_count %>"  class="form-control" placeholder="Affected Count">
+            </p>
+            <p>
+            Affected Count Text
+              <input type="text" id="affected_count_text" value="<%- this.affected_count_text %>"  class="form-control" placeholder="Affected Count Text">
             </p>
             <p>
               <input type="text" id="status_board" value="<%- this.status_board %>" class="form-control" placeholder="Status Board">

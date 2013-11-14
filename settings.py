@@ -52,6 +52,8 @@ API_OAUTH_RESP = {
 	invalid_instance (404) - instance not found, or incorrect instance id
 	cannot_create (500) - i dont even know what happened!
 	missing_params (406) - missing parameterssss
+	invalid_expiry (406) - invalid date format
+	invalid_cursor (406) - invalid cursor
 """
 #-------------
 

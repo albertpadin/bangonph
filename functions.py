@@ -141,8 +141,14 @@ def add_location(data, location_key=""):
     if data["death_count"]:
         location.death_count = int(data["death_count"])
 
+    if data["death_count_text"]:
+        location.death_count_text = data["death_count_text"]
+
     if data["affected_count"]:
         location.affected_count = int(data["affected_count"])
+
+    if data["affected_count_text"]:
+        location.affected_count_text = data["affected_count_text"]
 
     if data["status_board"]:
         location.status_board = data["status_board"]

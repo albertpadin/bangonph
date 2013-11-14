@@ -558,7 +558,9 @@ class LocationHandler(BaseHandler):
                 temp["latlong"] = location.latlong
                 temp["featured_photo"] = location.featured_photo
                 temp["death_count"] = location.death_count
+                temp["death_count_text"] = location.death_count_text
                 temp["affected_count"] = location.affected_count
+                temp["affected_count_text"] = location.affected_count_text
                 temp["status_board"] = location.status_board
                 temp["needs"] = location.needs
                 temp["status"] = location.status
@@ -576,7 +578,9 @@ class LocationHandler(BaseHandler):
                 temp["latlong"] = location.latlong
                 temp["featured_photo"] = location.featured_photo
                 temp["death_count"] = location.death_count
+                temp["death_count_text"] = location.death_count_text
                 temp["affected_count"] = location.affected_count
+                temp["affected_count_text"] = location.affected_count_text
                 temp["status_board"] = location.status_board
                 temp["needs"] = location.needs
                 temp["status"] = location.status
@@ -620,19 +624,35 @@ class LocationHandler(BaseHandler):
                 new_titles = simplejson.loads(titles)
                 new_captions = simplejson.loads(captions)
 
-                cnt = len(new_urls)
-                for i in range(0, cnt):
-                    images = {}
-                    images["src"] = new_urls[i]["src"]
-                    images["image_title"] = new_titles[i]["image_title"]
-                    images["image_caption"] = new_captions[i]["image_caption"]
-                    location.images.append(images)
+                if location.images:
+                    cnt = len(new_urls)
+                    for i in range(0, cnt):
+                        if new_urls[i]["src"] != "" or new_titles[i]["image_title"] != "" or new_captions[i]["image_caption"] != "":
+                            images = {}
+                            images["src"] = new_urls[i]["src"]
+                            images["image_title"] = new_titles[i]["image_title"]
+                            images["image_caption"] = new_captions[i]["image_caption"]
+                            location.images.append(images)
+                else:
+                    images_datas = []
+                    cnt = len(new_urls)
+                    image_data = []
+                    for i in range(0, cnt):
+                        if new_urls[i]["src"] != "" or new_titles[i]["image_title"] != "" or new_captions[i]["image_caption"] != "":
+                            images = {}
+                            images["src"] = new_urls[i]["src"]
+                            images["image_title"] = new_titles[i]["image_title"]
+                            images["image_caption"] = new_captions[i]["image_caption"]
+                            image_data.append(images)
+                    location.images = image_data
 
                 location.name = self.request.get("name")
                 location.latlong = self.request.get("latlong")
                 location.featured_photo = self.request.get("featured_photo")
                 location.death_count = int(self.request.get("death_count"))
+                location.death_count_text = self.request.get("death_count_text")
                 location.affected_count = int(self.request.get("affected_count"))
+                location.affected_count_text = self.request.get("affected_count_text")
                 location.status_board = self.request.get("status_board")
                 location.needs = needs
                 location.status = status
@@ -651,11 +671,12 @@ class LocationHandler(BaseHandler):
             cnt = len(new_urls)
             image_data = []
             for i in range(0, cnt):
-                images = {}
-                images["src"] = new_urls[i]["src"]
-                images["image_title"] = new_titles[i]["image_title"]
-                images["image_caption"] = new_captions[i]["image_caption"]
-                image_data.append(images)
+                if new_urls[i]["src"] != "" or new_titles[i]["image_title"] != "" or new_captions[i]["image_caption"] != "":
+                    images = {}
+                    images["src"] = new_urls[i]["src"]
+                    images["image_title"] = new_titles[i]["image_title"]
+                    images["image_caption"] = new_captions[i]["image_caption"]
+                    image_data.append(images)
 
             needs = {
                "food": self.request.get("food"),
@@ -689,7 +710,9 @@ class LocationHandler(BaseHandler):
                 "latlong": self.request.get("latlong"),
                 "featured_photo": self.request.get("featured_photo"),
                 "death_count": self.request.get("death_count"),
+                "death_count_text": self.request.get("death_count_text"),
                 "affected_count": self.request.get("affected_count"),
+                "affected_count_text": self.request.get("affected_count_text"),
                 "status_board": self.request.get("status_board"),
                 "status": status,
                 "images": image_data, # json format

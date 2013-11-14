@@ -2080,6 +2080,9 @@ app = webapp2.WSGIApplication([
         webapp2.Route('/', handler=PublicFrontPage, name="www-front"),
         webapp2.Route('/reliefoperations', handler=ReliefOperationsPage, name="www-reliefoperations"),
         webapp2.Route(r'/locations/<:.*>', handler=PublicLocationPage, name="www-locations"),
+        
+        webapp2.Route('/api/posts', handler=APIPostsHandler, name="www-api-posts"),
+        webapp2.Route(r'/api/posts/<:.*>', handler=APIPostsHandler, name="www-api-posts"),
 
         # richmond:
         webapp2.Route('/s', handler=sampler, name="www-get-authorization-code"),

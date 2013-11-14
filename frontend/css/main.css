@@ -610,3 +610,36 @@ height: 80px;
 
     }
 }
+
+/*post section*/
+.label2{
+    display: inline;
+    padding: .2em .6em .3em;
+    font-size: 15px;
+    font-weight: bold;
+    line-height: 1;
+    color: #fff;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: baseline;
+    border-radius: .25em;
+    text-transform: uppercase;
+}
+.related-posts{
+    font-size: smaller;
+}
+.related-posts h4{
+    font-size: 10px;
+    text-transform: uppercase;
+}
+.related-posts p{
+    margin-top: 10px;
+}
+.related-posts-entry a{
+    margin-bottom: 4px;
+}
+.related-posts hr{
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+/*end post section*/

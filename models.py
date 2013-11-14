@@ -72,7 +72,7 @@ class Location(ndb.Model):
 
     def to_object(self, extended=""):
         details = {}
-        details["meta"] = {"href": "http://api.bangonph.com/v1/v1/locations/" + str(self.key.id())}
+        details["meta"] = {"href": "http://api.bangonph.com/v1/locations/" + str(self.key.id())}
         details["created"] = str(self.created)
         details["updated"] = str(self.updated)
         details["latlong"] = self.latlong

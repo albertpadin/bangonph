@@ -1,11 +1,25 @@
 {% extends 'frontend/public-index.html' %}
 
+{% block ogdetails %}<meta property="og:image" content="http://www.bangonph.com/img/bangon-ph-black.png"/>{% endblock %}
+
 {% block content %}
   <div class="jumbotron">
       <div class="container">
-        <h1>#BangonPH</h1>
-        <p>Super Typhoon Yolanda hit the Philippines and left several towns devastated. Affecting more than 2 million people and killing over 2,000 and still counting. This is the live and developing story of how we rise again. Together.</p>
-        <!-- <p><a class="btn btn-primary btn-lg pull-right">See how you can help &raquo;</a></p> -->
+        <h1>Let's Coordinate our Relief Efforts</h1>
+        <p>Super Typhoon Yolanda hit the Philippines and left several towns devastated. Affecting more than 2 million people and killing over 2,000 and still counting. This is the live and developing story of how we rise again. <span style="font-weight: bold; color: #E02A2A;">Together.</span></p>
+<!-- 
+        <p><a class="btn btn-primary btn-md pull-right" href="https://docs.google.com/a/sym.ph/forms/d/1cGWQuAbuIVogA-uO9tZPlR5HMGGYQH3_Yp96BoBS3ng/viewform?edit_requested=true" target="_blank">Are we missing anyone? Tell us.</a></p> -->
+        
+        <div class="social-media pull-right">
+          <div class="social-item mt-16">
+            <div class="fb-share-button" data-href="{{ current_base_url }}" data-type="button_count"></div>            
+          </div>
+          <div class="social-item">
+            <a href="https://twitter.com/share" class="twitter-share-button" data-hashtags="BangonPH">Tweet</a>
+            <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+          </div>
+          <div class="clearfix"></div>
+        </div>
       </div>
     </div>
 
@@ -16,7 +30,7 @@
         <div class="col-lg-4 col-md-6 col-sm-6 col">
             <div class="status-item">
               <!--<h3>{{ location.name }}</h3>-->
-              <img src="{{ location.featured_photo }}" alt="{{ location.name }}" onclick="self.location='/locations/{{ location.key.id() }}';" >
+              <img class='location-front-feature-photo' src="{{ location.featured_photo }}" alt="{{ location.name }}" onclick="self.location='/locations/{{ location.key.id() }}';" >
               <h6 class="mb0">Current Status:</h6>
               <div class="status-group">
                 <div class="status-entry">

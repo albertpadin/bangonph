@@ -256,7 +256,7 @@ class Post(ndb.Model):
     post_type = ndb.StringProperty(repeated=True) # need or have (transpo, people, goods, needs, have )
     expiry = ndb.DateTimeProperty()
     status = ndb.StringProperty(default="ACTIVE") # expired cancelled active
-    location = ndb.KeyProperty(repeated=True)
+    location = ndb.StringProperty()
 
     def to_object(self):
         details = {}
@@ -269,21 +269,15 @@ class Post(ndb.Model):
         details["phone"] = self.phone
         details["message"] = self.message
         details["post_type"] = self.post_type
-        details["expiry"] = str(self.expiry)
+        if self.expiry:
+            details["expiry"] = str(self.expiry)
+            details["expiry_friendly"] = self.expiry.strftime("%b %d, %Y")
+        else:
+            details["expiry"] = None
+            details["expiry_friendly"] = None
         details["status"] = self.status
-        details["locations_id"] = self.location
+        details["location"] = self.location
         details["id"] = self.key.id()
-
-        locations = []
-        if self.location:
-            for loc in self.locations:
-                location_details = Location.get_by_id(loc)
-                locations.append(location_details.name)
-            if locations:
-                details["location_names"] = locations
-            else:
-                details["location_names"] = ""
-        
         return details
 
 

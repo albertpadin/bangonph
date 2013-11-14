@@ -1551,6 +1551,9 @@ class APIPostsHandler(APIBaseHandler):
                 self.render(post.to_object())
 
     def post(self, instance_id=None):
+        if self.request.get("comment"):
+            logging.warning("Honeypot put!")
+            return
         resp = API_RESPONSE.copy()
         if self.request.get("expiry"):
             try:
@@ -1564,7 +1567,6 @@ class APIPostsHandler(APIBaseHandler):
                 return
         else:
             expiry = None
-
 
         logging.critical(expiry)
         data = {

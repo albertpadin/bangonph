@@ -1734,7 +1734,7 @@ class APIPostsHandler(APIBaseHandler):
         resp = API_RESPONSE.copy()
         if self.request.get("expiry"):
             try:
-                self.params["expiry"] = datetime.datetime.strptime(self.request.get("expiry"), "%Y-%m-%d %H:%M:%S") #1992-10-20
+                expiry = datetime.datetime.strptime(self.request.get("expiry"), "%Y-%m-%d %H:%M:%S") #1992-10-20
             except:
                 resp['response'] = "invalid_date_format"
                 resp['code'] = 406
@@ -1743,25 +1743,24 @@ class APIPostsHandler(APIBaseHandler):
 
                 return
         else:
-            self.params["expiry"] = None
+            expiry = None
 
-        logging.critical(self.params["expiry"])
-        # data = {
-        #     "name": self.request.get("name"),
-        #     "email": self.request.get("email"),
-        #     "twitter": self.request.get("twitter"),
-        #     "facebook": self.request.get("facebook"),
-        #     "phone": self.request.get("phone"),
-        #     "message": self.request.get("message"),
-        #     "post_type": self.request.get_all("post_type"),
-        #     "expiry": expiry,
-        #     "status": self.request.get("status"),
-        #     "location": self.request.get_all("location"),
-        # }
+        data = {
+            "name": self.request.get("name"),
+            "email": self.request.get("email"),
+            "twitter": self.request.get("twitter"),
+            "facebook": self.request.get("facebook"),
+            "phone": self.request.get("phone"),
+            "message": self.request.get("message"),
+            "post_type": self.request.get_all("post_type"),
+            "expiry": expiry,
+            "status": self.request.get("status"),
+            "location": self.request.get_all("location"),
+        }
         # use self.params
         if not instance_id:
             resp["method"] = "create"
-            post = add_post(self.params)
+            post = add_post(data)
             if post:
                 resp["description"] = "Successfully created the instance"
                 resp["data"] = post.to_object()
@@ -1776,7 +1775,7 @@ class APIPostsHandler(APIBaseHandler):
             resp["method"] = "edit"
             exist = Post.Post.get_by_id(long(instance_id))
             if exist:
-                post = add_post(self.params, instance_id)
+                post = add_post(data, instance_id)
                 if post:
                     resp["description"] = "Successfully edited the instance"
                     resp["data"] = post.to_object()

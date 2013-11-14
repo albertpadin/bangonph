@@ -34,9 +34,11 @@ var ContactView = Backbone.View.extend({
   },
   contacts: function() {
     var self = this;
+    $(".loading-message").show();
     var contactsCollection = new ContactsCollection();
     contactsCollection.fetch({
       success: function(datas) {
+        $(".loading-message").fadeOut("fast");
         self.render(datas.toJSON());
       }
     });

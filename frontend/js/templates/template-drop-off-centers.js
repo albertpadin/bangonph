@@ -40,9 +40,11 @@ var DropOffCenterView = Backbone.View.extend({
   },
   drops: function() {
     var self = this;
+    $(".loading-message").show();
     var collection = new DropOffCollection();
     collection.fetch({
       success: function(datas) {
+        $(".loading-message").fadeOut("fast");
         self.render(datas.toJSON());
       }
     });

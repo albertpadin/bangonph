@@ -36,13 +36,14 @@ var DistributorView = Backbone.View.extend({
   },
   distributors: function(){
     var self = this;
+    $(".loading-message").show();
     var distributorsCollection = new DistributorCollection();
     distributorsCollection.fetch({
       success: function(datas){
+        $(".loading-message").fadeOut("fast");
         self.render(datas.toJSON());
       }
     });
-
   },
   deleteDistributor: function(id){
     if ( confirm('Are you sure to delete?')) {

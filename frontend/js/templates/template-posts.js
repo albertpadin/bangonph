@@ -25,9 +25,11 @@ var PostsView = Backbone.View.extend({
   },
   posts: function() {
     var self = this;
+    $(".loading-message").show();
     var collection = new PostsCollection();
     collection.fetch({
       success: function(datas) {
+        $(".loading-message").fadeOut("fast");
         self.render(datas.toJSON());
       }
     });

@@ -38,9 +38,11 @@ var DistributionView = Backbone.View.extend({
   },
   distributions: function() {
     var self = this;
+    $(".loading-message").show();
     var collection = new DistributionCollection();
     collection.fetch({
       success: function(datas) {
+        $(".loading-message").fadeOut("fast");
         self.render(datas.toJSON());
       }
     });

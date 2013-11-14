@@ -35,9 +35,11 @@ var MainView = Backbone.View.extend({
   },
   users: function() {
     var self = this;
+    $(".loading-message").show();
     var collection = new UsersCollection();
     collection.fetch({
       success: function(datas) {
+        $(".loading-message").fadeOut("fast");
         self.render(datas.toJSON());
       }
     });

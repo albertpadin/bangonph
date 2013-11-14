@@ -327,7 +327,7 @@ class PublicLocationPage(BaseHandler):
 
         self.tv['efforts'] = Distribution.query(Distribution.destinations == location.key, Distribution.date_of_distribution >= datetime.datetime.now()).order(Distribution.date_of_distribution)
 
-        self.tv['location'] = location.to_object()
+        self.tv['location'] = location
         self.tv['page_title'] = location.name
 
         self.render('frontend/public-location.html')

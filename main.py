@@ -1492,30 +1492,56 @@ class APIUsersHandler(APIBaseHandler):
 
 class APILocationsHandler(APIBaseHandler):
     def get(self, instance_id=None):
+        resp = API_RESPONSE.copy()
+        resp["method"] = "get"
+        failed = False
         locations_json = []
         if not instance_id:
             if self.request.get("cursor"):
-                curs = Cursor(urlsafe=self.request.get("cursor"))
-                if curs:
-                    locations, next_cursor, more = Location.query().fetch_page(25, start_cursor=curs)
+                try:
+                    curs = Cursor(urlsafe=self.request.get("cursor"))
+                except Exception, e:
+                    resp['response'] = "invalid_cursor"
+                    resp['code'] = 406
+                    resp['property'] = "cursor"
+                    resp['description'] = "Invalid cursor"
+                    failed = True
                 else:
-                    locations, next_cursor, more = Location.query().fetch_page(25)
+                    if curs:
+                        locations, next_cursor, more = Location.query().fetch_page(25, start_cursor=curs)
+                    else:
+                        locations, next_cursor, more = Location.query().fetch_page(25)
             else:
                 locations, next_cursor, more = Location.query().fetch_page(25)
 
-            for location in locations:
-                locations_json.append(location.to_object())
+            if not failed:
+                for location in locations:
+                    locations_json.append(location.to_object())
 
-            data = {}
-            data["locations"] = locations_json
-            if more:
-                data["next_page"] = "http://api.bangonph.com/v1/locations?cursor=" + str(next_cursor.urlsafe())
-            else:
-                data["next_page"] = False
-            self.render(data)
+                data = {}
+                data["locations"] = locations_json
+                if more:
+                    data["next_page"] = "http://api.bangonph.com/v1/locations?cursor=" + str(next_cursor.urlsafe())
+                else:
+                    data["next_page"] = False
+
+                resp["description"] = "List of instances"
+                resp["property"] = "posts"
+                resp["data"] = data
         else:
             location = Location.get_by_id(instance_id)
-            self.render(location.to_object())
+            if location:
+                resp["description"] = "Instance data"
+                resp["property"] = "posts"
+                resp["data"] = location.to_object()
+            else:
+                # instance dont exist
+                resp['response'] = "invalid_instance"
+                resp['code'] = 404
+                resp['property'] = "instance_id"
+                resp['description'] = "Instance id missing or not valid"
+
+        self.render(resp)
 
 
     def post(self, instance_id=None):
@@ -1544,25 +1570,57 @@ class APILocationsHandler(APIBaseHandler):
 
         hash_tag = self.request.get("hash_tag").split(" ")
 
-        data = {
-            "name": self.request.get("name"),
-            "needs": needs, # json format
-            "centers": self.request.get_all("centers"),
-            "latlong": self.request.get("latlong"),
-            "featured_photo": self.request.get("featured_photo"),
-            "death_count": self.request.get("death_count"),
-            "affected_count": self.request.get("affected_count"),
-            "status_board": self.request.get("status_board"),
-            "status": status, # json format
-            "hash_tag": hash_tag,
-            "images": self.request.get("images")
-        }
+        # data = {
+        #     "name": self.request.get("name"),
+        #     "needs": needs, # json format
+        #     "centers": self.request.get_all("centers"),
+        #     "latlong": self.request.get("latlong"),
+        #     "featured_photo": self.request.get("featured_photo"),
+        #     "death_count": self.request.get("death_count"),
+        #     "affected_count": self.request.get("affected_count"),
+        #     "status_board": self.request.get("status_board"),
+        #     "status": status, # json format
+        #     "hash_tag": hash_tag,
+        #     "images": self.request.get("images")
+        # }
+        self.params["needs"] = needs
+        self.params["status"] = status
+        self.params["hash_tag"] = hash_tag
+
         if not instance_id:
-            location = add_location(data)
-            self.render(location.to_object())
+            resp["method"] = "create"
+            location = add_location(self.params)
+            if location:
+                resp["description"] = "Successfully created the instance"
+                resp["data"] = location.to_object()
+            else:
+                # dindt create
+                resp['response'] = "cannot_create"
+                resp['code'] = 500
+                resp['property'] = "add_location"
+                resp['description'] = "Server cannot create the instance"
         else:
-            location = add_location(data, instance_id)
-            self.render(location.to_object())
+            resp["method"] = "edit"
+            exist = Location.get_by_id(instance_id)
+            if exist:
+                location = add_location(self.params, instance_id)
+                if location:
+                    resp["description"] = "Successfully edited the instance"
+                    resp["data"] = location.to_object()
+                else:
+                    # didnt edi but imposible
+                    resp['response'] = "cannot_edit"
+                    resp['code'] = 500
+                    resp['property'] = "add_location"
+                    resp['description'] = "Server cannot create the instance"
+            else:
+                #instance dont exist
+                resp['response'] = "invalid_instance"
+                resp['code'] = 404
+                resp['property'] = "instance_id"
+                resp['description'] = "Instance id missing or not valid"
+
+        self.render(resp)
 
     @oauthed_required
     def delete(self, instance_id=None):
@@ -1705,7 +1763,7 @@ class APIPostsHandler(APIBaseHandler):
             resp["method"] = "create"
             post = add_post(self.params)
             if post:
-                resp["description"] = "Successfully edited the subscriber"
+                resp["description"] = "Successfully created the instance"
                 resp["data"] = post.to_object()
             else:
                 # foolsafe, failsafe, watever!
@@ -1720,14 +1778,14 @@ class APIPostsHandler(APIBaseHandler):
             if exist:
                 post = add_post(self.params, instance_id)
                 if post:
-                    resp["description"] = "Successfully edited the subscriber"
+                    resp["description"] = "Successfully edited the instance"
                     resp["data"] = post.to_object()
                 else:
                     # didnt create but imposible
                     resp['response'] = "cannot_edit"
                     resp['code'] = 500
                     resp['property'] = "add_post"
-                    resp['description'] = "Server cannot create the instance"
+                    resp['description'] = "Server cannot edit the instance"
             else:
                 # instance dont exist but imposible
                 resp['response'] = "invalid_instance"

@@ -20,15 +20,8 @@
           <tr>
             <th>Name</th>
             <th>Latlong</th>
-            <th>Featured Photo</th>
-            <th>Death Count</th>
             <th>Deatch Count Text</th>
-            <th>Affected Count</th>
             <th>Affected Count Text</th>
-            <th>Status Board</th>
-            <th>Needs</th>
-            <th>Status</th>
-            <th>Images</th>
             <th>Hash Tag</th>
             <th>Action</th>
           </tr>
@@ -44,13 +37,9 @@
               <tr class="active" data-name="<%- _.unescape(this.name) %>" data-id="<%- this.id %>">
                   <td><%- _.unescape(this.name) %></td>
                   <td><%- _.unescape(this.latlong) %></td>
-                  <td><%- _.unescape(this.featured_photo) %></td>
-                  <td><%- _.unescape(this.death_count) %></td>
                   <td><%- _.unescape(this.death_count_text) %></td>
-                  <td><%- _.unescape(this.affected_count) %></td>
                   <td><%- _.unescape(this.affected_count_text) %></td>
-                  <td><%- _.unescape(this.status_board) %></td>
-                  <td>
+                  <!-- <td>
                     <% _.each(this.needs, function(item, name) { %>
                       <% if (name == "medical_workers") { %>
                         Medical Workers: <%- item %> <br/>
@@ -127,7 +116,7 @@
                         <% }) %>
                       <hr/>
                     <% }) %>
-                  </td>
+                  </td> -->
                   <td><%- _.unescape(this.hash_tag) %></td>
                   <td align='center'><a class="first">Edit</a> | <a class="last">Delete</a></td>
               </tr>

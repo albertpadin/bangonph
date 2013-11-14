@@ -487,7 +487,7 @@ class ContactHandler(BaseHandler):
                 self.response.out.write(simplejson.dumps({"success": True, "message": "Successfully deleted."}))
             return
 
-        contacts = Contact.query().fetch(100)
+        contacts = Contact.query().order(-Contact.created).fetch(300)
         if contacts:
             datas = []
             for contact in contacts:
@@ -569,7 +569,7 @@ class LocationHandler(BaseHandler):
                 self.response.out.write(simplejson.dumps(temp))
             return
 
-        locations = Location.query().fetch(300)
+        locations = Location.query().order(-Location.created).fetch(300)
         if locations:
             datas = []
             for location in locations:
@@ -731,7 +731,7 @@ class DistributionHandler(BaseHandler):
                 distribution.key.delete()
             return
 
-        distributions = Distribution.query().fetch(100)
+        distributions = Distribution.query().order(-Distribution.created).fetch(300)
         if distributions:
             datas = []
             for distribution in distributions:
@@ -1024,7 +1024,7 @@ class DistributionFetchHandler(BaseHandler):
     def get(self):
         datas_contacts = []
         temp_type = {}
-        contacts = Contact.query().fetch(100)
+        contacts = Contact.query().fetch(300)
         if contacts:
             for contact in contacts:
                 temp = {}
@@ -1038,7 +1038,7 @@ class DistributionFetchHandler(BaseHandler):
             temp_type["contacts"] = datas_contacts
 
         datas_locations = []
-        locations = Location.query().fetch(100)
+        locations = Location.query().fetch(300)
         if locations:
             for location in locations:
                 temp = {}
@@ -1060,7 +1060,7 @@ class DistributionFetch2Handler(BaseHandler):
     def get(self):
         datas_contacts = []
         temp_type = {}
-        contacts = Contact.query().fetch(100)
+        contacts = Contact.query().fetch(300)
         if contacts:
             for contact in contacts:
                 temp = {}
@@ -1092,7 +1092,7 @@ class DistributionFetch2Handler(BaseHandler):
             temp_type["distribution"] = datas_distribution
 
         datas_locations = []
-        locations = Location.query().fetch(100)
+        locations = Location.query().fetch(300)
         if locations:
             for location in locations:
                 temp = {}
@@ -1133,7 +1133,7 @@ class DistributorHandler(BaseHandler):
             self.response.out.write(simplejson.dumps(temp))
             return
 
-        distributors = Distributor.query().fetch(100)
+        distributors = Distributor.query().order(-Distributor.created).fetch(300)
         if distributors:
             datas = []
             for distributor in distributors:
@@ -1197,7 +1197,7 @@ class CentersHandler(BaseHandler):
                 self.response.out.write(simplejson.dumps(temp))
                 return
 
-        dropOffCenters = DropOffCenter.query().order(-DropOffCenter.created).fetch(100)
+        dropOffCenters = DropOffCenter.query().order(-DropOffCenter.created).fetch(300)
         if dropOffCenters:
             datas = []
             for drop in dropOffCenters:
@@ -1267,7 +1267,7 @@ class SubscriberPage(BaseHandler):
 class PostsHandler(BaseHandler):
     @login_required
     def get(self):
-        posts = Post.query().fetch(100)
+        posts = Post.query().order(-Post.created).fetch(300)
         if posts:
             datas = []
             for post in posts:

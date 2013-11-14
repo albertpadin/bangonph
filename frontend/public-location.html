@@ -349,8 +349,22 @@
             <br/>
             <h4>Gathering Data on Relief Efforts</h4>
 
-            <img class="fix-width" src='/img/bangonph-ad1.png' title="Volunteer at #BangonPH" alt="Volunteer at #BangonPH" />
-            <br /><br /><br /><br />
+            <img src='/img/bangonph-ad1.png' title="Volunteer at #BangonPH" alt="Volunteer at #BangonPH" />
+            <br /><br />
+            <hr />
+            <h4>Subscribe:</h4>
+            <form class="form-inline" role="form" action="/locations/{{ location.id }}" method="post">
+              <div class="form-group">
+                <input type="email" class="col-sm-6 form-control" id="exampleInputEmail2" placeholder="Enter email" name="email" >
+                <label><input type="checkbox" name="subscribe_location" value="{{ page_title }}"> {{ page_title }}</label> 
+                | 
+                <label><input type="checkbox" name="subscribe_all" value="all_locations"> All locations </label>
+              </div>
+              
+              <button type="submit" class="btn btn-success">Subscribe</button>
+            </form>
+
+            <br /><br />
 
             <!-- <div class="side-wrap">
               <div class="side-head needed">

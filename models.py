@@ -197,6 +197,8 @@ class Subscriber(ndb.Model):
     email = ndb.StringProperty()
     fb_id = ndb.StringProperty()
     distribution = ndb.KeyProperty(kind="Distribution")
+    location = ndb.KeyProperty()
+    all_updates = ndb.BooleanProperty(default=False)
 
     def to_object(self, expand=None):
     	details = API_RESPONSE.copy()
@@ -245,6 +247,10 @@ class Post(ndb.Model):
     facebook = ndb.StringProperty()
     phone = ndb.StringProperty()
     message = ndb.TextProperty()
+    post_type = ndb.StringProperty() # need or have (transpo, people, goods)
+    expiry = ndb.DateTimeProperty()
+    status = ndb.StringProperty(default="ACTIVE") # expired cancelled active
+    location = ndb.KeyProperty(repeated=True)
 
     def to_object(self):
         details = {}
@@ -256,6 +262,9 @@ class Post(ndb.Model):
         details["facebook"] = self.facebook
         details["phone"] = self.phone
         details["message"] = self.message
+        details["post_type"] = self.post_type
+        details["expiry"] = str(self.expiry)
+        details["status"] = self.status
 
         return details
 

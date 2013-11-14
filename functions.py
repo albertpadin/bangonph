@@ -271,7 +271,7 @@ def add_subcriber(data, instance_id=""):
 
 def add_post(data, instance_id=""):
     if instance_id:
-        post = Post.get_by_id(instance_id)
+        post = Post.get_by_id(int(instance_id))
     else:
         post = Post()
 
@@ -292,6 +292,18 @@ def add_post(data, instance_id=""):
 
     if data["message"]:
         post.message = data["message"]
+
+    if data["post_type"]:
+        post.post_type = data["post_type"]
+
+    if data["expiry"]:
+        post.expiry = data["expiry"]
+
+    if data["status"]:
+        post.status = data["status"].upper()
+
+    if data["location"]:
+        post.location = data["location"]
 
     post.put()
     return post

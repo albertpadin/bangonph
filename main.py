@@ -1502,8 +1502,23 @@ class APIPostsHandler(APIBaseHandler):
             if post:
                 self.render(post.to_object())
 
-    @oauthed_required
     def post(self, instance_id=None):
+        resp = API_RESPONSE.copy()
+        if self.request.get("expiry"):
+            try:
+                expiry = datetime.datetime.strptime(self.request.get("expiry"), "%Y-%m-%d %H:%M:%S") #1992-10-20
+            except:
+                resp['response'] = "date has invalid format"
+                resp['code'] = 404
+                resp['property'] = "delete_subscriber"
+                resp['description'] = "Use this format (YYYY-mm-dd)"
+
+                return
+        else:
+            expiry = None
+
+
+        logging.critical(expiry)
         data = {
             "name": self.request.get("name"),
             "email": self.request.get("email"),
@@ -1511,6 +1526,10 @@ class APIPostsHandler(APIBaseHandler):
             "facebook": self.request.get("facebook"),
             "phone": self.request.get("phone"),
             "message": self.request.get("message"),
+            "post_type": self.request.get("post_type"),
+            "expiry": expiry,
+            "status": self.request.get("status"),
+            "location": self.request.get_all("location"),
         }
         if not instance_id:
             post = add_post(data)
@@ -1519,14 +1538,13 @@ class APIPostsHandler(APIBaseHandler):
             post = add_post(data, instance_id)
             self.render(post.to_object())
 
-    @oauthed_required
     def delete(self, instance_id=None):
         resp = API_RESPONSE.copy()
         resp["method"] = "delete"
         if instance_id:
             post = Post.get_by_id(int(instance_id))
             if post:
-                center.key.delete()
+                post.key.delete()
                 resp["description"] = "Successfully deleted the instance"
             else:
                 resp['response'] = "invalid_instance"
@@ -1994,7 +2012,7 @@ app = webapp2.WSGIApplication([
 
         webapp2.Route(r'/<:.*>', ErrorHandler)
     ]),
-    routes.DomainRoute(r'<:admin\.bangonph\.com|localhost>', [
+    routes.DomainRoute(r'<:admin\.bangonph\.com>', [
         webapp2.Route('/', handler=FrontPage, name="www-front"),
         webapp2.Route('/register', handler=RegisterPage, name="www-register"),
         webapp2.Route('/logout', handler=Logout, name="www-logout"),

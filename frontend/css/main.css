@@ -375,6 +375,91 @@ height: 80px;
 
 }
 
+
+
+/* FEED */
+
+.feed > strong {
+    font-size: 18px;
+}
+
+.feed ul {
+    list-style: none;
+    margin: 0px;
+    padding: 0px;
+    /*padding: 10px;
+    border: 1px solid #b6b6b6;*/
+    border-radius: 6px;
+}
+
+.feed .tab-pane ul li {
+    display: inline-block;
+    margin-bottom: 5px;
+    border-bottom: 1px solid #dddddd;
+
+}
+
+    .feed ul li a {
+        text-decoration: none;
+        color: #000;
+    }
+
+    .feed ul li a > strong {
+        text-transform: uppercase;
+        font-size: 10px;
+        color: #000;
+    }
+
+    .feed ul li p {
+        font-size: 12px;
+    }
+
+        .feed ul li p .date-time {
+            font-weight: bold;
+            font-size: 10px;
+            color: #000;
+            text-transform: uppercase;
+        }
+
+    .feed ul li .label {
+        text-transform: uppercase;
+        margin-right: 5px;
+    }
+
+    .feed ul li .share-btn {
+        float: right;
+    }
+
+    .feed .nav {
+        padding: 5px 0px;
+    }
+
+    .feed .nav li a {
+        font-size: 11px;
+        padding: 3px 10px;
+        border-radius: 3px;
+    }
+
+        .feed .nav li.active a {
+            background: #333!important;
+        }
+
+    .see-more-btn{
+        padding: 3px 6px;
+        border: 1px solid #b6b6b6;
+        border-radius: 4px;
+        color: #000;
+        font-size: 11px;
+    }
+
+        .see-more-btn:hover {
+            text-decoration: none;
+            border: 1px solid #5bc0de;
+            color: #5bc0de;
+        }
+
+
+
 /*relief-operations page*/
 #relief-cover{
     background: url(../img/cover-relief.jpg)!important;

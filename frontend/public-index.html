@@ -36,16 +36,23 @@
     <div class="navbar navbar-inverse navbar-fixed-top">
       <div class="container">
         <div class="navbar-header">
+        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target=".navbar-collapse">
+            <span class="sr-only"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
           <a class="navbar-brand" href="/">
           <img src="/img/logo-mini.png" alt="">
           </a>
         </div>
-        <p class="navbar-text navbar-right"><a class="navbar-link" href="https://docs.google.com/a/sym.ph/forms/d/1cGWQuAbuIVogA-uO9tZPlR5HMGGYQH3_Yp96BoBS3ng/viewform" target="_blank">Are we missing anyone? Tell us.</a></p>
-        <!-- 
+        <!-- <p class="navbar-text navbar-right"><a class="navbar-link" href="https://docs.google.com/a/sym.ph/forms/d/1cGWQuAbuIVogA-uO9tZPlR5HMGGYQH3_Yp96BoBS3ng/viewform" target="_blank">Are we missing anyone? Tell us.</a></p> -->
+         
         <div class="navbar-collapse collapse">
-          <ul class="nav navbar-nav">
-            <li class="active"><a href="#">Home</a></li>
-            <li><a href="#">How to Help</a></li>
+          <ul class="nav navbar-nav pull-right">
+            <li><a href="http://google.org/personfinder/2013-yolanda/" target="_blank">Google Person Finder</a></li>
+            <li><a class="navbar-link" href="https://docs.google.com/a/sym.ph/forms/d/1cGWQuAbuIVogA-uO9tZPlR5HMGGYQH3_Yp96BoBS3ng/viewform" target="_blank">Are we missing anything? Tell us.</a></li>
+<!--             <li><a href="#">How to Help</a></li>
             <li class="dropdown">
               <a href="#" class="dropdown-toggle" data-toggle="dropdown">Affected Areas <b class="caret"></b></a>
               <ul class="dropdown-menu">
@@ -69,11 +76,10 @@
                 <li><a href="#">RedCross</a></li>
                 <li><a href="#">UN</a></li>
                 <li><a href="#">SaveALife.Org</a></li>
-                <a href="#" data-toggle="tooltip" data-original-title="Tooltip on right">hover me</a>
               </ul>
-            </li>
+            </li> -->
           </ul>
-        </div>-->
+        </div>
       </div>
     </div>
 
@@ -99,6 +105,7 @@
         <script src="/js/vendor/bootstrap.min.js"></script>
 
         <script src="/js/main.js"></script>
+        
         {% block bottomjs %}
         {% endblock %}
 

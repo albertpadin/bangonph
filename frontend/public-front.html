@@ -342,6 +342,9 @@
               d += '<span class="label label-info">' + data2.post_type + '</span>'
             }*/
             d += data2.message;
+            if(data2.phone){
+              d +='<br/>' + data2.phone;
+            }
             /*d += '<br/><span class="date-time">' + data2.expiry_friendly + '<span class="pull-right"><a href="/posts/' + data2.id + '" class="share-btn">View</a></span></span></p></a></li>';*/
             d += '<br/><span class="date-time">' + data2.expiry_friendly + '</span></p></li>';
 
@@ -382,6 +385,10 @@
               d += '<span class="label label-info">' + data2.post_type + '</span>'
             }*/
             d += data2.message;
+            if(data2.phone){
+              d +='<br/>' + data2.phone;
+            }
+
             /*d += '<br/><span class="date-time">' + data2.expiry_friendly + '<span class="pull-right"><a href="/posts/' + data2.id + '" class="share-btn">View</a></span></span></p></a></li>';*/
             d += '<br/><span class="date-time">' + data2.expiry_friendly + '</span></p></li>';
 

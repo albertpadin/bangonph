@@ -170,8 +170,8 @@ class Distribution(ndb.Model):
             details["contact"] = contact_details
         else:
             if self.contact:
-                data = {}
-                data["meta"] = {"href": "http://api.bangonph.com/v1/contacts/" + str(self.contact)}
+                # data = {}
+                # data["meta"] = {"href": "http://api.bangonph.com/v1/contacts/" + str(self.contact)}
                 details["contact"] = data
             else:
                 details["contact"] = ""

@@ -302,6 +302,7 @@ class PublicFrontPage(BaseHandler):
     def get(self):
         self.tv["current_page"] = "PUBLIC_FRONT"
         self.tv['locations'] = Location.query().fetch(100)
+        self.tv['featured_locations'] = Location.query(Location.featured == True).fetch(30)
         self.render('frontend/public-front.html')
 
 
@@ -2415,7 +2416,7 @@ class UploadHandler(blobstore_handlers.BlobstoreUploadHandler):
 
 
 app = webapp2.WSGIApplication([
-    routes.DomainRoute(r'<:gcdc2013-bangonph\.appspot\.com|www\.bangonph\.com>', [
+    routes.DomainRoute(r'<:gcdc2013-bangonph\.appspot\.com|www\.bangonph\.com|staging\.gcdc2013-bangonph\.appspot\.com>', [
         webapp2.Route('/', handler=PublicFrontPage, name="www-front"),
         webapp2.Route('/reliefoperations', handler=ReliefOperationsPage, name="www-reliefoperations"),
         webapp2.Route(r'/locations/<:.*>', handler=PublicLocationPage, name="www-locations"),

@@ -552,17 +552,7 @@
               <input type="date" id="date_of_distribution" value="<%- this.date_of_distribution %>" required="required" class="form-control" placeholder="Date of Distribution">
             </p>
             <p>
-              <select id="contact" required="required" class="form-control">
-              <%
-                if(!$.isEmptyObject(contacts)) {
-                  $.each(contacts, function() {
-              %>
-                <option value="<%- this.name %>"><%- this.name %></option>
-              <%
-                  })
-                }
-              %>
-              </select>
+              <input type="text" id="contact" value="<%- this.contact %>" class="form-control" placeholder="Contacts"/>
             </p>
             <p>
               <select id="destinations" class="form-control">

@@ -353,6 +353,10 @@ class ReliefOperationsPage(BaseHandler):
         self.tv["current_page"] = "RELIEF_OPERATIONS"
         self.render('frontend/reliefoperations.html')
 
+class PublicPostPage(BaseHandler):
+    def get(self):
+        self.tv["current_page"] = "PUBLIC_POST"
+        self.render('frontend/public-post.html')
 
 class RegisterPage(BaseHandler):
     def get(self):
@@ -2446,6 +2450,7 @@ app = webapp2.WSGIApplication([
         webapp2.Route('/', handler=PublicFrontPage, name="www-front"),
         webapp2.Route('/reliefoperations', handler=ReliefOperationsPage, name="www-reliefoperations"),
         webapp2.Route(r'/locations/<:.*>', handler=PublicLocationPage, name="www-locations"),
+        webapp2.Route('/public-post', handler=PublicPostPage, name="www-public-post"),
 
         webapp2.Route('/api/posts', handler=APIPostsHandler, name="www-api-posts"),
         webapp2.Route(r'/api/posts/<:.*>', handler=APIPostsHandler, name="www-api-posts"),
@@ -2455,7 +2460,7 @@ app = webapp2.WSGIApplication([
 
         webapp2.Route(r'/<:.*>', ErrorHandler)
     ]),
-    routes.DomainRoute(r'<:admin\.bangonph\.com|localhost>', [
+    routes.DomainRoute(r'<:admin\.bangonph\.com>', [
         webapp2.Route('/', handler=FrontPage, name="www-front"),
         webapp2.Route('/register', handler=RegisterPage, name="www-register"),
         webapp2.Route('/logout', handler=Logout, name="www-logout"),

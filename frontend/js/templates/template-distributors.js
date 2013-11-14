@@ -93,7 +93,8 @@ var AddDistributor = Backbone.View.extend({
         "contact_num": _.escape($("#contact_num").val()),
         "email": _.escape($("#email").val()),
         "website": _.escape($("#website").val()),
-        "facebook": _.escape($("#facebook").val())
+        "facebook": _.escape($("#facebook").val()),
+        "contact_details" : _.escape($("#contact_details").val())
       },
       success: function() {
         window.location.hash = "#distributors";
@@ -136,7 +137,8 @@ var EditDistributor = Backbone.View.extend({
         "contact_num" : _.escape($("#contacts").val()),
         "email" : _.escape($("#email").val()),
         "website" : _.escape($("#website").val()),
-        "facebook" : _.escape($("#facebook").val())
+        "facebook" : _.escape($("#facebook").val()),
+        "contact_details" : _.escape($("#contact_details").val())
       },
       success: function(temp) {
         window.location.hash = "#distributors";

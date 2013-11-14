@@ -20,6 +20,7 @@
           <tr>
             <th>Name</th>
             <th>phone</th>
+            <th>Contact Details</th>
             <th>email</th>
             <th>website</th>
             <th>destinations</th>
@@ -37,6 +38,7 @@
               <tr class="active" data-name="<%- _.unescape(this.name) %>" data-id="<%- this.id %>">
                   <td><%- _.unescape(this.name) %></td>
                   <td><%- _.unescape(this.contact_num) %></td>
+                  <td><%- _.unescape(this.contact_details) %></td>
                   <td><%- _.unescape(this.email) %></td>
                   <td><%- _.unescape(this.website) %></td>
                   <td><%- _.unescape(this.facebook) %></td>
@@ -71,9 +73,12 @@
             <p>
               <input type="text" id="contact_num" required="required" class="form-control" placeholder="Contact Number">
             </p>
+            <p>
+              <input type="text" id="contact_details" required="required" class="form-control" placeholder="Contact Details">
+            </p>
             
             <p>
-              <input type="email" id="email" required="required" class="form-control" placeholder="email">
+              <input type="text" id="email" required="required" class="form-control" placeholder="email">
             </p>
             <p>
               <input type="text" id="website" class="form-control" placeholder="website">
@@ -123,7 +128,10 @@
                   <input type="text" id="contacts" class="form-control" placeholder="Contacts (separated by commas)" value="<%- _.unescape(this.contact_num) %>">
                 </p>
                 <p>
-                  <input type="email" id="email" required="required" class="form-control" placeholder="Email" value="<%- _.unescape(this.email) %>">
+                  <input type="text" id="contact_details" class="form-control" placeholder="Contact Details" value="<%- _.unescape(this.contact_details) %>">
+                </p>
+                <p>
+                  <input type="text" id="email" required="required" class="form-control" placeholder="Email" value="<%- _.unescape(this.email) %>">
                 </p>
                 <p>
                   <input type="text" id="website" class="form-control" placeholder="Enter Twitter URL" value="<%- _.unescape(this.website) %>">

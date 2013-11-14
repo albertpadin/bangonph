@@ -37,6 +37,7 @@ class Distributor(ndb.Model):
     email = ndb.StringProperty()
     website = ndb.StringProperty()
     facebook = ndb.StringProperty()
+    contact_details = ndb.TextProperty()
 
     def to_object(self):
         details = {}
@@ -50,6 +51,7 @@ class Distributor(ndb.Model):
         details["contact_num"] = self.contact_num
         details["website"] = self.website
         details["facebook"] = self.contact_num
+        details["contact_details"] = self.contact_details
 
         return details
 
@@ -61,7 +63,9 @@ class Location(ndb.Model):
     latlong = ndb.StringProperty()
     featured_photo = ndb.StringProperty()
     death_count = ndb.IntegerProperty()
+    death_count_text = ndb.StringProperty()
     affected_count = ndb.IntegerProperty()
+    affected_count_text = ndb.StringProperty()
     status_board = ndb.StringProperty()
     needs = ndb.JsonProperty()
     status = ndb.JsonProperty()
@@ -77,7 +81,9 @@ class Location(ndb.Model):
         details["id"] = self.key.id()
         details["featured_photo"] = self.featured_photo
         details["death_count"] = self.death_count
+        details["death_count_text"] = self.death_count_text
         details["affectedCount"] = self.affected_count
+        details["affectedCountText"] = self.affected_count_text
         details["statusBoard"] = self.status_board
         details["needs"] = self.needs
         details["status"] = self.status

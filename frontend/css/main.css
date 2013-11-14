@@ -1,4 +1,9 @@
 /*custom classes*/
+
+.navbar {
+    z-index: 99999!important;
+}
+
 .mb0{
     margin-bottom: 0!important;
 }
@@ -387,6 +392,10 @@ height: 80px;
 
 /* FEED */
 
+.feed {
+    margin-bottom: 20px;
+}
+
 .feed > strong {
     font-size: 18px;
 }
@@ -401,6 +410,7 @@ height: 80px;
 }
 
 .feed .tab-pane ul li {
+    width: 100%;
     display: inline-block;
     margin-bottom: 5px;
     border-bottom: 1px solid #dddddd;
@@ -439,7 +449,7 @@ height: 80px;
     }
 
     .feed .nav {
-        padding: 10px 0px;
+        padding: 97px 0px 10px 0px;
     }
 
     .feed .nav li a {
@@ -472,20 +482,46 @@ height: 80px;
         padding: 10px;
         border-radius: 5px;
         margin-top: 10px;
+        width: 95%;
+        position: absolute;
     }
+
+        .shadowed {
+            box-shadow: 0px 0px 8px 1px rgba(0, 0, 0, 0.3);
+            -webkit-box-shadow: 0px 0px 8px 1px rgba(0, 0, 0, 0.3);
+            -moz-box-shadow: 0px 0px 8px 1px rgba(0, 0, 0, 0.3);
+        }
 
     .feed-wrapper {
         position: absolute;
     }
 
-    .feed-input input[type="text"], .feed-input textarea {
+    .feed-input input[type="text"], .feed-input input[type="date"], .feed-input textarea {
         width: 100%;
         padding: 5px 10px;
-        border-radius: 5px;
+        border-radius: 3px;
         border: 1px solid #ccc;
         margin-bottom: 5px;
-
     }
+
+    .cancel-btn {
+        margin-right: 5px;
+        display: inline-block;
+        float: left;
+    }
+
+    .submit-btn {
+        float: right;
+    }
+
+    .hidden {
+        display: none;
+    }
+
+    .show {
+        display: block;
+    }
+
 
 /*    .feed-input input[type="submit"] {
         margin-top: -35px;

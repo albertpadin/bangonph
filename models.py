@@ -207,19 +207,19 @@ class Subscriber(ndb.Model):
     all_updates = ndb.BooleanProperty(default=False)
 
     def to_object(self, expand=None):
-    	data = {}
-    	data["meta"] = {"href": str(currenturl + "/v1/subscribers/" + str(self.key.id()))}
-    	data["name"] = self.name
-    	data["email"] = self.email
-    	data["fb_id"] = self.fb_id
-    	distribution = self.distribution.get()
-    	if expand:
-    		if expand == "distribution":
-    			data["distribution"] = distribution.to_object()
-    	else:
-    		meta = {"href": str(currenturl + "/efforts/" + str(distribution.key.id()))}
-    		data["distribution"] = {"meta": meta}
-    	return data
+        data = {}
+        data["meta"] = {"href": str(currenturl + "/v1/subscribers/" + str(self.key.id()))}
+        data["name"] = self.name
+        data["email"] = self.email
+        data["fb_id"] = self.fb_id
+        distribution = self.distribution.get()
+        if expand:
+            if expand == "distribution":
+                data["distribution"] = distribution.to_object()
+        else:
+            meta = {"href": str(currenturl + "/efforts/" + str(distribution.key.id()))}
+            data["distribution"] = {"meta": meta}
+        return data
 
 class Contact(ndb.Model):
     created = ndb.DateTimeProperty(auto_now_add=True)

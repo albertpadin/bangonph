@@ -43,9 +43,11 @@ var LocationView = Backbone.View.extend({
   },
   locations: function() {
     var self = this;
+    $(".loading-message").show();
     var collection = new LocationCollection();
     collection.fetch({
       success: function(datas) {
+        $(".loading-message").fadeOut("fast");
         self.render(datas.toJSON());
       }
     });

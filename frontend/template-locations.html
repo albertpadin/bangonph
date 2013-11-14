@@ -305,15 +305,19 @@
             %>             
             <input type="hidden" id="id" value="<%- this.id %>"/>
             <p>
+            Location Name
               <input type="text" id="name" value="<%- this.name %>" required="required" class="form-control" placeholder="Location Name">
             </p>
             <p>
+            Lat Long
               <input type="text" id="latlong" value="<%- this.latlong %>" class="form-control" placeholder="Lat Long">
             </p>
             <p>
+            Featured Photo
               <input type="text" id="featured_photo" value="<%- this.featured_photo %>" class="form-control" placeholder="Featured Photo">
             </p>
             <p>
+            Death Count
               <input type="text" id="death_count" required="required" value="<%- this.death_count %>" class="form-control" placeholder="Death Count">
             </p>
             <p>
@@ -321,6 +325,7 @@
               <input type="text" id="death_count_text" value="<%- this.death_count_text %>" class="form-control" placeholder="Death Count Text">
             </p>
             <p>
+            Affected Count
               <input type="text" id="affected_count" required="required" value="<%- this.affected_count %>"  class="form-control" placeholder="Affected Count">
             </p>
             <p>
@@ -328,30 +333,31 @@
               <input type="text" id="affected_count_text" value="<%- this.affected_count_text %>"  class="form-control" placeholder="Affected Count Text">
             </p>
             <p>
+            Status Board
               <input type="text" id="status_board" value="<%- this.status_board %>" class="form-control" placeholder="Status Board">
             </p>
             Needs:
-            <p>
+            <p>Number of food
               <input type="text" <% _.each(this.needs, function(item, name) { if (name == "food") { %> value="<%- item %>" <% } }) %> id="food" placeholder="Number of food"><br/>
-
+Number of water
               <input type="text" id="water" <% _.each(this.needs, function(item, name) { if (name == "water") { %> value="<%- item %>" <% } }) %>  placeholder="Number of water"><br/>
-
+Number of medicines
               <input type="text" id="medicines" <% _.each(this.needs, function(item, name) { if (name == "medicines") { %> value="<%- item %>" <% } }) %> placeholder="Number of medicines"><br/>
-
+Number of social_workers
               <input type="text" id="social_workers" <% _.each(this.needs, function(item, name) { if (name == "social_workers") { %> value="<%- item %>" <% } }) %> placeholder="Number of social_workers"><br/>
-
+Number of medical_workers
               <input type="text" id="medical_workers" <% _.each(this.needs, function(item, name) { if (name == "medical_workers") { %> value="<%- item %>" <% } }) %>  placeholder="Number of medical_workers"><br/>
-
+Number of shelter
               <input type="text" id="shelter" <% _.each(this.needs, function(item, name) { if (name == "shelter") { %> value="<%- item %>" <% } }) %>  placeholder="Number of shelter"><br/>
-
+Number of formula
               <input type="text" id="formula" <% _.each(this.needs, function(item, name) { if (name == "formula") { %> value="<%- item %>" <% } }) %> placeholder="Number of formula"><br/>
-
+Number of toiletries
               <input type="text" id="toiletries" <% _.each(this.needs, function(item, name) { if (name == "toiletries") { %> value="<%- item %>" <% } }) %>  placeholder="Number of toiletries"><br/>
-
+Number of flashlights
               <input type="text" id="flashlights" <% _.each(this.needs, function(item, name) { if (name == "flashlights") { %> value="<%- item %>" <% } }) %> placeholder="Number of flashlights"><br/>
-
+Number of cloths
               <input type="text" id="cloths" <% _.each(this.needs, function(item, name) { if (name == "cloths") { %> value="<%- item %>" <% } }) %> placeholder="Number of cloths"><br/>
-
+Miscellaneous
               <input type="text" <% _.each(this.needs, function(item, name) { if (name == "miscellaneous") { %> value="<%- item %>" <% } }) %> id="miscellaneous" placeholder="Miscellaneous"><br/>
             </p>
             <p>

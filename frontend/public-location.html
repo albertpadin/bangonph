@@ -34,6 +34,19 @@
                 {% endfor %}
                 </div>
             </div>
+            <div class="col-lg-8">
+              <div id="fb-root"></div>
+              <div id="fb-root"></div>
+              <script>(function(d, s, id) {
+                var js, fjs = d.getElementsByTagName(s)[0];
+                if (d.getElementById(id)) return;
+                js = d.createElement(s); js.id = id;
+                js.src = "//connect.facebook.net/en_US/all.js#xfbml=1";
+                fjs.parentNode.insertBefore(js, fjs);
+              }(document, 'script', 'facebook-jssdk'));</script>
+              <div class="fb-comments center-block" data-href="http://example.com/comments" data-numposts="10"></div>
+            </div>
+            <div class="clearfix"></div>
 
             <div class="col-lg-4 hide-on-big show-on-small">
 
@@ -106,7 +119,7 @@
                   </div>
                 </div>
 
-                <<!-- div class="status-entry">
+                <!-- div class="status-entry">
                 <img class="icon" src="/img/icon-box.png" alt="Packs">
                 <span>{{ location.packs_needed }} packs needed</span>
               </div>
@@ -181,7 +194,7 @@
             
             <div>
                   <div id="donations-wrap">
-                    <div class="col-lg-4">
+                    <div class="col-lg-4 col-md-6 col-sm-6">
                       <div class="operations-content">
                         <img src="/img/logos/aboitiz.jpg" class="operations-img"><br/>
                         <strong>Aboitiz Foundation</strong>
@@ -192,7 +205,7 @@
                         <a target="_blank" href="http://ushare.unionbankph.com/aboitiz/" class="operations-btn blue-btn">Donate Cash</a>
                       </div>
                     </div>
-                    <div class="col-lg-4">
+                    <div class="col-lg-4 col-md-6 col-sm-6">
                       <div class="operations-content">
                         <img src="/img/logos/unicef.jpg" class="operations-img"><br/>
                         <strong>Unicef Philippines</strong>
@@ -203,7 +216,7 @@
                         <a target="_blank" href="http://donate.unicef.ph/campaign/24/typhoon-yolanda-emergency-appeal" class="operations-btn blue-btn">Donate Cash</a>
                       </div>
                     </div>
-                    <div class="col-lg-4">
+                    <div class="col-lg-4 col-md-6 col-sm-6">
                       <div class="operations-content">
                         <img src="/img/logos/red-cross.png" class="operations-img"><br/>
                         <strong>Philippine Red Cross</strong><!-- 
@@ -336,7 +349,7 @@
             <br/>
             <h4>Gathering Data on Relief Efforts</h4>
 
-            <img src='/img/bangonph-ad1.png' title="Volunteer at #BangonPH" alt="Volunteer at #BangonPH" />
+            <img class="fix-width" src='/img/bangonph-ad1.png' title="Volunteer at #BangonPH" alt="Volunteer at #BangonPH" />
             <br /><br /><br /><br />
 
             <!-- <div class="side-wrap">

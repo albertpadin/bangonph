@@ -739,7 +739,7 @@ class DistributionHandler(BaseHandler):
                 temp["id"] = distribution.key.id()
                 temp["date_of_distribution"] = str(distribution.date_of_distribution.strftime("%m/%d/%Y"))
                 temp["contact"] = distribution.contact
-                temp["destinations"] = distribution.destinations.urlsafe()
+                temp["destinations"] = distribution.destinations.id()
                 temp["supply_goal"] = distribution.supply_goal
                 temp["actual_supply"] = distribution.actual_supply
                 temp["images"] = distribution.images
@@ -2086,7 +2086,7 @@ app = webapp2.WSGIApplication([
 
         webapp2.Route(r'/<:.*>', ErrorHandler)
     ]),
-    routes.DomainRoute(r'<:admin\.bangonph\.com>', [
+    routes.DomainRoute(r'<:admin\.bangonph\.com|localhost>', [
         webapp2.Route('/', handler=FrontPage, name="www-front"),
         webapp2.Route('/register', handler=RegisterPage, name="www-register"),
         webapp2.Route('/logout', handler=Logout, name="www-logout"),

@@ -17,7 +17,6 @@
           </div>
           <div class="social-item">
             <a href="https://twitter.com/share" class="twitter-share-button" data-hashtags="BangonPH">Tweet</a>
-            <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
           </div>
           <div class="clearfix"></div>
         </div>
@@ -332,7 +331,7 @@
           for(i=0;i<data.data.posts.length;i++){
             data2 = data.data.posts[i];
             d = '<li class="all ' + data2.post_type + '">';
-            /*d += '<a href="/' + data2.id + '">';*/
+            d += '<a href="/posts/' + data2.id + '">';
             d += '<strong>' + data2.name + '</strong>';
             d += '<p>';
             if(data2.location){
@@ -345,8 +344,8 @@
             if(data2.phone){
               d +='<br/>' + data2.phone;
             }
-            /*d += '<br/><span class="date-time">' + data2.expiry_friendly + '<span class="pull-right"><a href="/posts/' + data2.id + '" class="share-btn">View</a></span></span></p></a></li>';*/
-            d += '<br/><span class="date-time">' + data2.expiry_friendly + '</span></p></li>';
+            d += '<br/><span class="date-time">' + data2.expiry_friendly + '<div class="social-media pull-right"><div class="social-item"><div class="fb-share-button" data-href="http://www.bangonph.com/posts/' + data2.id + '" data-type="button_count"></div></div><div class="social-item"><a href="https://twitter.com/share" class="twitter-share-button" data-text="' + data2.message + '" data-url="http://www.bangonph.com/posts/' + data2.id + '" data-hashtags="BangonPH">Tweet</a></div><div class="clearfix"></div></div></span></p></a></li>';
+            /*d += '<br/><span class="date-time">' + data2.expiry_friendly + '</span></p></li>';*/
 
             if(data2.post_type){
               if(data2.post_type == "NEED"){
@@ -361,6 +360,8 @@
             }
 
           }
+
+          setTimeout(function(){twttr.widgets.load();FB.XFBML.parse();},100);
           
         });
 
@@ -375,7 +376,7 @@
           for(i=0;i<data.data.posts.length;i++){
             data2 = data.data.posts[i];
             d = '<li class="all ' + data2.post_type + '">';
-            /*d += '<a href="/' + data2.id + '">';*/
+            d += '<a href="/posts/' + data2.id + '">';
             d += '<strong>' + data2.name + '</strong>';
             d += '<p>';
             if(data2.location){
@@ -389,8 +390,8 @@
               d +='<br/>' + data2.phone;
             }
 
-            /*d += '<br/><span class="date-time">' + data2.expiry_friendly + '<span class="pull-right"><a href="/posts/' + data2.id + '" class="share-btn">View</a></span></span></p></a></li>';*/
-            d += '<br/><span class="date-time">' + data2.expiry_friendly + '</span></p></li>';
+            d += '<br/><span class="date-time">' + data2.expiry_friendly + '<div class="social-media pull-right"><div class="social-item"><div class="fb-share-button" data-href="http://www.bangonph.com/posts/' + data2.id + '" data-type="button_count"></div></div><div class="social-item"><a href="https://twitter.com/share" class="twitter-share-button" data-text="' + data2.message + '" data-url="http://www.bangonph.com/posts/' + data2.id + '" data-hashtags="BangonPH">Tweet</a></div><div class="clearfix"></div></div></span></p></a></li>';
+            /*d += '<br/><span class="date-time">' + data2.expiry_friendly + '</span></p></li>';*/
 
             if(data2.post_type){
               if(data2.post_type == "NEED"){
@@ -405,6 +406,7 @@
             }
 
           }
+          setTimeout(function(){twttr.widgets.load();FB.XFBML.parse();},100);
         });
       </script>
       <script type="text/javascript">
@@ -433,4 +435,5 @@
       });
 
       </script>
+      <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
 {% endblock %}

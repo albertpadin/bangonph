@@ -362,8 +362,21 @@ class ReliefOperationsPage(BaseHandler):
         self.render('frontend/reliefoperations.html')
 
 class PublicPostPage(BaseHandler):
-    def get(self):
+    def get(self, page=None):
         self.tv["current_page"] = "PUBLIC_POST"
+        post = Post.get_by_id(int(page))
+        if not post:
+            self.redirect('/')
+            return
+        self.tv['post'] = post.to_object()
+        self.tv['og_description'] = ""
+        if post.location:
+            self.tv['og_description'] += post.location + '. '
+        if post.message:
+            self.tv['og_description'] += post.message + '. '
+        if post.phone:
+            self.tv['og_description'] += post.phone
+
         self.render('frontend/public-post.html')
 
 class RegisterPage(BaseHandler):
@@ -1897,6 +1910,9 @@ class APIPostsHandler(APIBaseHandler):
         else:
             expiry = datetime.datetime.now() + datetime.timedelta(days=7)
 
+        if not self.request.get('name') and not self.request.get('message'):
+            return
+
         data = {
             "name": self.request.get("name"),
             "email": self.request.get("email"),
@@ -2532,6 +2548,70 @@ class APIDistributorsHandler(APIBaseHandler):
         self.render(resp)
 
 
+class APIMainHandler(APIBaseHandler):
+    def get(self):
+        resp = API_RESPONSE.copy()
+        resp["method"] = "get"
+        failed = False
+        data = {}
+        data["versions"] = [{
+            "meta": {
+                "href": "http://api.bangonph.com/v1"
+            },
+            "description": "Version 1"
+        }]
+
+        resp["description"] = "List of API Versions"
+        resp["property"] = "all"
+        resp["data"] = data
+
+        self.render(resp)
+
+
+class APIV1Handler(APIBaseHandler):
+    def get(self):
+        resp = API_RESPONSE.copy()
+        resp["method"] = "get"
+        failed = False
+        data = {}
+        data["apis"] = [{
+            "meta": {
+                "href": "http://api.bangonph.com/v1/locations"
+                },
+            "description": "Affected Locations"
+        },{
+            "meta": {
+                "href": "http://api.bangonph.com/v1/posts"
+                },
+            "description": "Posts or Messages"
+        },{
+            "meta": {
+                "href": "http://api.bangonph.com/v1/efforts"
+                },
+            "description": "Relief Efforts"
+        },{
+            "meta": {
+                "href": "http://api.bangonph.com/v1/orgs"
+                },
+            "description": "Relief Organizations"
+        },{
+            "meta": {
+                "href": "http://api.bangonph.com/v1/drop-off-centers"
+                },
+            "description": "Drop Off Centers"
+        }]
+
+        resp["description"] = "List of API endpoints"
+        resp["property"] = "all"
+        resp["data"] = data
+
+        self.render(resp)
+
+
+class APIErrorHandler(APIBaseHandler):
+    def get(self, page=None):
+        self.redirect('/')
+
 
 class UploadPage(BaseHandler):
     @login_required
@@ -2572,7 +2652,7 @@ app = webapp2.WSGIApplication([
         webapp2.Route('/', handler=PublicFrontPage, name="www-front"),
         webapp2.Route('/reliefoperations', handler=ReliefOperationsPage, name="www-reliefoperations"),
         webapp2.Route(r'/locations/<:.*>', handler=PublicLocationPage, name="www-locations"),
-        webapp2.Route('/public-post', handler=PublicPostPage, name="www-public-post"),
+        webapp2.Route(r'/posts/<:.*>', handler=PublicPostPage, name="www-public-post"),
 
         webapp2.Route('/api/posts', handler=APIPostsHandler, name="www-api-posts"),
         webapp2.Route(r'/api/posts/<:.*>', handler=APIPostsHandler, name="www-api-posts"),
@@ -2619,6 +2699,8 @@ app = webapp2.WSGIApplication([
     ]),
 
     routes.DomainRoute(r'<:api\.bangonph\.com|localhost>', [
+        webapp2.Route('/', handler=APIMainHandler, name="api-locations"),
+        webapp2.Route('/v1', handler=APIV1Handler, name="api-locations"),
         webapp2.Route('/v1/locations', handler=APILocationsHandler, name="api-locations"),
         webapp2.Route('/v1/users', handler=APIUsersHandler, name="api-users"),
         webapp2.Route('/v1/contacts', handler=APIContactsHandler, name="api-locations"),
@@ -2644,7 +2726,7 @@ app = webapp2.WSGIApplication([
         webapp2.Route('/v1/oauth/authorize', handler=GetUserToken, name="api-get-user-token"),
         webapp2.Route('/s', handler=sampler, name="api-get-authorization-code"),
 
-        webapp2.Route(r'/<:.*>', ErrorHandler)
+        webapp2.Route(r'/<:.*>', APIErrorHandler)
     ])
 ])
 

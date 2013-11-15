@@ -6,7 +6,7 @@
         {% block ogdetails %}{% endblock %}
         <meta property="og:site_name" content="#BangonPH"/>
         <meta property="og:type" content="website"/>
-        <meta property="og:description" content="Super Typhoon Yolanda hit the Philippines and left several towns devastated. Affecting more than 2 million people and killing over 2,000 and still counting. This is the live and developing story of how we rise again. Together."/>
+        <meta property="og:description" content="{% if og_description %}{{ og_description }}{% else %}Super Typhoon Yolanda hit the Philippines and left several towns devastated. Affecting more than 2 million people and killing over 2,000 and still counting. This is the live and developing story of how we rise again. Together.{% endif %}"/>
         <title>{% if page_title %}{{ page_title }}{% else %}#BangonPH{% endif %}</title>
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width">
@@ -97,7 +97,7 @@
           </div>
       <hr>
       <footer>
-        <p>&copy; #BangonPH 2013</p>
+        <p>&copy; #BangonPH 2013. Powered by <a href='http://www.pusher.com' title='Pusher. Real time messaging'>Pusher</a></p>
         <p><span style='font-size: smaller; font-style: italic;'>* Images on the website were collected from various sources online. All rights belong to their owners.</span></p>
       </footer>
     </div> <!-- /container -->        

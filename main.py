@@ -2447,7 +2447,7 @@ class UploadHandler(blobstore_handlers.BlobstoreUploadHandler):
 
 
 app = webapp2.WSGIApplication([
-    routes.DomainRoute(r'<:gcdc2013-bangonph\.appspot\.com|www\.bangonph\.com|staging\.gcdc2013-bangonph\.appspot\.com>', [
+    routes.DomainRoute(r'<:gcdc2013-bangonph\.appspot\.com|www\.bangonph\.com|localhost|staging\.gcdc2013-bangonph\.appspot\.com>', [
 
         webapp2.Route('/', handler=PublicFrontPage, name="www-front"),
         webapp2.Route('/reliefoperations', handler=ReliefOperationsPage, name="www-reliefoperations"),
@@ -2462,7 +2462,7 @@ app = webapp2.WSGIApplication([
 
         webapp2.Route(r'/<:.*>', ErrorHandler)
     ]),
-    routes.DomainRoute(r'<:admin\.bangonph\.com|localhost>', [
+    routes.DomainRoute(r'<:admin\.bangonph\.com>', [
         webapp2.Route('/', handler=FrontPage, name="www-front"),
         webapp2.Route('/register', handler=RegisterPage, name="www-register"),
         webapp2.Route('/logout', handler=Logout, name="www-logout"),
@@ -2498,7 +2498,7 @@ app = webapp2.WSGIApplication([
         webapp2.Route(r'/<:.*>', ErrorHandler)
     ]),
 
-    routes.DomainRoute(r'<:api\.bangonph\.com|localhost>', [
+    routes.DomainRoute(r'<:api\.bangonph\.com>', [
         webapp2.Route('/v1/locations', handler=APILocationsHandler, name="api-locations"),
         webapp2.Route('/v1/users', handler=APIUsersHandler, name="api-users"),
         webapp2.Route('/v1/contacts', handler=APIContactsHandler, name="api-locations"),

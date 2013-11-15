@@ -25,7 +25,7 @@
             <h4>Update status of this location</h4>
             <form method="post">
             <input type="hidden" name="status" value="status"/>
-            <input type="hidden" name="page_title" value="{{ page_title }}"/>
+            <input type="hidden" name="page_title" value="{{ location_id }}"/>
 
             <table class="table table-hover">
               <thead>
@@ -36,24 +36,24 @@
               <tbody>
                 <tr>
                   <td>Deaths Count</td>
-                  <td><input required="requried" name="death_count" onblur="if(isNaN(this.value)){ alert('Please remove non-numeric value.'); this.focus(); return false; }" class="form-control" type="text" value="{% if location.death_count %}{{ location.death_count }}{% endif %}" placeholder="Numberic value only"/></td>
+                  <td><input required="requried" name="death_count" onblur="if(isNaN(this.value)){ alert('Please remove non-numeric value.'); this.focus(); return false; }" class="form-control" type="text" value="{% if location.death_count %}{{ location.death_count }}{% endif %}" placeholder="Numeric value only"/></td>
                   <td><input name="death_source" class="form-control" type="hidden" placeholder="Source"/></td>
                 </tr>
                 <tr>
                   <td>Families Affected Count</td>
-                  <td><input required="requried" name="affected_count" onblur="if(isNaN(this.value)){ alert('Please remove non-numeric value.'); this.focus(); return false; }" class="form-control" type="text" value="{% if location.affected_count %}{{ location.affected_count }}{% endif %}" placeholder="Numberic value only"/></td>
+                  <td><input required="requried" name="affected_count" onblur="if(isNaN(this.value)){ alert('Please remove non-numeric value.'); this.focus(); return false; }" class="form-control" type="text" value="{% if location.affected_count %}{{ location.affected_count }}{% endif %}" placeholder="Numeric value only"/></td>
                   <td><input name="affected_source" class="form-control" type="hidden" placeholder="Source"/></td>
                 </tr>
                 <tr>
                   <td>Missing Persons Count</td>
-                  <td><input required="requried" name="missing_person" onblur="if(isNaN(this.value)){ alert('Please remove non-numeric value.'); this.focus(); return false; }" class="form-control" type="text" value="{% if location.missing_person %}{{ location.missing_person }}{% endif %}" placeholder="Numberic value only"/></td>
+                  <td><input required="requried" name="missing_person" onblur="if(isNaN(this.value)){ alert('Please remove non-numeric value.'); this.focus(); return false; }" class="form-control" type="text" value="{% if location.missing_person %}{{ location.missing_person }}{% endif %}" placeholder="Numeric value only"/></td>
                   <td><input name="missing_person_source" class="form-control" type="hidden" placeholder="Source"/></td>
                 </tr>
                 <tr>
                   <td><br/></td>
                 </tr>
                 <tr>
-                  <th colspan="5">Display Informations</th>
+                  <th colspan="5">Display Information</th>
                 </tr>
                 <tr>
                   <td>Deaths Count Text</td>
@@ -66,6 +66,10 @@
                 <tr>
                   <td>Missing Persons Count Text</td>
                   <td><input name="missing_person_text" class="form-control" type="text" value="{% if location.missing_person_text %}{{ location.missing_person_text }}{% endif %}" /></td>
+                </tr>
+                <tr>
+                  <td>Status Board</td>
+                  <td><input name="status_board" class="form-control" type="text" value="{% if location.status_board %}{{ location.status_board }}{% endif %}" /></td>
                 </tr>
                 <tr>
                   <td>Communication</td>
@@ -96,7 +100,7 @@
                 </tr>
                 <tr>
                   <td>Source</td>
-                  <td><input name="source" class="form-control" type="text" value="{% if location.source %}{{ location.source }}{% endif %}" placeholder="Status"/></td>
+                  <td><input name="source" class="form-control" type="text" value="{% if location.source %}{{ location.source }}{% endif %}" placeholder="Source"/></td>
                 </tr>
               </tbody>
             </table>
@@ -108,7 +112,7 @@
             <h4>Add a relief effort to this location</h4>
             <form method="post">
               <input type="hidden" name="status" value="reliefs"/>
-              <input type="hidden" name="page_title" value="{{ page_title }}"/>
+              <input type="hidden" name="page_title" value="{{ location_id }}"/>
               <table class="table">
                 <thead>
                   <tr>

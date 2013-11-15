@@ -14,7 +14,8 @@ var Locations = Backbone.Model.extend({
     status: "",
     images: "",
     hash_tag: "",
-    featured: ""
+    featured: "",
+    missing_person: ""
   }
 });
 
@@ -116,6 +117,7 @@ var AddLocation = Backbone.View.extend({
         "death_count_text": _.escape($("#death_count_text").val()),
         "affected_count": _.escape($("#affected_count").val()),
         "affected_count_text": _.escape($("#affected_count_text").val()),
+        "missing_person": _.escape($("#missing_person").val()),
         "status_board": _.escape($("#status_board").val()),
         "food": _.escape($("#food").val()),
         "water": _.escape($("#water").val()),
@@ -206,6 +208,7 @@ var EditLocation =  Backbone.View.extend({
         "death_count_text": _.escape($("#death_count_text").val()),
         "affected_count": _.escape($("#affected_count").val()),
         "affected_count_text": _.escape($("#affected_count_text").val()),
+        "missing_person": _.escape($("#missing_person").val()),
         "status_board": _.escape($("#status_board").val()),
         "food": _.escape($("#food").val()),
         "water": _.escape($("#water").val()),

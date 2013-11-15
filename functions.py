@@ -168,6 +168,9 @@ def add_location(data, location_key=""):
     if data["featured"]:
         location.featured = data["featured"]
 
+    if data["missing_person"]:
+        location.missing_person = data["missing_person"]
+
     location.put()
     return location
 

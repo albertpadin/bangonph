@@ -301,8 +301,13 @@ class LoginPage(BaseHandler):
 class PublicFrontPage(BaseHandler):
     def get(self):
         self.tv["current_page"] = "PUBLIC_FRONT"
-        self.tv['locations'] = Location.query().fetch(100)
-        self.tv['featured_locations'] = Location.query(Location.featured == True).fetch(30)
+        self.tv['featured_locations'] = []
+        self.tv['locations'] = Location.query().fetch(300)
+        for location in self.tv['locations']:
+            if location.featured:
+                self.tv['featured_locations'].append(location)
+                self.tv['locations'].remove(location)
+        
         self.render('frontend/public-front.html')
 
 

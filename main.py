@@ -2453,6 +2453,113 @@ class APIPostsHandler(APIBaseHandler):
         self.render(resp)
 
 
+class APIPostSandbox(APIBaseHandler):
+def get(self, instance_id=None):
+        resp = API_RESPONSE.copy()
+        resp["method"] = "get"
+        failed = False
+        posts_json = []
+        if not instance_id:
+            if self.request.get("cursor"):
+                try:
+                    curs = Cursor(urlsafe=self.request.get("cursor"))
+                except Exception, e:
+                    resp['response'] = "invalid_cursor"
+                    resp['code'] = 406
+                    resp['property'] = "cursor"
+                    resp['description'] = "Invalid cursor"
+                    failed = True
+
+                if curs:
+                    posts, next_cursor, more = Post.query().fetch_page(25, start_cursor=curs)
+                else:
+                    posts, next_cursor, more = Post.query().fetch_page(25)
+            else:
+                if self.request.get_all("filter_post_type"):
+                    filter_type = self.request.get_all("filter_post_type")[0].upper()
+                    date_now = datetime.datetime.now() - datetime.timedelta(hours=24)
+
+                    posts, next_cursor, more = Post.query(Post.post_type.IN([filter_type]), Post.expiry >= date_now).order(-Post.expiry).fetch_page(100)
+                else:
+                    posts, next_cursor, more = Post.query().fetch_page(25)
+
+            if not failed:
+                for post in posts:
+                    posts_json.append(post.to_object())
+
+                data = {}
+                data["posts"] = posts_json
+                if more:
+                    data["next_page"] = "http://api.bangonph.com/v1/locations?cursor=" + str(next_cursor.urlsafe())
+                else:
+                    data["next_page"] = False
+
+                resp["description"] = "List of posts"
+                resp["property"] = "posts"
+                resp["data"] = data
+        else:
+            post = Post.get_by_id(instance_id)
+            if post:
+                resp["description"] = "Instance data"
+                resp["property"] = "posts"
+                resp["data"] = post.to_object()
+            else:
+                # instance dont exist
+                resp['response'] = "invalid_instance"
+                resp['code'] = 404
+                resp['property'] = "instance_id"
+                resp['description'] = "Instance id missing or not valid"
+
+        self.render(resp)
+
+    def post(self, instance_id=None):
+        resp = API_RESPONSE.copy()
+        if instance_id:
+            resp["method"] = "edit"
+            exist = Post.Post.get_by_id(long(instance_id))
+            if exist:
+                post = add_post(data, instance_id)
+                if post:
+                    resp["description"] = "Successfully edited the instance"
+                    resp["data"] = post.to_object()
+                else:
+                    # didnt create but imposible
+                    resp['response'] = "cannot_edit"
+                    resp['code'] = 500
+                    resp['property'] = "add_post"
+                    resp['description'] = "Server cannot edit the instance"
+            else:
+                # instance dont exist but imposible
+                resp['response'] = "invalid_instance"
+                resp['code'] = 404
+                resp['property'] = "instance_id"
+                resp['description'] = "Instance id missing or not valid"
+
+            self.render(resp)
+
+    def delete(self, instance_id=None):
+        resp = API_RESPONSE.copy()
+        resp["method"] = "delete"
+        if instance_id:
+            post = Post.get_by_id(long(instance_id))
+            if post:
+                post.key.delete()
+                resp["description"] = "Successfully deleted the instance"
+            else:
+                resp['response'] = "invalid_instance"
+                resp['code'] = 404
+                resp['property'] = "delete_post"
+                resp['description'] = "Instance id not valid"
+        else:
+            # missing params
+            resp['response'] = "missing_params"
+            resp['code'] = 406
+            resp['property'] = "params"
+            resp['description'] = "The request has missing parameters"
+
+        self.render(resp)
+
+
 class APIDropOffCentersHandler(APIBaseHandler):
     def get(self, instance_id=None):
         resp = API_RESPONSE.copy()
@@ -3233,9 +3340,11 @@ app = webapp2.WSGIApplication([
         webapp2.Route('/v1/orgs', handler=APIOrganizationsHandler, name="api-locations"),
         webapp2.Route('/v1/efforts', handler=APIEffortsHandler, name="api-locations"),
         webapp2.Route('/v1/distributors', handler=APIDistributorsHandler, name="api-locations"),
+        webapp2.Route('/v1/posts/sandbox', handler=APIPostSandbox, name="api-locations"),
 
 
         webapp2.Route(r'/v1/distributors/<:.*>', handler=APIDistributorsHandler, name="api-locations"),
+        webapp2.Route(r'/v1/posts/sandbox/<:.*>', handler=APIPostSandbox, name="api-locations"),
         webapp2.Route(r'/v1/locations/<:.*>', handler=APILocationsHandler, name="api-locations"),
         webapp2.Route(r'/v1/users/<:.*>', handler=APIUsersHandler, name="api-users"),
         webapp2.Route(r'/v1/contacts/<:.*>', handler=APIContactsHandler, name="api-locations"),

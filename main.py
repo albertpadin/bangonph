@@ -32,8 +32,13 @@ def with_commas(value):
     return "{:,}".format(value)
 
 def to_date(date):
-    return date.strftime("%B %d, %Y %H:%M%p")
+    date = date + datetime.timedelta(hours=8)
+    return date.strftime("%B %d, %Y %I:%M%p")
 
+def nl_to_br(text):
+    return text.replace('<','&lt;').replace('>','&gt;').replace('&','&amp;').replace('\n','<br />')
+
+jinja_environment.filters['nl_to_br'] = nl_to_br
 jinja_environment.filters['with_commas'] = with_commas
 jinja_environment.filters['to_date'] = to_date
 
@@ -549,7 +554,7 @@ class PublicLocationEditPage(BaseHandler):
 
     def post(self, *args, **kwargs):
         if self.request.get("status") == "status":
-            location_revision = LocationRevision.get_by_id(int(self.public_user.key.id()))
+            location_revision = LocationRevision()
             if location_revision:
                 temp = {}
                 datas_death = []
@@ -624,32 +629,44 @@ class PublicLocationEditPage(BaseHandler):
                 status = {
                     "power": self.request.get("status_power"),
                     "water": self.request.get("status_water"),
-                    "medicine": self.request.get("status_medicines"),
-                    "clothes": self.request.get("status_cloths"),
+                    "medicines": self.request.get("status_medicines"),
+                    "cloths": self.request.get("status_cloths"),
                     "communication": self.request.get("status_communication"),
                     "food": self.request.get("status_food")
                 }
 
                 datas_changes = []
+                if location.status_board != self.request.get("status_board"):
+                    datas_changes.append("Status Board")
+
                 if location.death_count != int(self.request.get("death_count")):
-                    datas_changes.append("death count")
+                    datas_changes.append("Death Count: " + str(location.death_count) + " >> " + str(self.request.get("death_count")))
                 if location.affected_count != int(self.request.get("affected_count")):
-                    datas_changes.append("affected count")
+                    datas_changes.append("Affected Count: " + str(location.affected_count) + " >> " + str(self.request.get("affected_count")))
                 if location.missing_person != int(self.request.get("missing_person")):
-                    datas_changes.append("missing person")
+                    datas_changes.append("Missing Count: " + str(location.missing_person) + " >> " + str(self.request.get("missing_person")))
+                if location.death_count_text != self.request.get("death_count_text"):
+                    datas_changes.append("Deaths: " + str(location.death_count_text) + " >> " + str(self.request.get("death_count_text")))
+                if location.affected_count_text != self.request.get("affected_count_text"):
+                    datas_changes.append("Affected: " + str(location.affected_count_text) + " >> " + str(self.request.get("affected_count_text")))
+                if location.missing_person_text != self.request.get("missing_person_text"):
+                    datas_changes.append("Missing: " + str(location.missing_person_text) + " >> " + str(self.request.get("missing_person_text")))
                 if location.status:
                     if status["power"] != location.status["power"]:
-                        datas_changes.append("power")
+                        datas_changes.append("Power: " + location.status["power"] + " >> " + status["power"])
                     if status["water"] != location.status["water"]:
-                        datas_changes.append("water")
-                    # if status["medicine"] != location.status["medicine"]:
-                    #     datas_changes.append("medicine")
-                    if status["clothes"] != location.status["clothes"]:
-                        datas_changes.append("clothes")
+                        datas_changes.append("Water: " + location.status["water"] + " >> " + status["water"])
+                    if status["medicines"] != location.status["medicines"]:
+                        datas_changes.append("Medicines: " + location.status["medicines"] + " >> " + status["medicines"])
+                    if status["cloths"] != location.status["cloths"]:
+                        datas_changes.append("Clothing: " + location.status["cloths"] + " >> " + status["cloths"])
                     if status["communication"] != location.status["communication"]:
-                        datas_changes.append("communication")
+                        datas_changes.append("Communication: " + location.status["communication"] + " >> " + status["communication"])
                     if status["food"] != location.status["food"]:
-                        datas_changes.append("food")
+                        datas_changes.append("Food: " + location.status["food"] + " >> " + status["food"])
+
+                if self.request.get("source"):
+                    datas_changes.append("Source/s: " + self.request.get('source'))
 
                 user_changes.status = datas_changes
                 user_changes.put()
@@ -699,19 +716,21 @@ class PublicLocationEditPage(BaseHandler):
             user_changes.name = self.request.get("page_title")
             datas_changes = []
             if self.request.get("relief_name"):
-                datas_changes.append("relief name")
+                datas_changes.append("Relief Effort: " + distribution_revision.name)
             if self.request.get("destination"):
-                datas_changes.append("destination")
+                datas_changes.append("Destination: " + distribution_revision.destination)
             if self.request.get("packs"):
-                datas_changes.append("packs")
+                datas_changes.append("Packs: " + str(distribution_revision.packs))
             if self.request.get("description"):
-                datas_changes.append("description")
+                datas_changes.append("Description: " + distribution_revision.description)
             if self.request.get("contacts"):
-                datas_changes.append("contacts")
+                datas_changes.append("Contacts: " + distribution_revision.contacts)
             if self.request.get("needs"):
-                datas_changes.append("needs")
+                datas_changes.append("Needs: " + distribution_revision.needs)
             if self.request.get("date"):
-                datas_changes.append("date")
+                datas_changes.append("Date: " + distribution_revision.date)
+            if self.request.get("source"):
+                datas_changes.append("Source: " + self.request.get('source'))
             user_changes.status = datas_changes
             user_changes.put()
 
@@ -737,7 +756,7 @@ class PublicLocationPage(BaseHandler):
         path_redirect = self.request.path + "/edit"
         self.tv["fb_login_url"] = facebook.generate_login_url(path_redirect, self.uri_for('www-publicfblogin'))
 
-        user_changes = LocationRevisionChanges.query(LocationRevisionChanges.name == location.key.id()).order(-LocationRevisionChanges.created).fetch(10)
+        user_changes = LocationRevisionChanges.query(LocationRevisionChanges.name == location.key.id()).order(-LocationRevisionChanges.created).fetch(100)
         if user_changes:
             self.tv["status_changes"] = user_changes
 

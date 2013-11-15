@@ -20,6 +20,11 @@
     <div class="container">
       <!-- Example row of columns -->
       <div class="row">
+          {% if success %}
+          <div class="alert alert-success">
+            {{ success }} <a href="/locations/{{ location_id }}" class="alert-link">Go back to {{ page_title }}</a>
+          </div>
+          {% endif %}
           <div>
             <h5>Logged in as: {{ login_user }} (Facebook) <a href="/logout">Logout?</a></h5>
             <h4>Update status of this location</h4>
@@ -36,17 +41,17 @@
               <tbody>
                 <tr>
                   <td>Deaths Count</td>
-                  <td><input required="requried" name="death_count" onblur="if(isNaN(this.value)){ alert('Please remove non-numeric value.'); this.focus(); return false; }" class="form-control" type="text" value="{% if location.death_count %}{{ location.death_count }}{% endif %}" placeholder="Numeric value only"/></td>
+                  <td><input required="requried" name="death_count" onblur="if(isNaN(this.value)){ alert('Please remove non-numeric value.'); this.focus(); return false; }" class="form-control" type="text" value="{{ location.death_count }}" placeholder="Numeric value only"/></td>
                   <td><input name="death_source" class="form-control" type="hidden" placeholder="Source"/></td>
                 </tr>
                 <tr>
                   <td>Families Affected Count</td>
-                  <td><input required="required" name="affected_count" onblur="if(isNaN(this.value)){ alert('Please remove non-numeric value.'); this.focus(); return false; }" class="form-control" type="text" value="{% if location.affected_count %}{{ location.affected_count }}{% endif %}" placeholder="Numeric value only"/></td>
+                  <td><input name="affected_count" onblur="if(isNaN(this.value)){ alert('Please remove non-numeric value.'); this.focus(); return false; }" class="form-control" type="text" value="{{ location.affected_count }}" placeholder="Numeric value only"/></td>
                   <td><input name="affected_source" class="form-control" type="hidden" placeholder="Source"/></td>
                 </tr>
                 <tr>
                   <td>Missing Persons Count</td>
-                  <td><input required="required" name="missing_person" onblur="if(isNaN(this.value)){ alert('Please remove non-numeric value.'); this.focus(); return false; }" class="form-control" type="text" value="{% if location.missing_person %}{{ location.missing_person }}{% endif %}" placeholder="Numeric value only"/></td>
+                  <td><input name="missing_person" onblur="if(isNaN(this.value)){ alert('Please remove non-numeric value.'); this.focus(); return false; }" class="form-control" type="text" value="{{ location.missing_person }}" placeholder="Numeric value only"/></td>
                   <td><input name="missing_person_source" class="form-control" type="hidden" placeholder="Source"/></td>
                 </tr>
                 <tr>
@@ -69,7 +74,7 @@
                 </tr>
                 <tr>
                   <td>Status Board</td>
-                  <td><input name="status_board" class="form-control" type="text" value="{% if location.status_board %}{{ location.status_board }}{% endif %}" /></td>
+                  <td><textarea name="status_board" class="form-control">{% if location.status_board %}{{ location.status_board }}{% endif %}</textarea></td>
                 </tr>
                 <tr>
                   <td>Communication</td>
@@ -85,7 +90,7 @@
                 </tr>
                 <tr>
                   <td>Medicines</td>
-                  <td><input name="status_medicines" class="form-control" type="text" value="{% if location.status.medicine %}{{ location.status.medicine }}{% else %}Gathering Data{% endif %}" placeholder="Status"/></td>
+                  <td><input name="status_medicines" class="form-control" type="text" value="{% if location.status.medicines %}{{ location.status.medicines }}{% else %}Gathering Data{% endif %}" placeholder="Status"/></td>
                 </tr>
                 <tr>
                   <td>Food</td>
@@ -93,7 +98,7 @@
                 </tr>
                 <tr>
                   <td>Clothes</td>
-                  <td><input name="status_cloths" class="form-control" type="text" value="{% if location.status.clothes %}{{ location.status.clothes }}{% else %}Gathering Data{% endif %}" placeholder="Status"/></td>
+                  <td><input name="status_cloths" class="form-control" type="text" value="{% if location.status.cloths %}{{ location.status.cloths }}{% else %}Gathering Data{% endif %}" placeholder="Status"/></td>
                 </tr>
                 <tr>
                   <td><br/></td>
@@ -104,7 +109,7 @@
                 </tr>
               </tbody>
             </table>
-            <a href=".../locations/{{ location_id }}" class="btn btn-default">Cancel</a>
+            <a href="/locations/{{ location_id }}" class="btn btn-default">Cancel</a>
             <button type="submit" class="btn btn-primary">Submit</button>
             </form>
           </div>
@@ -128,11 +133,11 @@
                 </thead>
                 <tbody>
                   <tr>
-                    <td><input type="text" class="form-control" name="relief_name"/></td>
-                    <td><input type="text" class="form-control" name="destination"</td>
-                    <td><input type="text" class="form-control" name="packs" onblur="if(isNaN(this.value)){ alert('Please remove non-numeric value.'); this.focus(); return false; }" placeholder="Number only"/></td>
-                    <td><textarea class="form-control" name="description" style="margin: 0px 6px 0px 0px; width: 315px; height: 35px;"></textarea></td>
-                    <td><input type="text" class="form-control" name="contacts"/></td>
+                    <td><input type="text" class="form-control" required="required" name="relief_name"/></td>
+                    <td><input type="text" class="form-control" required="required" name="destination"</td>
+                    <td><input type="text" class="form-control" required="required" name="packs" onblur="if(isNaN(this.value)){ alert('Please remove non-numeric value.'); this.focus(); return false; }" placeholder="Number only"/></td>
+                    <td><textarea class="form-control" name="description" required="required" style="margin: 0px 6px 0px 0px; width: 315px; height: 35px;"></textarea></td>
+                    <td><input type="text" class="form-control" required="required" name="contacts"/></td>
                     <td><textarea class="form-control" name="needs" style="margin: 0px 6px 0px 0px; width: 315px; height: 35px;"></textarea></td>
                     <td>
                       <select name="date">
@@ -163,7 +168,7 @@
                   </tr>
                 </tbody>
               </table>
-              <a href=".../locations/{{ location_id }}" class="btn btn-default">Cancel</a>
+              <a href="/locations/{{ location_id }}" class="btn btn-default">Cancel</a>
               <button class="btn btn-primary" type="submit">Submit</button>
             </form>
           </div>

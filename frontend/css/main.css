@@ -39,6 +39,10 @@
 .fix-width{
     width: 100%;
 }
+
+.center-text{
+    text-align: center;
+}
 /*end custom classes*/
 
 /*overwritten bootstrap*/
@@ -59,6 +63,8 @@
     background: url(../img/cover.jpg);
     background-repeat: no-repeat;
     background-size: cover;
+    -webkit-box-shadow: inset 0 -10px 10px -10px rgba(129, 129, 129, 0.65);
+    box-shadow: inset inset 0 -10px 10px -10px rgba(129, 129, 129, 0.65);
 }
 
 .sr-only{
@@ -99,12 +105,148 @@
     
 }
 
-.status-entry{
-    width: 160px;
-    float: left;
-    font-size: 0.8em;
-    padding-top: 7px;
+/* Large desktop */
+@media (min-width: 1200px) and (max-width: 767px) {
+    .status-entry{
+        width: 50%;
+        float: left;
+        font-size: 0.8em;
+        padding-top: 7px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        text-transform: capitalize;
+        position: static;
+    }
+
+    .status-entry span:hover{
+        text-overflow:auto;
+        overflow: visible;
+        position: absolute;
+        background-color: white;
+        z-index: 9;
+        margin-left: 4px;
+    }
 }
+
+/*@media (min-width: 991px) and (max-width: 1200px) {
+    .status-entry{
+        width: 50%;
+        float: left;
+        font-size: 0.8em;
+        padding-top: 7px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        text-transform: capitalize;
+        position: static;
+    }
+
+    .status-entry span:hover{
+        text-overflow:auto;
+        overflow: visible;
+        position: absolute;
+        background-color: white;
+        z-index: 9;
+        margin-left: 4px;
+    }
+}*/
+
+/* Portrait tablet to landscape and desktop */
+/*@media (min-width: 768px) and (max-width: 991px) {
+    .status-entry{
+        width: 50%;
+        float: left;
+        font-size: 0.8em;
+        padding-top: 7px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        text-transform: capitalize;
+        position: static;
+    }
+
+    .status-entry span:hover{
+        text-overflow:auto;
+        overflow: visible;
+        position: absolute;
+        background-color: white;
+        z-index: 9;
+        margin-left: 4px;
+    }
+}*/
+
+/* Landscape phone to portrait tablet */
+/*@media (max-width: 767px) {
+    .status-entry{
+        width: 50%;
+        float: left;
+        font-size: 0.8em;
+        padding-top: 7px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        text-transform: capitalize;
+        position: static;
+    }
+
+    .status-entry span:hover{
+        text-overflow:auto;
+        overflow: visible;
+        position: absolute;
+        background-color: white;
+        z-index: 9;
+        margin-left: 4px;
+    }
+}*/
+
+@media (min-width: 600px) and (max-width: 767px) {
+    .status-entry{
+        width: 33%;
+        float: left;
+        font-size: 0.8em;
+        padding-top: 7px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        text-transform: capitalize;
+        position: static;
+    }
+
+    .status-entry span:hover{
+        text-overflow:auto;
+        overflow: visible;
+        position: absolute;
+        background-color: white;
+        z-index: 9;
+        margin-left: 4px;
+    }
+}
+/* Landscape phones and down */
+@media (max-width: 480px) {
+    .status-entry{
+        width: 50%;
+        float: left;
+        font-size: 0.8em;
+        padding-top: 7px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        text-transform: capitalize;
+        position: static;
+    }
+
+    .status-entry span:hover{
+        text-overflow:auto;
+        overflow: visible;
+        position: absolute;
+        background-color: white;
+        z-index: 9;
+        margin-left: 4px;
+    }
+}
+
+
 
 .status-entry span{
     padding-left: 2px;
@@ -643,3 +785,15 @@ height: 80px;
     margin-bottom: 10px;
 }
 /*end post section*/
+
+.intro{
+    border: 1px solid #b6b6b6;
+    padding: 15px;
+    border-radius: 6px;
+    margin-bottom: 30px;
+}
+
+.intro img{
+    height: 100%;
+    width: 136px;
+}

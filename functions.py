@@ -319,6 +319,8 @@ def add_post(data, instance_id=""):
                 post.post_type.append(item)
         else:
             post.post_type = types
+    else:
+        post.post_type = ['NEED']
 
     if data["expiry"]:
         post.expiry = data["expiry"]
@@ -368,6 +370,8 @@ def add_mock_post(data, instance_id=""):
                 post.post_type.append(item)
         else:
             post.post_type = types
+    else:
+        post.post_type = ['NEED']
 
     if data["expiry"]:
         post.expiry = data["expiry"]

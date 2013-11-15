@@ -577,6 +577,17 @@ class PublicLocationEditPage(BaseHandler):
                     datas_affected.append(temp)
                     location_revision.affected = datas_affected
 
+                datas_missing = []
+                if location_revision.missing_person:
+                    temp["missing_person"] = self.request.get("missing_person")
+                    temp["updated"] = str(datetime.datetime.now())
+                    location_revision.missing_person.append(temp)
+                else:
+                    temp["missing_person"] = self.request.get("missing_person")
+                    temp["updated"] = str(datetime.datetime.now())
+                    datas_missing.append(temp)
+                    location_revision.missing_person = datas_missing
+
                 datas_status = []
                 if location_revision.status:
                     temp["communication"] = self.request.get("status_communication")
@@ -627,6 +638,8 @@ class PublicLocationEditPage(BaseHandler):
                     datas_changes.append("death count")
                 if location.affected_count != int(self.request.get("affected_count")):
                     datas_changes.append("affected count")
+                if location.missing_person != int(self.request.get("missing_person")):
+                    datas_changes.append("missing person")
                 if location.status:
                     if status["power"] != location.status["power"]:
                         datas_changes.append("power")
@@ -648,6 +661,7 @@ class PublicLocationEditPage(BaseHandler):
                 location.death_count_text = self.request.get("death_source")
                 location.affected_count = int(self.request.get("affected_count"))
                 location.affected_count_text = self.request.get("affected_source")
+                location.missing_person = int(self.request.get("missing_person"))
                 location.status = status
                 location.put()
 
@@ -3152,7 +3166,7 @@ class UploadHandler(blobstore_handlers.BlobstoreUploadHandler):
 
 
 app = webapp2.WSGIApplication([
-    routes.DomainRoute(r'<:gcdc2013-bangonph\.appspot\.com|www\.bangonph\.com|staging\.gcdc2013-bangonph\.appspot\.com>', [
+    routes.DomainRoute(r'<:gcdc2013-bangonph\.appspot\.com|www\.bangonph\.com|staging\.gcdc2013-bangonph\.appspot\.com|localhost>', [
 
         webapp2.Route('/', handler=PublicFrontPage, name="www-front"),
         webapp2.Route('/reliefoperations', handler=ReliefOperationsPage, name="www-reliefoperations"),
@@ -3171,7 +3185,7 @@ app = webapp2.WSGIApplication([
 
         webapp2.Route(r'/<:.*>', ErrorHandler)
     ]),
-    routes.DomainRoute(r'<:admin\.bangonph\.com|localhost>', [
+    routes.DomainRoute(r'<:admin\.bangonph\.com>', [
         webapp2.Route('/', handler=FrontPage, name="www-front"),
         webapp2.Route('/register', handler=RegisterPage, name="www-register"),
         webapp2.Route('/logout', handler=Logout, name="www-logout"),

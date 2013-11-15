@@ -45,6 +45,11 @@
                   <td><input name="affected_source" class="form-control" type="text" placeholder="Source"/></td>
                 </tr>
                 <tr>
+                  <td>Missing Persons</td>
+                  <td><input required="requried" name="missing_person" onblur="if(isNaN(this.value)){ alert('Please remove non-numeric value.'); this.value=''; this.focus(); return false; }" class="form-control" type="text" value="{% if location.missing_person %}{{ location.missing_person|with_commas }}{% else %}Gathering Data{% endif %}" placeholder="Numberic value only"/></td>
+                </tr>
+
+                <tr>
                   <th colspan="5">Info Status</th>
                 </tr>
                 <tr>

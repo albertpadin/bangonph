@@ -1822,6 +1822,7 @@ class GetUserToken(APIBaseHandler):
 
 
 class APIUsersHandler(APIBaseHandler):
+    @oauthed_required
     def get(self, instance_id=None):
         resp = API_RESPONSE.copy()
         resp["method"] = "get"
@@ -1933,7 +1934,7 @@ class APILocationsHandler(APIBaseHandler):
 
         self.render(resp)
 
-
+    @oauthed_required
     def post(self, instance_id=None):
         needs = {
            "food": self.request.get("food"),
@@ -2309,6 +2310,7 @@ class APIPostsHandler(APIBaseHandler):
         )
         p['feeds'].trigger('new_post', post.to_object())
 
+    @oauthed_required
     def delete(self, instance_id=None):
         resp = API_RESPONSE.copy()
         resp["method"] = "delete"
@@ -2614,6 +2616,7 @@ class APIEffortsHandler(APIBaseHandler):
 
         self.render(resp)
 
+    @oauthed_required
     def post(self, instance_id=None):
         resp = API_RESPONSE.copy()
         if self.request.get("date_of_distribution"):

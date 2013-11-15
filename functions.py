@@ -332,6 +332,55 @@ def add_post(data, instance_id=""):
     post.put()
     return post
 
+
+def add_mock_post(data, instance_id=""):
+    if instance_id:
+        post = Post.get_by_id(int(instance_id))
+    else:
+        post = Post()
+
+    if data["name"]:
+        post.name = data["name"]
+
+    if data["email"]:
+        post.email = data["email"]
+
+    if data["twitter"]:
+        post.twitter = data["twitter"]
+
+    if data["facebook"]:
+        post.facebook = data["facebook"]
+
+    if data["phone"]:
+        post.phone = data["phone"]
+
+    if data["message"]:
+        post.message = data["message"]
+
+    if data["post_type"]:
+        
+        types = []
+        for this_type in data["post_type"]:
+            post_type = this_type.replace(" ", "_")
+            types.append(post_type.upper())
+        if post.post_type:
+            for item in types:
+                post.post_type.append(item)
+        else:
+            post.post_type = types
+
+    if data["expiry"]:
+        post.expiry = data["expiry"]
+
+    if data["status"]:
+        post.status = data["status"].upper()
+
+    if data["location"]:
+        post.location = data["location"]
+
+    return post
+
+
 def add_contact(data, instance_id=""):
     if instance_id:
         contact = Contact.get_by_id(int(instance_id))

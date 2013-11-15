@@ -42,6 +42,10 @@ var DistributorView = Backbone.View.extend({
       success: function(datas){
         $(".loading-message").fadeOut("fast");
         self.render(datas.toJSON());
+      },
+      error: function(datas) {
+        $(".loading-message").fadeOut("fast");
+        $(".failed-message").fadeIn("fast");
       }
     });
   },
@@ -120,11 +124,17 @@ var EditDistributor = Backbone.View.extend({
   },
   data: function(id){
     var self = this;
+    $(".loading-message").show();
     var distributorsCollection = new DistributorCollection();
     distributorsCollection.fetch({
       data:{ id_edit: id },
       success: function(datas) {
+        $(".loading-message").fadeOut("fast");
         self.render(datas.toJSON());
+      },
+      error: function(datas) {
+        $(".loading-message").fadeOut("fast");
+        $(".failed-message").fadeIn("fast");
       }
     });
   },

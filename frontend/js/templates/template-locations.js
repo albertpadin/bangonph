@@ -49,6 +49,10 @@ var LocationView = Backbone.View.extend({
       success: function(datas) {
         $(".loading-message").fadeOut("fast");
         self.render(datas.toJSON());
+      },
+      error: function(datas) {
+        $(".loading-message").fadeOut("fast");
+        $(".failed-message").fadeIn("fast");
       }
     });
   },
@@ -155,11 +159,17 @@ var EditLocation =  Backbone.View.extend({
   location: function(id) {
     console.log(id);
     var self = this;
+    $(".loading-message").show();
     var collection = new LocationCollection();
     collection.fetch({
       data: { id_edit: id },
       success: function(data) {
+        $(".loading-message").fadeOut("fast");
         self.render(data.toJSON());
+      },
+      error: function(datas) {
+        $(".loading-message").fadeOut("fast");
+        $(".failed-message").fadeIn("fast");
       }
     });
   },

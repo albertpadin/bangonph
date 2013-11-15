@@ -435,7 +435,6 @@ class DashboardPage(BaseHandler):
     def get(self):
         self.render('frontend/dashboard.html')
 
-
 class UserHandler(BaseHandler):
     @login_required
     def get(self):
@@ -2460,7 +2459,7 @@ app = webapp2.WSGIApplication([
 
         webapp2.Route(r'/<:.*>', ErrorHandler)
     ]),
-    routes.DomainRoute(r'<:admin\.bangonph\.com>', [
+    routes.DomainRoute(r'<:admin\.bangonph\.com|localhost>', [
         webapp2.Route('/', handler=FrontPage, name="www-front"),
         webapp2.Route('/register', handler=RegisterPage, name="www-register"),
         webapp2.Route('/logout', handler=Logout, name="www-logout"),

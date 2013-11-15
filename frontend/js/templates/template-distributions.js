@@ -44,6 +44,10 @@ var DistributionView = Backbone.View.extend({
       success: function(datas) {
         $(".loading-message").fadeOut("fast");
         self.render(datas.toJSON());
+      },
+      error: function(datas) {
+        $(".loading-message").fadeOut("fast");
+        $(".failed-message").fadeIn("fast");
       }
     });
   },
@@ -200,14 +204,19 @@ var EditDistribution = Backbone.View.extend({
   },
   datas: function(id) {
     var self = this;
+    $(".loading-message").show();
     $.ajax({
       type: "get",
       url: "/distributions/fetch/2",
       data: { id: id },
       success: function(datas) {
         var dd = JSON.parse(datas);
-        console.log(dd);
+        $(".loading-message").fadeOut("fast");
         self.render(dd.contacts, dd.locations, dd.distribution);
+      },
+      error: function(datas) {
+        $(".loading-message").fadeOut("fast");
+        $(".failed-message").fadeIn("fast");
       }
     });
   },

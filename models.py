@@ -55,6 +55,49 @@ class Distributor(ndb.Model):
 
         return details
 
+class DistributionRevision(ndb.Model):
+    created = ndb.DateTimeProperty(auto_now_add=True)
+    updated = ndb.DateTimeProperty(auto_now=True)
+    date_of_distribution = ndb.DateTimeProperty()
+    contact = ndb.StringProperty()
+    destinations = ndb.KeyProperty()
+    supply_goal = ndb.JsonProperty()
+    actual_supply = ndb.JsonProperty()
+    images = ndb.JsonProperty()
+    status = ndb.StringProperty()
+    info = ndb.TextProperty()
+    featured_photo = ndb.StringProperty()
+    description = ndb.TextProperty()
+
+class LocationRevisionChanges(ndb.Model):
+    created = ndb.DateTimeProperty(auto_now_add=True)
+    updated = ndb.DateTimeProperty(auto_now=True)
+    fb_email = ndb.StringProperty()
+    fb_id = ndb.StringProperty()
+    fb_access_token = ndb.StringProperty()
+    fb_username = ndb.StringProperty()
+    fb_lastname = ndb.StringProperty()
+    fb_firstname = ndb.StringProperty()
+    fb_middlename = ndb.StringProperty()
+    fb_name = ndb.StringProperty()
+    name = ndb.StringProperty()
+    status = ndb.JsonProperty()
+
+class LocationRevision(ndb.Model):
+    created = ndb.DateTimeProperty(auto_now_add=True)
+    updated = ndb.DateTimeProperty(auto_now=True)
+    fb_email = ndb.StringProperty()
+    fb_id = ndb.StringProperty()
+    fb_access_token = ndb.StringProperty()
+    fb_username = ndb.StringProperty()
+    fb_lastname = ndb.StringProperty()
+    fb_firstname = ndb.StringProperty()
+    fb_middlename = ndb.StringProperty()
+    fb_name = ndb.StringProperty()
+    name = ndb.StringProperty()
+    death = ndb.JsonProperty() # ndb.IntegerProperty()
+    affected = ndb.JsonProperty() # ndb.IntegerProperty()
+    status = ndb.JsonProperty() # ndb.JsonProperty()
 
 class Location(ndb.Model):
     created = ndb.DateTimeProperty(auto_now_add=True)

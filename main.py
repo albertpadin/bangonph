@@ -1,6 +1,6 @@
 import webapp2, jinja2, os, calendar
 from webapp2_extras import routes
-from models import User, Contact, Location, Post, Distribution, File, Distributor, Subscriber, DropOffCenter
+from models import User, Contact, Location, Post, Distribution, File, Distributor, Subscriber, DropOffCenter, LocationRevision, LocationRevisionChanges
 from functions import *
 import json as simplejson
 import logging
@@ -31,8 +31,11 @@ jinja_environment = jinja2.Environment(loader=jinja2.FileSystemLoader(os.path.di
 def with_commas(value):
     return "{:,}".format(value)
 
+def to_date(date):
+    return date.strftime("%B %d, %Y %H:%M%p")
 
 jinja_environment.filters['with_commas'] = with_commas
+jinja_environment.filters['to_date'] = to_date
 
 
 def login_required(fn):
@@ -43,7 +46,6 @@ def login_required(fn):
         else:
             return fn(self, *args)
     return wrapper
-
 
 def admin_required(fn):
     '''So we can decorate any RequestHandler with @admin_required'''
@@ -93,6 +95,7 @@ class BaseHandler(webapp2.RequestHandler):
 
         self.session = self.get_session()
         self.user = self.get_current_user()
+        self.public_user = self.get_public_current_user()
 
 
     def render(self, template_path=None, force=False):
@@ -128,6 +131,13 @@ class BaseHandler(webapp2.RequestHandler):
         if self.session.has_key("user"):
             user = User.get_by_id(self.session["user"])
             return user
+        else:
+            return None
+
+    def get_public_current_user(self):
+        if self.session.has_key("user"):
+            location_revision = LocationRevision.get_by_id(self.session["user"])
+            return location_revision
         else:
             return None
 
@@ -207,6 +217,87 @@ class BaseHandler(webapp2.RequestHandler):
         self.login(user)
         return
 
+    def public_login_fb(self, fb_content, access_token, state_url):
+        self.logout()
+        location_revision = LocationRevision.query(LocationRevision.fb_id == fb_content["id"]).get()
+        if not location_revision:
+            email = fb_content["email"]
+            if email:
+                location_revision = LocationRevision.query(LocationRevision.fb_email == email).get()
+
+            if location_revision:
+                # Merge User
+
+                location_revision.fb_id = fb_content["id"]
+                try:
+                    location_revision.fb_username = fb_content["username"]
+                except:
+                    logging.exception("no username?")
+                location_revision.fb_firstname = fb_content["first_name"]
+                try:
+                    location_revision.fb_lastname = fb_content["last_name"]
+                except:
+                    logging.exception("no last_name?")
+                try:
+                    location_revision.fb_middlename = fb_content["middle_name"]
+                except:
+                    logging.exception('no middle name?')
+
+                location_revision.fb_name = user.fb_firstname
+                if location_revision.fb_middlename:
+                    location_revision.fb_name += " " + location_revision.fb_middlename
+
+                if location_revision.fb_lastname:
+                    location_revision.fb_name += " " + location_revision.fb_lastname
+
+                try:
+                    location_revision.fb_access_token = access_token
+                except:
+                    logging.exception('no access token')
+
+                try:
+                    location_revision.name = state_url
+                except:
+                    logging.exception("no location name")
+            else:
+                location_revision = LocationRevision()
+                location_revision.fb_id = fb_content["id"]
+                try:
+                    location_revision.fb_username = fb_content["username"]
+                except:
+                    logging.exception("no username?")
+                location_revision.fb_email = fb_content["email"]
+                location_revision.fb_firstname = fb_content["first_name"]
+                try:
+                    location_revision.fb_lastname = fb_content["last_name"]
+                except:
+                    logging.exception("no last_name?")
+                try:
+                    location_revision.fb_middlename = fb_content["middle_name"]
+                except:
+                    logging.exception('no middle name?')
+
+                location_revision.fb_name = location_revision.fb_firstname
+                if location_revision.fb_middlename:
+                    location_revision.fb_name += " " + location_revision.fb_middlename
+
+                if location_revision.fb_lastname:
+                    location_revision.fb_name += " " + location_revision.fb_lastname
+
+                try:
+                    location_revision.fb_access_token = access_token
+                except:
+                    logging.exception('no access token')
+
+                try:
+                    location_revision.name = state_url
+                except:
+                    logging.exception("no location name")
+
+            location_revision.put()
+        self.login(location_revision)
+        return
+
 
     def logout(self):
         if self.session.is_active():
@@ -230,6 +321,13 @@ class Logout(BaseHandler):
         if self.user:
             self.logout()
         self.redirect(self.uri_for('www-front', referred="logout"))
+
+class PublicLogout(BaseHandler):
+    def get(self):
+        id = self.public_user.name
+        if self.user:
+            self.logout()
+        self.redirect("/locations/" + str(id))
 
 
 class LoginPage(BaseHandler):
@@ -316,6 +414,166 @@ class LocationSamplePage(BaseHandler):
         self.tv["current_page"] = "LOCATIONSAMPLE"
         self.render('frontend/locationsample.html')
 
+class PublicFBLoginPage(BaseHandler):
+    def get(self):
+        if self.request.get('code') and self.request.get('state'):
+            state = self.request.get('state')
+            code = self.request.get('code')
+            access_token = facebook.code_to_access_token(code, self.uri_for('www-publicfblogin'))
+            if not access_token:
+                # Assume expiration, just redirect to login page
+                self.redirect(self.uri_for('www-locations', referred="publicfblogin", error="We were not able to connect with Facebook. Please try again."))
+                return
+
+            url = "https://graph.facebook.com/me?access_token=" + access_token
+
+            result = urlfetch.fetch(url)
+            if result.status_code == 200:
+                state_url = str(state).split("/")[2]
+                logging.critical(state_url)
+                self.public_login_fb(simplejson.loads(result.content), access_token, state_url)
+                logging.critical(str(state))
+                self.redirect(str(state))
+                return
+
+        else:
+            self.redirect(facebook.generate_login_url(self.request.get('goto'), self.uri_for('www-publicfblogin')))
+
+class PublicLocationEditPage(BaseHandler):
+    def get(self, location_id=None):
+        if self.public_user:
+            if not location_id:
+                logging.error('No location ID')
+                self.redirect('/')
+                return
+
+            location = Location.get_by_id(location_id)
+            if not location:
+                logging.error('No location found')
+                self.redirect('/')
+                return
+
+            self.tv['efforts'] = Distribution.query(Distribution.destinations == location.key, Distribution.date_of_distribution >= datetime.datetime.now()).order(Distribution.date_of_distribution)
+
+            self.tv['location'] = location
+            self.tv['page_title'] = location.name
+
+            # location revision
+            self.tv["login_user"] = self.public_user.fb_name
+
+            self.render('frontend/public-location-edit.html')
+        else:
+            path = self.request.path.split("/")[0] + "/" + self.request.path.split("/")[1] 
+            # self.response.out.write("You are not allowed to visit this site. Click <a href='"+ path +"'>here</a> to go back.")
+            path_facebook = facebook.generate_login_url(path, self.uri_for('www-publicfblogin'))
+            self.redirect(path_facebook)
+
+    def post(self, *args, **kwargs):
+        if self.request.get("status"):
+            location_revision = LocationRevision.get_by_id(int(self.public_user.key.id()))
+            if location_revision:
+                temp = {}
+                datas_death = []
+                if location_revision.death:
+                    temp["death_count"] = self.request.get("death_count")
+                    temp["death_source"] = self.request.get("death_source")
+                    temp["updated"] = str(datetime.datetime.now())
+                    location_revision.death.append(temp)
+                else:
+                    temp["death_count"] = self.request.get("death_count")
+                    temp["death_source"] = self.request.get("death_source")
+                    temp["updated"] = str(datetime.datetime.now())
+                    datas_death.append(temp)
+                    location_revision.death = datas_death
+
+                datas_affected = []
+                if location_revision.affected:
+                    temp["affected_count"] = self.request.get("affected_count")
+                    temp["affected_source"] = self.request.get("affected_source")
+                    temp["updated"] = str(datetime.datetime.now())
+                    location_revision.affected.append(temp)
+                else:
+                    temp["affected_count"] = self.request.get("affected_count")
+                    temp["affected_source"] = self.request.get("affected_source")
+                    temp["updated"] = str(datetime.datetime.now())
+                    datas_affected.append(temp)
+                    location_revision.affected = datas_affected
+
+                datas_status = []
+                if location_revision.status:
+                    temp["communication"] = self.request.get("status_communication")
+                    temp["water"] = self.request.get("status_water")
+                    temp["power"] = self.request.get("status_power")
+                    temp["medicines"] = self.request.get("status_medicines")
+                    temp["food"] = self.request.get("status_food")
+                    temp["cloths"] = self.request.get("status_cloths")
+                    temp["updated"] = str(datetime.datetime.now())
+                    location_revision.status.append(temp)
+                else:
+                    temp["communication"] = self.request.get("status_communication")
+                    temp["water"] = self.request.get("status_water")
+                    temp["power"] = self.request.get("status_power")
+                    temp["medicines"] = self.request.get("status_medicines")
+                    temp["food"] = self.request.get("status_food")
+                    temp["cloths"] = self.request.get("status_cloths")
+                    temp["updated"] = str(datetime.datetime.now())
+                    datas_status.append(temp)
+                    location_revision.status = datas_status
+
+                location_revision.put()
+
+            status = {
+                "power": self.request.get("status_power"),
+                "water": self.request.get("status_water"),
+                "medicine": self.request.get("status_medicines"),
+                "clothes": self.request.get("status_cloths"),
+                "communication": self.request.get("status_communication"),
+                "food": self.request.get("status_food")
+            }
+
+            user_changes = LocationRevisionChanges()
+            user_changes.fb_email = self.public_user.fb_email
+            user_changes.fb_id = self.public_user.fb_id
+            user_changes.fb_access_token = self.public_user.fb_access_token
+            user_changes.fb_username = self.public_user.fb_username
+            user_changes.fb_lastname = self.public_user.fb_lastname
+            user_changes.fb_firstname = self.public_user.fb_firstname
+            user_changes.fb_middlename = self.public_user.fb_middlename
+            user_changes.fb_name = self.public_user.fb_name
+            user_changes.name = self.request.get("page_title")
+
+            location = Location.get_by_id(self.request.get("page_title"))
+            if location:
+                datas_changes = []
+                if location.death_count != int(self.request.get("death_count")):
+                    datas_changes.append("death count")
+                if location.affected_count != int(self.request.get("affected_count")):
+                    datas_changes.append("affected count")
+                if location.status:
+                    if status["power"] != location.status["power"]:
+                        datas_changes.append("power")
+                    if status["water"] != location.status["water"]:
+                        datas_changes.append("water")
+                    if status["medicine"] != location.status["medicine"]:
+                        datas_changes.append("medicine")
+                    if status["clothes"] != location.status["clothes"]:
+                        datas_changes.append("clothes")
+                    if status["communication"] != location.status["communication"]:
+                        datas_changes.append("communication")
+                    if status["food"] != location.status["food"]:
+                        datas_changes.append("food")
+
+                user_changes.status = datas_changes
+                user_changes.put()
+
+                location.death_count = int(self.request.get("death_count"))
+                location.death_count_text = self.request.get("death_source")
+                location.affected_count = int(self.request.get("affected_count"))
+                location.affected_count_text = self.request.get("affected_source")
+                location.status = status
+                location.put()
+
+            self.redirect("/locations/" + self.request.get("page_title") + "/edit?success=Successfully+updated.")
 
 class PublicLocationPage(BaseHandler):
     def get(self, location_id=None):
@@ -334,6 +592,12 @@ class PublicLocationPage(BaseHandler):
 
         self.tv['location'] = location
         self.tv['page_title'] = location.name
+        path_redirect = self.request.path + "/edit"
+        self.tv["fb_login_url"] = facebook.generate_login_url(path_redirect, self.uri_for('www-publicfblogin'))
+
+        user_changes = LocationRevisionChanges.query().order(-LocationRevisionChanges.created).fetch(10)
+        if user_changes:
+            self.tv["status_changes"] = user_changes
 
         self.render('frontend/public-location.html')
 
@@ -2777,15 +3041,19 @@ class UploadHandler(blobstore_handlers.BlobstoreUploadHandler):
 
 
 app = webapp2.WSGIApplication([
-    routes.DomainRoute(r'<:gcdc2013-bangonph\.appspot\.com|www\.bangonph\.com|staging\.gcdc2013-bangonph\.appspot\.com>', [
+    routes.DomainRoute(r'<:gcdc2013-bangonph\.appspot\.com|www\.bangonph\.com|staging\.gcdc2013-bangonph\.appspot\.com|localhost>', [
 
         webapp2.Route('/', handler=PublicFrontPage, name="www-front"),
         webapp2.Route('/reliefoperations', handler=ReliefOperationsPage, name="www-reliefoperations"),
+        webapp2.Route(r'/locations/<:.*>/edit', handler=PublicLocationEditPage, name="www-locations-edit"),
         webapp2.Route(r'/locations/<:.*>', handler=PublicLocationPage, name="www-locations"),
         webapp2.Route(r'/posts/<:.*>', handler=PublicPostPage, name="www-public-post"),
 
         webapp2.Route('/api/posts', handler=APIPostsHandler, name="www-api-posts"),
         webapp2.Route(r'/api/posts/<:.*>', handler=APIPostsHandler, name="www-api-posts"),
+
+        webapp2.Route('/fblogin', handler=PublicFBLoginPage, name="www-publicfblogin"),
+        webapp2.Route('/logout', handler=PublicLogout, name="www-public-logout"),
 
         # richmond:
         webapp2.Route('/s', handler=sampler, name="www-get-authorization-code"),

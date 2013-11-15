@@ -447,33 +447,56 @@ Miscellaneous
               <input type="radio" <% if (this.featured == true) { %> checked="checked" <% } %> name="featured" value="True"/> Yes
               <input type="radio" <% if (this.featured == false) { %> checked="checked" <% } %> name="featured" value="False"/> No
             </p>
-            <% 
-                })
-              }
-            %>
             <p>
             <br/>
               Images <a href="javascript:;" onclick="javascript:addimage2()" class="btn btn-success addimage">Add More</a>
               <table class="table imageTable">
-                <tbody id="image1">
-                  <tr>
-                    <th>Image 1</th>
-                    <th style="text-align: right;"><a href="javascript:;" rel="image1" onclick="$('#image1').remove();" class="removeimage">Remove</a></th>
-                  </tr>
-                  <tr>
-                    <td>Image URL</td>
-                    <td><input type="text" id="image_url_1" class="form-control image_url"/></td>
-                  </tr>
-                  <tr>
-                    <td>Title</td>
-                    <td><input type="text" id="image_title_1" class="form-control image_title"/></td>
-                  </tr>
-                  <tr>
-                    <td>Caption</td>
-                    <td><textarea id="image_caption_1" class="image_caption" style="width: 1002px; height: 73px; margin: 0px;"></textarea></td>
-                  </tr>
-                </tbody>
               </table>
+              <table class="table">
+                <tr>
+                  <th colspan=2>Recent Images Added</th>
+                </tr>
+                <%
+                  if (this.images) {
+                    $.each(this.images, function(item, name) {
+                %>
+                <tr>
+                  <td colspan=2>
+                    <%
+                      $.each(name, function(n, i) {
+                    %>
+                      <% if (n == "src") { %>
+                        <tr>
+                          <td>Image URL</td>
+                          <td><input type="text" value="<%- i %>" id="image_url_1" class="form-control image_url"/></td>
+                        </tr>
+                      <% } %>
+                      <% if (n == "image_title") { %>
+                        <tr>
+                          <td>Title</td>
+                          <td><input type="text" value="<%- i %>" id="image_title_1" class="form-control image_title"/></td>
+                        </tr>
+                      <% } %>
+                      <% if (n == "image_caption") { %>
+                        <tr>
+                          <td>Caption</td>
+                          <td><input type="text" value="<%- i %>" id="image_caption_1" class="form-control image_caption"/></td>
+                        </tr>
+                      <% } %>
+                    <%
+                      })
+                    %>
+                  </td>
+                </tr>
+                <%
+                    })
+                  }
+                %>
+              </table>
+            <% 
+                })
+              }
+            %>
             </p>
             <p>
               <button type="submit" class="btn btn-primary">Submit</button> 

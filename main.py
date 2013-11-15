@@ -1696,13 +1696,128 @@ class APILContactsHandler(APIBaseHandler):
 
 class APIOrganizationsHandler(APIBaseHandler):
     def get(self, instance_id=None):
-        pass
+        resp = API_RESPONSE.copy()
+        resp["method"] = "get"
+        failed = False
+        distributors_json = []
+        if not instance_id:
+            if self.request.get("cursor"):
+                try:
+                    curs = Cursor(urlsafe=self.request.get("cursor"))
+                except Exception, e:
+                    resp['response'] = "invalid_cursor"
+                    resp['code'] = 406
+                    resp['property'] = "cursor"
+                    resp['description'] = "Invalid cursor"
+                    failed = True
+                else:
+                    if curs:
+                        distributors, next_cursor, more = Distributor.query().fetch_page(25, start_cursor=curs)
+                    else:
+                        distributors, next_cursor, more = Distributor.query().fetch_page(25)
+            else:
+                distributors, next_cursor, more = Distributor.query().fetch_page(25)
 
+            if not failed:
+                for distributor in distributors:
+                    distributors_json.append(distributor.to_object())
+
+                data = {}
+                data["distributors"] = distributors_json
+                if more:
+                    data["next_page"] = "http://api.bangonph.com/v1/distributors?cursor=" + str(next_cursor.urlsafe())
+                else:
+                    data["next_page"] = False
+
+                resp["description"] = "List of instances"
+                resp["property"] = "posts"
+                resp["data"] = data
+        else:
+            distributers = Distributor.get_by_id(instance_id)
+            if distributers:
+                resp["description"] = "Instance data"
+                resp["property"] = "distributers"
+                resp["data"] = distributers.to_object()
+            else:
+                # instance dont exist
+                resp['response'] = "invalid_instance"
+                resp['code'] = 404
+                resp['property'] = "instance_id"
+                resp['description'] = "Instance id missing or not valid"
+
+        self.render(resp)
+
+    @oauthed_required
     def post(self, instance_id=None):
-        pass
+        resp = API_RESPONSE.copy()
+        data = {
+            "email": self.request.get("email"),
+            "name": self.request.get("name"),
+            "contact_num": self.request.get("contact_num"),
+            "website": self.request.get("website"),
+            "facebook": self.request.get("facebook")
+        }
 
+        logging.critical(data)
+
+        if not instance_id:
+            resp["method"] = "create"
+            distributor = add_distributor(data)
+            if distributor:
+                resp["description"] = "Successfully edited the instance"
+                resp["data"] = distributor.to_object()
+            else:
+                # foolsafe, failsafe, watever!
+                resp['response'] = "cannot_create"
+                resp['code'] = 500
+                resp['property'] = "add_distributor"
+                resp['description'] = "Server cannot create the instance"
+        else:
+            resp["method"] = "edit"
+            exist = Distributor.get_by_id(long(instance_id))
+            if exist:
+                distributor = add_distributor(data, instance_id)
+                if distributor:
+                    resp["description"] = "Successfully edited the instance"
+                    resp["data"] = distributor.to_object()
+                else:
+                    # didnt edi but imposible
+                    resp['response'] = "cannot_edit"
+                    resp['code'] = 500
+                    resp['property'] = "add_distributor"
+                    resp['description'] = "Server cannot edit the instance"
+            else:
+                # instance dont exist but imposible
+                resp['response'] = "invalid_instance"
+                resp['code'] = 404
+                resp['property'] = "instance_id"
+                resp['description'] = "Instance id missing or not valid"
+
+        self.render(resp)
+
+
+    @oauthed_required
     def delete(self, instance_id=None):
-        pass
+        resp = API_RESPONSE.copy()
+        resp["method"] = "delete"
+        if instance_id:
+            distributor = Distributor.get_by_id(long(instance_id))
+            if distributor:
+                distributor.key.delete()
+                resp["description"] = "Successfully deleted the instance"
+            else:
+                resp['response'] = "invalid_instance"
+                resp['code'] = 404
+                resp['property'] = "delete_subscriber"
+                resp['description'] = "Instance id not valid"
+        else:
+            # missing params
+            resp['response'] = "missing_params"
+            resp['code'] = 406
+            resp['property'] = "params"
+            resp['description'] = "The request has missing parameters"
+
+        self.render(resp)
 
 
 class APIPostsHandler(APIBaseHandler):

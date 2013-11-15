@@ -1498,7 +1498,7 @@ class APIUsersHandler(APIBaseHandler):
                 else:
                     data["next_page"] = False
 
-                resp["description"] = "List of instances"
+                resp["description"] = "List of users"
                 resp["property"] = "posts"
                 resp["data"] = data
         else:
@@ -1557,7 +1557,7 @@ class APILocationsHandler(APIBaseHandler):
                 else:
                     data["next_page"] = False
 
-                resp["description"] = "List of instances"
+                resp["description"] = "List of locations"
                 resp["property"] = "posts"
                 resp["data"] = data
         else:
@@ -1718,17 +1718,17 @@ class APIOrganizationsHandler(APIBaseHandler):
                     distributors_json.append(distributor.to_object())
 
                 data = {}
-                data["distributors"] = distributors_json
+                data["organizations"] = distributors_json
                 if more:
                     data["next_page"] = "http://api.bangonph.com/v1/distributors?cursor=" + str(next_cursor.urlsafe())
                 else:
                     data["next_page"] = False
 
-                resp["description"] = "List of instances"
+                resp["description"] = "List of organizations"
                 resp["property"] = "posts"
                 resp["data"] = data
         else:
-            distributers = Distributor.get_by_id(instance_id)
+            distributers = Distributor.get_by_id(long(instance_id))
             if distributers:
                 resp["description"] = "Instance data"
                 resp["property"] = "distributers"
@@ -1831,11 +1831,11 @@ class APIPostsHandler(APIBaseHandler):
                     resp['property'] = "cursor"
                     resp['description'] = "Invalid cursor"
                     failed = True
+
+                if curs:
+                    posts, next_cursor, more = Post.query().fetch_page(25, start_cursor=curs)
                 else:
-                    if curs:
-                        posts, next_cursor, more = Post.query().fetch_page(25, start_cursor=curs)
-                    else:
-                        posts, next_cursor, more = Post.query().fetch_page(25)
+                    posts, next_cursor, more = Post.query().fetch_page(25)
             else:
                 if self.request.get_all("filter_post_type"):
                     filter_type = self.request.get_all("filter_post_type")[0].upper()
@@ -1856,7 +1856,7 @@ class APIPostsHandler(APIBaseHandler):
                 else:
                     data["next_page"] = False
 
-                resp["description"] = "List of instances"
+                resp["description"] = "List of posts"
                 resp["property"] = "posts"
                 resp["data"] = data
         else:
@@ -1974,9 +1974,17 @@ class APIPostsHandler(APIBaseHandler):
 class APIDropOffCentersHandler(APIBaseHandler):
     def get(self, instance_id=None):
         centers_json = []
+        failed = False
         if not instance_id:
             if self.request.get("cursor"):
-                curs = Cursor(urlsafe=self.request.get("cursor"))
+                try:
+                    curs = Cursor(urlsafe=self.request.get("cursor"))
+                except Exception, e:
+                    resp['response'] = "invalid_cursor"
+                    resp['code'] = 406
+                    resp['property'] = "cursor"
+                    resp['description'] = "Invalid cursor"
+                    failed = True
                 if curs:
                     centers, next_cursor, more = DropOffCenter.query().fetch_page(25, start_cursor=curs)
                 else:
@@ -1984,20 +1992,34 @@ class APIDropOffCentersHandler(APIBaseHandler):
             else:
                 centers, next_cursor, more = DropOffCenter.query().fetch_page(25)
 
-            for center in centers:
-                centers_json.append(center.to_object())
+            if not failed:
+                for center in centers:
+                    centers_json.append(center.to_object())
 
-            data = {}
-            data["dropOffCenters"] = centers_json
-            if more:
-                data["next_page"] = "http://api.bangonph.com/v1/locations?cursor=" + str(next_cursor.urlsafe())
-            else:
-                data["next_page"] = False
-            self.render(data)
+                data = {}
+                data["dropOffCenters"] = centers_json
+                if more:
+                    data["next_page"] = "http://api.bangonph.com/v1/locations?cursor=" + str(next_cursor.urlsafe())
+                else:
+                    data["next_page"] = False
+
+                resp["description"] = "List of drop off centers"
+                resp["property"] = "drop-off-centers"
+                resp["data"] = data
+
+                self.render(data)
         else:
             center = DropOffCenter.get_by_id(instance_id)
-            if center:
-                self.render(center.to_object())
+            if post:
+                resp["description"] = "Instance data"
+                resp["property"] = "drop-off-centers"
+                resp["data"] = center.to_object()
+            else:
+                # instance dont exist
+                resp['response'] = "invalid_instance"
+                resp['code'] = 404
+                resp['property'] = "instance_id"
+                resp['description'] = "Instance id missing or not valid"
 
     @oauthed_required
     def post(self, instance_id=None):
@@ -2016,11 +2038,32 @@ class APIDropOffCentersHandler(APIBaseHandler):
             "id" : self.request.get("id")
         }
         if not instance_id:
+            resp["method"] = "create"
             centers = add_drop_off_centers(data)
-            self.render(centers.to_object())
+            if centers:
+                self.render(centers.to_object())
+                resp["description"] = "Successfully created the instance"
+                resp["data"] = post.to_object()
+            else:
+                # foolsafe, failsafe, watever!
+                resp['response'] = "cannot_create"
+                resp['code'] = 500
+                resp['property'] = "add drop off centers"
+                resp['description'] = "Server cannot create the instance"
         else:
+            resp["method"] = "edit"
             centers = add_drop_off_centers(data, instance_id)
-            self.render(centers.to_object())
+            if centers:
+                resp["description"] = "Successfully edited the instance"
+                resp["data"] = post.to_object()
+            else:
+                # instance dont exist but imposible
+                resp['response'] = "invalid_instance"
+                resp['code'] = 404
+                resp['property'] = "instance_id"
+                resp['description'] = "Instance id missing or not valid"
+
+        self.render(resp)
 
     @oauthed_required
     def delete(self, instance_id=None):
@@ -2190,9 +2233,11 @@ class APIEffortsHandler(APIBaseHandler):
                 else:
                     data["next_page"] = False
 
-                resp["description"] = "List of instances"
+                resp["description"] = "List of efforts"
                 resp["property"] = "efforts"
                 resp["data"] = data
+
+                self.render(resp)
         else:
             effort = Distribution.get_by_id(instance_id)
             if effort:
@@ -2315,7 +2360,7 @@ class APIContactsHandler(APIBaseHandler):
                 else:
                     data["next_page"] = False
 
-                resp["description"] = "List of instances"
+                resp["description"] = "List of contacts"
                 resp["property"] = "contacts"
                 resp["data"] = data
         else:
@@ -2430,13 +2475,13 @@ class APIDistributorsHandler(APIBaseHandler):
                     distributors_json.append(distributor.to_object())
 
                 data = {}
-                data["distributors"] = distributors_json
+                data["efforts"] = distributors_json
                 if more:
                     data["next_page"] = "http://api.bangonph.com/v1/distributors?cursor=" + str(next_cursor.urlsafe())
                 else:
                     data["next_page"] = False
 
-                resp["description"] = "List of instances"
+                resp["description"] = "List of efforts"
                 resp["property"] = "posts"
                 resp["data"] = data
         else:

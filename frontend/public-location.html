@@ -26,7 +26,9 @@
             <div id="campaign-content-wrap">
                <ul class="bxslider">
                 {% for image in location.images %}
+                {% if image.src %}
                   <li><img src="{{ image.src }}" title="{{ image.title }}" alt="{{ image.caption }}" /></li>
+                {% endif %}
                 {% endfor %}
                 </ul>
 
@@ -105,11 +107,7 @@
                   <span>{% if location.status.food %}{{ location.status.food }}{% else %}Gathering Data{% endif %}</span>
                 </div>
                 <div class="status-entry">
-                  <img class="icon" src="/img/icon-shelter.png" alt="Food">
-                  <span>{% if location.status.shelter %}{{ location.status.shelter }}{% else %}Gathering Data{% endif %}</span>
-                </div>
-                <div class="status-entry">
-                  <img class="icon" src="/img/icon-others.png" alt="Food">
+                  <img class="icon" src="/img/icon-shelter.png" alt="Shelter">
                   <span>{% if location.status.shelter %}{{ location.status.shelter }}{% else %}Gathering Data{% endif %}</span>
                 </div>
 

@@ -337,7 +337,10 @@ class PublicLocationPage(BaseHandler):
 
         if self.request.get("subscribe_location"):
             loc = Location.get_by_id(location_id)
-            subscriber.location = loc.key
+            if loc:
+                subscriber.location = loc.key
+            else:
+                logging.critical("No location selected!..")
 
         if self.request.get("subscribe_all"):
             subscriber.all_updates = True

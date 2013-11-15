@@ -306,6 +306,7 @@ def add_post(data, instance_id=""):
         post.message = data["message"]
 
     if data["post_type"]:
+        
         types = []
         for this_type in data["post_type"]:
             post_type = this_type.replace(" ", "_")

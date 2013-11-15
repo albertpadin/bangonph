@@ -155,10 +155,12 @@ var EditLocation =  Backbone.View.extend({
   location: function(id) {
     console.log(id);
     var self = this;
+    $(".loading-message").show();
     var collection = new LocationCollection();
     collection.fetch({
       data: { id_edit: id },
       success: function(data) {
+        $(".loading-message").fadeOut("fast");
         self.render(data.toJSON());
       }
     });

@@ -1,6 +1,7 @@
 var Locations = Backbone.Model.extend({
   defaults: {
     name: "",
+    relief_aid_status: "Unknown",
     latlong: "",
     featured_photo: "",
     death_count: "",
@@ -108,6 +109,7 @@ var AddLocation = Backbone.View.extend({
         "image_titles" : JSON.stringify(obj_image_title),
         "image_captions" : JSON.stringify(obj_image_caption),
         "name": _.escape($("#name").val()),
+        "relief_aid_status": _.escape($("#relief_aid_status").val()),
         "latlong": _.escape($("#latlong").val()),
         "featured_photo": _.escape($("#featured_photo").val()),
         "death_count": _.escape($("#death_count").val()),
@@ -197,6 +199,7 @@ var EditLocation =  Backbone.View.extend({
         "image_titles" : JSON.stringify(obj_image_title),
         "image_captions" : JSON.stringify(obj_image_caption),
         "name": _.escape($("#name").val()),
+        "relief_aid_status": _.escape($("#relief_aid_status").val()),
         "latlong": _.escape($("#latlong").val()),
         "featured_photo": _.escape($("#featured_photo").val()),
         "death_count": _.escape($("#death_count").val()),

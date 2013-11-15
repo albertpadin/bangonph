@@ -611,7 +611,7 @@ class PublicLocationEditPage(BaseHandler):
             status = {
                 "power": self.request.get("status_power"),
                 "water": self.request.get("status_water"),
-                "medicine": self.request.get("status_medicines"),
+                "medicines": self.request.get("status_medicines"),
                 "clothes": self.request.get("status_cloths"),
                 "communication": self.request.get("status_communication"),
                 "food": self.request.get("status_food")
@@ -642,7 +642,7 @@ class PublicLocationEditPage(BaseHandler):
                         datas_changes.append("power")
                     if status["water"] != location.status["water"]:
                         datas_changes.append("water")
-                    if status["medicine"] != location.status["medicine"]:
+                    if status["medicines"] != location.status["medicines"]:
                         datas_changes.append("medicine")
                     if status["clothes"] != location.status["clothes"]:
                         datas_changes.append("clothes")
@@ -686,6 +686,35 @@ class PublicLocationEditPage(BaseHandler):
             distribution_revision.needs = self.request.get("needs")
             distribution_revision.date = self.request.get("date")
             distribution_revision.put()
+
+            user_changes = LocationRevisionChanges()
+            user_changes.fb_email = self.public_user.fb_email
+            user_changes.fb_id = self.public_user.fb_id
+            user_changes.fb_access_token = self.public_user.fb_access_token
+            user_changes.fb_username = self.public_user.fb_username
+            user_changes.fb_lastname = self.public_user.fb_lastname
+            user_changes.fb_firstname = self.public_user.fb_firstname
+            user_changes.fb_middlename = self.public_user.fb_middlename
+            user_changes.fb_name = self.public_user.fb_name
+            user_changes.name = self.request.get("page_title")
+            datas_changes = []
+            if self.request.get("relief_name"):
+                datas_changes.append("relief name")
+            if self.request.get("destination"):
+                datas_changes.append("destination")
+            if self.request.get("packs"):
+                datas_changes.append("packs")
+            if self.request.get("description"):
+                datas_changes.append("description")
+            if self.request.get("contacts"):
+                datas_changes.append("contacts")
+            if self.request.get("needs"):
+                datas_changes.append("needs")
+            if self.request.get("date"):
+                datas_changes.append("date")
+            user_changes.status = datas_changes
+            user_changes.put()
+
             self.redirect("/locations/" + self.request.get("page_title") + "/edit?success=Successfully+updated.")
 
 class PublicLocationPage(BaseHandler):

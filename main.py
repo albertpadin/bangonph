@@ -2236,12 +2236,21 @@ class APIEffortsHandler(APIBaseHandler):
                 resp["description"] = "List of efforts"
                 resp["property"] = "efforts"
                 resp["data"] = data
-
-                self.render(resp)
+                
         else:
             effort = Distribution.get_by_id(instance_id)
             if effort:
-                self.render(effort.to_object())
+                resp["description"] = "Instance data"
+                resp["property"] = "posts"
+                resp["data"] = effort.to_object()
+            else:
+                # instance dont exist
+                resp['response'] = "invalid_instance"
+                resp['code'] = 404
+                resp['property'] = "instance_id"
+                resp['description'] = "Instance id missing or not valid"
+
+        self.render(resp)
 
     def post(self, instance_id=None):
         resp = API_RESPONSE.copy()

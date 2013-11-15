@@ -554,12 +554,10 @@ class PublicLocationEditPage(BaseHandler):
                 datas_death = []
                 if location_revision.death:
                     temp["death_count"] = self.request.get("death_count")
-                    temp["death_source"] = self.request.get("death_source")
                     temp["updated"] = str(datetime.datetime.now())
                     location_revision.death.append(temp)
                 else:
                     temp["death_count"] = self.request.get("death_count")
-                    temp["death_source"] = self.request.get("death_source")
                     temp["updated"] = str(datetime.datetime.now())
                     datas_death.append(temp)
                     location_revision.death = datas_death
@@ -567,12 +565,10 @@ class PublicLocationEditPage(BaseHandler):
                 datas_affected = []
                 if location_revision.affected:
                     temp["affected_count"] = self.request.get("affected_count")
-                    temp["affected_source"] = self.request.get("affected_source")
                     temp["updated"] = str(datetime.datetime.now())
                     location_revision.affected.append(temp)
                 else:
                     temp["affected_count"] = self.request.get("affected_count")
-                    temp["affected_source"] = self.request.get("affected_source")
                     temp["updated"] = str(datetime.datetime.now())
                     datas_affected.append(temp)
                     location_revision.affected = datas_affected
@@ -580,12 +576,10 @@ class PublicLocationEditPage(BaseHandler):
                 datas_missing = []
                 if location_revision.missing_person:
                     temp["missing_person"] = self.request.get("missing_person")
-                    temp["missing_person_source"] = self.request.get("missing_person_source")
                     temp["updated"] = str(datetime.datetime.now())
                     location_revision.missing_person.append(temp)
                 else:
                     temp["missing_person"] = self.request.get("missing_person")
-                    temp["missing_person_source"] = self.request.get("missing_person_source")
                     temp["updated"] = str(datetime.datetime.now())
                     datas_missing.append(temp)
                     location_revision.missing_person = datas_missing
@@ -660,12 +654,13 @@ class PublicLocationEditPage(BaseHandler):
                 user_changes.put()
 
                 location.death_count = int(self.request.get("death_count"))
-                location.death_count_text = self.request.get("death_source")
+                location.death_count_text = self.request.get("death_count_text")
                 location.affected_count = int(self.request.get("affected_count"))
-                location.affected_count_text = self.request.get("affected_source")
+                location.affected_count_text = self.request.get("affected_count_text")
                 location.missing_person = int(self.request.get("missing_person"))
-                location.missing_person_text = self.request.get("missing_person_source")
+                location.missing_person_text = self.request.get("missing_person_text")
                 location.status = status
+                location.source = self.request.get("source")
                 location.put()
 
             self.redirect("/locations/" + self.request.get("page_title") + "/edit?success=Successfully+updated.")

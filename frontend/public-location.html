@@ -196,16 +196,6 @@
           </div>
 
             <div id="content">
-            <p>&nbsp;</p>
-            <!-- <a data-toggle="collapse" href="#collapseOne" class="donate-btn">Donate Cash</a> -->
-              <h3>Relief Operations that need your Help</h3>
-              <span>Stand up, take part, and get involved!</span>
-              <br/>
-              
-
-              <p>&nbsp;</p>
-              
-            
             <div>
                   <div id="donations-wrap">
 
@@ -227,6 +217,7 @@
                         <tbody>
                           {% if distribution_changes %}
                             {% for changes in distribution_changes %}
+                            {% if changes.relief_name != None or changes.relief_name != "None" %}
                             <tr>
                               <td>{{ changes.relief_name }}</td>
                               <td>{{ changes.destination }}</td>
@@ -236,6 +227,7 @@
                               <td>{{ changes.needs }}</td>
                               <td>{{ changes.date }}</td>
                             </tr>
+                            {% endif %}
                             {% endfor %}
                           {% else %}
                           <tr>
@@ -245,6 +237,9 @@
                         </tbody>
                       </table>
                     </div>
+                    <br/><br/>
+                    <h3>Relief Operations that need your Help</h3>
+                    <span>Stand up, take part, and get involved!</span>
                     <br/><br/>
                     <div class="col-lg-4 col-md-6 col-sm-6">
                       <div class="operations-content">

@@ -37,6 +37,9 @@
                 </div>
             </div>
             <div class="col-lg-8">
+                {% if location.status_board %}
+                <p>Status Board: <b>{{ location.status_board }}</b></p>
+                {% endif %}
               <div id="fb-root"></div>
               <div id="fb-root"></div>
               <script>(function(d, s, id) {
@@ -51,6 +54,7 @@
             <div class="clearfix"></div>
 
             <div class="col-lg-4 hide-on-big show-on-small">
+
 
             <div class="side-wrap hide-border">
               <div class="social-item">
@@ -197,13 +201,51 @@
               <h3>Relief Operations that need your Help</h3>
               <span>Stand up, take part, and get involved!</span>
               <br/>
-              <a href="{{ fb_login_url }}" class="btn btn-info">Add a relief effort to this location</a>
+              
 
               <p>&nbsp;</p>
               
             
             <div>
                   <div id="donations-wrap">
+
+                    <div>
+                      <h3 style="float:left">Recently Added Relief Efforts</h3>
+                      <a href="{{ fb_login_url }}" style="float: right; margin-top: 15px;" class="btn btn-info">Add a relief effort to this location</a>
+                      <table class="table">
+                        <thead>
+                          <tr>
+                            <th>Name</th>
+                            <th>Destination (Specific)</th>
+                            <th># of Packs</th>
+                            <th>Description</th>
+                            <th>Contact Details</th>
+                            <th>Needs</th>
+                            <th>Date</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {% if distribution_changes %}
+                            {% for changes in distribution_changes %}
+                            <tr>
+                              <td>{{ changes.relief_name }}</td>
+                              <td>{{ changes.destination }}</td>
+                              <td>{{ changes.num_of_packs }}</td>
+                              <td>{{ changes.description }}</td>
+                              <td>{{ changes.contacts }}</td>
+                              <td>{{ changes.needs }}</td>
+                              <td>{{ changes.created|to_date }}</td>
+                            </tr>
+                            {% endfor %}
+                          {% else %}
+                          <tr>
+                            <td colspan="10">Empty.</td>
+                          </tr>
+                          {% endif %}
+                        </tbody>
+                      </table>
+                    </div>
+                    <br/><br/>
                     <div class="col-lg-4 col-md-6 col-sm-6">
                       <div class="operations-content">
                         <img src="/img/logos/aboitiz.jpg" class="operations-img"><br/>
@@ -241,41 +283,6 @@
 
                     <p>&nbsp;</p>
 
-                    <div>
-                      <h5>Recently Added Relief Efforts</h5>
-                      <table class="table">
-                        <thead>
-                          <tr>
-                            <th>Name</th>
-                            <th>Destination (Specific)</th>
-                            <th># of Packs</th>
-                            <th>Description</th>
-                            <th>Contact Details</th>
-                            <th>Needs</th>
-                            <th>Date</th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          {% if distribution_changes %}
-                            {% for changes in distribution_changes %}
-                            <tr>
-                              <td>{{ changes.relief_name }}</td>
-                              <td>{{ changes.destination }}</td>
-                              <td>{{ changes.num_of_packs }}</td>
-                              <td>{{ changes.description }}</td>
-                              <td>{{ changes.contacts }}</td>
-                              <td>{{ changes.needs }}</td>
-                              <td>{{ changes.created|to_date }}</td>
-                            </tr>
-                            {% endfor %}
-                          {% else %}
-                          <tr>
-                            <td colspan="10">Empty.</td>
-                          </tr>
-                          {% endif %}
-                        </tbody>
-                      </table>
-                    </div>
                   </div>
                 </div>
 

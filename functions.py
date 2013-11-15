@@ -171,6 +171,9 @@ def add_location(data, location_key=""):
     if data["missing_person"]:
         location.missing_person = data["missing_person"]
 
+    if data["missing_person_text"]:
+        location.missing_person_text = data["missing_person_text"]
+
     location.put()
     return location
 

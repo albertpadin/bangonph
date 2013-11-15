@@ -118,6 +118,7 @@ class Location(ndb.Model):
     hash_tag = ndb.StringProperty(repeated=True)
     featured = ndb.BooleanProperty(default=False)
     missing_person = ndb.IntegerProperty()
+    missing_person_text = ndb.StringProperty()
 
     def to_object(self, extended=""):
         details = {}
@@ -140,6 +141,7 @@ class Location(ndb.Model):
         details["packs_needed"] = '20,000'
         details["packs_provided"] = '5,000'
         details["missing_person"] = self.missing_person
+        details["missing_person_text"] = self.missing_person_text
         return details
 
 

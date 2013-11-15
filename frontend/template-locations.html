@@ -22,7 +22,7 @@
             <th>Latlong</th>
             <th>Deatch Count Text</th>
             <th>Affected Count Text</th>
-            <th>Missing Person/s</th>
+            <th>Missing Person Text</th>
             <th>Hash Tag</th>
             <th>Featured</th>
             <th>Action</th>
@@ -41,7 +41,7 @@
                   <td><%- _.unescape(this.latlong) %></td>
                   <td><%- _.unescape(this.death_count_text) %></td>
                   <td><%- _.unescape(this.affected_count_text) %></td>
-                  <td><%- _.unescape(this.missing_person) %></td>
+                  <td><%- _.unescape(this.missing_person_text) %></td>
                   <!-- <td>
                     <% _.each(this.needs, function(item, name) { %>
                       <% if (name == "medical_workers") { %>
@@ -203,8 +203,12 @@
               <input type="text" id="affected_count_text" class="form-control" placeholder="Affected Count Text">
             </p>
             <p>
-            Missing Person/s
-              <input type="text" id="missing_person" value="0"  class="form-control" placeholder="Missing Person/s">
+            Missing Person/s Count
+              <input type="text" id="missing_person" value="0"  class="form-control" placeholder="Missing Person/s Text">
+            </p>
+            <p>
+            Missing Person/s Text
+              <input type="text" id="missing_person_text"  class="form-control" placeholder="Missing Person/s Text">
             </p>
             <p>
               Status Board
@@ -391,6 +395,10 @@
             <p>
             Missing Person/s
               <input type="text" id="missing_person" value="<%- this.missing_person %>"  class="form-control" placeholder="Missing Person/s">
+            </p>
+            <p>
+            Missing Person/s Text
+              <input type="text" id="missing_person_text"  value="<%- this.missing_person_text %>" class="form-control" placeholder="Missing Person/s Text">
             </p>
             <p>
             Status Board

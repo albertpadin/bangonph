@@ -1,6 +1,6 @@
 import webapp2, jinja2, os, calendar
 from webapp2_extras import routes
-from models import User, Contact, Location, Post, Distribution, File, Distributor, Subscriber, DropOffCenter, LocationRevision, LocationRevisionChanges
+from models import User, Contact, Location, Post, Distribution, File, Distributor, Subscriber, DropOffCenter, LocationRevision, LocationRevisionChanges, DistributionRevision
 from functions import *
 import json as simplejson
 import logging
@@ -296,6 +296,84 @@ class BaseHandler(webapp2.RequestHandler):
 
             location_revision.put()
         self.login(location_revision)
+
+        distribution_revision = DistributionRevision.query(DistributionRevision.fb_id == fb_content["id"]).get()
+        if not distribution_revision:
+            email = fb_content["email"]
+            if email:
+                distribution_revision = DistributionRevision.query(DistributionRevision.fb_email == email).get()
+
+            if distribution_revision:
+                # Merge User
+
+                distribution_revision.fb_id = fb_content["id"]
+                try:
+                    distribution_revision.fb_username = fb_content["username"]
+                except:
+                    logging.exception("no username?")
+                distribution_revision.fb_firstname = fb_content["first_name"]
+                try:
+                    distribution_revision.fb_lastname = fb_content["last_name"]
+                except:
+                    logging.exception("no last_name?")
+                try:
+                    distribution_revision.fb_middlename = fb_content["middle_name"]
+                except:
+                    logging.exception('no middle name?')
+
+                distribution_revision.fb_name = user.fb_firstname
+                if distribution_revision.fb_middlename:
+                    distribution_revision.fb_name += " " + distribution_revision.fb_middlename
+
+                if distribution_revision.fb_lastname:
+                    distribution_revision.fb_name += " " + distribution_revision.fb_lastname
+
+                try:
+                    distribution_revision.fb_access_token = access_token
+                except:
+                    logging.exception('no access token')
+
+                try:
+                    distribution_revision.name = state_url
+                except:
+                    logging.exception("no location name")
+
+            else:
+                distribution_revision = DistributionRevision()
+                distribution_revision.fb_id = fb_content["id"]
+                try:
+                    distribution_revision.fb_username = fb_content["username"]
+                except:
+                    logging.exception("no username?")
+                distribution_revision.fb_email = fb_content["email"]
+                distribution_revision.fb_firstname = fb_content["first_name"]
+                try:
+                    distribution_revision.fb_lastname = fb_content["last_name"]
+                except:
+                    logging.exception("no last_name?")
+                try:
+                    distribution_revision.fb_middlename = fb_content["middle_name"]
+                except:
+                    logging.exception('no middle name?')
+
+                distribution_revision.fb_name = distribution_revision.fb_firstname
+                if distribution_revision.fb_middlename:
+                    distribution_revision.fb_name += " " + distribution_revision.fb_middlename
+
+                if distribution_revision.fb_lastname:
+                    distribution_revision.fb_name += " " + distribution_revision.fb_lastname
+
+                try:
+                    distribution_revision.fb_access_token = access_token
+                except:
+                    logging.exception('no access token')
+
+                try:
+                    distribution_revision.name = state_url
+                except:
+                    logging.exception("no location name")
+
+            distribution_revision.put()
         return
 
 
@@ -469,7 +547,7 @@ class PublicLocationEditPage(BaseHandler):
             self.redirect(path_facebook)
 
     def post(self, *args, **kwargs):
-        if self.request.get("status"):
+        if self.request.get("status") == "status":
             location_revision = LocationRevision.get_by_id(int(self.public_user.key.id()))
             if location_revision:
                 temp = {}
@@ -575,6 +653,25 @@ class PublicLocationEditPage(BaseHandler):
 
             self.redirect("/locations/" + self.request.get("page_title") + "/edit?success=Successfully+updated.")
 
+        if self.request.get("status") == "reliefs":
+            distribution_revision = DistributionRevision()
+            distribution_revision.fb_email = self.public_user.fb_email
+            distribution_revision.fb_id = self.public_user.fb_id
+            distribution_revision.fb_access_token = self.public_user.fb_access_token
+            distribution_revision.fb_username = self.public_user.fb_username
+            distribution_revision.fb_lastname = self.public_user.fb_lastname
+            distribution_revision.fb_firstname = self.public_user.fb_firstname
+            distribution_revision.fb_middlename = self.public_user.fb_middlename
+            distribution_revision.fb_name = self.public_user.fb_name
+            distribution_revision.relief_name = self.request.get("relief_name")
+            distribution_revision.destination = self.request.get("destination")
+            distribution_revision.num_of_packs = int(self.request.get("packs"))
+            distribution_revision.description = self.request.get("description")
+            distribution_revision.contacts = self.request.get("contacts")
+            distribution_revision.needs = self.request.get("needs")
+            distribution_revision.put()
+            self.redirect("/locations/" + self.request.get("page_title") + "/edit?success=Successfully+updated.")
+
 class PublicLocationPage(BaseHandler):
     def get(self, location_id=None):
         if not location_id:
@@ -598,6 +695,10 @@ class PublicLocationPage(BaseHandler):
         user_changes = LocationRevisionChanges.query().order(-LocationRevisionChanges.created).fetch(10)
         if user_changes:
             self.tv["status_changes"] = user_changes
+
+        distribution_changes = DistributionRevision.query().order(-DistributionRevision.created).fetch(100)
+        if distribution_changes:
+            self.tv["distribution_changes"] = distribution_changes
 
         self.render('frontend/public-location.html')
 
@@ -3102,7 +3203,7 @@ app = webapp2.WSGIApplication([
         webapp2.Route(r'/<:.*>', ErrorHandler)
     ]),
 
-    routes.DomainRoute(r'<:api\.bangonph\.com|localhost>', [
+    routes.DomainRoute(r'<:api\.bangonph\.com>', [
         webapp2.Route('/', handler=APIMainHandler, name="api-locations"),
         webapp2.Route('/v1', handler=APIV1Handler, name="api-locations"),
         webapp2.Route('/v1/locations', handler=APILocationsHandler, name="api-locations"),

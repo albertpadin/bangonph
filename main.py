@@ -535,6 +535,7 @@ class PublicLocationEditPage(BaseHandler):
 
             self.tv['location'] = location
             self.tv['page_title'] = location.name
+            self.tv["location_id"] = location.key.id()
 
             # location revision
             self.tv["login_user"] = self.public_user.fb_name
@@ -659,6 +660,7 @@ class PublicLocationEditPage(BaseHandler):
                 location.affected_count_text = self.request.get("affected_count_text")
                 location.missing_person = int(self.request.get("missing_person"))
                 location.missing_person_text = self.request.get("missing_person_text")
+                location.status_board = self.request.get("status_board")
                 location.status = status
                 location.source = self.request.get("source")
                 location.put()
@@ -708,7 +710,7 @@ class PublicLocationPage(BaseHandler):
         if user_changes:
             self.tv["status_changes"] = user_changes
 
-        distribution_changes = DistributionRevision.query().order(-DistributionRevision.created).fetch(100)
+        distribution_changes = DistributionRevision.query(DistributionRevision.name == self.public_user.name).order(-DistributionRevision.created).fetch(100)
         if distribution_changes:
             self.tv["distribution_changes"] = distribution_changes
 

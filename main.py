@@ -608,6 +608,7 @@ class LocationHandler(BaseHandler):
                 temp["status"] = location.status
                 temp["hash_tag"] = location.hash_tag
                 temp["featured"] = location.featured
+                temp["images"] = location.images
                 self.response.out.write(simplejson.dumps(temp))
             return
 

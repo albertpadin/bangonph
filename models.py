@@ -176,6 +176,24 @@ class DropOffCenter(ndb.Model):
 
         return details
 
+class DistributionRevision(ndb.Model):
+    created = ndb.DateTimeProperty(auto_now_add=True)
+    updated = ndb.DateTimeProperty(auto_now=True)
+    fb_email = ndb.StringProperty()
+    fb_id = ndb.StringProperty()
+    fb_access_token = ndb.StringProperty()
+    fb_username = ndb.StringProperty()
+    fb_lastname = ndb.StringProperty()
+    fb_firstname = ndb.StringProperty()
+    fb_middlename = ndb.StringProperty()
+    fb_name = ndb.StringProperty()
+    name = ndb.StringProperty() # location
+    relief_name = ndb.StringProperty()
+    destination = ndb.StringProperty()
+    num_of_packs = ndb.IntegerProperty()
+    description = ndb.StringProperty()
+    contacts = ndb.StringProperty()
+    needs = ndb.StringProperty()
 
 class Distribution(ndb.Model):
     created = ndb.DateTimeProperty(auto_now_add=True)

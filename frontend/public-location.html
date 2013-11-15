@@ -196,7 +196,8 @@
             <!-- <a data-toggle="collapse" href="#collapseOne" class="donate-btn">Donate Cash</a> -->
               <h3>Relief Operations that need your Help</h3>
               <span>Stand up, take part, and get involved!</span>
-
+              <br/>
+              <a href="{{ fb_login_url }}" class="btn btn-info">Add a relief effort to this location</a>
 
               <p>&nbsp;</p>
               
@@ -239,6 +240,42 @@
                     <div class="clearfix"></div>
 
                     <p>&nbsp;</p>
+
+                    <div>
+                      <h5>Recently Added Relief Efforts</h5>
+                      <table class="table">
+                        <thead>
+                          <tr>
+                            <th>Name</th>
+                            <th>Destination (Specific)</th>
+                            <th># of Packs</th>
+                            <th>Description</th>
+                            <th>Contact Details</th>
+                            <th>Needs</th>
+                            <th>Date</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {% if distribution_changes %}
+                            {% for changes in distribution_changes %}
+                            <tr>
+                              <td>{{ changes.relief_name }}</td>
+                              <td>{{ changes.destination }}</td>
+                              <td>{{ changes.num_of_packs }}</td>
+                              <td>{{ changes.description }}</td>
+                              <td>{{ changes.contacts }}</td>
+                              <td>{{ changes.needs }}</td>
+                              <td>{{ changes.created|to_date }}</td>
+                            </tr>
+                            {% endfor %}
+                          {% else %}
+                          <tr>
+                            <td colspan="10">Empty.</td>
+                          </tr>
+                          {% endif %}
+                        </tbody>
+                      </table>
+                    </div>
                   </div>
                 </div>
 

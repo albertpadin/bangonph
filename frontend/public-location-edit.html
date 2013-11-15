@@ -74,7 +74,38 @@
               </tbody>
             </table>
             <button type="submit" class="btn btn-default">Submit</button>
-            <form>
+            </form>
+          </div>
+          <hr/>
+          <div>
+            <h4>Add a relief effort to this location</h4>
+            <form method="post">
+              <input type="hidden" name="status" value="reliefs"/>
+              <input type="hidden" name="page_title" value="{{ page_title }}"/>
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th>Name</th>
+                    <th>Destination (Specific)</th>
+                    <th># of Packs</th>
+                    <th>Description</th>
+                    <th>Contact Details</th>
+                    <th>Needs</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><input type="text" class="form-control" name="relief_name"/></td>
+                    <td><input type="text" class="form-control" name="destination"</td>
+                    <td><input type="text" class="form-control" name="packs" onblur="if(isNaN(this.value)){ alert('Please remove non-numeric value.'); this.focus(); return false; }" placeholder="Number only"/></td>
+                    <td><textarea class="form-control" name="description" style="margin: 0px 6px 0px 0px; width: 315px; height: 35px;"></textarea></td>
+                    <td><input type="text" class="form-control" name="contacts"/></td>
+                    <td><textarea class="form-control" name="needs" style="margin: 0px 6px 0px 0px; width: 315px; height: 35px;"></textarea></td>
+                  </tr>
+                </tbody>
+              </table>
+              <button class="btn btn-default" type="submit">Submit</button>
+            </form>
           </div>
       </div>
     </div>

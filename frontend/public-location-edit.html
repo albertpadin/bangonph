@@ -30,28 +30,42 @@
             <table class="table table-hover">
               <thead>
                 <tr>
-                  <th colspan="5">{{ page_title }}</th>
+                  <th colspan="5">{{ page_title }} (Numbers only, no commas, no text)</th>
                 </tr>
               </thead>
               <tbody>
                 <tr>
-                  <td>Deaths</td>
-                  <td><input required="requried" name="death_count" onblur="if(isNaN(this.value)){ alert('Please remove non-numeric value.'); this.focus(); return false; }" class="form-control" type="text" value="{% if location.death_count_text %}{{ location.death_count_text }}{% else %}{% if location.death_count %}{{ location.death_count|with_commas }}{% else %}Gathering Data{% endif %}{% endif %}" placeholder="Numberic value only"/></td>
-                  <td><input name="death_source" class="form-control" type="text" placeholder="Source"/></td>
+                  <td>Deaths Count</td>
+                  <td><input required="requried" name="death_count" onblur="if(isNaN(this.value)){ alert('Please remove non-numeric value.'); this.focus(); return false; }" class="form-control" type="text" value="{% if location.death_count %}{{ location.death_count }}{% endif %}" placeholder="Numberic value only"/></td>
+                  <td><input name="death_source" class="form-control" type="hidden" placeholder="Source"/></td>
                 </tr>
                 <tr>
-                  <td>Families Affected</td>
-                  <td><input required="requried" name="affected_count" onblur="if(isNaN(this.value)){ alert('Please remove non-numeric value.'); this.focus(); return false; }" class="form-control" type="text" value="{% if location.affected_count_text %}{{ location.affected_count_text }}{% else %}{% if location.affected_count %}{{ location.affected_count|with_commas }}{% else %}Gathering Data{% endif %}{% endif %}" placeholder="Numberic value only"/></td>
-                  <td><input name="affected_source" class="form-control" type="text" placeholder="Source"/></td>
+                  <td>Families Affected Count</td>
+                  <td><input required="requried" name="affected_count" onblur="if(isNaN(this.value)){ alert('Please remove non-numeric value.'); this.focus(); return false; }" class="form-control" type="text" value="{% if location.affected_count %}{{ location.affected_count }}{% endif %}" placeholder="Numberic value only"/></td>
+                  <td><input name="affected_source" class="form-control" type="hidden" placeholder="Source"/></td>
                 </tr>
                 <tr>
-                  <td>Missing Persons</td>
-                  <td><input required="requried" name="missing_person" onblur="if(isNaN(this.value)){ alert('Please remove non-numeric value.'); this.focus(); return false; }" class="form-control" type="text" value="{% if location.missing_person %}{{ location.missing_person|with_commas }}{% else %}Gathering Data{% endif %}" placeholder="Numberic value only"/></td>
-                  <td><input name="missing_person_source" class="form-control" type="text" placeholder="Source"/></td>
+                  <td>Missing Persons Count</td>
+                  <td><input required="requried" name="missing_person" onblur="if(isNaN(this.value)){ alert('Please remove non-numeric value.'); this.focus(); return false; }" class="form-control" type="text" value="{% if location.missing_person %}{{ location.missing_person }}{% endif %}" placeholder="Numberic value only"/></td>
+                  <td><input name="missing_person_source" class="form-control" type="hidden" placeholder="Source"/></td>
                 </tr>
-
                 <tr>
-                  <th colspan="5">Info Status</th>
+                  <td><br/></td>
+                </tr>
+                <tr>
+                  <th colspan="5">Display Informations</th>
+                </tr>
+                <tr>
+                  <td>Deaths Count Text</td>
+                  <td><input name="death_count_text"class="form-control" type="text" value="{% if location.death_count_text %}{{ location.death_count_text }}{% endif %}"/></td>
+                </tr>
+                <tr>
+                  <td>Families Affected Count Text</td>
+                  <td><input name="affected_count_text" class="form-control" type="text" value="{% if location.affected_count_text %}{{ location.affected_count_text }}{% endif %}"/></td>
+                </tr>
+                <tr>
+                  <td>Missing Persons Count Text</td>
+                  <td><input name="missing_person_text" class="form-control" type="text" value="{% if location.missing_person_text %}{{ location.missing_person_text }}{% endif %}" /></td>
                 </tr>
                 <tr>
                   <td>Communication</td>
@@ -74,8 +88,15 @@
                   <td><input name="status_food" class="form-control" type="text" value="{% if location.status.food %}{{ location.status.food }}{% else %}Gathering Data{% endif %}" placeholder="Status"/></td>
                 </tr>
                 <tr>
-                  <td>Cloths</td>
+                  <td>Clothes</td>
                   <td><input name="status_cloths" class="form-control" type="text" value="{% if location.status.clothes %}{{ location.status.clothes }}{% else %}Gathering Data{% endif %}" placeholder="Status"/></td>
+                </tr>
+                <tr>
+                  <td><br/></td>
+                </tr>
+                <tr>
+                  <td>Source</td>
+                  <td><input name="source" class="form-control" type="text" value="{% if location.source %}{{ location.source }}{% endif %}" placeholder="Status"/></td>
                 </tr>
               </tbody>
             </table>

@@ -2006,11 +2006,10 @@ class APIDropOffCentersHandler(APIBaseHandler):
                 resp["description"] = "List of drop off centers"
                 resp["property"] = "drop-off-centers"
                 resp["data"] = data
-
-                self.render(data)
+                
         else:
             center = DropOffCenter.get_by_id(instance_id)
-            if post:
+            if center:
                 resp["description"] = "Instance data"
                 resp["property"] = "drop-off-centers"
                 resp["data"] = center.to_object()
@@ -2020,6 +2019,8 @@ class APIDropOffCentersHandler(APIBaseHandler):
                 resp['code'] = 404
                 resp['property'] = "instance_id"
                 resp['description'] = "Instance id missing or not valid"
+
+        self.render(resp)
 
     @oauthed_required
     def post(self, instance_id=None):

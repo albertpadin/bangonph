@@ -34,10 +34,16 @@ var ContactView = Backbone.View.extend({
   },
   contacts: function() {
     var self = this;
+    $(".loading-message").show();
     var contactsCollection = new ContactsCollection();
     contactsCollection.fetch({
       success: function(datas) {
+        $(".loading-message").fadeOut("fast");
         self.render(datas.toJSON());
+      },
+      error: function(datas) {
+        $(".loading-message").fadeOut("fast");
+        $(".failed-message").fadeIn("fast");
       }
     });
   },
@@ -108,11 +114,17 @@ var EditContact = Backbone.View.extend({
   },
   data: function(id) {
     var self = this;
+    $(".loading-message").show();
     var contactsCollection = new ContactsCollection();
     contactsCollection.fetch({
       data: { id_edit: id },
       success: function(datas) {
+        $(".loading-message").fadeOut("fast");
         self.render(datas.toJSON());
+      },
+      error: function(datas) {
+        $(".loading-message").fadeOut("fast");
+        $(".failed-message").fadeIn("fast");
       }
     });
   },

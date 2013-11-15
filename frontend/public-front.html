@@ -3,7 +3,8 @@
 {% block ogdetails %}<meta property="og:image" content="http://www.bangonph.com/img/bangon-ph-black.png"/>{% endblock %}
 
 {% block content %}
-  <div class="jumbotron">
+    <link rel="stylesheet" href="/css/datepicker.css">
+    <div class="jumbotron">
       <div class="container">
         <h1>Let's Coordinate our Relief Efforts</h1>
         <p>Super Typhoon Yolanda hit the Philippines and left several towns devastated. Affecting more than 2 million people and killing over 2,000 and still counting. This is the live and developing story of how we rise again. <span style="font-weight: bold; color: #E02A2A;">Together.</span></p>
@@ -24,8 +25,178 @@
     </div>
 
     <div class="container">
-      <!-- Example row of columns -->
+
+      
       <div class="row">
+        <div class="col-lg-6 col-md-6 col-sm-6 col feed">
+       <strong>Need Anything? Post it here!</strong>
+       <!-- <span class="pull-right"><a href="/posts" class="see-more-btn">see more</a></span> -->
+
+
+      <div class="feed-input">
+         <form id="post_need">
+            
+            <textarea placeholder="what do you need.." name="message" class="text-input"></textarea>
+            <input type="text" name="expiry" placeholder="show this until what date" class="datepicker hidden">
+            <input type="text" name="location" placeholder="what place is this for" class="hidden">
+            <input type="text" name="name" placeholder="what is your name" class="hidden">
+            <input type="text" name="phone" placeholder="leave your contact details" class="hidden">
+            <input type="text" style="display: none;" name="comment">
+            <input type="hidden" name="post_type" value="NEED" />
+           
+              <a href="#" class="btn btn-default hidden cancel-btn">Cancel</a>
+              <input type="submit" value="Post" id="post_need_submit" class="btn btn-primary hidden submit-btn">
+
+        </form>
+       </div>
+
+        
+       <ul class="nav nav-pills">
+         <!--  <li class="active"><a href="#all" data-toggle="tab">All</a></li>
+          <li><a href="#transpo" data-toggle="tab">Transpo</a></li>
+          <li><a href="#volunteers" data-toggle="tab">Volunteers</a></li>
+          <li><a href="#relief-goods" data-toggle="tab">Relief Goods</a></li> -->
+
+        </ul>
+        <div class="tab-content">
+
+          <div class="tab-pane active" id="all">
+             <ul id="post_need_feed" class="feed-wrap">
+
+                
+
+             </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-lg-6 col-md-6 col-sm-6 col feed">
+       <strong>What can you donate? Let us know!</strong>
+       <!-- <span class="pull-right"><a href="/posts" class="see-more-btn">see more</a></span> -->
+       
+         <div class="feed-input">
+           <form id="post_have">
+              
+              <textarea placeholder="what do you have.." name="message" class="text-input"></textarea>
+              <input type="text" name="expiry" placeholder="until when is it available" class="datepicker hidden"> 
+              <input type="text" name="location" placeholder="where is it" class="hidden">
+              <input type="text" name="name" placeholder="what is your name" class="hidden">
+              <input type="text" name="phone" placeholder="leave your contact details" class="hidden">
+              <input type="text" style="display: none;" name="comment">
+              <input type="hidden" name="post_type" value="HAVE" />
+           
+              <a href="#" class="btn btn-default hidden cancel-btn">Cancel</a>
+              <input type="submit" value="Post" id="post_have_submit" class="btn btn-primary hidden submit-btn">
+
+        </form>
+       </div>
+
+       <ul class="nav nav-pills">
+          <!-- <li class="active"><a href="#all-have" data-toggle="tab">All</a></li>
+          <li><a href="#transpo-have" data-toggle="tab">Transpo</a></li>
+          <li><a href="#volunteers-have" data-toggle="tab">Volunteers</a></li>
+          <li><a href="#relief-goods-have" data-toggle="tab">Relief Goods</a></li> -->
+
+        </ul>
+
+        <div class="tab-content">
+
+          <div class="tab-pane active" id="all-have">
+             <ul class="feed-wrap" id="post_have_feed">
+
+                
+
+             </ul>
+
+          </div>
+        </div>
+      </div>
+      <div class="clearfix"></div>
+          
+        {% for location in featured_locations %}
+        <div class="col-lg-4 col-md-6 col-sm-6 col">
+            <div class="status-item">
+              <!--<h3>{{ location.name }}</h3>-->
+              <img class='location-front-feature-photo' src="{{ location.featured_photo }}" alt="{{ location.name }}" onclick="self.location='/locations/{{ location.key.id() }}';" >
+              <h6 class="mb0">Current Status:</h6>
+              <div class="status-group">
+                <div class="status-entry">
+                  <img class="icon" src="/img/icon-deaths.png" alt="Deaths">
+                  <span>{% if location.death_count_text %}{{ location.death_count_text }}{% else %}{% if location.death_count %}{{ location.death_count|with_commas }} Deaths{% else %}Gathering Data{% endif %}{% endif %}</span>
+                </div>
+                <div class="status-entry">
+                  <img class="icon" src="/img/icon-family.png" alt="Families Affected">
+                  <span>{% if location.affected_count_text %}{{ location.affected_count_text }}{% else %}{% if location.affected_count %}{{ location.affected_count|with_commas }} Families Affected{% else %}Gathering Data{% endif %}{% endif %}</span>
+                </div>
+                <div class="status-entry">
+                  <img class="icon" src="/img/icon-communication.png" alt="No Communication">
+                  <span>{% if location.status.communication %}{{ location.status.communication }}{% else %}Gathering Data{% endif %}</span>
+                </div>
+                <div class="status-entry">
+                  <img class="icon" src="/img/icon-water.png" alt="No Water">
+                  <span>{% if location.status.water %}{{ location.status.water }}{% else %}Gathering Data{% endif %}</span>
+                </div>
+                <div class="status-entry">
+                  <img class="icon" src="/img/icon-electricity.png" alt="No Electricity">
+                  <span>{% if location.status.water %}{{ location.status.power }}{% else %}Gathering Data{% endif %}</span>
+                </div>
+                <div class="status-entry">
+                  <img class="icon" src="/img/icon-medicine.png" alt="No Medicine">
+                  <span>{% if location.status.medicine %}{{ location.status.medicine }}{% else %}Gathering Data{% endif %}</span>
+                </div>
+                <div class="status-entry">
+                  <img class="icon" src="/img/icon-clothes.png" alt="Needs Clothes">
+                  <span>{% if location.status.clothes %}{{ location.status.clothes }}{% else %}Gathering Data{% endif %}</span>
+                </div>
+                <div class="status-entry">
+                  <img class="icon" src="/img/icon-food.png" alt="No Food">
+                  <span>{% if location.status.food %}{{ location.status.food }}{% else %}Gathering Data{% endif %}</span>
+                </div>
+              </div>
+              <div class="clear"></div>
+              <h6>Relief Aid Status:</h6>
+              <div class="progress">
+                <div class="progress-bar progress-bar-danger" role="progressbar" aria-valuenow="30" aria-valuemin="0" aria-valuemax="100" style="width: 30%">
+                  <span class="sr-only">Gathering Data...</span>
+                </div>
+              </div>
+              <!--
+              <div class="status-group">
+                <div class="status-entry">
+                  <img class="icon" src="/img/icon-pledged.png" alt="Relief Goods Pledged">
+                  <span>0 Packs Pledged</span>
+                </div>
+                <div class="status-entry">
+                  <img class="icon" src="/img/icon-delivered.png" alt="Relief Goods Delivered">
+                  <span>0 Packs Delivered</span>
+                </div>
+                <div class="status-entry">
+                  <img class="icon" src="/img/icon-distributed.png" alt="Relief Goods Distributed">
+                  <span>0 Packs Distributed</span>
+                </div>
+                <div class="status-entry">
+                  <img class="icon" src="/img/icon-needed.png" alt="Relief Goods Needed">
+                  <span class="emphasize">0 Packs Needed</span>
+                </div>
+              </div>
+              -->
+              <div class="clear"></div><!-- 
+              <h6>Active Relief Orgs:</h6>
+                <div class="relief-orgs-group">
+                  <img src="/img/thumb-dswd.png" title="DSWD">
+                  <img src="/img/thumb-redcross.png" title="Philippine Red Cross">
+                  <img src="/img/thumb-rafi.png" title="Ramon Aboitiz Foundation, Inc.">
+                  <img src="/img/thumb-jci.png" title="Junior Chamber International">
+                </div> -->
+              <div>
+                <a class="btn btn-primary btn-block entry-btn" href="/locations/{{ location.key.id() }}" title="{{ location.name }}" role="button"><span class="glyphicon glyphicon-circle-arrow-right"></span> Get Involved. Donate Now!  &raquo;</a>
+              </div>
+            </div>
+        </div>
+        {% endfor %}
+      
+
+
         {% for location in locations %}
         <div class="col-lg-4 col-md-6 col-sm-6 col">
             <div class="status-item">
@@ -109,4 +280,157 @@
         {% endfor %}
       </div>
     </div>
+{% endblock %}
+
+
+{% block bottomjs %}
+        <script src="/js/jquery-draggable.js"></script>
+        <script src="/js/jquery.slimscroll.min.js"></script>
+
+        <script src="/js/bootstrap-datepicker.js"></script>
+        <script>
+            $('.datepicker').datepicker();
+        </script>
+
+        <script>
+          $(function(){
+              $('.feed-wrap').slimScroll({
+                  height: '320px'
+              });
+          });
+        </script>
+        <script>
+          $('#myTab a').click(function (e) {
+            e.preventDefault()
+            $(this).tab('show')
+          })
+        </script>
+        <script>
+          $(".text-input").focus(function(){
+            $(this).closest("form").find(".hidden").removeClass("hidden").addClass("show");
+            $(this).closest("div").addClass("shadowed");
+          });
+          
+          $(".cancel-btn").click(function(e){
+            e.preventDefault()
+            $(this).closest("form").find(".show").removeClass("show").addClass("hidden");
+            $(this).closest("div").removeClass("shadowed");
+          });
+
+        </script>
+
+        <script src="http://js.pusher.com/2.1/pusher.min.js"></script>
+      <script type="text/javascript">
+      $(document).ready(function(){
+
+        $.ajax({
+          type: 'GET',
+          url: '/api/posts',
+        })
+        .success(function(data) {
+          //get the posts here
+          for(i=0;i<data.data.posts.length;i++){
+            data2 = data.data.posts[i];
+            d = '<li class="all ' + data2.post_type + '">';
+            /*d += '<a href="/' + data2.id + '">';*/
+            d += '<strong>' + data2.name + '</strong>';
+            d += '<p>';
+            if(data2.location){
+              d += '<span class="label label-default">' + data2.location + '</span>';
+            }/*
+            if(data2.post_type){
+              d += '<span class="label label-info">' + data2.post_type + '</span>'
+            }*/
+            d += data2.message;
+            if(data2.phone){
+              d +='<br/>' + data2.phone;
+            }
+            /*d += '<br/><span class="date-time">' + data2.expiry_friendly + '<span class="pull-right"><a href="/posts/' + data2.id + '" class="share-btn">View</a></span></span></p></a></li>';*/
+            d += '<br/><span class="date-time">' + data2.expiry_friendly + '</span></p></li>';
+
+            if(data2.post_type){
+              if(data2.post_type == "NEED"){
+                $("#post_need_feed").prepend(d);
+              }
+              else {
+                $("#post_have_feed").prepend(d);
+              }
+            }
+            else {
+              $("#post_need_feed").prepend(d);
+            }
+
+          }
+          
+        });
+
+      });
+
+        //pusher
+        var pusher = new Pusher('e0a2a1c8316b9baddc9b');
+        var channel = pusher.subscribe('feeds');
+        channel.bind('new_post', function(data) {
+          //do something when the new data is triggered
+          console.log(data);
+          for(i=0;i<data.data.posts.length;i++){
+            data2 = data.data.posts[i];
+            d = '<li class="all ' + data2.post_type + '">';
+            /*d += '<a href="/' + data2.id + '">';*/
+            d += '<strong>' + data2.name + '</strong>';
+            d += '<p>';
+            if(data2.location){
+              d += '<span class="label label-default">' + data2.location + '</span>';
+            }/*
+            if(data2.post_type){
+              d += '<span class="label label-info">' + data2.post_type + '</span>'
+            }*/
+            d += data2.message;
+            if(data2.phone){
+              d +='<br/>' + data2.phone;
+            }
+
+            /*d += '<br/><span class="date-time">' + data2.expiry_friendly + '<span class="pull-right"><a href="/posts/' + data2.id + '" class="share-btn">View</a></span></span></p></a></li>';*/
+            d += '<br/><span class="date-time">' + data2.expiry_friendly + '</span></p></li>';
+
+            if(data2.post_type){
+              if(data2.post_type == "NEED"){
+                $("#post_need_feed").prepend(d);
+              }
+              else {
+                $("#post_have_feed").prepend(d);
+              }
+            }
+            else {
+              $("#post_need_feed").prepend(d);
+            }
+
+          }
+        });
+      </script>
+      <script type="text/javascript">
+      $("#post_need").submit(function(e){
+        e.preventDefault();
+        $("#post_need_submit").attr('disabled','disabled');
+        $.post( "/api/posts", $("#post_need").serialize(), function( data ) {
+          console.log(data);
+          $("#post_need").find("input[type=text], textarea").val("");
+          $("#post_need_submit").removeAttr('disabled');
+            $("#post_need").find(".show").removeClass("show").addClass("hidden");
+            $("#post_need").closest("div").removeClass("shadowed");
+        });
+      });
+
+      $("#post_have").submit(function(e){
+        e.preventDefault();
+        $("#post_have_submit").attr('disabled','disabled');
+        $.post( "/api/posts", $("#post_have").serialize(), function( data ) {
+          console.log(data);
+          $("#post_have").find("input[type=text], textarea").val("");
+          $("#post_have_submit").removeAttr('disabled');
+          $("#post_have").find(".show").removeClass("show").addClass("hidden");
+            $("#post_have").closest("div").removeClass("shadowed");
+        });
+      });
+
+      </script>
 {% endblock %}

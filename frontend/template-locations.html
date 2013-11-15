@@ -238,7 +238,7 @@
             <p>
               Featured
               <input type="radio" name="featured" value="True"/> Yes
-              <input type="radio" name="featured" value="False"/> No
+              <input type="radio" checked name="featured" value="False"/> No
             </p>
             <p>
             <br/>
@@ -384,19 +384,19 @@ Miscellaneous
             <p>
               shelter
               <input type="text" <% _.each(this.status, function(item, name) { if (name == "shelter" && item != "") { %> value="<%- item %>" <% } }) %> id="status_shelter"/>
-            </p>
-            <% 
-                })
-              }
-            %><br/>
+            </p><br/>
             <p>Hash Tag
               <input type="text" value="<%- this.hash_tag %>" id="hash_tag"/>
             </p>
             <p>
               Featured
-              <input type="radio" name="featured" value="True"/> Yes
-              <input type="radio" name="featured" value="False"/> No
+              <input type="radio" <% if (this.featured == true) { %> checked="checked" <% } %> name="featured" value="True"/> Yes
+              <input type="radio" <% if (this.featured == false) { %> checked="checked" <% } %> name="featured" value="False"/> No
             </p>
+            <% 
+                })
+              }
+            %>
             <p>
             <br/>
               Images <a href="javascript:;" onclick="javascript:addimage2()" class="btn btn-success addimage">Add More</a>

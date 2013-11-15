@@ -1,13 +1,11 @@
 {% extends 'frontend/public-index.html' %}
 
-{% block ogdetails %}
-
-
-
+{% block ogdetails %}<meta property="og:image" content="http://www.bangonph.com/img/bangon-ph-black.png"/>
 {% endblock %}
 
 
 {% block content %}
+<link rel="stylesheet" href="/css/datepicker.css">
     <div class="jumbotron">
       <div class="container">
         <h1>Let's Coordinate our Relief Efforts</h1>
@@ -34,12 +32,12 @@
           
       <div class="col-lg-8 col-md-8">
         <div id="campaign-content-wrap">
-            <h3 class="mt0">Dan Allen Pantinople says:</h3>
-            <h4 class="label2 label-info">needs transpo</h4>
-            <blockquote class="mb0">Super Typhoon Yolanda hit the Philippines and left several towns devastated. Affecting more than 2 million people and killing over 2,000 and still counting. This is the live and developing story of how we rise again.</blockquote>
+            <h3 class="mt0">{{ post.name }}</h3>
+            <h4 class="label2 label-info">{{ post.location }}</h4>
+            <blockquote class="mb0">{{ post.message }}<br />Preferably before {{ post.expiry_friendly }}<br />{{ post.phone }}</blockquote>
             <div class="pull-right">
               <div class="social-item">
-                  <div class="fb-share-button" data-href="{{ current_base_url }}" data-type="button_count"></div>
+                  <div class="fb-share-button" data-text="{{ post.message }}" data-href="{{ current_base_url }}" data-type="button_count"></div>
               </div>
               <div class="social-item">
                 <a href="https://twitter.com/share" class="twitter-share-button" data-hashtags="BangonPH">Tweet</a>
@@ -166,6 +164,11 @@
 {% block bottomjs %}
         <script src="/js/jquery-draggable.js"></script>
         <script src="/js/jquery.slimscroll.min.js"></script>
+        <script src="/js/bootstrap-datepicker.js"></script>
+        <script>
+            $('.datepicker').datepicker();
+        </script>
+
         <script>
           $(function(){
               $('.feed-wrap').slimScroll({
@@ -191,4 +194,121 @@
             $(this).closest("div").removeClass("shadowed");
           });
         </script>
+        <script src="http://js.pusher.com/2.1/pusher.min.js"></script>
+      <script type="text/javascript">
+      $(document).ready(function(){
+
+        $.ajax({
+          type: 'GET',
+          url: '/api/posts',
+        })
+        .success(function(data) {
+          //get the posts here
+          for(i=0;i<data.data.posts.length;i++){
+            data2 = data.data.posts[i];
+            d = '<li class="all ' + data2.post_type + '">';
+            d += '<a href="/posts/' + data2.id + '">';
+            d += '<strong>' + data2.name + '</strong>';
+            d += '<p>';
+            if(data2.location){
+              d += '<span class="label label-default">' + data2.location + '</span>';
+            }/*
+            if(data2.post_type){
+              d += '<span class="label label-info">' + data2.post_type + '</span>'
+            }*/
+            d += data2.message;
+            if(data2.phone){
+              d +='<br/>' + data2.phone;
+            }
+            d += '<br/><span class="date-time">' + data2.expiry_friendly + '<div class="social-media pull-right"><div class="social-item"><div class="fb-share-button" data-href="http://www.bangonph.com/posts/' + data2.id + '" data-text="' + data2.message + '" data-type="button_count"></div></div><div class="social-item"><a href="https://twitter.com/share" class="twitter-share-button" data-url="http://www.bangonph.com/posts/' + data2.id + '" data-hashtags="BangonPH">Tweet</a></div><div class="clearfix"></div></div></span></p></a></li>';
+            /*d += '<br/><span class="date-time">' + data2.expiry_friendly + '</span></p></li>';*/
+
+            if(data2.post_type){
+              if(data2.post_type == "NEED"){
+                $("#post_need_feed").prepend(d);
+              }
+              else {
+                $("#post_have_feed").prepend(d);
+              }
+            }
+            else {
+              $("#post_need_feed").prepend(d);
+            }
+
+          }
+          setTimeout(function(){twttr.widgets.load();FB.XFBML.parse();},100);
+        });
+
+      });
+
+        //pusher
+        var pusher = new Pusher('e0a2a1c8316b9baddc9b');
+        var channel = pusher.subscribe('feeds');
+        channel.bind('new_post', function(data) {
+          //do something when the new data is triggered
+          console.log(data);
+          for(i=0;i<data.data.posts.length;i++){
+            data2 = data.data.posts[i];
+            d = '<li class="all ' + data2.post_type + '">';
+            d += '<a href="/posts/' + data2.id + '">';
+            d += '<strong>' + data2.name + '</strong>';
+            d += '<p>';
+            if(data2.location){
+              d += '<span class="label label-default">' + data2.location + '</span>';
+            }/*
+            if(data2.post_type){
+              d += '<span class="label label-info">' + data2.post_type + '</span>'
+            }*/
+            d += data2.message;
+            if(data2.phone){
+              d +='<br/>' + data2.phone;
+            }
+
+            d += '<br/><span class="date-time">' + data2.expiry_friendly + '<div class="social-media pull-right"><div class="social-item"><div class="fb-share-button" data-href="http://www.bangonph.com/posts/' + data2.id + '" data-text="' + data2.message + '" data-type="button_count"></div></div><div class="social-item"><a href="https://twitter.com/share" class="twitter-share-button" data-url="http://www.bangonph.com/posts/' + data2.id + '" data-hashtags="BangonPH">Tweet</a></div><div class="clearfix"></div></div></span></p></a></li>';
+            /*d += '<br/><span class="date-time">' + data2.expiry_friendly + '</span></p></li>';*/
+
+            if(data2.post_type){
+              if(data2.post_type == "NEED"){
+                $("#post_need_feed").prepend(d);
+              }
+              else {
+                $("#post_have_feed").prepend(d);
+              }
+            }
+            else {
+              $("#post_need_feed").prepend(d);
+            }
+
+          }
+          setTimeout(function(){twttr.widgets.load();FB.XFBML.parse();},100);
+        });
+      </script>
+      <script type="text/javascript">
+      $("#post_need").submit(function(e){
+        e.preventDefault();
+        $("#post_need_submit").attr('disabled','disabled');
+        $.post( "/api/posts", $("#post_need").serialize(), function( data ) {
+          console.log(data);
+          $("#post_need").find("input[type=text], textarea").val("");
+          $("#post_need_submit").removeAttr('disabled');
+            $("#post_need").find(".show").removeClass("show").addClass("hidden");
+            $("#post_need").closest("div").removeClass("shadowed");
+        });
+      });
+
+      $("#post_have").submit(function(e){
+        e.preventDefault();
+        $("#post_have_submit").attr('disabled','disabled');
+        $.post( "/api/posts", $("#post_have").serialize(), function( data ) {
+          console.log(data);
+          $("#post_have").find("input[type=text], textarea").val("");
+          $("#post_have_submit").removeAttr('disabled');
+          $("#post_have").find(".show").removeClass("show").addClass("hidden");
+            $("#post_have").closest("div").removeClass("shadowed");
+        });
+      });
+
+      </script>
+
+      <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
 {% endblock %}

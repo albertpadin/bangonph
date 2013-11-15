@@ -1329,9 +1329,54 @@ class SubscriberPage(BaseHandler):
 class PostsHandler(BaseHandler):
     @login_required
     def get(self):
+        if self.request.get("id_delete"):
+            post = Post.get_by_id(int(self.request.get("id_delete")))
+            if post:
+                post.key.delete()
+            return
+
+        if self.request.get("id_edit"):
+            temp_type = {}
+            data_post = []
+            post = Post.get_by_id(int(self.request.get("id_edit")))
+            if post:
+                temp = {}
+                temp["id"] = post.key.id()
+                temp["name"] = post.name
+                temp["phone"] = post.phone
+                temp["email"] = post.email
+                temp["facebook"] = post.facebook
+                temp["twitter"] = post.twitter
+                temp["message"] = post.message
+                temp["post_type"] = post.post_type
+                temp["expiry"] = str(post.expiry.strftime("%m/%d/%Y"))
+                temp["location"] = post.location
+                temp["status"] = post.status
+                data_post.append(temp)
+                temp_type["post"] = data_post
+
+            datas_locations = []
+            locations = Location.query().fetch(300)
+            if locations:
+                for location in locations:
+                    temp = {}
+                    temp["id"] = location.key.id()
+                    temp["name"] = location.name
+                    temp["latlong"] = location.latlong
+                    temp["featured_photo"] = location.featured_photo
+                    temp["death_count"] = location.death_count
+                    temp["affected_count"] = location.affected_count
+                    temp["status_board"] = location.status_board
+                    temp["needs"] = location.needs
+                    temp["status"] = location.status
+                    datas_locations.append(temp)
+                temp_type["locations"] = datas_locations
+            self.response.out.write(simplejson.dumps(temp_type))
+            return
+
         posts = Post.query().order(-Post.created).fetch(300)
+        datas = []
         if posts:
-            datas = []
             for post in posts:
                 temp = {}
                 temp["id"] = post.key.id()
@@ -1341,10 +1386,32 @@ class PostsHandler(BaseHandler):
                 temp["facebook"] = post.facebook
                 temp["twitter"] = post.twitter
                 temp["message"] = post.message
+                temp["post_type"] = post.post_type
+                temp["expiry"] = str(post.expiry.strftime("%m/%d/%Y"))
+                temp["location"] = post.location
+                temp["status"] = post.status
                 datas.append(temp)
-            self.response.out.write(simplejson.dumps(datas))
+        self.response.out.write(simplejson.dumps(datas))
 
     def post(self):
+        post_type = []
+        if self.request.get("need_transpo"):
+            post_type.append(self.request.get("need_transpo"))
+        if self.request.get("need_people"):
+            post_type.append(self.request.get("need_people"))
+        if self.request.get("need_goods"):
+            post_type.append(self.request.get("need_goods"))
+        if self.request.get("need_needs"):
+            post_type.append(self.request.get("need_needs"))
+        if self.request.get("have_transpo"):
+            post_type.append(self.request.get("have_transpo"))
+        if self.request.get("have_people"):
+            post_type.append(self.request.get("have_people"))
+        if self.request.get("have_goods"):
+            post_type.append(self.request.get("have_goods"))
+        if self.request.get("have_needs"):
+            post_type.append(self.request.get("have_needs"))
+
         data = {
             "name": self.request.get("name"),
             "email": self.request.get("email"),
@@ -1352,6 +1419,10 @@ class PostsHandler(BaseHandler):
             "facebook": self.request.get("facebook"),
             "phone": self.request.get("phone"),
             "message": self.request.get("message"),
+            "post_type": post_type,
+            "expiry": datetime.datetime.strptime(self.request.get("expiry"), "%Y-%m-%d"), #1992-10-20
+            "location": self.request.get("location"),
+            "status": "ACTIVE"
         }
 
         add_post(data)

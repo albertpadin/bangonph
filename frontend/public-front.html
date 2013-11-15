@@ -128,19 +128,19 @@
                   <span>{% if location.affected_count_text %}{{ location.affected_count_text }}{% else %}{% if location.affected_count %}{{ location.affected_count|with_commas }} Families Affected{% else %}Gathering Data{% endif %}{% endif %}</span>
                 </div>
                 <div class="status-entry">
-                  <img class="icon" src="/img/icon-communication.png" alt="No Communication">
+                  <img class="icon" src="/img/icon-communication.png" alt="Communication">
                   <span>{% if location.status.communication %}{{ location.status.communication }}{% else %}Gathering Data{% endif %}</span>
                 </div>
                 <div class="status-entry">
-                  <img class="icon" src="/img/icon-water.png" alt="No Water">
+                  <img class="icon" src="/img/icon-water.png" alt="Water">
                   <span>{% if location.status.water %}{{ location.status.water }}{% else %}Gathering Data{% endif %}</span>
                 </div>
                 <div class="status-entry">
-                  <img class="icon" src="/img/icon-electricity.png" alt="No Electricity">
+                  <img class="icon" src="/img/icon-electricity.png" alt="Electricity">
                   <span>{% if location.status.power %}{{ location.status.power }}{% else %}Gathering Data{% endif %}</span>
                 </div>
                 <div class="status-entry">
-                  <img class="icon" src="/img/icon-medicine.png" alt="No Medicine">
+                  <img class="icon" src="/img/icon-medicine.png" alt="Medicine">
                   <span>{% if location.status.medicines %}{{ location.status.medicines }}{% else %}Gathering Data{% endif %}</span>
                 </div>
                 <div class="status-entry">
@@ -148,8 +148,16 @@
                   <span>{% if location.status.cloths %}{{ location.status.cloths }}{% else %}Gathering Data{% endif %}</span>
                 </div>
                 <div class="status-entry">
-                  <img class="icon" src="/img/icon-food.png" alt="No Food">
+                  <img class="icon" src="/img/icon-food.png" alt="Food">
                   <span>{% if location.status.food %}{{ location.status.food }}{% else %}Gathering Data{% endif %}</span>
+                </div>
+                <div class="status-entry">
+                  <img class="icon" src="/img/icon-shelter.png" alt="Food">
+                  <span>{% if location.status.shelter %}{{ location.status.shelter }}{% else %}Gathering Data{% endif %}</span>
+                </div>
+                <div class="status-entry">
+                  <img class="icon" src="/img/icon-others.png" alt="Food">
+                  <span>{% if location.status.shelter %}{{ location.status.shelter }}{% else %}Gathering Data{% endif %}</span>
                 </div>
               </div>
               <div class="clear"></div>
@@ -212,19 +220,19 @@
                   <span>{% if location.affected_count_text %}{{ location.affected_count_text }}{% else %}{% if location.affected_count %}{{ location.affected_count|with_commas }} Families Affected{% else %}Gathering Data{% endif %}{% endif %}</span>
                 </div>
                 <div class="status-entry">
-                  <img class="icon" src="/img/icon-communication.png" alt="No Communication">
+                  <img class="icon" src="/img/icon-communication.png" alt="Communication">
                   <span>{% if location.status.communication %}{{ location.status.communication }}{% else %}Gathering Data{% endif %}</span>
                 </div>
                 <div class="status-entry">
-                  <img class="icon" src="/img/icon-water.png" alt="No Water">
+                  <img class="icon" src="/img/icon-water.png" alt="Water">
                   <span>{% if location.status.water %}{{ location.status.water }}{% else %}Gathering Data{% endif %}</span>
                 </div>
                 <div class="status-entry">
-                  <img class="icon" src="/img/icon-electricity.png" alt="No Electricity">
+                  <img class="icon" src="/img/icon-electricity.png" alt="Electricity">
                   <span>{% if location.status.water %}{{ location.status.power }}{% else %}Gathering Data{% endif %}</span>
                 </div>
                 <div class="status-entry">
-                  <img class="icon" src="/img/icon-medicine.png" alt="No Medicine">
+                  <img class="icon" src="/img/icon-medicine.png" alt="Medicine">
                   <span>{% if location.status.medicines %}{{ location.status.medicines }}{% else %}Gathering Data{% endif %}</span>
                 </div>
                 <div class="status-entry">
@@ -232,7 +240,7 @@
                   <span>{% if location.status.cloths %}{{ location.status.cloths }}{% else %}Gathering Data{% endif %}</span>
                 </div>
                 <div class="status-entry">
-                  <img class="icon" src="/img/icon-food.png" alt="No Food">
+                  <img class="icon" src="/img/icon-food.png" alt="Food">
                   <span>{% if location.status.food %}{{ location.status.food }}{% else %}Gathering Data{% endif %}</span>
                 </div>
               </div>

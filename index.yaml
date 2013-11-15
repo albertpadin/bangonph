@@ -20,6 +20,18 @@ indexes:
   - name: client
   - name: expires
 
+- kind: DistributionRevision
+  properties:
+  - name: name
+  - name: created
+    direction: desc
+
+- kind: LocationRevisionChanges
+  properties:
+  - name: name
+  - name: created
+    direction: desc
+
 - kind: Post
   properties:
   - name: post_type

@@ -55,20 +55,6 @@ class Distributor(ndb.Model):
 
         return details
 
-class DistributionRevision(ndb.Model):
-    created = ndb.DateTimeProperty(auto_now_add=True)
-    updated = ndb.DateTimeProperty(auto_now=True)
-    date_of_distribution = ndb.DateTimeProperty()
-    contact = ndb.StringProperty()
-    destinations = ndb.KeyProperty()
-    supply_goal = ndb.JsonProperty()
-    actual_supply = ndb.JsonProperty()
-    images = ndb.JsonProperty()
-    status = ndb.StringProperty()
-    info = ndb.TextProperty()
-    featured_photo = ndb.StringProperty()
-    description = ndb.TextProperty()
-
 class LocationRevisionChanges(ndb.Model):
     created = ndb.DateTimeProperty(auto_now_add=True)
     updated = ndb.DateTimeProperty(auto_now=True)
@@ -201,6 +187,7 @@ class DistributionRevision(ndb.Model):
     description = ndb.StringProperty()
     contacts = ndb.StringProperty()
     needs = ndb.StringProperty()
+    date = ndb.StringProperty()
 
 class Distribution(ndb.Model):
     created = ndb.DateTimeProperty(auto_now_add=True)

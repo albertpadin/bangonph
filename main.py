@@ -677,12 +677,14 @@ class PublicLocationEditPage(BaseHandler):
             distribution_revision.fb_firstname = self.public_user.fb_firstname
             distribution_revision.fb_middlename = self.public_user.fb_middlename
             distribution_revision.fb_name = self.public_user.fb_name
+            distribution_revision.name = self.request.get("page_title")
             distribution_revision.relief_name = self.request.get("relief_name")
             distribution_revision.destination = self.request.get("destination")
             distribution_revision.num_of_packs = int(self.request.get("packs"))
             distribution_revision.description = self.request.get("description")
             distribution_revision.contacts = self.request.get("contacts")
             distribution_revision.needs = self.request.get("needs")
+            distribution_revision.date = self.request.get("date")
             distribution_revision.put()
             self.redirect("/locations/" + self.request.get("page_title") + "/edit?success=Successfully+updated.")
 

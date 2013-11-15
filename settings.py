@@ -5,7 +5,7 @@ SETTINGS = {
     "start_year": 2012,
     "enable_fb_login": True,
     "fb_id": "759672407382550",
-    "fb_secret": "220b69e931bc5790ada6b858a6cc68a7",
+    "fb_secret": "",
     "fb_permissions": ["email"],
     "fb_app_access_token": "",
     "pubnub_subscriber_token": "",
@@ -16,7 +16,7 @@ SETTINGS = {
 }
 
 SECRET_SETTINGS = {
-    "fb_secret": "",
+    "fb_secret": "220b69e931bc5790ada6b858a6cc68a7",
     "fb_app_access_token": "",
     "pubnub_secret_key": "",
     "password_salt": "ENTER_SALT_HERE",  # Only set once. Do NOT change. If changed, users will not be able to login

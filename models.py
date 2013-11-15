@@ -116,6 +116,7 @@ class Location(ndb.Model):
     images = ndb.JsonProperty()
     hash_tag = ndb.StringProperty(repeated=True)
     featured = ndb.BooleanProperty(default=False)
+    missing_person = ndb.IntegerProperty()
 
     def to_object(self, extended=""):
         details = {}
@@ -137,6 +138,7 @@ class Location(ndb.Model):
         details["relief_aid_status"] = self.relief_aid_status
         details["packs_needed"] = '20,000'
         details["packs_provided"] = '5,000'
+        details["missing_person"] = self.missing_person
         return details
 
 

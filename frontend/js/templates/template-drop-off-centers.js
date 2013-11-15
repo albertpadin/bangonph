@@ -46,6 +46,10 @@ var DropOffCenterView = Backbone.View.extend({
       success: function(datas) {
         $(".loading-message").fadeOut("fast");
         self.render(datas.toJSON());
+      },
+      error: function(datas) {
+        $(".loading-message").fadeOut("fast");
+        $(".failed-message").fadeIn("fast");
       }
     });
   },
@@ -117,11 +121,17 @@ var EditDropOffCenter = Backbone.View.extend({
   },
   dropoff: function(id) {
     var self = this;
+    $(".loading-message").show();
     var collection = new DropOffCollection();
     collection.fetch({
       data: { id_edit : id },
       success: function(datas) {
+        $(".loading-message").fadeOut("fast");
         self.render(datas.toJSON());
+      },
+      error: function(datas) {
+        $(".loading-message").fadeOut("fast");
+        $(".failed-message").fadeIn("fast");
       }
     });
   },

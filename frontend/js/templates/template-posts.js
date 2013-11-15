@@ -31,6 +31,10 @@ var PostsView = Backbone.View.extend({
       success: function(datas) {
         $(".loading-message").fadeOut("fast");
         self.render(datas.toJSON());
+      },
+      error: function(datas) {
+        $(".loading-message").fadeOut("fast");
+        $(".failed-message").fadeIn("fast");
       }
     });
   }

@@ -97,6 +97,7 @@ class LocationRevision(ndb.Model):
     name = ndb.StringProperty()
     death = ndb.JsonProperty() # ndb.IntegerProperty()
     affected = ndb.JsonProperty() # ndb.IntegerProperty()
+    missing_person = ndb.JsonProperty()
     status = ndb.JsonProperty() # ndb.JsonProperty()
 
 class Location(ndb.Model):

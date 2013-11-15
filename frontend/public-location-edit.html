@@ -1,0 +1,97 @@
+{% extends 'frontend/public-index.html' %}
+
+{% block ogdetails %}
+
+    <meta property="og:image" content="{{ location.featured_photo }}"/>
+    <meta property="og:title" content="{{ page_title }}"/>
+    <meta property="og:url" content="{{ current_base_url }}"/>
+
+{% endblock %}
+
+
+{% block content %}
+  <div class="jumbotron">
+    <div class="container">
+      <h1>{{ page_title }}</h1>
+      <p>{% if location.description %}{{ location.description }}{% else %}Super Typhoon Yolanda hit the Philippines and left several towns devastated. Affecting more than 2 million people and killing over 2,000 and still counting. This is the live and developing story of how we rise again. <span style="font-weight: bold; color: #E02A2A;">Together.</span>{% endif %}</p>
+    </div>
+  </div>
+
+    <div class="container">
+      <!-- Example row of columns -->
+      <div class="row">
+          <div>
+            <h5>Logged in as: {{ login_user }} (Facebook) <a href="/logout">Logout?</a></h5>
+            <h4>Update status of this location</h4>
+            <form method="post">
+            <input type="hidden" name="status" value="status"/>
+            <input type="hidden" name="page_title" value="{{ page_title }}"/>
+
+            <table class="table table-hover">
+              <thead>
+                <tr>
+                  <th colspan="5">{{ page_title }}</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Deaths</td>
+                  <td><input required="requried" name="death_count" onblur="if(isNaN(this.value)){ alert('Please remove non-numeric value.'); this.focus(); return false; }" class="form-control" type="text" value="{% if location.death_count_text %}{{ location.death_count_text }}{% else %}{% if location.death_count %}{{ location.death_count|with_commas }}{% else %}Gathering Data{% endif %}{% endif %}" placeholder="Numberic value only"/></td>
+                  <td><input name="death_source" class="form-control" type="text" placeholder="Source"/></td>
+                </tr>
+                <tr>
+                  <td>Families Affected</td>
+                  <td><input required="requried" name="affected_count" onblur="if(isNaN(this.value)){ alert('Please remove non-numeric value.'); this.value=''; this.focus(); return false; }" class="form-control" type="text" value="{% if location.affected_count_text %}{{ location.affected_count_text }}{% else %}{% if location.affected_count %}{{ location.affected_count|with_commas }}{% else %}Gathering Data{% endif %}{% endif %}" placeholder="Numberic value only"/></td>
+                  <td><input name="affected_source" class="form-control" type="text" placeholder="Source"/></td>
+                </tr>
+                <tr>
+                  <th colspan="5">Info Status</th>
+                </tr>
+                <tr>
+                  <td>Communication</td>
+                  <td><input name="status_communication" class="form-control" type="text" value="{% if location.status.communication %}{{ location.status.communication }}{% else %}Gathering Data{% endif %}" placeholder="Status"/></td>
+                </tr>
+                <tr>
+                  <td>Water</td>
+                  <td><input name="status_water" class="form-control" type="text" value="{% if location.status.water %}{{ location.status.water }}{% else %}Gathering Data{% endif %}" placeholder="Status"/></td>
+                </tr>
+                <tr>
+                  <td>Power</td>
+                  <td><input name="status_power" class="form-control" type="text" value="{% if location.status.power %}{{ location.status.power }}{% else %}Gathering Data{% endif %}" placeholder="Status"/></td>
+                </tr>
+                <tr>
+                  <td>Medicines</td>
+                  <td><input name="status_medicines" class="form-control" type="text" value="{% if location.status.medicine %}{{ location.status.medicine }}{% else %}Gathering Data{% endif %}" placeholder="Status"/></td>
+                </tr>
+                <tr>
+                  <td>Food</td>
+                  <td><input name="status_food" class="form-control" type="text" value="{% if location.status.food %}{{ location.status.food }}{% else %}Gathering Data{% endif %}" placeholder="Status"/></td>
+                </tr>
+                <tr>
+                  <td>Cloths</td>
+                  <td><input name="status_cloths" class="form-control" type="text" value="{% if location.status.clothes %}{{ location.status.clothes }}{% else %}Gathering Data{% endif %}" placeholder="Status"/></td>
+                </tr>
+              </tbody>
+            </table>
+            <button type="submit" class="btn btn-default">Submit</button>
+            <form>
+          </div>
+      </div>
+    </div>
+    <br/><br/>
+{% endblock %}
+{% block customcss %}
+<link rel="stylesheet" href="/css/jquery.bxslider.css">
+{% endblock %}
+{% block bottomjs %}
+  <script src="/js/jquery.bxslider.min.js"></script>
+    <script src="/js/jquery.easing.1.3.js"></script>
+    <script src="/js/jquery.fitvids.js"></script>
+    <script type="text/javascript">
+    $('.bxslider').bxSlider({
+      pagerCustom: '#bx-pager',
+      adaptiveHeight: true,
+      mode: 'fade'
+    });
+    </script>
+{% endblock %}

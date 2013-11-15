@@ -31,6 +31,7 @@ var Router = Backbone.Router.extend({
 
         "posts" : "renderPostsPage",
         "post/new" : "renderAddPostPage",
+        "post/edit/:id" : "renderEditPostPage",
 
         "*default" : "defaultpage"
     },
@@ -129,6 +130,11 @@ var Router = Backbone.Router.extend({
     },
     renderAddPostPage: function() {
       addPost.render();
+      addPost.locations();
+    },
+    renderEditPostPage: function(id) {
+      editPost.render();
+      editPost.post(id);
     }
     
 });
@@ -163,6 +169,7 @@ var subscribersView = new SubscribersView();
 
 var postsView = new PostsView();
 var addPost = new AddPost();
+var editPost = new EditPost();
 
 var router = new Router();
 Backbone.history.start();

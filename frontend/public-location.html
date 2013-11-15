@@ -19,6 +19,8 @@
 
     <div class="container">
       <!-- Example row of columns -->
+      <a href="{{ fb_login_url }}" class="btn btn-info">Update status of this location</a>
+      <br/><br/>
       <div class="row">
           <div class="col-lg-8 col-md-8">
             <div id="campaign-content-wrap">
@@ -136,7 +138,6 @@
 
             <br/>
             <h4>Still Gathering Data on Relief Efforts</h4>
-
 
             <!-- <div class="side-wrap">
               <div class="side-head ongoing">
@@ -351,6 +352,30 @@
 
             <img class="fix-width" src='/img/bangonph-ad1.png' title="Volunteer at #BangonPH" alt="Volunteer at #BangonPH" />
             <br /><br />
+
+            <h4>Location Status Updates</h4>
+            <div style="overflow-y: scroll; height: 300px; border: 1px solid #e2e2e2;">
+              {% if status_changes %}
+                {% for user in status_changes %}
+                  <div style="padding: 5px;">
+                    <div style="float: left">
+                      <img style="width: 40px; height: 40px;" src="http://graph.facebook.com/{{ user.fb_id }}/picture?small"/>
+                    </div>
+                    <div style="float: left; width: 260px;">
+                      <label>{{ user.fb_name }}</label>
+                      <p>Date: {{ user.created|to_date }}</p>
+                      <p>Updates:
+                        {% for stat in user.status %}
+                          <span class="badge">{{ stat }}</span>
+                        {% endfor %}
+                      </p>
+                    </div>
+                  </div>
+                {% endfor %}
+              {% endif %}
+            </div>
+
+            <br/><br/>
             <hr />
             <h4>Subscribe:</h4>
             

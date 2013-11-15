@@ -2454,7 +2454,7 @@ class APIPostsHandler(APIBaseHandler):
 
 
 class APIPostSandbox(APIBaseHandler):
-def get(self, instance_id=None):
+    def get(self, instance_id=None):
         resp = API_RESPONSE.copy()
         resp["method"] = "get"
         failed = False
@@ -2518,7 +2518,7 @@ def get(self, instance_id=None):
             resp["method"] = "edit"
             exist = Post.Post.get_by_id(long(instance_id))
             if exist:
-                post = add_post(data, instance_id)
+                post = add_mock_post(data, instance_id)
                 if post:
                     resp["description"] = "Successfully edited the instance"
                     resp["data"] = post.to_object()
@@ -2543,7 +2543,6 @@ def get(self, instance_id=None):
         if instance_id:
             post = Post.get_by_id(long(instance_id))
             if post:
-                post.key.delete()
                 resp["description"] = "Successfully deleted the instance"
             else:
                 resp['response'] = "invalid_instance"

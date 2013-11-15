@@ -41,12 +41,13 @@
                 </tr>
                 <tr>
                   <td>Families Affected</td>
-                  <td><input required="requried" name="affected_count" onblur="if(isNaN(this.value)){ alert('Please remove non-numeric value.'); this.value=''; this.focus(); return false; }" class="form-control" type="text" value="{% if location.affected_count_text %}{{ location.affected_count_text }}{% else %}{% if location.affected_count %}{{ location.affected_count|with_commas }}{% else %}Gathering Data{% endif %}{% endif %}" placeholder="Numberic value only"/></td>
+                  <td><input required="requried" name="affected_count" onblur="if(isNaN(this.value)){ alert('Please remove non-numeric value.'); this.focus(); return false; }" class="form-control" type="text" value="{% if location.affected_count_text %}{{ location.affected_count_text }}{% else %}{% if location.affected_count %}{{ location.affected_count|with_commas }}{% else %}Gathering Data{% endif %}{% endif %}" placeholder="Numberic value only"/></td>
                   <td><input name="affected_source" class="form-control" type="text" placeholder="Source"/></td>
                 </tr>
                 <tr>
                   <td>Missing Persons</td>
-                  <td><input required="requried" name="missing_person" onblur="if(isNaN(this.value)){ alert('Please remove non-numeric value.'); this.value=''; this.focus(); return false; }" class="form-control" type="text" value="{% if location.missing_person %}{{ location.missing_person|with_commas }}{% else %}Gathering Data{% endif %}" placeholder="Numberic value only"/></td>
+                  <td><input required="requried" name="missing_person" onblur="if(isNaN(this.value)){ alert('Please remove non-numeric value.'); this.focus(); return false; }" class="form-control" type="text" value="{% if location.missing_person %}{{ location.missing_person|with_commas }}{% else %}Gathering Data{% endif %}" placeholder="Numberic value only"/></td>
+                  <td><input name="missing_person_source" class="form-control" type="text" placeholder="Source"/></td>
                 </tr>
 
                 <tr>

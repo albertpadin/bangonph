@@ -2334,6 +2334,7 @@ class APIPostsHandler(APIBaseHandler):
 
 class APIDropOffCentersHandler(APIBaseHandler):
     def get(self, instance_id=None):
+        resp = API_RESPONSE.copy()
         centers_json = []
         failed = False
         if not instance_id:
@@ -2385,6 +2386,7 @@ class APIDropOffCentersHandler(APIBaseHandler):
 
     @oauthed_required
     def post(self, instance_id=None):
+        resp = API_RESPONSE.copy()
         data = {
             "drop_off_locations" : self.request.get("drop_off_locations").split(" "),
             "distributor" : self.request.get("distributor").split(", "),

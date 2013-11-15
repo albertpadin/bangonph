@@ -608,15 +608,6 @@ class PublicLocationEditPage(BaseHandler):
 
                 location_revision.put()
 
-            status = {
-                "power": self.request.get("status_power"),
-                "water": self.request.get("status_water"),
-                "medicines": self.request.get("status_medicines"),
-                "clothes": self.request.get("status_cloths"),
-                "communication": self.request.get("status_communication"),
-                "food": self.request.get("status_food")
-            }
-
             user_changes = LocationRevisionChanges()
             user_changes.fb_email = self.public_user.fb_email
             user_changes.fb_id = self.public_user.fb_id
@@ -630,6 +621,15 @@ class PublicLocationEditPage(BaseHandler):
 
             location = Location.get_by_id(self.request.get("page_title"))
             if location:
+                status = {
+                    "power": self.request.get("status_power"),
+                    "water": self.request.get("status_water"),
+                    "medicine": self.request.get("status_medicines"),
+                    "clothes": self.request.get("status_cloths"),
+                    "communication": self.request.get("status_communication"),
+                    "food": self.request.get("status_food")
+                }
+
                 datas_changes = []
                 if location.death_count != int(self.request.get("death_count")):
                     datas_changes.append("death count")
@@ -642,8 +642,8 @@ class PublicLocationEditPage(BaseHandler):
                         datas_changes.append("power")
                     if status["water"] != location.status["water"]:
                         datas_changes.append("water")
-                    if status["medicines"] != location.status["medicines"]:
-                        datas_changes.append("medicine")
+                    # if status["medicine"] != location.status["medicine"]:
+                    #     datas_changes.append("medicine")
                     if status["clothes"] != location.status["clothes"]:
                         datas_changes.append("clothes")
                     if status["communication"] != location.status["communication"]:

@@ -41,12 +41,12 @@
                 </tr>
                 <tr>
                   <td>Families Affected Count</td>
-                  <td><input required="requried" name="affected_count" onblur="if(isNaN(this.value)){ alert('Please remove non-numeric value.'); this.focus(); return false; }" class="form-control" type="text" value="{% if location.affected_count %}{{ location.affected_count }}{% endif %}" placeholder="Numeric value only"/></td>
+                  <td><input required="required" name="affected_count" onblur="if(isNaN(this.value)){ alert('Please remove non-numeric value.'); this.focus(); return false; }" class="form-control" type="text" value="{% if location.affected_count %}{{ location.affected_count }}{% endif %}" placeholder="Numeric value only"/></td>
                   <td><input name="affected_source" class="form-control" type="hidden" placeholder="Source"/></td>
                 </tr>
                 <tr>
                   <td>Missing Persons Count</td>
-                  <td><input required="requried" name="missing_person" onblur="if(isNaN(this.value)){ alert('Please remove non-numeric value.'); this.focus(); return false; }" class="form-control" type="text" value="{% if location.missing_person %}{{ location.missing_person }}{% endif %}" placeholder="Numeric value only"/></td>
+                  <td><input required="required" name="missing_person" onblur="if(isNaN(this.value)){ alert('Please remove non-numeric value.'); this.focus(); return false; }" class="form-control" type="text" value="{% if location.missing_person %}{{ location.missing_person }}{% endif %}" placeholder="Numeric value only"/></td>
                   <td><input name="missing_person_source" class="form-control" type="hidden" placeholder="Source"/></td>
                 </tr>
                 <tr>
@@ -104,8 +104,8 @@
                 </tr>
               </tbody>
             </table>
-            <button type="submit" class="btn btn-default">Submit</button>
-            <a href="locations/{{ location_id }}" class="btn btn-default">Cancel</a>
+            <a href=".../locations/{{ location_id }}" class="btn btn-default">Cancel</a>
+            <button type="submit" class="btn btn-primary">Submit</button>
             </form>
           </div>
           <hr/>
@@ -163,8 +163,8 @@
                   </tr>
                 </tbody>
               </table>
-              <button class="btn btn-default" type="submit">Submit</button>
-              <a href="locations/{{ location_id }}" class="btn btn-default">Cancel</a>
+              <a href=".../locations/{{ location_id }}" class="btn btn-default">Cancel</a>
+              <button class="btn btn-primary" type="submit">Submit</button>
             </form>
           </div>
       </div>

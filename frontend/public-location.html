@@ -217,17 +217,15 @@
                         <tbody>
                           {% if distribution_changes %}
                             {% for changes in distribution_changes %}
-                            {% if changes.relief_name != None or changes.relief_name != "None" %}
                             <tr>
-                              <td>{{ changes.relief_name }}</td>
-                              <td>{{ changes.destination }}</td>
-                              <td>{{ changes.num_of_packs }}</td>
-                              <td>{{ changes.description }}</td>
-                              <td>{{ changes.contacts }}</td>
-                              <td>{{ changes.needs }}</td>
-                              <td>{{ changes.date }}</td>
+                              <td>{% if changes.relief_name != None %}{{ changes.relief_name }}{% endif %}</td>
+                              <td>{% if changes.relief_name != None %}{{ changes.destination }}{% endif %}</td>
+                              <td>{% if changes.relief_name != None %}{{ changes.num_of_packs }}{% endif %}</td>
+                              <td>{% if changes.relief_name != None %}{{ changes.description }}{% endif %}</td>
+                              <td>{% if changes.relief_name != None %}{{ changes.contacts }}{% endif %}</td>
+                              <td>{% if changes.relief_name != None %}{{ changes.needs }}{% endif %}</td>
+                              <td>{% if changes.relief_name != None %}{{ changes.date }}{% endif %}</td>
                             </tr>
-                            {% endif %}
                             {% endfor %}
                           {% else %}
                           <tr>

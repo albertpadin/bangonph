@@ -67,6 +67,7 @@ class Location(ndb.Model):
     affected_count = ndb.IntegerProperty()
     affected_count_text = ndb.StringProperty()
     status_board = ndb.StringProperty()
+    relief_aid_status = ndb.StringProperty(default="Unknown")
     needs = ndb.JsonProperty()
     status = ndb.JsonProperty()
     images = ndb.JsonProperty()
@@ -90,6 +91,7 @@ class Location(ndb.Model):
         details["status"] = self.status
         details["images"] = self.images
         details["hash_tag"] = self.hash_tag
+        details["relief_aid_status"] = self.relief_aid_status
         details["packs_needed"] = '20,000'
         details["packs_provided"] = '5,000'
         return details

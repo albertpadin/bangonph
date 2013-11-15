@@ -596,6 +596,7 @@ class LocationHandler(BaseHandler):
                 temp = {}
                 temp["id"] = location.key.id()
                 temp["name"] = location.name
+                temp["relief_aid_status"] = location.relief_aid_status
                 temp["latlong"] = location.latlong
                 temp["featured_photo"] = location.featured_photo
                 temp["death_count"] = location.death_count
@@ -617,6 +618,7 @@ class LocationHandler(BaseHandler):
                 temp = {}
                 temp["id"] = location.key.id()
                 temp["name"] = location.name
+                temp["relief_aid_status"] = location.relief_aid_status
                 temp["latlong"] = location.latlong
                 temp["featured_photo"] = location.featured_photo
                 temp["death_count"] = location.death_count
@@ -690,6 +692,7 @@ class LocationHandler(BaseHandler):
                     location.images = image_data
 
                 location.name = self.request.get("name")
+                location.relief_aid_status = self.request.get("relief_aid_status")
                 location.latlong = self.request.get("latlong")
                 location.featured_photo = self.request.get("featured_photo")
                 location.death_count = int(self.request.get("death_count"))
@@ -763,6 +766,7 @@ class LocationHandler(BaseHandler):
 
             data = {
                 "name": self.request.get("name"),
+                "relief_aid_status": self.request.get("relief_aid_status"),
                 "needs": needs, # json format
                 "centers": self.request.get_all("centers"),
                 "latlong": self.request.get("latlong"),

@@ -1,6 +1,19 @@
 {% extends 'frontend/public-index.html' %}
 
 {% block ogdetails %}<meta property="og:image" content="http://www.bangonph.com/img/bangon-ph-black.png"/>
+{% if post.post_type == "NEED" %}
+<meta property="og:image" content="http://www.bangonph.com/img/og-image-donation.png"/>
+{% else %}
+<meta property="og:image" content="http://www.bangonph.com/img/og-image-needs-help.png"/>
+{% endif %}
+
+{% if post.post_type == "NEED" %}
+<meta property="og:title" content="{{ post.name }} NEEDS Help!"/>
+{% else %}
+<meta property="og:title" content="{{ post.name }} OFFERRED to Help!"/>
+{% endif %}
+
+    <meta property="og:url" content="{{ current_base_url }}"/>
 {% endblock %}
 
 

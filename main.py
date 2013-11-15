@@ -706,7 +706,6 @@ class PublicLocationPage(BaseHandler):
         path_redirect = self.request.path + "/edit"
         self.tv["fb_login_url"] = facebook.generate_login_url(path_redirect, self.uri_for('www-publicfblogin'))
 
-        logging.critical(self.public_user.name)
         user_changes = LocationRevisionChanges.query(LocationRevisionChanges.name == location.key.id()).order(-LocationRevisionChanges.created).fetch(10)
         if user_changes:
             self.tv["status_changes"] = user_changes

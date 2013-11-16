@@ -555,63 +555,52 @@ class PublicLocationEditPage(BaseHandler):
     def post(self, *args, **kwargs):
         if self.request.get("status") == "status":
             location_revision = LocationRevision()
-            if location_revision:
-                temp = {}
-                datas_death = []
-                if location_revision.death:
-                    temp["death_count"] = self.request.get("death_count")
-                    temp["updated"] = str(datetime.datetime.now())
-                    location_revision.death.append(temp)
-                else:
-                    temp["death_count"] = self.request.get("death_count")
-                    temp["updated"] = str(datetime.datetime.now())
-                    datas_death.append(temp)
-                    location_revision.death = datas_death
+            temp = {}
+            datas_death = []
 
-                datas_affected = []
-                if location_revision.affected:
-                    temp["affected_count"] = self.request.get("affected_count")
-                    temp["updated"] = str(datetime.datetime.now())
-                    location_revision.affected.append(temp)
-                else:
-                    temp["affected_count"] = self.request.get("affected_count")
-                    temp["updated"] = str(datetime.datetime.now())
-                    datas_affected.append(temp)
-                    location_revision.affected = datas_affected
+            temp["death_count"] = self.request.get("death_count")
+            temp["updated"] = str(datetime.datetime.now())
+            datas_death.append(temp)
+            location_revision.death = datas_death
 
-                datas_missing = []
-                if location_revision.missing_person:
-                    temp["missing_person"] = self.request.get("missing_person")
-                    temp["updated"] = str(datetime.datetime.now())
-                    location_revision.missing_person.append(temp)
-                else:
-                    temp["missing_person"] = self.request.get("missing_person")
-                    temp["updated"] = str(datetime.datetime.now())
-                    datas_missing.append(temp)
-                    location_revision.missing_person = datas_missing
+            datas_affected = []
 
-                datas_status = []
-                if location_revision.status:
-                    temp["communication"] = self.request.get("status_communication")
-                    temp["water"] = self.request.get("status_water")
-                    temp["power"] = self.request.get("status_power")
-                    temp["medicines"] = self.request.get("status_medicines")
-                    temp["food"] = self.request.get("status_food")
-                    temp["cloths"] = self.request.get("status_cloths")
-                    temp["updated"] = str(datetime.datetime.now())
-                    location_revision.status.append(temp)
-                else:
-                    temp["communication"] = self.request.get("status_communication")
-                    temp["water"] = self.request.get("status_water")
-                    temp["power"] = self.request.get("status_power")
-                    temp["medicines"] = self.request.get("status_medicines")
-                    temp["food"] = self.request.get("status_food")
-                    temp["cloths"] = self.request.get("status_cloths")
-                    temp["updated"] = str(datetime.datetime.now())
-                    datas_status.append(temp)
-                    location_revision.status = datas_status
+            temp["affected_count"] = self.request.get("affected_count")
+            temp["updated"] = str(datetime.datetime.now())
+            datas_affected.append(temp)
+            location_revision.affected = datas_affected
 
-                location_revision.put()
+            datas_missing = []
+
+            temp["missing_person"] = self.request.get("missing_person")
+            temp["updated"] = str(datetime.datetime.now())
+            datas_missing.append(temp)
+            location_revision.missing_person = datas_missing
+
+            datas_status = []
+
+            temp["communication"] = self.request.get("status_communication")
+            temp["water"] = self.request.get("status_water")
+            temp["power"] = self.request.get("status_power")
+            temp["medicines"] = self.request.get("status_medicines")
+            temp["food"] = self.request.get("status_food")
+            temp["cloths"] = self.request.get("status_cloths")
+            temp["updated"] = str(datetime.datetime.now())
+            datas_status.append(temp)
+            location_revision.status = datas_status
+
+            datas_requirements = []
+
+            temp["food"] = int(self.request.get("requirements_food"))
+            temp["hygiene"] = int(self.request.get("requirements_hygiene"))
+            temp["medicine"] = int(self.request.get("requirements_medicine"))
+            temp["medical_mission"] = int(self.request.get("requirements_medical_mission"))
+            temp["shelter"] = int(self.request.get("requirements_shelter"))
+            temp["updated"] = str(datetime.datetime.now())
+            datas_requirements.append(temp)
+            location_revision.requirements = datas_requirements
+
+            location_revision.put()
 
             user_changes = LocationRevisionChanges()
             user_changes.fb_email = self.public_user.fb_email
@@ -633,6 +622,13 @@ class PublicLocationEditPage(BaseHandler):
                     "cloths": self.request.get("status_cloths"),
                     "communication": self.request.get("status_communication"),
                     "food": self.request.get("status_food")
+                }
+                requirements = {
+                    "food": int(self.request.get("requirements_food")),
+                    "hygiene": int(self.request.get("requirements_hygiene")),
+                    "medicine": int(self.request.get("requirements_medicine")),
+                    "medical_mission": int(self.request.get("requirements_medical_mission")),
+                    "shelter": int(self.request.get("requirements_shelter"))
                 }
 
                 datas_changes = []
@@ -664,6 +660,17 @@ class PublicLocationEditPage(BaseHandler):
                         datas_changes.append("Communication: " + location.status["communication"] + " >> " + status["communication"])
                     if status["food"] != location.status["food"]:
                         datas_changes.append("Food: " + location.status["food"] + " >> " + status["food"])
+                if location.requirements:
+                    if requirements["food"] != location.requirements["food"]:
+                        datas_changes.append("Food & Water: " + location.requirements["food"] + " >> " + requirements["food"])
+                    if requirements["hygiene"] != location.requirements["hygiene"]:
+                        datas_changes.append("Hygiene: " + location.requirements["hygiene"] + " >> " + requirements["hygiene"])
+                    if requirements["medicine"] != location.requirements["medicine"]:
+                        datas_changes.append("Medicine: " + location.requirements["medicine"] + " >> " + requirements["medicine"])
+                    if requirements["medical_mission"] != location.requirements["medical_mission"]:
+                        datas_changes.append("Medical Mission: " + location.requirements["medical_mission"] + " >> " + requirements["medical_mission"])
+                    if requirements["shelter"] != location.requirements["shelter"]:
+                        datas_changes.append("Shelter: " + location.requirements["shelter"] + " >> " + requirements["shelter"])
 
                 if self.request.get("source"):
                     datas_changes.append("Source/s: " + self.request.get('source'))
@@ -679,62 +686,69 @@ class PublicLocationEditPage(BaseHandler):
                 location.missing_person_text = self.request.get("missing_person_text")
                 location.status_board = self.request.get("status_board")
                 location.status = status
+                location.requirements = requirements
                 location.source = self.request.get("source")
                 location.put()
 
             self.redirect("/locations/" + self.request.get("page_title") + "/edit?success=Successfully+updated.")
 
         if self.request.get("status") == "reliefs":
-            distribution_revision = DistributionRevision()
-            distribution_revision.fb_email = self.public_user.fb_email
-            distribution_revision.fb_id = self.public_user.fb_id
-            distribution_revision.fb_access_token = self.public_user.fb_access_token
-            distribution_revision.fb_username = self.public_user.fb_username
-            distribution_revision.fb_lastname = self.public_user.fb_lastname
-            distribution_revision.fb_firstname = self.public_user.fb_firstname
-            distribution_revision.fb_middlename = self.public_user.fb_middlename
-            distribution_revision.fb_name = self.public_user.fb_name
-            distribution_revision.name = self.request.get("page_title")
-            distribution_revision.relief_name = self.request.get("relief_name")
-            distribution_revision.destination = self.request.get("destination")
-            distribution_revision.num_of_packs = int(self.request.get("packs"))
-            distribution_revision.description = self.request.get("description")
-            distribution_revision.contacts = self.request.get("contacts")
-            distribution_revision.needs = self.request.get("needs")
-            distribution_revision.date = self.request.get("date")
-            distribution_revision.put()
+            if self.request.get('relief_name'):
+                distribution_revision = DistributionRevision()
+                distribution_revision.fb_email = self.public_user.fb_email
+                distribution_revision.fb_id = self.public_user.fb_id
+                distribution_revision.fb_access_token = self.public_user.fb_access_token
+                distribution_revision.fb_username = self.public_user.fb_username
+                distribution_revision.fb_lastname = self.public_user.fb_lastname
+                distribution_revision.fb_firstname = self.public_user.fb_firstname
+                distribution_revision.fb_middlename = self.public_user.fb_middlename
+                distribution_revision.fb_name = self.public_user.fb_name
+                distribution_revision.name = self.request.get("page_title")
+                distribution_revision.relief_name = self.request.get("relief_name")
+                distribution_revision.destination = self.request.get("destination")
+                distribution_revision.num_of_packs = int(self.request.get("packs"))
+                distribution_revision.description = self.request.get("description")
+                distribution_revision.contacts = self.request.get("contacts")
+                distribution_revision.needs = self.request.get("needs")
+                distribution_revision.date = self.request.get("date")
+                distribution_revision.tag = self.request.get("tag")
+                distribution_revision.put()
 
-            user_changes = LocationRevisionChanges()
-            user_changes.fb_email = self.public_user.fb_email
-            user_changes.fb_id = self.public_user.fb_id
-            user_changes.fb_access_token = self.public_user.fb_access_token
-            user_changes.fb_username = self.public_user.fb_username
-            user_changes.fb_lastname = self.public_user.fb_lastname
-            user_changes.fb_firstname = self.public_user.fb_firstname
-            user_changes.fb_middlename = self.public_user.fb_middlename
-            user_changes.fb_name = self.public_user.fb_name
-            user_changes.name = self.request.get("page_title")
-            datas_changes = []
-            if self.request.get("relief_name"):
-                datas_changes.append("Relief Effort: " + distribution_revision.name)
-            if self.request.get("destination"):
-                datas_changes.append("Destination: " + distribution_revision.destination)
-            if self.request.get("packs"):
-                datas_changes.append("Packs: " + str(distribution_revision.packs))
-            if self.request.get("description"):
-                datas_changes.append("Description: " + distribution_revision.description)
-            if self.request.get("contacts"):
-                datas_changes.append("Contacts: " + distribution_revision.contacts)
-            if self.request.get("needs"):
-                datas_changes.append("Needs: " + distribution_revision.needs)
-            if self.request.get("date"):
-                datas_changes.append("Date: " + distribution_revision.date)
-            if self.request.get("source"):
-                datas_changes.append("Source: " + self.request.get('source'))
-            user_changes.status = datas_changes
-            user_changes.put()
+                user_changes = LocationRevisionChanges()
+                user_changes.fb_email = self.public_user.fb_email
+                user_changes.fb_id = self.public_user.fb_id
+                user_changes.fb_access_token = self.public_user.fb_access_token
+                user_changes.fb_username = self.public_user.fb_username
+                user_changes.fb_lastname = self.public_user.fb_lastname
+                user_changes.fb_firstname = self.public_user.fb_firstname
+                user_changes.fb_middlename = self.public_user.fb_middlename
+                user_changes.fb_name = self.public_user.fb_name
+                user_changes.name = self.request.get("page_title")
+                datas_changes = []
+                if self.request.get("relief_name"):
+                    datas_changes.append("Relief Effort: " + distribution_revision.name)
+                if self.request.get("destination"):
+                    datas_changes.append("Destination: " + distribution_revision.destination)
+                if self.request.get("packs"):
+                    datas_changes.append("Packs: " + str(distribution_revision.num_of_packs))
+                if self.request.get("description"):
+                    datas_changes.append("Description: " + distribution_revision.description)
+                if self.request.get("contacts"):
+                    datas_changes.append("Contacts: " + distribution_revision.contacts)
+                if self.request.get("needs"):
+                    datas_changes.append("Needs: " + distribution_revision.needs)
+                if self.request.get("date"):
+                    datas_changes.append("Date: " + distribution_revision.date)
+                if self.request.get("source"):
+                    datas_changes.append("Source: " + self.request.get('source'))
+                if self.request.get("tag"):
+                    datas_changes.append("Tag: " + str(distribution_revision.tag))
+                user_changes.status = datas_changes
+                user_changes.put()
 
-            self.redirect("/locations/" + self.request.get("page_title") + "/edit?success=Successfully+updated.")
+                self.redirect("/locations/" + self.request.get("page_title") + "/edit?success=Successfully+updated.")
+            else:
+                self.redirect("/locations/" + self.request.get("page_title") + "/edit?error=Please%20fill%20all%20required%20information.")
 
 class PublicLocationPage(BaseHandler):
     def get(self, location_id=None):

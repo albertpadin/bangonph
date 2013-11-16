@@ -13,7 +13,7 @@
   <div class="jumbotron">
       <div class="container">
         <h1>{{ page_title }}</h1>
-        <p>{% if location.description %}{{ location.description }}{% else %}Super Typhoon Yolanda hit the Philippines and left several towns devastated. Affecting more than 2 million people and killing over 4,362 and still counting. This is the live and developing story of how we rise again. <span style="font-weight: bold; color: #E02A2A;">Together.</span>{% endif %}</p>
+        <p>{% if location.description %}{{ location.description }}{% else %}We Need Your Help! Help the super typhoon Yolanda affected areas! Share information on your latest or planned relief drop here and let's get aid where it is needed the most!{% endif %}</p>
       </div>
     </div>
 
@@ -129,12 +129,12 @@
               
               <div class="status-group">
 
-              <h6>Relief Aid Status:</h6>
+              <h5>Relief Aid Status for 1 Week:</h5>
                 <div class="progress">
-                  <div class="progress-bar progress-bar-danger" role="progressbar" aria-valuenow="30" aria-valuemin="0" aria-valuemax="100" style="width: 30%">
-                    <span class="sr-only">Gathering data...</span>
-                  </div>
+                <div class="progress-bar progress-bar-danger" role="progressbar" {% if location.relief_aid_status == 'Unknown' %}aria-valuenow="1"{% else %}aria-valuenow="{{ location.relief_aid_status }}"{% endif %} aria-valuemin="0" aria-valuemax="100" {% if location.relief_aid_status == 'Unknown' %}style="width:1%"{% else %}style="width:{{ location.relief_aid_status }}%"{% endif %}>
+                  {% if location.relief_aid_status == 'Unknown' %}<span class="sr-only">Unknown... <a href="https://docs.google.com/a/sym.ph/forms/d/1cGWQuAbuIVogA-uO9tZPlR5HMGGYQH3_Yp96BoBS3ng/viewform" target="_blank" title='Contribute Information'>Have Info?</a></span>{% else %}<span class="sr-only">{{ location.relief_aid_status }}%  &nbsp;&nbsp;&nbsp;Have Info?</a></span>{% endif %}
                 </div>
+              </div>
 
                 <!-- div class="status-entry">
                 <img class="icon" src="/img/icon-box.png" alt="Packs">
@@ -210,6 +210,7 @@
                           <tr>
                             <th>Name</th>
                             <th>Destination (Specific)</th>
+                            <th>TAG</th>
                             <th># of Packs</th>
                             <th>Description</th>
                             <th>Contact Details</th>
@@ -220,15 +221,18 @@
                         <tbody>
                           {% if distribution_changes %}
                             {% for changes in distribution_changes %}
+                            {% if changes.relief_name %}
                             <tr>
-                              <td>{% if changes.relief_name != None %}{{ changes.relief_name }}{% endif %}</td>
-                              <td>{% if changes.relief_name != None %}{{ changes.destination }}{% endif %}</td>
-                              <td>{% if changes.relief_name != None %}{{ changes.num_of_packs }}{% endif %}</td>
-                              <td>{% if changes.relief_name != None %}{{ changes.description }}{% endif %}</td>
-                              <td>{% if changes.relief_name != None %}{{ changes.contacts }}{% endif %}</td>
-                              <td>{% if changes.relief_name != None %}{{ changes.needs }}{% endif %}</td>
-                              <td>{% if changes.relief_name != None %}{{ changes.date }}{% endif %}</td>
+                              <td>{% if changes.relief_name %}{{ changes.relief_name }}{% endif %}</td>
+                              <td>{% if changes.destination %}{{ changes.destination }}{% endif %}</td>
+                              <td>{% if changes.tag %}{{ changes.tag }}{% endif %}</td>
+                              <td>{% if changes.num_of_packs %}{{ changes.num_of_packs }}{% endif %}</td>
+                              <td>{% if changes.description %}{{ changes.description }}{% endif %}</td>
+                              <td>{% if changes.contacts %}{{ changes.contacts }}{% endif %}</td>
+                              <td>{% if changes.needs %}{{ changes.needs }}{% endif %}</td>
+                              <td>{% if changes.date %}{{ changes.date }}{% endif %}</td>
                             </tr>
+                            {% endif %}
                             {% endfor %}
                           {% else %}
                           <tr>
@@ -283,29 +287,7 @@
                 </div>
 
 
-              <div id="operations-wrap">
-                {% for effort in efforts %}
-                <div class="col-lg-4">
-                  <div class="operations-content">
-                    <img src="{{ effort.featured_photo }}" class="operations-img"><br/>
-                    <strong>{{ effort.name }}</strong>
-                    <div class="operations-details">
-                      {{ effort.info }}
-                      <!-- 
-
-                      <img class="icon" src="/img/icon-box-open.png" alt="Packs">
-                      <span>20,000 packs provided</span><br/>
-                      <img class="icon" src="/img/icon-box.png" alt="Packs">
-                      <span>20,000 packs needed</span>
-                      <br/><br/> -->
-
-                    </div>
-                    <a href="/efforts/{{ effort.key.id() }}" class="operations-btn">Get Involved</a>
-                  </div>
-                </div>
-                {{ loop.cycle('', '', '<div class="clearfix"></div>') }}
-                {% endfor %}
-              </div>
+             
 
             </div>
 
@@ -416,11 +398,8 @@
             <div style="overflow-y: scroll; height: 350px; border: 1px solid #e2e2e2;">
               {% if status_changes %}
                 {% for user in status_changes %}
-                  <div style="padding: 5px;">
-                    <div style="float: left">
-                      <img style="width: 40px; height: 40px;" src="http://graph.facebook.com/{{ user.fb_id }}/picture?small"/>
-                    </div>
-                    <div style="float: left; width: 260px; font-size: smaller; margin-left: 5px;">
+                  <div>
+                      <img style="width: 40px; height: 40px; float: left; margin: 5px;" src="http://graph.facebook.com/{{ user.fb_id }}/picture?small"/>
                       <label><a href="http://www.facebook.com/profile.php?id={{ user.fb_id }}">{{ user.fb_name }}</a></label>
                       <p><em>{{ user.created|to_date }}</em><br />
                         Updates:
@@ -428,7 +407,7 @@
                           <span>{{ stat }}; </span>
                         {% endfor %}
                       </p>
-                    </div>
+                      <div class="clear"></div>
                   </div>
                 {% endfor %}
               {% endif %}

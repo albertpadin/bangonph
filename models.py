@@ -68,6 +68,7 @@ class LocationRevisionChanges(ndb.Model):
     fb_name = ndb.StringProperty()
     name = ndb.StringProperty()
     status = ndb.JsonProperty()
+    requirements = ndb.JsonProperty()
 
 class LocationRevision(ndb.Model):
     created = ndb.DateTimeProperty(auto_now_add=True)
@@ -85,6 +86,7 @@ class LocationRevision(ndb.Model):
     affected = ndb.JsonProperty() # ndb.IntegerProperty()
     missing_person = ndb.JsonProperty()
     status = ndb.JsonProperty() # ndb.JsonProperty()
+    requirements = ndb.JsonProperty() # ndb.JsonProperty()
 
 class Location(ndb.Model):
     created = ndb.DateTimeProperty(auto_now_add=True)
@@ -100,6 +102,7 @@ class Location(ndb.Model):
     relief_aid_status = ndb.StringProperty(default="Unknown")
     needs = ndb.JsonProperty()
     status = ndb.JsonProperty()
+    requirements = ndb.JsonProperty(default={"food":0, "hygiene":0, "medicine":0, "medical_mission":0, "shelter":0})
     images = ndb.JsonProperty()
     hash_tag = ndb.StringProperty(repeated=True)
     featured = ndb.BooleanProperty(default=False)
@@ -130,6 +133,8 @@ class Location(ndb.Model):
         details["missing_person"] = self.missing_person
         details["missing_person_text"] = self.missing_person_text
         details["source"] = self.source
+        details["name"] = self.name
+        details["requirements"] = self.requirements
         return details
 
 
@@ -188,6 +193,7 @@ class DistributionRevision(ndb.Model):
     contacts = ndb.StringProperty()
     needs = ndb.StringProperty()
     date = ndb.StringProperty()
+    tag = ndb.StringProperty()
 
 class Distribution(ndb.Model):
     created = ndb.DateTimeProperty(auto_now_add=True)

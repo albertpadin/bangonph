@@ -7,7 +7,7 @@
     <div class="jumbotron">
       <div class="container">
         <h1>Let's Coordinate our Relief Efforts</h1>
-        <p>Super Typhoon Yolanda hit the Philippines and left several towns devastated. Affecting more than 2 million people and killing over 4,362 and still counting. This is the live and developing story of how we rise again. <span style="font-weight: bold; color: #E02A2A;">Together.</span></p>
+        <p>We Need Your Help! Help the super typhoon Yolanda affected areas! Share information on your latest or planned relief drop here and let's get aid where it is needed the most!</p>
 <!-- 
         <p><a class="btn btn-primary btn-md pull-right" href="https://docs.google.com/a/sym.ph/forms/d/1cGWQuAbuIVogA-uO9tZPlR5HMGGYQH3_Yp96BoBS3ng/viewform?edit_requested=true" target="_blank">Are we missing anyone? Tell us.</a></p> -->
         
@@ -121,39 +121,39 @@
               <div class="status-group">
                 <div class="status-entry">
                   <img class="icon" src="/img/icon-deaths.png" alt="Deaths">
-                  <span>{% if location.death_count_text %}{{ location.death_count_text }}{% else %}{% if location.death_count %}{{ location.death_count|with_commas }} Deaths{% else %}Gathering Data{% endif %}{% endif %}</span>
+                  <span title="{{ location.death_count_text }}">{% if location.death_count_text %}{{ location.death_count_text }}{% else %}{% if location.death_count %}{{ location.death_count|with_commas }} Deaths{% else %}Gathering Data{% endif %}{% endif %}</span>
                 </div>
                 <div class="status-entry">
                   <img class="icon" src="/img/icon-family.png" alt="Families Affected">
-                  <span>{% if location.affected_count_text %}{{ location.affected_count_text }}{% else %}{% if location.affected_count %}{{ location.affected_count|with_commas }} Families Affected{% else %}Gathering Data{% endif %}{% endif %}</span>
+                  <span title="{{ location.affected_count_text }}">{% if location.affected_count_text %}{{ location.affected_count_text }}{% else %}{% if location.affected_count %}{{ location.affected_count|with_commas }} Families Affected{% else %}Gathering Data{% endif %}{% endif %}</span>
                 </div>
                 <div class="status-entry">
                   <img class="icon" src="/img/icon-communication.png" alt="Communication">
-                  <span>{% if location.status.communication %}{{ location.status.communication }}{% else %}Gathering Data{% endif %}</span>
+                  <span title="{{ location.status.communication }}">{% if location.status.communication %}{{ location.status.communication }}{% else %}Gathering Data{% endif %}</span>
                 </div>
                 <div class="status-entry">
                   <img class="icon" src="/img/icon-water.png" alt="Water">
-                  <span>{% if location.status.water %}{{ location.status.water }}{% else %}Gathering Data{% endif %}</span>
+                  <span title="{{ location.status.water }}">{% if location.status.water %}{{ location.status.water }}{% else %}Gathering Data{% endif %}</span>
                 </div>
                 <div class="status-entry">
                   <img class="icon" src="/img/icon-electricity.png" alt="Electricity">
-                  <span>{% if location.status.power %}{{ location.status.power }}{% else %}Gathering Data{% endif %}</span>
+                  <span title="{{ location.status.power }}">{% if location.status.power %}{{ location.status.power }}{% else %}Gathering Data{% endif %}</span>
                 </div>
                 <div class="status-entry">
                   <img class="icon" src="/img/icon-medicine.png" alt="Medicine">
-                  <span>{% if location.status.medicines %}{{ location.status.medicines }}{% else %}Gathering Data{% endif %}</span>
+                  <span title="{{ location.status.medicines }}">{% if location.status.medicines %}{{ location.status.medicines }}{% else %}Gathering Data{% endif %}</span>
                 </div>
                 <div class="status-entry">
                   <img class="icon" src="/img/icon-clothes.png" alt="Needs Clothes">
-                  <span>{% if location.status.cloths %}{{ location.status.cloths }}{% else %}Gathering Data{% endif %}</span>
+                  <span title="{{ location.status.cloths }}">{% if location.status.cloths %}{{ location.status.cloths }}{% else %}Gathering Data{% endif %}</span>
                 </div>
                 <div class="status-entry">
                   <img class="icon" src="/img/icon-food.png" alt="Food">
-                  <span>{% if location.status.food %}{{ location.status.food }}{% else %}Gathering Data{% endif %}</span>
+                  <span title="{{ location.status.food }}">{% if location.status.food %}{{ location.status.food }}{% else %}Gathering Data{% endif %}</span>
                 </div>
                 <div class="status-entry">
                   <img class="icon" src="/img/icon-shelter.png" alt="Shelter">
-                  <span>{% if location.status.shelter %}{{ location.status.shelter }}{% else %}Gathering Data{% endif %}</span>
+                  <span title="{{ location.status.shelter }}">{% if location.status.shelter %}{{ location.status.shelter }}{% else %}Gathering Data{% endif %}</span>
                 </div>
               </div>
               <div class="clear"></div>
@@ -209,46 +209,46 @@
               <div class="status-group">
                 <div class="status-entry">
                   <img class="icon" src="/img/icon-deaths.png" alt="Deaths">
-                  <span>{% if location.death_count_text %}{{ location.death_count_text }}{% else %}{% if location.death_count %}{{ location.death_count|with_commas }} Deaths{% else %}Gathering Data{% endif %}{% endif %}</span>
+                  <span title="{{ location.death_count_text }}">{% if location.death_count_text %}{{ location.death_count_text }}{% else %}{% if location.death_count %}{{ location.death_count|with_commas }} Deaths{% else %}Gathering Data{% endif %}{% endif %}</span>
                 </div>
                 <div class="status-entry">
                   <img class="icon" src="/img/icon-family.png" alt="Families Affected">
-                  <span>{% if location.affected_count_text %}{{ location.affected_count_text }}{% else %}{% if location.affected_count %}{{ location.affected_count|with_commas }} Families Affected{% else %}Gathering Data{% endif %}{% endif %}</span>
+                  <span title="{{ location.affected_count_text }}">{% if location.affected_count_text %}{{ location.affected_count_text }}{% else %}{% if location.affected_count %}{{ location.affected_count|with_commas }} Families Affected{% else %}Gathering Data{% endif %}{% endif %}</span>
                 </div>
                 <div class="status-entry">
                   <img class="icon" src="/img/icon-communication.png" alt="Communication">
-                  <span>{% if location.status.communication %}{{ location.status.communication }}{% else %}Gathering Data{% endif %}</span>
+                  <span title="{{ location.status.communication }}">{% if location.status.communication %}{{ location.status.communication }}{% else %}Gathering Data{% endif %}</span>
                 </div>
                 <div class="status-entry">
                   <img class="icon" src="/img/icon-water.png" alt="Water">
-                  <span>{% if location.status.water %}{{ location.status.water }}{% else %}Gathering Data{% endif %}</span>
+                  <span title="{{ location.status.water }}">{% if location.status.water %}{{ location.status.water }}{% else %}Gathering Data{% endif %}</span>
                 </div>
                 <div class="status-entry">
                   <img class="icon" src="/img/icon-electricity.png" alt="Electricity">
-                  <span>{% if location.status.water %}{{ location.status.power }}{% else %}Gathering Data{% endif %}</span>
+                  <span title="{{ location.status.power }}">{% if location.status.power %}{{ location.status.power }}{% else %}Gathering Data{% endif %}</span>
                 </div>
                 <div class="status-entry">
                   <img class="icon" src="/img/icon-medicine.png" alt="Medicine">
-                  <span>{% if location.status.medicines %}{{ location.status.medicines }}{% else %}Gathering Data{% endif %}</span>
+                  <span title="{{ location.status.medicines }}">{% if location.status.medicines %}{{ location.status.medicines }}{% else %}Gathering Data{% endif %}</span>
                 </div>
                 <div class="status-entry">
                   <img class="icon" src="/img/icon-clothes.png" alt="Needs Clothes">
-                  <span>{% if location.status.cloths %}{{ location.status.cloths }}{% else %}Gathering Data{% endif %}</span>
+                  <span title="{{ location.status.cloths }}">{% if location.status.cloths %}{{ location.status.cloths }}{% else %}Gathering Data{% endif %}</span>
                 </div>
                 <div class="status-entry">
                   <img class="icon" src="/img/icon-food.png" alt="Food">
-                  <span>{% if location.status.food %}{{ location.status.food }}{% else %}Gathering Data{% endif %}</span>
+                  <span title="{{ location.status.food }}">{% if location.status.food %}{{ location.status.food }}{% else %}Gathering Data{% endif %}</span>
                 </div>
                 <div class="status-entry">
                   <img class="icon" src="/img/icon-shelter.png" alt="Shelter">
-                  <span>{% if location.status.shelter %}{{ location.status.shelter }}{% else %}Gathering Data{% endif %}</span>
+                  <span title="{{ location.status.shelter }}">{% if location.status.shelter %}{{ location.status.shelter }}{% else %}Gathering Data{% endif %}</span>
                 </div>
               </div>
               <div class="clear"></div>
-              <h6>Relief Aid Status:</h6>
+              <h6>Relief Aid Status for 1 Week:</h6>
               <div class="progress">
-                <div class="progress-bar progress-bar-danger" role="progressbar" aria-valuenow="30" aria-valuemin="0" aria-valuemax="100" style="width: 30%">
-                  <span class="sr-only">Gathering Data...</span>
+                <div class="progress-bar progress-bar-danger" role="progressbar" {% if location.relief_aid_status == 'Unknown' %}aria-valuenow="1"{% else %}aria-valuenow="{{ location.relief_aid_status }}"{% endif %} aria-valuemin="0" aria-valuemax="100" {% if location.relief_aid_status == 'Unknown' %}style="width:1%"{% else %}style="width:{{ location.relief_aid_status }}%"{% endif %}>
+                  {% if location.relief_aid_status == 'Unknown' %}<span class="sr-only">Unknown... <a href="https://docs.google.com/a/sym.ph/forms/d/1cGWQuAbuIVogA-uO9tZPlR5HMGGYQH3_Yp96BoBS3ng/viewform" target="_blank" title='Contribute Information'>Have Info?</a></span>{% else %}<span class="sr-only">{{ location.relief_aid_status }}%  &nbsp;&nbsp;&nbsp;Have Info?</a></span>{% endif %}
                 </div>
               </div>
               <!--

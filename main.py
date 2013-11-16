@@ -2532,7 +2532,22 @@ class APIPostsHandler(APIBaseHandler):
           key='e0a2a1c8316b9baddc9b',
           secret='474177f7aea8c983a7d1'
         )
-        p['feeds'].trigger('new_post', post.to_object())
+        post_object = post.to_object()
+        p['feeds'].trigger('new_post', post_object)
+
+        form_fields = {
+          "app_id": "hjaksv987.bangonph.web",
+          "message": post.message + " -" + post.phone + " (Preferably before " + post_object["expiry_friendly"] + ")",
+          "name": post.name,
+          "address": post.location
+        }
+        form_data = urllib.urlencode(form_fields)
+
+        try:
+            logging.debug(urlfetch.fetch(url="http://rboard.me/messages/feed", payload=form_data, method=urlfetch.POST, headers={'Content-Type': 'application/x-www-form-urlencoded'}).content)
+        except:
+            logging.exception("failed...")
+
 
     @oauthed_required
     def delete(self, instance_id=None):

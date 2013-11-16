@@ -108,7 +108,6 @@ class Location(ndb.Model):
     featured = ndb.BooleanProperty(default=False)
     missing_person = ndb.IntegerProperty()
     missing_person_text = ndb.StringProperty()
-    source = ndb.StringProperty()
 
     def to_object(self, extended=""):
         details = {}
@@ -129,10 +128,10 @@ class Location(ndb.Model):
         details["status"] = self.status
         details["images"] = self.images
         details["hash_tag"] = self.hash_tag
+        details["featured"] = self.featured
         details["relief_aid_status"] = self.relief_aid_status
         details["missing_person"] = self.missing_person
         details["missing_person_text"] = self.missing_person_text
-        details["source"] = self.source
         details["name"] = self.name
         details["requirements"] = self.requirements
         return details

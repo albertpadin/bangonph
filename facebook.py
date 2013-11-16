@@ -47,8 +47,6 @@ def code_to_access_token(code, redirect, app_id = settings["fb_id"], app_secret 
     if result.status_code == 200:
         return parse_access_code(result.content)
     else:
-        logging.critical(str(result.status_code))
-        logging.critical(str(result.content))
         return None
 
 
@@ -71,7 +69,5 @@ def send_notification(user_id, href, template, ref="GENERAL", access_token = sec
         logging.debug("CONTENT: " + result.content)
         return True
     else:
-        logging.critical(str(result.status_code))
-        logging.critical(str(result.content))
         return False
 

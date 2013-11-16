@@ -482,12 +482,21 @@ class LoginPage(BaseHandler):
 class PublicFrontPage(BaseHandler):
     def get(self):
         self.tv["current_page"] = "PUBLIC_FRONT"
-        self.tv['featured_locations'] = []
-        self.tv['locations'] = Location.query().fetch(300)
-        for location in self.tv['locations']:
+        featured_locations = []
+        locations = Location.query().fetch(300)
+        for location in locations:
             if location.featured:
-                self.tv['featured_locations'].append(location)
-                self.tv['locations'].remove(location)
+                featured_locations.append(location)
+                locations.remove(location)
+
+        self.tv['featured_locations'] = []
+        self.tv['locations'] = []
+
+        for location in locations:
+            self.tv['locations'].append(location.to_object())
+
+        for featured_location in featured_locations:
+            self.tv['featured_locations'].append(featured_location.to_object())
         
         self.render('frontend/public-front.html')
 
@@ -513,9 +522,7 @@ class PublicFBLoginPage(BaseHandler):
             result = urlfetch.fetch(url)
             if result.status_code == 200:
                 state_url = str(state).split("/")[2]
-                logging.critical(state_url)
                 self.public_login_fb(simplejson.loads(result.content), access_token, state_url)
-                logging.critical(str(state))
                 self.redirect(str(state))
                 return
 
@@ -585,6 +592,7 @@ class PublicLocationEditPage(BaseHandler):
             temp["medicines"] = self.request.get("status_medicines")
             temp["food"] = self.request.get("status_food")
             temp["cloths"] = self.request.get("status_cloths")
+            temp["shelter"] = self.request.get("status_shelter")
             temp["updated"] = str(datetime.datetime.now())
             datas_status.append(temp)
             location_revision.status = datas_status
@@ -635,7 +643,8 @@ class PublicLocationEditPage(BaseHandler):
                     "medicines": self.request.get("status_medicines"),
                     "cloths": self.request.get("status_cloths"),
                     "communication": self.request.get("status_communication"),
-                    "food": self.request.get("status_food")
+                    "food": self.request.get("status_food"),
+                    "shelter": self.request.get("status_shelter")
                 }
                 requirements = {
                     "food": temp["food"],
@@ -649,15 +658,21 @@ class PublicLocationEditPage(BaseHandler):
                 if location.status_board != self.request.get("status_board"):
                     datas_changes.append("Status Board")
 
-                if self.request.get('death_count'):
+                try:
                     if location.death_count != int(self.request.get("death_count")):
                         datas_changes.append("Death Count: " + str(location.death_count) + " >> " + str(self.request.get("death_count")))
-                if self.request.get('affected_count'):
+                except:
+                    logging.exception("passing...")
+                try:
                     if location.affected_count != int(self.request.get("affected_count")):
                         datas_changes.append("Affected Count: " + str(location.affected_count) + " >> " + str(self.request.get("affected_count")))
-                if self.request.get('missing_person'):
+                except:
+                    logging.exception("passing...")
+                try:
                     if location.missing_person != int(self.request.get("missing_person")):
                         datas_changes.append("Missing Count: " + str(location.missing_person) + " >> " + str(self.request.get("missing_person")))
+                except:
+                    logging.exception("passing...")
                 if location.death_count_text != self.request.get("death_count_text"):
                     datas_changes.append("Deaths: " + str(location.death_count_text) + " >> " + str(self.request.get("death_count_text")))
                 if location.affected_count_text != self.request.get("affected_count_text"):
@@ -695,19 +710,24 @@ class PublicLocationEditPage(BaseHandler):
                 user_changes.status = datas_changes
                 user_changes.put()
 
-                if self.request.get('death_count'):
+                try:
                     location.death_count = int(self.request.get("death_count"))
+                except:
+                    logging.exception("passing...")
                 location.death_count_text = self.request.get("death_count_text")
-                if self.request.get('affected_count'):
+                try:
                     location.affected_count = int(self.request.get("affected_count"))
+                except:
+                    logging.exception("passing...")
                 location.affected_count_text = self.request.get("affected_count_text")
-                if self.request.get('missing_person'):
+                try:
                     location.missing_person = int(self.request.get("missing_person"))
+                except:
+                    logging.exception("passing...")
                 location.missing_person_text = self.request.get("missing_person_text")
                 location.status_board = self.request.get("status_board")
                 location.status = status
                 location.requirements = requirements
-                location.source = self.request.get("source")
                 location.put()
 
             self.redirect("/locations/" + self.request.get("page_title") + "/edit?success=Successfully+updated.")
@@ -785,7 +805,7 @@ class PublicLocationPage(BaseHandler):
 
         self.tv['efforts'] = Distribution.query(Distribution.destinations == location.key, Distribution.date_of_distribution >= datetime.datetime.now()).order(Distribution.date_of_distribution)
 
-        self.tv['location'] = location
+        self.tv['location'] = location.to_object()
         self.tv['page_title'] = location.name
         path_redirect = self.request.path + "/edit"
         self.tv["fb_login_url"] = facebook.generate_login_url(path_redirect, self.uri_for('www-publicfblogin'))
@@ -815,7 +835,6 @@ class PublicLocationPage(BaseHandler):
             subscriber.all_updates = True
 
         subscriber.put()
-        logging.critical(subscriber)
         self.redirect("/locations/"+location_id)
 
 
@@ -2319,8 +2338,6 @@ class APIOrganizationsHandler(APIBaseHandler):
             "facebook": self.request.get("facebook")
         }
 
-        logging.critical(data)
-
         if not instance_id:
             resp["method"] = "create"
             distributor = add_distributor(data)
@@ -2877,7 +2894,6 @@ class APIEffortsHandler(APIBaseHandler):
         resp["method"] = "get"
         failed = False
         efforts_json = []
-        logging.critical(self.request.get("expand"))
         if not instance_id:
             if self.request.get("cursor"):
                 try:
@@ -3199,8 +3215,6 @@ class APIDistributorsHandler(APIBaseHandler):
             "facebook": self.request.get("facebook")
         }
 
-        logging.critical(data)
-
         if not instance_id:
             resp["method"] = "create"
             distributor = add_distributor(data)
@@ -3339,7 +3353,6 @@ class UploadHandler(blobstore_handlers.BlobstoreUploadHandler):
         upload_files = self.get_uploads('file')
         title = self.request.get('title').strip()
         title_code = slugify(title)
-        logging.error(upload_files)
         blob_info = upload_files[0]
         blob_key = blob_info.key()
 

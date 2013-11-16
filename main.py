@@ -590,12 +590,26 @@ class PublicLocationEditPage(BaseHandler):
             location_revision.status = datas_status
 
             datas_requirements = []
-
-            temp["food"] = int(self.request.get("requirements_food"))
-            temp["hygiene"] = int(self.request.get("requirements_hygiene"))
-            temp["medicine"] = int(self.request.get("requirements_medicine"))
-            temp["medical_mission"] = int(self.request.get("requirements_medical_mission"))
-            temp["shelter"] = int(self.request.get("requirements_shelter"))
+            if self.request.get('requirements_food'):
+                temp["food"] = int(self.request.get("requirements_food"))
+            else:
+                temp["food"] = 0
+            if self.request.get('requirements_hygiene'):
+                temp["hygiene"] = int(self.request.get("requirements_hygiene"))
+            else:
+                temp["hygiene"] = 0
+            if self.request.get('requirements_medicine'):
+                temp["medicine"] = int(self.request.get("requirements_medicine"))
+            else:
+                temp["medicine"] = 0
+            if self.request.get('requirements_medical_mission'):
+                temp["medical_mission"] = int(self.request.get("requirements_medical_mission"))
+            else:
+                temp["medical_mission"] = 0
+            if self.request.get('requirements_shelter'):
+                temp["shelter"] = int(self.request.get("requirements_shelter"))
+            else:
+                temp["shelter"] = 0
             temp["updated"] = str(datetime.datetime.now())
             datas_requirements.append(temp)
             location_revision.requirements = datas_requirements
@@ -624,23 +638,26 @@ class PublicLocationEditPage(BaseHandler):
                     "food": self.request.get("status_food")
                 }
                 requirements = {
-                    "food": int(self.request.get("requirements_food")),
-                    "hygiene": int(self.request.get("requirements_hygiene")),
-                    "medicine": int(self.request.get("requirements_medicine")),
-                    "medical_mission": int(self.request.get("requirements_medical_mission")),
-                    "shelter": int(self.request.get("requirements_shelter"))
+                    "food": temp["food"],
+                    "hygiene": temp["hygiene"],
+                    "medicine": temp["medicine"],
+                    "medical_mission": temp["medical_mission"],
+                    "shelter": temp["shelter"]
                 }
 
                 datas_changes = []
                 if location.status_board != self.request.get("status_board"):
                     datas_changes.append("Status Board")
 
-                if location.death_count != int(self.request.get("death_count")):
-                    datas_changes.append("Death Count: " + str(location.death_count) + " >> " + str(self.request.get("death_count")))
-                if location.affected_count != int(self.request.get("affected_count")):
-                    datas_changes.append("Affected Count: " + str(location.affected_count) + " >> " + str(self.request.get("affected_count")))
-                if location.missing_person != int(self.request.get("missing_person")):
-                    datas_changes.append("Missing Count: " + str(location.missing_person) + " >> " + str(self.request.get("missing_person")))
+                if self.request.get('death_count'):
+                    if location.death_count != int(self.request.get("death_count")):
+                        datas_changes.append("Death Count: " + str(location.death_count) + " >> " + str(self.request.get("death_count")))
+                if self.request.get('affected_count'):
+                    if location.affected_count != int(self.request.get("affected_count")):
+                        datas_changes.append("Affected Count: " + str(location.affected_count) + " >> " + str(self.request.get("affected_count")))
+                if self.request.get('missing_person'):
+                    if location.missing_person != int(self.request.get("missing_person")):
+                        datas_changes.append("Missing Count: " + str(location.missing_person) + " >> " + str(self.request.get("missing_person")))
                 if location.death_count_text != self.request.get("death_count_text"):
                     datas_changes.append("Deaths: " + str(location.death_count_text) + " >> " + str(self.request.get("death_count_text")))
                 if location.affected_count_text != self.request.get("affected_count_text"):
@@ -678,11 +695,14 @@ class PublicLocationEditPage(BaseHandler):
                 user_changes.status = datas_changes
                 user_changes.put()
 
-                location.death_count = int(self.request.get("death_count"))
+                if self.request.get('death_count'):
+                    location.death_count = int(self.request.get("death_count"))
                 location.death_count_text = self.request.get("death_count_text")
-                location.affected_count = int(self.request.get("affected_count"))
+                if self.request.get('affected_count'):
+                    location.affected_count = int(self.request.get("affected_count"))
                 location.affected_count_text = self.request.get("affected_count_text")
-                location.missing_person = int(self.request.get("missing_person"))
+                if self.request.get('missing_person'):
+                    location.missing_person = int(self.request.get("missing_person"))
                 location.missing_person_text = self.request.get("missing_person_text")
                 location.status_board = self.request.get("status_board")
                 location.status = status
@@ -3332,11 +3352,7 @@ class UploadHandler(blobstore_handlers.BlobstoreUploadHandler):
             logging.exception("Not an image?")
         f.put()
 
-        if "?" in self.request.referer:
-            self.redirect(self.request.referer + "&success=File%20Uploaded")
-        else:
-            self.redirect(self.request.referer + "?success=File%20Uploaded")
-
+        self.redirect("/upload?success=File%20Uploaded")
 
 
 app = webapp2.WSGIApplication([

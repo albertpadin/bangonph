@@ -122,14 +122,14 @@ class Location(ndb.Model):
         details["death_count_text"] = self.death_count_text
         details["affectedCount"] = self.affected_count
         details["affectedCountText"] = self.affected_count_text
+        details["missing_count"] = self.missing_person
+        details["missing_count_text"] = self.missing_person_text
         details["statusBoard"] = self.status_board
         details["needs"] = self.needs
         details["status"] = self.status
         details["images"] = self.images
         details["hash_tag"] = self.hash_tag
         details["relief_aid_status"] = self.relief_aid_status
-        details["packs_needed"] = '20,000'
-        details["packs_provided"] = '5,000'
         details["missing_person"] = self.missing_person
         details["missing_person_text"] = self.missing_person_text
         details["source"] = self.source

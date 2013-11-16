@@ -400,8 +400,8 @@
                 {% for user in status_changes %}
                   <div>
                       <img style="width: 40px; height: 40px; float: left; margin: 5px;" src="http://graph.facebook.com/{{ user.fb_id }}/picture?small"/>
-                      <label><a href="http://www.facebook.com/profile.php?id={{ user.fb_id }}">{{ user.fb_name }}</a></label>
-                      <p><em>{{ user.created|to_date }}</em><br />
+                      <label style="margin-bottom: 0;"><a href="http://www.facebook.com/profile.php?id={{ user.fb_id }}">{{ user.fb_name }}</a></label>
+                      <p style="margin-top: 0; font-size: smaller"><em>{{ user.created|to_date }}</em><br />
                         Updates:
                         {% for stat in user.status %}
                           <span>{{ stat }}; </span>

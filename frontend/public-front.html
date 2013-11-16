@@ -116,8 +116,8 @@
         <div class="col-lg-4 col-md-6 col-sm-6 col">
             <div class="status-item">
               <!--<h3>{{ location.name }}</h3>-->
-              <img class='location-front-feature-photo' src="{% if location.featured_photo %}{{ location.featured_photo }}{% else %}https://fbcdn-sphotos-h-a.akamaihd.net/hphotos-ak-prn2/v/1422846_750043521675941_1980969414_n.jpg?oh=c1f21b1b2a886bbcced761d546fd1ccf&oe=52886CD9&__gda__=1384696205_aea2d7e3807dc100137e84030d3d4c77{% endif %}" alt="{{ location.name }}" onclick="self.location='/locations/{{ location.key.id() }}';" >
-              <h6 class="mb0">Current Status:</h6>
+              <img class='location-front-feature-photo' src="{% if location.featured_photo %}{{ location.featured_photo }}{% else %}https://fbcdn-sphotos-h-a.akamaihd.net/hphotos-ak-prn2/v/1422846_750043521675941_1980969414_n.jpg?oh=c1f21b1b2a886bbcced761d546fd1ccf&oe=52886CD9&__gda__=1384696205_aea2d7e3807dc100137e84030d3d4c77{% endif %}" alt="{{ location.name }}" onclick="self.location='/locations/{{ location.id }}';" >
+              <h6 class="mb0">{{ location.name }} Current Status:</h6>
               <div class="status-group">
                 <div class="status-entry">
                   <img class="icon" src="/img/icon-deaths.png" alt="Deaths">
@@ -192,7 +192,7 @@
                   <img src="/img/thumb-jci.png" title="Junior Chamber International">
                 </div> -->
               <div>
-                <a class="btn btn-primary btn-block entry-btn" href="/locations/{{ location.key.id() }}" title="{{ location.name }}" role="button"><span class="glyphicon glyphicon-circle-arrow-right"></span> Get Involved. Donate Now!  &raquo;</a>
+                <a class="btn btn-primary btn-block entry-btn" href="/locations/{{ location.id }}" title="{{ location.name }}" role="button"><span class="glyphicon glyphicon-circle-arrow-right"></span> Get Involved. Donate Now!  &raquo;</a>
               </div>
             </div>
         </div>
@@ -204,8 +204,8 @@
         <div class="col-lg-4 col-md-6 col-sm-6 col">
             <div class="status-item">
               <!--<h3>{{ location.name }}</h3>-->
-              <img class='location-front-feature-photo' src="{% if location.featured_photo %}{{ location.featured_photo }}{% else %}https://fbcdn-sphotos-h-a.akamaihd.net/hphotos-ak-prn2/v/1422846_750043521675941_1980969414_n.jpg?oh=c1f21b1b2a886bbcced761d546fd1ccf&oe=52886CD9&__gda__=1384696205_aea2d7e3807dc100137e84030d3d4c77{% endif %}" alt="{{ location.name }}" onclick="self.location='/locations/{{ location.key.id() }}';" >
-              <h6 class="mb0">Current Status:</h6>
+              <img class='location-front-feature-photo' src="{% if location.featured_photo %}{{ location.featured_photo }}{% else %}https://fbcdn-sphotos-h-a.akamaihd.net/hphotos-ak-prn2/v/1422846_750043521675941_1980969414_n.jpg?oh=c1f21b1b2a886bbcced761d546fd1ccf&oe=52886CD9&__gda__=1384696205_aea2d7e3807dc100137e84030d3d4c77{% endif %}" alt="{{ location.name }}" onclick="self.location='/locations/{{ location.id }}';" >
+              <h6 class="mb0">{{ location.name }} Current Status:</h6>
               <div class="status-group">
                 <div class="status-entry">
                   <img class="icon" src="/img/icon-deaths.png" alt="Deaths">
@@ -280,7 +280,7 @@
                   <img src="/img/thumb-jci.png" title="Junior Chamber International">
                 </div> -->
               <div>
-                <a class="btn btn-primary btn-block entry-btn" href="/locations/{{ location.key.id() }}" title="{{ location.name }}" role="button"><span class="glyphicon glyphicon-circle-arrow-right"></span> Get Involved. Donate Now!  &raquo;</a>
+                <a class="btn btn-primary btn-block entry-btn" href="/locations/{{ location.id }}" title="{{ location.name }}" role="button"><span class="glyphicon glyphicon-circle-arrow-right"></span> Get Involved. Donate Now!  &raquo;</a>
               </div>
             </div>
         </div>

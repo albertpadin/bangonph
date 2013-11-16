@@ -209,7 +209,7 @@
                         <thead>
                           <tr>
                             <th>Name</th>
-                            <th>Destination (Specific)</th>
+                            <th>Destination (Barangay)</th>
                             <th>TAG</th>
                             <th># of Packs</th>
                             <th>Description</th>
@@ -417,7 +417,7 @@
             <hr />
             <h4>Subscribe:</h4>
             
-            <form class="form-inline" role="form" action="/locations/{{ location.key.id() }}" method="post">
+            <form class="form-inline" role="form" action="/locations/{{ location.id }}" method="post">
               <div class="form-group">
                 <input type="email" class="col-sm-6 form-control" id="exampleInputEmail2" placeholder="Enter email" name="email" >
                 <label><input type="checkbox" name="subscribe_location" value="{{ page_title }}"> {{ page_title }}</label> 

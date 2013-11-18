@@ -27,12 +27,13 @@
         <p><a class="btn btn-primary btn-md pull-right" href="https://docs.google.com/a/sym.ph/forms/d/1cGWQuAbuIVogA-uO9tZPlR5HMGGYQH3_Yp96BoBS3ng/viewform?edit_requested=true" target="_blank">Are we missing anyone? Tell us.</a></p> -->
         
         <div class="social-media pull-right">
-          <div class="social-item mt-16">
-            <div class="fb-share-button" data-href="{{ current_base_url }}" data-type="button_count"></div>            
+          <div class="social-item">
+                      <a href="https://twitter.com/share" class="twitter-share-button" data-hashtags="BangonPH">Tweet</a>
+            <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
           </div>
           <div class="social-item">
-            <a href="https://twitter.com/share" class="twitter-share-button" data-hashtags="BangonPH">Tweet</a>
-            <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+            <div class="fb-like" data-href="{{ current_base_url }}" data-layout="button_count" data-action="like" data-show-faces="false" data-share="true"></div>  
+            
           </div>
           <div class="clearfix"></div>
         </div>
@@ -60,15 +61,14 @@
             <div class="clearfix"></div>
             </div>
           <div class="col-lg-8">
-              <div id="fb-root"></div>
-              <div id="fb-root"></div>
-              <script>(function(d, s, id) {
-                var js, fjs = d.getElementsByTagName(s)[0];
-                if (d.getElementById(id)) return;
-                js = d.createElement(s); js.id = id;
-                js.src = "//connect.facebook.net/en_US/all.js#xfbml=1";
-                fjs.parentNode.insertBefore(js, fjs);
-              }(document, 'script', 'facebook-jssdk'));</script>
+<div id="fb-root"></div>
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) return;
+  js = d.createElement(s); js.id = id;
+  js.src = "//connect.facebook.net/en_US/all.js#xfbml=1&appId=759672407382550";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
               <div class="fb-comments" data-href="{{ current_base_url }}" data-numposts="10"></div>
           </div>
         </div>
@@ -260,8 +260,7 @@
         channel.bind('new_post', function(data) {
           //do something when the new data is triggered
           console.log(data);
-          for(i=0;i<data.data.posts.length;i++){
-            data2 = data.data.posts[i];
+            data2 = data;
             d = '<li class="all ' + data2.post_type + '">';
             d += '<a href="/posts/' + data2.id + '">';
             d += '<strong>' + data2.name + '</strong>';
@@ -292,7 +291,7 @@
               $("#post_need_feed").prepend(d);
             }
 
-          }
+      
           setTimeout(function(){twttr.widgets.load();FB.XFBML.parse();},100);
         });
       </script>

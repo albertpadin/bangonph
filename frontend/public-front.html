@@ -12,37 +12,36 @@
         <p><a class="btn btn-primary btn-md pull-right" href="https://docs.google.com/a/sym.ph/forms/d/1cGWQuAbuIVogA-uO9tZPlR5HMGGYQH3_Yp96BoBS3ng/viewform?edit_requested=true" target="_blank">Are we missing anyone? Tell us.</a></p> -->
         
         <div class="social-media pull-right">
-          <div class="social-item mt-16">
-            <div class="fb-share-button" data-href="{{ current_base_url }}" data-type="button_count"></div>            
-          </div>
           <div class="social-item">
             <a href="https://twitter.com/share" class="twitter-share-button" data-hashtags="BangonPH">Tweet</a>
+          </div>
+          <div class="social-item">
+            <div class="fb-like" data-href="{{ current_base_url }}" data-layout="button_count" data-action="like" data-show-faces="false" data-share="true"></div>
           </div>
           <div class="clearfix"></div>
         </div>
       </div>
     </div>
 
-    <div class="container">
+    <div class="container" id="locations-container">
 
       
       <div class="row">
         <div class="col-lg-6">
             <div class="btn-group">
-              <a href="#" class="btn btn-default">All</a>
-              <a href="#" class="btn btn-default">Samar</a>
-              <a href="#" class="btn btn-default">Leyte</a>
-              <a href="#" class="btn btn-default">Cebu</a>
-              <a href="#" class="btn btn-default">Iloilo</a>
-              <a href="#" class="btn btn-default">Capiz</a>
-              <a href="#" class="btn btn-default">Aklan</a>
-              <a href="#" class="btn btn-default">Antique</a>
+              <a id="show-all" class="active btn btn-default hand search_buttons">All</a>
+              <a id="show-samar" class="btn btn-default hand search_buttons">Samar</a>
+              <a id="show-leyte" class="btn btn-default hand search_buttons">Leyte</a>
+              <a id="show-cebu" class="btn btn-default hand search_buttons">Cebu</a>
+              <a id="show-iloilo" class="btn btn-default hand search_buttons">Iloilo</a>
+              <a id="show-capiz" class="btn btn-default hand search_buttons">Capiz</a>
+              <a id="show-aklan" class="btn btn-default hand search_buttons">Aklan</a>
+              <a id="show-antique" class="btn btn-default hand search_buttons">Antique</a>
             </div>
         </div>
         <div class="col-lg-6">
           <div class="input-group">
-            <input type="text" class="form-control" placeholder="Search...">
-            <span class="input-group-btn">
+            <input type="text" class="form-control" id="search" placeholder="Search for the location here..."><span class="input-group-btn">
               <button class="btn btn-default" type="button">Search <span class="glyphicon glyphicon-search"></span></button>
             </span>
           </div><!-- /input-group -->
@@ -55,22 +54,22 @@
        <!-- <span class="pull-right"><a href="/posts" class="see-more-btn">see more</a></span> -->
 
 
-      <div class="feed-input">
-         <form id="post_need">
-            
-            <textarea placeholder="what do you need.." name="message" class="text-input"></textarea>
-            <input type="text" name="expiry" placeholder="show this until what date" class="datepicker hidden">
-            <input type="text" name="location" placeholder="what place is this for" class="hidden">
-            <input type="text" name="name" placeholder="what is your name" class="hidden">
-            <input type="text" name="phone" placeholder="leave your contact details" class="hidden">
-            <input type="text" style="display: none;" name="comment">
-            <input type="hidden" name="post_type" value="NEED" />
-           
-              <a href="#" class="btn btn-default hidden cancel-btn">Cancel</a>
-              <input type="submit" value="Post" id="post_need_submit" class="btn btn-primary hidden submit-btn">
+          <div class="feed-input">
+             <form id="post_need">
+                
+                <textarea placeholder="what do you need.." name="message" class="text-input"></textarea>
+                <input type="text" name="expiry" placeholder="show this until what date" class="datepicker hidden">
+                <input type="text" name="location" placeholder="what place is this for" class="hidden">
+                <input type="text" name="name" placeholder="what is your name" class="hidden">
+                <input type="text" name="phone" placeholder="leave your contact details" class="hidden">
+                <input type="text" style="display: none;" name="comment">
+                <input type="hidden" name="post_type" value="NEED" />
+               
+                  <a href="#" class="btn btn-default hidden cancel-btn">Cancel</a>
+                  <input type="submit" value="Post" id="post_need_submit" class="btn btn-primary hidden submit-btn">
 
-        </form>
-       </div>
+            </form>
+           </div>
 
         
        <ul class="nav nav-pills">
@@ -138,91 +137,72 @@
         <div class="col-lg-4 col-md-6 col-sm-6 col updates-feed">
           <div class="status-item">
           <h4>Updates</h4>
-          <ul class="updates-wrap">
+          <ul id='updates_feed' class="updates-wrap">
+            {% for revision in revisions %}
+            {% if revision.status %}
             <li>
-              <img src="http://graph.facebook.com/550109953/picture?small">
-              <label style="margin-bottom: 0;"><a href="http://www.facebook.com/profile.php?id=550109953">Albert Chiu Padin</a></label> updated <a href="#"><span class="label label-success">Basey, Samar</span></a><br/>
-              <p>
-              Updates: Affected: 7510 families >> 7,510 families;</p>
-              </p>
-              <span class="update-date">November 17, 2013 - 12:16am</span>
+              <img src="http://graph.facebook.com/{{ revision.fb_id }}/picture?small">
+              <label style="margin-bottom: 0;">
+                <a target="_blank" href="http://www.facebook.com/profile.php?id={{ revision.fb_id }}">{% if revision.fb_firstname %}{{ revision.fb_firstname }} {% endif %}{% if revision.fb_middlename %}{{ revision.fb_middlename }}{% endif %} {% if revision.fb_lastname %}{{ revision.fb_lastname }}{% endif %}</a>
+              </label>
+              <a href="/locations/{{ revision.name }}">
+                <span class="label label-default">{{ revision.name|prettify }}</span>
+                <span class="label label-success">{{ revision.revision_type }}</span>
+              </a><br/>
+              <p>{% for stat in revision.status %}{{ stat }}; {% endfor %}</p>
+              <span class="update-date">{{ revision.created|to_date }}</span>
             </li>
-            <li>
-              <img src="http://graph.facebook.com/550109953/picture?small">
-              <label style="margin-bottom: 0;"><a href="http://www.facebook.com/profile.php?id=550109953">Albert Chiu Padin</a></label> updated <a href="#"><span class="label label-success">Basey, Samar</span></a><br/>
-              <p>
-              Updates: Affected Count: 0 >> 7510; Missing Count: 0 >> 39; Affected: Gathering Data >> 7510 families; Missing: Gathering Data >> 30 persons; Communication: No Communication >> Reachable - in terms of DILG coordination with the LGU; Source/s: http://www.ndrrmc.gov.ph/attachments/article/1125/doc02491920131116201822.pdf;</p>
-              </p>
-              <span class="update-date">November 17, 2013 - 12:16am</span>
-            </li>
-            <li>
-              <img src="http://graph.facebook.com/550109953/picture?small">
-              <label style="margin-bottom: 0;"><a href="http://www.facebook.com/profile.php?id=550109953">Albert Chiu Padin</a></label> updated <a href="#"><span class="label label-success">Basey, Samar</span></a><br/>
-              <p>
-              Updates: Affected: 7510 families >> 7,510 families;</p>
-              </p>
-              <span class="update-date">November 17, 2013 - 12:16am</span>
-            </li>
-            <li>
-              <img src="http://graph.facebook.com/550109953/picture?small">
-              <label style="margin-bottom: 0;"><a href="http://www.facebook.com/profile.php?id=550109953">Albert Chiu Padin</a></label> updated <a href="#"><span class="label label-success">Basey, Samar</span></a><br/>
-              <p>
-              Updates: Affected: 7510 families >> 7,510 families;</p>
-              </p>
-              <span class="update-date">November 17, 2013 - 12:16am</span>
-            </li>
-            <li>
-              <img src="http://graph.facebook.com/550109953/picture?small">
-              <label style="margin-bottom: 0;"><a href="http://www.facebook.com/profile.php?id=550109953">Albert Chiu Padin</a></label> updated <a href="#"><span class="label label-success">Basey, Samar</span></a><br/>
-              <p>
-              Updates: Affected Count: 0 >> 7510; Missing Count: 0 >> 39; Affected: Gathering Data >> 7510 families; Missing: Gathering Data >> 30 persons; Communication: No Communication >> Reachable - in terms of DILG coordination with the LGU; Source/s: http://www.ndrrmc.gov.ph/attachments/article/1125/doc02491920131116201822.pdf;</p>
-              </p>
-              <span class="update-date">November 17, 2013 - 12:16am</span>
-            </li>
+            {% endif %}
+            {% endfor %}
           </ul>
           </div>
         </div>
         {% for location in featured_locations %}
-        <div class="col-lg-4 col-md-6 col-sm-6 col">
+        <div class="col-lg-4 col-md-6 col-sm-6 col location" id="location_{{ location.id }}">
+            <div class="location-tags" style='display: none;'>{{ location.name }}</div>
             <div class="status-item">
               <!--<h3>{{ location.name }}</h3>-->
               <img class='location-front-feature-photo' src="{% if location.featured_photo %}{{ location.featured_photo }}{% else %}https://fbcdn-sphotos-h-a.akamaihd.net/hphotos-ak-prn2/v/1422846_750043521675941_1980969414_n.jpg?oh=c1f21b1b2a886bbcced761d546fd1ccf&oe=52886CD9&__gda__=1384696205_aea2d7e3807dc100137e84030d3d4c77{% endif %}" alt="{{ location.name }}" onclick="self.location='/locations/{{ location.id }}';" >
               <h6 class="mb0">{{ location.name }} Current Status:</h6>
               <div class="status-group">
                 <div class="status-entry">
-                  <img class="icon" src="/img/icon-deaths.png" alt="Deaths">
-                  <span title="{{ location.death_count_text }}">{% if location.death_count_text %}{{ location.death_count_text }}{% else %}{% if location.death_count %}{{ location.death_count|with_commas }} Deaths{% else %}Gathering Data{% endif %}{% endif %}</span>
+                  <img class="icon" src="/img/icon-deaths.png" alt="Deaths" title="Deaths">
+                  <span title="{% if location.death_count_text %}{{ location.death_count_text }}{% else %}{% if location.death_count %}{{ location.death_count|with_commas }} Deaths{% else %}Gathering Data{% endif %}{% endif %}">{% if location.death_count_text %}{{ location.death_count_text }}{% else %}{% if location.death_count %}{{ location.death_count|with_commas }} Deaths{% else %}Gathering Data{% endif %}{% endif %}</span>
                 </div>
                 <div class="status-entry">
-                  <img class="icon" src="/img/icon-family.png" alt="Families Affected">
-                  <span title="{{ location.affected_count_text }}">{% if location.affected_count_text %}{{ location.affected_count_text }}{% else %}{% if location.affected_count %}{{ location.affected_count|with_commas }} Families Affected{% else %}Gathering Data{% endif %}{% endif %}</span>
+                  <img class="icon" src="/img/icon-family.png" alt="Families Affected" title="Families Affected">
+                  <span title="{% if location.affected_count_text %}{{ location.affected_count_text }}{% else %}{% if location.affected_count %}{{ location.affected_count|with_commas }} Families Affected{% else %}Gathering Data{% endif %}{% endif %}">{% if location.affected_count_text %}{{ location.affected_count_text }}{% else %}{% if location.affected_count %}{{ location.affected_count|with_commas }} Families Affected{% else %}Gathering Data{% endif %}{% endif %}</span>
                 </div>
                 <div class="status-entry">
-                  <img class="icon" src="/img/icon-communication.png" alt="Communication">
+                  <img class="icon" src="/img/icon-pledged.png" alt="Missing People" title="Missing People">
+                  <span title="{% if location.missing_count_text %}{{ location.missing_count_text }}{% else %}{% if location.missing_count %}{{ location.missing_count|with_commas }} Missing{% else %}Gathering Data{% endif %}{% endif %}">{% if location.missing_count_text %}{{ location.missing_count_text }}{% else %}{% if location.missing_count %}{{ location.missing_count|with_commas }} Missing{% else %}Gathering Data{% endif %}{% endif %}</span>
+                </div>
+                <div class="status-entry">
+                  <img class="icon" src="/img/icon-communication.png" alt="Communication" title="Communication Status">
                   <span title="{{ location.status.communication }}">{% if location.status.communication %}{{ location.status.communication }}{% else %}Gathering Data{% endif %}</span>
                 </div>
                 <div class="status-entry">
-                  <img class="icon" src="/img/icon-water.png" alt="Water">
+                  <img class="icon" src="/img/icon-water.png" alt="Water" title="Water Status">
                   <span title="{{ location.status.water }}">{% if location.status.water %}{{ location.status.water }}{% else %}Gathering Data{% endif %}</span>
                 </div>
                 <div class="status-entry">
-                  <img class="icon" src="/img/icon-electricity.png" alt="Electricity">
+                  <img class="icon" src="/img/icon-electricity.png" alt="Power" title="Power Status">
                   <span title="{{ location.status.power }}">{% if location.status.power %}{{ location.status.power }}{% else %}Gathering Data{% endif %}</span>
                 </div>
                 <div class="status-entry">
-                  <img class="icon" src="/img/icon-medicine.png" alt="Medicine">
+                  <img class="icon" src="/img/icon-medicine.png" alt="Medicine" title="Medical Status">
                   <span title="{{ location.status.medicines }}">{% if location.status.medicines %}{{ location.status.medicines }}{% else %}Gathering Data{% endif %}</span>
                 </div>
                 <div class="status-entry">
-                  <img class="icon" src="/img/icon-clothes.png" alt="Needs Clothes">
+                  <img class="icon" src="/img/icon-clothes.png" alt="Needs Clothes" title="Clothing Status">
                   <span title="{{ location.status.cloths }}">{% if location.status.cloths %}{{ location.status.cloths }}{% else %}Gathering Data{% endif %}</span>
                 </div>
                 <div class="status-entry">
-                  <img class="icon" src="/img/icon-food.png" alt="Food">
+                  <img class="icon" src="/img/icon-food.png" alt="Food" title="Food Supply Status">
                   <span title="{{ location.status.food }}">{% if location.status.food %}{{ location.status.food }}{% else %}Gathering Data{% endif %}</span>
                 </div>
                 <div class="status-entry">
-                  <img class="icon" src="/img/icon-shelter.png" alt="Shelter">
+                  <img class="icon" src="/img/icon-shelter.png" alt="Shelter" title="Shelter Status">
                   <span title="{{ location.status.shelter }}">{% if location.status.shelter %}{{ location.status.shelter }}{% else %}Gathering Data{% endif %}</span>
                 </div>
               </div>
@@ -262,7 +242,7 @@
                   <img src="/img/thumb-jci.png" title="Junior Chamber International">
                 </div> -->
               <div>
-                <a class="btn btn-primary btn-block entry-btn" href="/locations/{{ location.id }}" title="{{ location.name }}" role="button"><span class="glyphicon glyphicon-circle-arrow-right"></span> Get Involved. Donate Now!  &raquo;</a>
+                <a class="btn btn-primary btn-block entry-btn" href="/locations/{{ location.id }}" title="{{ location.name }}" role="button"><span class="glyphicon glyphicon-circle-arrow-right"></span> View Relief Efforts in {{ location.name }} &raquo;</a>
               </div>
             </div>
         </div>
@@ -271,46 +251,51 @@
 
 
         {% for location in locations %}
-        <div class="col-lg-4 col-md-6 col-sm-6 col">
+        <div class="col-lg-4 col-md-6 col-sm-6 col location">
+          <div class="location-tags" style='display: none;'>{{ location.name }}</div>
             <div class="status-item">
               <!--<h3>{{ location.name }}</h3>-->
               <img class='location-front-feature-photo' src="{% if location.featured_photo %}{{ location.featured_photo }}{% else %}https://fbcdn-sphotos-h-a.akamaihd.net/hphotos-ak-prn2/v/1422846_750043521675941_1980969414_n.jpg?oh=c1f21b1b2a886bbcced761d546fd1ccf&oe=52886CD9&__gda__=1384696205_aea2d7e3807dc100137e84030d3d4c77{% endif %}" alt="{{ location.name }}" onclick="self.location='/locations/{{ location.id }}';" >
               <h6 class="mb0">{{ location.name }} Current Status:</h6>
               <div class="status-group">
                 <div class="status-entry">
-                  <img class="icon" src="/img/icon-deaths.png" alt="Deaths">
-                  <span title="{{ location.death_count_text }}">{% if location.death_count_text %}{{ location.death_count_text }}{% else %}{% if location.death_count %}{{ location.death_count|with_commas }} Deaths{% else %}Gathering Data{% endif %}{% endif %}</span>
+                  <img class="icon" src="/img/icon-deaths.png" alt="Deaths" title="Deaths">
+                  <span title="{% if location.death_count_text %}{{ location.death_count_text }}{% else %}{% if location.death_count %}{{ location.death_count|with_commas }} Deaths{% else %}Gathering Data{% endif %}{% endif %}">{% if location.death_count_text %}{{ location.death_count_text }}{% else %}{% if location.death_count %}{{ location.death_count|with_commas }} Deaths{% else %}Gathering Data{% endif %}{% endif %}</span>
                 </div>
                 <div class="status-entry">
-                  <img class="icon" src="/img/icon-family.png" alt="Families Affected">
-                  <span title="{{ location.affected_count_text }}">{% if location.affected_count_text %}{{ location.affected_count_text }}{% else %}{% if location.affected_count %}{{ location.affected_count|with_commas }} Families Affected{% else %}Gathering Data{% endif %}{% endif %}</span>
+                  <img class="icon" src="/img/icon-family.png" alt="Families Affected" title="Families Affected">
+                  <span title="{% if location.affected_count_text %}{{ location.affected_count_text }}{% else %}{% if location.affected_count %}{{ location.affected_count|with_commas }} Families Affected{% else %}Gathering Data{% endif %}{% endif %}">{% if location.affected_count_text %}{{ location.affected_count_text }}{% else %}{% if location.affected_count %}{{ location.affected_count|with_commas }} Families Affected{% else %}Gathering Data{% endif %}{% endif %}</span>
                 </div>
                 <div class="status-entry">
-                  <img class="icon" src="/img/icon-communication.png" alt="Communication">
+                  <img class="icon" src="/img/icon-pledged.png" alt="Missing People" title="Missing People">
+                  <span title="{% if location.missing_count_text %}{{ location.missing_count_text }}{% else %}{% if location.missing_count %}{{ location.missing_count|with_commas }} Missing{% else %}Gathering Data{% endif %}{% endif %}">{% if location.missing_count_text %}{{ location.missing_count_text }}{% else %}{% if location.missing_count %}{{ location.missing_count|with_commas }} Missing{% else %}Gathering Data{% endif %}{% endif %}</span>
+                </div>
+                <div class="status-entry">
+                  <img class="icon" src="/img/icon-communication.png" alt="Communication" title="Communication Status">
                   <span title="{{ location.status.communication }}">{% if location.status.communication %}{{ location.status.communication }}{% else %}Gathering Data{% endif %}</span>
                 </div>
                 <div class="status-entry">
-                  <img class="icon" src="/img/icon-water.png" alt="Water">
+                  <img class="icon" src="/img/icon-water.png" alt="Water" title="Water Status">
                   <span title="{{ location.status.water }}">{% if location.status.water %}{{ location.status.water }}{% else %}Gathering Data{% endif %}</span>
                 </div>
                 <div class="status-entry">
-                  <img class="icon" src="/img/icon-electricity.png" alt="Electricity">
+                  <img class="icon" src="/img/icon-electricity.png" alt="Power" title="Power Status">
                   <span title="{{ location.status.power }}">{% if location.status.power %}{{ location.status.power }}{% else %}Gathering Data{% endif %}</span>
                 </div>
                 <div class="status-entry">
-                  <img class="icon" src="/img/icon-medicine.png" alt="Medicine">
+                  <img class="icon" src="/img/icon-medicine.png" alt="Medicine" title="Medical Status">
                   <span title="{{ location.status.medicines }}">{% if location.status.medicines %}{{ location.status.medicines }}{% else %}Gathering Data{% endif %}</span>
                 </div>
                 <div class="status-entry">
-                  <img class="icon" src="/img/icon-clothes.png" alt="Needs Clothes">
+                  <img class="icon" src="/img/icon-clothes.png" alt="Needs Clothes" title="Clothing Status">
                   <span title="{{ location.status.cloths }}">{% if location.status.cloths %}{{ location.status.cloths }}{% else %}Gathering Data{% endif %}</span>
                 </div>
                 <div class="status-entry">
-                  <img class="icon" src="/img/icon-food.png" alt="Food">
+                  <img class="icon" src="/img/icon-food.png" alt="Food" title="Food Supply Status">
                   <span title="{{ location.status.food }}">{% if location.status.food %}{{ location.status.food }}{% else %}Gathering Data{% endif %}</span>
                 </div>
                 <div class="status-entry">
-                  <img class="icon" src="/img/icon-shelter.png" alt="Shelter">
+                  <img class="icon" src="/img/icon-shelter.png" alt="Shelter" title="Shelter Status">
                   <span title="{{ location.status.shelter }}">{% if location.status.shelter %}{{ location.status.shelter }}{% else %}Gathering Data{% endif %}</span>
                 </div>
               </div>
@@ -350,11 +335,18 @@
                   <img src="/img/thumb-jci.png" title="Junior Chamber International">
                 </div> -->
               <div>
-                <a class="btn btn-primary btn-block entry-btn" href="/locations/{{ location.id }}" title="{{ location.name }}" role="button"><span class="glyphicon glyphicon-circle-arrow-right"></span> Get Involved. Donate Now!  &raquo;</a>
+                <a class="btn btn-primary btn-block entry-btn" href="/locations/{{ location.id }}" title="{{ location.name }}" role="button"><span class="glyphicon glyphicon-circle-arrow-right"></span> View Relief Efforts in {{ location.name }} &raquo;</a>
               </div>
             </div>
         </div>
         {% endfor %}
+
+        <div class="col-12" id="no_results_notice">
+
+          <div class="alert">
+              <strong>No Locations Found...</strong></a>
+          </div>
+        </div>
       </div>
     </div>
 {% endblock %}
@@ -454,8 +446,7 @@
         channel.bind('new_post', function(data) {
           //do something when the new data is triggered
           console.log(data);
-          for(i=0;i<data.data.posts.length;i++){
-            data2 = data.data.posts[i];
+            data2 = data;
             d = '<li class="all ' + data2.post_type + '">';
             d += '<a href="/posts/' + data2.id + '">';
             d += '<strong>' + data2.name + '</strong>';
@@ -485,9 +476,16 @@
             else {
               $("#post_need_feed").prepend(d);
             }
-
-          }
           setTimeout(function(){twttr.widgets.load();FB.XFBML.parse();},100);
+        });
+
+        channel.bind('new_revision', function(data) {
+          //do something when the new data is triggered
+          console.log(data);
+          var d = '<li><img src="http://graph.facebook.com/' + data.fb_id + '/picture?small">
+              <label style="margin-bottom: 0;"><a target="_blank" href="http://www.facebook.com/profile.php?id=' + data.fb_id + '">' + data.fb_name + '</a></label> updated <a href="/locations/' + data.location + '"><span class="label label-success">' + data.revision_type + '</span></a><br/><p>' + data.changes + '</p><span class="update-date">' + data.created + '</span></li>';
+
+          $("#updates_feed").prepend(d);
         });
       </script>
       <script type="text/javascript">
@@ -517,4 +515,160 @@
 
       </script>
       <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+
+      <script type="text/javascript">
+
+    var search_locations = false;
+    var search_locations_length = 0;
+    var search_locations_text = new Array();
+
+    $(document).ready(function(){
+
+        init_location_search();
+
+        $("body").on("keyup", "#search", function(event){
+            val = $("#search").val();
+            search_location(val);
+            $(".search_buttons").removeClass('active');
+        });
+
+        $("#search").focus(function(){
+          $('html, body').animate({
+              scrollTop: ($("#locations-container").offset().top - 80)
+          }, 500);
+        })
+
+    });
+
+    function init_location_search(){
+        search_locations = $(".location");
+        search_locations_length = search_locations.length;
+        for (var i = 0; i < search_locations_length; i++) {
+            b = search_locations.eq(i);
+            c = extract_terms(b);
+            c = c.toLowerCase();
+            search_locations_text.push(c);
+        }
+    }
+
+    function extract_terms(b){
+        return b.find(".location-tags").html();
+    }
+
+    function search_location(search_term){
+        if(search_term.length > 0){
+            search_term = search_term.toLowerCase();
+            search_terms = search_term.split(" ");
+            no_results = true;
+            for (var i = 0; i < search_locations_length; i++) {
+                if(in_terms(search_locations_text[i],search_terms)){
+                    search_locations.eq(i).removeClass('hidden');
+                    no_results = false;
+                } else {
+                    search_locations.eq(i).addClass('hidden');
+                }
+            }
+        }
+        else {
+            search_locations.removeClass('hidden');
+            no_results = false;
+            $(".updates-feed").removeClass('hidden');
+        }
+        if(no_results){
+          $(".updates-feed").addClass('hidden');
+            $("#no_results_notice").removeClass('hidden');
+        }
+        else {
+          $(".updates-feed").addClass('hidden');
+            $("#no_results_notice").addClass('hidden');
+        }
+    }
+
+    function in_terms(term, term_array){
+        for(i=0;i<term_array.length;i++){
+            if(term.indexOf(term_array[i]) == -1){
+                return false;
+            }
+        }
+        return true;
+    }
+
+    $(document).ready(function(){
+      $("#show-samar").click(function(){
+        $("#search").val("Samar");
+        search_location("Samar");
+        $(this).addClass('active');
+        $(this).siblings().removeClass('active');
+        $('html, body').animate({
+            scrollTop: ($("#locations-container").offset().top - 80)
+        }, 500);
+      });
+      $("#show-leyte").click(function(){
+        $("#search").val("Leyte");
+        search_location("Leyte");
+        $(this).addClass('active');
+        $(this).siblings().removeClass('active');
+        $('html, body').animate({
+            scrollTop: ($("#locations-container").offset().top - 80)
+        }, 500);
+      });
+      $("#show-cebu").click(function(){
+        $("#search").val("Cebu");
+        search_location("Cebu");
+        $(this).addClass('active');
+        $(this).siblings().removeClass('active');
+        $('html, body').animate({
+            scrollTop: ($("#locations-container").offset().top - 80)
+        }, 500);
+      });
+      $("#show-iloilo").click(function(){
+        $("#search").val("Iloilo");
+        search_location("Iloilo");
+        $(this).addClass('active');
+        $(this).siblings().removeClass('active');
+        $('html, body').animate({
+            scrollTop: ($("#locations-container").offset().top - 80)
+        }, 500);
+      });
+      $("#show-capiz").click(function(){
+        $("#search").val("Capiz");
+        search_location("Capiz");
+        $(this).addClass('active');
+        $(this).siblings().removeClass('active');
+        $('html, body').animate({
+            scrollTop: ($("#locations-container").offset().top - 80)
+        }, 500);
+      });
+      $("#show-aklan").click(function(){
+        $("#search").val("Aklan");
+        search_location("Aklan");
+        $(this).addClass('active');
+        $(this).siblings().removeClass('active');
+        $('html, body').animate({
+            scrollTop: ($("#locations-container").offset().top - 80)
+        }, 500);
+      });
+      $("#show-antique").click(function(){
+        $("#search").val("Antique");
+        search_location("Antique");
+        $(this).addClass('active');
+        $(this).siblings().removeClass('active');
+        $('html, body').animate({
+            scrollTop: ($("#locations-container").offset().top - 80)
+        }, 500);
+      });
+      $("#show-all").click(function(){
+        $("#search").val("");
+        search_location("");
+        $(this).addClass('active');
+        $(this).siblings().removeClass('active');
+        $('html, body').animate({
+            scrollTop: ($("#locations-container").offset().top - 80)
+        }, 500);
+      });
+    });
+
+    </script>
+
+</script>
 {% endblock %}

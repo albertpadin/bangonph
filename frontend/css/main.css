@@ -701,6 +701,11 @@ height: 80px;
         display: block;
     }
 
+    .hand:hover {
+        cursor: hand;
+        cursor:pointer;
+    }
+
 
 /*    .feed-input input[type="submit"] {
         margin-top: -35px;

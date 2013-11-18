@@ -69,6 +69,8 @@ class LocationRevisionChanges(ndb.Model):
     name = ndb.StringProperty()
     status = ndb.JsonProperty()
     requirements = ndb.JsonProperty()
+    revision_type = ndb.StringProperty(default="New Update")
+
 
 class LocationRevision(ndb.Model):
     created = ndb.DateTimeProperty(auto_now_add=True)
@@ -98,7 +100,7 @@ class Location(ndb.Model):
     death_count_text = ndb.StringProperty()
     affected_count = ndb.IntegerProperty()
     affected_count_text = ndb.StringProperty()
-    status_board = ndb.StringProperty()
+    status_board = ndb.TextProperty()
     relief_aid_status = ndb.StringProperty(default="Unknown")
     needs = ndb.JsonProperty()
     status = ndb.JsonProperty()
@@ -108,6 +110,7 @@ class Location(ndb.Model):
     featured = ndb.BooleanProperty(default=False)
     missing_person = ndb.IntegerProperty()
     missing_person_text = ndb.StringProperty()
+    relief_aid_totals = ndb.JsonProperty()
 
     def to_object(self, extended=""):
         details = {}
@@ -121,6 +124,8 @@ class Location(ndb.Model):
         details["death_count_text"] = self.death_count_text
         details["affectedCount"] = self.affected_count
         details["affectedCountText"] = self.affected_count_text
+        details["affected_count"] = self.affected_count
+        details["affected_count_text"] = self.affected_count_text
         details["missing_count"] = self.missing_person
         details["missing_count_text"] = self.missing_person_text
         details["statusBoard"] = self.status_board
@@ -134,6 +139,22 @@ class Location(ndb.Model):
         details["missing_person_text"] = self.missing_person_text
         details["name"] = self.name
         details["requirements"] = self.requirements
+        tags = self.name.split(",")
+        details['tags'] = []
+        for tag in tags:
+            details['tags'].append(tag.strip().lower())
+        details['relief_aid_totals'] = self.relief_aid_totals
+        details['relief_aid_ratings'] = {"food":1, "hygiene":1, "medicine":1, "medical_mission":1, "shelter":1}
+
+        if details['requirements']:
+            for key in details['requirements']:
+                if details['requirements'][key]:
+                    try:
+                        relief_aid_rating = (float(details['relief_aid_totals'][key]) / float(details['requirements'][key])) * 100
+                        details['relief_aid_ratings'][key] = relief_aid_rating
+                    except:
+                        logging.exception("error in relief aid rating computation")
+        
         return details
 
 
@@ -309,7 +330,7 @@ class Contact(ndb.Model):
 class Post(ndb.Model):
     created = ndb.DateTimeProperty(auto_now_add=True)
     updated = ndb.DateTimeProperty(auto_now=True)
-    name = ndb.StringProperty()
+    name = ndb.StringProperty(default="Anonymous")
     email = ndb.StringProperty()
     twitter = ndb.StringProperty()
     facebook = ndb.StringProperty()

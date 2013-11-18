@@ -1159,12 +1159,14 @@ class LocationHandler(BaseHandler):
                 if location.images:
                     cnt = len(new_urls)
                     for i in range(0, cnt):
-                        if new_urls[i]["src"] != "" or new_titles[i]["image_title"] != "" or new_captions[i]["image_caption"] != "":
-                            images = {}
-                            images["src"] = new_urls[i]["src"]
-                            images["image_title"] = new_titles[i]["image_title"]
-                            images["image_caption"] = new_captions[i]["image_caption"]
-                            location.images.append(images)
+                        if new_urls[i]["srcid"] != "":
+                            for loc_image in location.images:
+                                if new_urls[i]["srcid"] == loc_image["src"]:
+                                    loc_image["src"] = new_urls[i]["src"]
+                                    loc_image["image_title"] = new_titles[i]["image_title"]
+                                    loc_image["image_caption"] = new_captions[i]["image_caption"]
+                        else:
+                            location.images.append({"src": new_urls[i]["src"], "image_title": new_titles[i]["image_title"], "image_caption": new_captions[i]["image_caption"]})
                 else:
                     images_datas = []
                     cnt = len(new_urls)
@@ -1769,7 +1771,7 @@ class CentersHandler(BaseHandler):
                 temp["email"] = drop.email
                 datas.append(temp)
         self.response.out.write(simplejson.dumps(datas))
-        
+
     def post(self):
         if self.request.get("id"):
             drop = DropOffCenter.get_by_id(self.request.get('id'))

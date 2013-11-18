@@ -184,7 +184,7 @@ var EditLocation =  Backbone.View.extend({
   editLocation: function() {
     var obj_image_url = [];
     $(".image_url").each(function() {
-        obj_image_url.push({"src": $(this).val()});
+        obj_image_url.push({"src": $(this).val(), "srcid" : $(this).attr("rel")});
     });
 
     var obj_image_title = [];

@@ -46,6 +46,7 @@ var LocationView = Backbone.View.extend({
   },
   locations: function() {
     var self = this;
+    $(".failed-message").hide();
     $(".loading-message").show();
     var collection = new LocationCollection();
     collection.fetch({
@@ -165,6 +166,7 @@ var EditLocation =  Backbone.View.extend({
   location: function(id) {
     console.log(id);
     var self = this;
+    $(".failed-message").hide();
     $(".loading-message").show();
     var collection = new LocationCollection();
     collection.fetch({

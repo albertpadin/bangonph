@@ -36,6 +36,7 @@ var DistributorView = Backbone.View.extend({
   },
   distributors: function(){
     var self = this;
+    $(".failed-message").hide();
     $(".loading-message").show();
     var distributorsCollection = new DistributorCollection();
     distributorsCollection.fetch({
@@ -124,6 +125,7 @@ var EditDistributor = Backbone.View.extend({
   },
   data: function(id){
     var self = this;
+    $(".failed-message").hide();
     $(".loading-message").show();
     var distributorsCollection = new DistributorCollection();
     distributorsCollection.fetch({

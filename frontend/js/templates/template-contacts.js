@@ -34,6 +34,7 @@ var ContactView = Backbone.View.extend({
   },
   contacts: function() {
     var self = this;
+    $(".failed-message").hide();
     $(".loading-message").show();
     var contactsCollection = new ContactsCollection();
     contactsCollection.fetch({
@@ -114,6 +115,7 @@ var EditContact = Backbone.View.extend({
   },
   data: function(id) {
     var self = this;
+    $(".failed-message").hide();
     $(".loading-message").show();
     var contactsCollection = new ContactsCollection();
     contactsCollection.fetch({

@@ -23,6 +23,26 @@
         <div class='col-lg-12'><a class='btn' href='/locations/{{ location_id }}'>Back to {{ page_title }}</a><div class='pull-right'>Logged in as: {{ login_user }}</div>
         <hr/>
       </div>
+
+      <div class="row">
+        <div class="col-12">
+        <h2>Guidelines: PLEASE READ!!!!</h2>
+        
+          <div><strong>GENERAL GUIDELINES</strong></div>
+          <ol>
+          <li>Anything you submit here is IMMEDIATELY made PUBLIC and VISIBLE. Be accurate and double check everything.</li>
+          <li>ONLY submit information here that is VERIFIED and CONFIRMED by reputable sources such as official news agencies, authorized people (eg. official statements of Mayors and other public officials of a city or municipality), and first-hand accounts with multiple corroborative evidence.</li>
+          <li>In the "Source/s" field, explain how you obtained the information. If possible, please include links to website sources. (Not applicable when adding a Relief Effort)</li>
+          </ol>
+          <div><strong>HOW TO FILL IN FIELDS</strong></div>
+          <ol>
+          <li>Some fields only accept number values only. Please remove COMMAS and SPACES in between numbers. No letters allows.</li>
+          <li>When you submit information, your changes and profile will be shown in the Revision History of the Location.</li>
+          </ol>
+          <div>Thank you for helping out! Your contribution will go a long way in helping the victims.</div>
+        <hr/>
+      </div>
+      </div>
           {% if success %}
           <div class="alert alert-success">
             {{ success }} <a href="/locations/{{ location_id }}" class="alert-link">Go back to {{ page_title }}</a>
@@ -75,14 +95,16 @@
                     <td><input type="text" class="form-control" required="required" name="contacts"/></td>
                   </tr>
                   <tr>
-                    <td>Needs</td>
-                    <td><textarea class="form-control" name="needs"></textarea></td>
+                    <td>Needs of Relief Operation</td>
+                    <td><textarea class="form-control" placeholder="Does this relief operation need anything? Volunteers? Transportation? Anything? Put it here." name="needs"></textarea></td>
                   </tr>
                   <tr>
                     <td>Date of Operation</td>
                     <td>
                       <select name="date" class="form-control">
                         <option value="UNKNOWN">UNKNOWN</option>
+                        <option value="11/10/2013">11/08/2013</option>
+                        <option value="11/10/2013">11/09/2013</option>
                         <option value="11/10/2013">11/10/2013</option>
                         <option value="11/11/2013">11/11/2013</option>
                         <option value="11/12/2013">11/12/2013</option>
@@ -144,7 +166,7 @@
                   <td></td>
                 </tr>
                 <tr>
-                  <th colspan="2">Display Information</th>
+                  <th colspan="2">Display Information. This is shown as is. (You may include commas)</th>
                 </tr>
                 <tr>
                   <td>Death Count Text</td>
@@ -155,7 +177,7 @@
                   <td><input name="affected_count_text" class="form-control" type="text" value="{% if location.affected_count_text %}{{ location.affected_count_text }}{% endif %}"/></td>
                 </tr>
                 <tr>
-                  <td>Missing Persons Text</td>
+                  <td>Missing Persons Count Text</td>
                   <td><input name="missing_person_text" class="form-control" type="text" value="{% if location.missing_person_text %}{{ location.missing_person_text }}{% endif %}" /></td>
                 </tr>
                 

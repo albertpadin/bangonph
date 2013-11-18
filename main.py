@@ -1,3 +1,6 @@
+import sys
+reload(sys)
+sys.setdefaultencoding('utf-8')
 import webapp2, jinja2, os, calendar
 from webapp2_extras import routes
 from models import User, Contact, Location, Post, Distribution, File, Distributor, Subscriber, DropOffCenter, LocationRevision, LocationRevisionChanges, DistributionRevision
@@ -31,6 +34,18 @@ jinja_environment = jinja2.Environment(loader=jinja2.FileSystemLoader(os.path.di
 def with_commas(value):
     return "{:,}".format(value)
 
+
+def no_commas(values):
+    tag_string = ""
+    for value in values:
+        tag_string += value + " "
+    return tag_string.strip()
+
+
+def prettify(ugly):
+    return ugly.replace("-", " ").title()
+
+
 def to_date(date):
     date = date + datetime.timedelta(hours=8)
     return date.strftime("%B %d, %Y %I:%M%p")
@@ -39,6 +54,8 @@ def nl_to_br(text):
     return text.replace('<','&lt;').replace('>','&gt;').replace('&','&amp;').replace('\n','<br />')
 
 jinja_environment.filters['nl_to_br'] = nl_to_br
+jinja_environment.filters['no_commas'] = no_commas
+jinja_environment.filters['prettify'] = prettify
 jinja_environment.filters['with_commas'] = with_commas
 jinja_environment.filters['to_date'] = to_date
 
@@ -497,6 +514,10 @@ class PublicFrontPage(BaseHandler):
 
         for featured_location in featured_locations:
             self.tv['featured_locations'].append(featured_location.to_object())
+
+        user_changes = LocationRevisionChanges.query().order(-LocationRevisionChanges.created).fetch(25)
+        if user_changes:
+            self.tv["revisions"] = user_changes
         
         self.render('frontend/public-front.html')
 
@@ -634,6 +655,7 @@ class PublicLocationEditPage(BaseHandler):
             user_changes.fb_middlename = self.public_user.fb_middlename
             user_changes.fb_name = self.public_user.fb_name
             user_changes.name = self.request.get("page_title")
+            user_changes.revision_type = "Updated Location Status"
 
             location = Location.get_by_id(self.request.get("page_title"))
             if location:
@@ -730,6 +752,28 @@ class PublicLocationEditPage(BaseHandler):
                 location.requirements = requirements
                 location.put()
 
+                p = pusher.Pusher(
+                  app_id='59383',
+                  key='e0a2a1c8316b9baddc9b',
+                  secret='474177f7aea8c983a7d1'
+                )
+                user_name = ""
+                if user_changes.fb_firstname:
+                    user_name += user_changes.fb_firstname
+                if user_changes.fb_middlename:
+                    user_name += " " + user_changes.fb_middlename
+                if user_changes.fb_lastname:
+                    user_name += " " + user_changes.fb_lastname
+
+                p['feeds'].trigger('new_revision', {
+                    "changes": "; ".join(datas_changes),
+                    "location": location.key.id(),
+                    "fb_id": user_changes.fb_id,
+                    "fb_name": user_name,
+                    "revision_type": 'Updated Location Status',
+                    "created": to_date(user_changes.created)
+                    })
+
             self.redirect("/locations/" + self.request.get("page_title") + "/edit?success=Successfully+updated.")
 
         if self.request.get("status") == "reliefs":
@@ -764,6 +808,7 @@ class PublicLocationEditPage(BaseHandler):
                 user_changes.fb_middlename = self.public_user.fb_middlename
                 user_changes.fb_name = self.public_user.fb_name
                 user_changes.name = self.request.get("page_title")
+                user_changes.revision_type = "Added a New Relief Effort"
                 datas_changes = []
                 if self.request.get("relief_name"):
                     datas_changes.append("Relief Effort: " + distribution_revision.name)
@@ -785,6 +830,28 @@ class PublicLocationEditPage(BaseHandler):
                     datas_changes.append("Tag: " + str(distribution_revision.tag))
                 user_changes.status = datas_changes
                 user_changes.put()
+
+                p = pusher.Pusher(
+                  app_id='59383',
+                  key='e0a2a1c8316b9baddc9b',
+                  secret='474177f7aea8c983a7d1'
+                )
+                user_name = ""
+                if user_changes.fb_firstname:
+                    user_name += user_changes.fb_firstname
+                if user_changes.fb_middlename:
+                    user_name += " " + user_changes.fb_middlename
+                if user_changes.fb_lastname:
+                    user_name += " " + user_changes.fb_lastname
+
+                p['feeds'].trigger('new_revision', {
+                    "changes": "; ".join(datas_changes),
+                    "location": location.key.id(),
+                    "fb_id": user_changes.fb_id,
+                    "fb_name": user_name,
+                    "revision_type": 'Added a New Relief Effort',
+                    "created": to_date(user_changes.created)
+                    })
 
                 self.redirect("/locations/" + self.request.get("page_title") + "/edit?success=Successfully+updated.")
             else:
@@ -2419,17 +2486,18 @@ class APIPostsHandler(APIBaseHandler):
                     failed = True
 
                 if curs:
-                    posts, next_cursor, more = Post.query().fetch_page(25, start_cursor=curs)
+                    posts, next_cursor, more = Post.query(Post.expiry >= (datetime.datetime.now() - datetime.timedelta(hours=30))).fetch_page(25, start_cursor=curs)
                 else:
-                    posts, next_cursor, more = Post.query().fetch_page(25)
+                    posts, next_cursor, more = Post.query(Post.expiry >= (datetime.datetime.now() - datetime.timedelta(hours=30))).fetch_page(25)
             else:
                 if self.request.get_all("filter_post_type"):
                     filter_type = self.request.get_all("filter_post_type")[0].upper()
-                    date_now = datetime.datetime.now() - datetime.timedelta(hours=24)
+                    date_now = datetime.datetime.now() - datetime.timedelta(hours=30)
 
                     posts, next_cursor, more = Post.query(Post.post_type.IN([filter_type]), Post.expiry >= date_now).order(-Post.expiry).fetch_page(100)
                 else:
-                    posts, next_cursor, more = Post.query().fetch_page(25)
+                    date_now = datetime.datetime.now() - datetime.timedelta(hours=30)
+                    posts, next_cursor, more = Post.query(Post.expiry >= date_now).fetch_page(25)
 
             if not failed:
                 for post in posts:
@@ -2547,7 +2615,7 @@ class APIPostsHandler(APIBaseHandler):
         form_data = urllib.urlencode(form_fields)
 
         try:
-            logging.debug(urlfetch.fetch(url="http://rboard.me/messages/feed", payload=form_data, method=urlfetch.POST, headers={'Content-Type': 'application/x-www-form-urlencoded'}).content)
+            logging.debug(urlfetch.fetch(url="http://reliefboard.com/messages/feed", payload=form_data, method=urlfetch.POST, headers={'Content-Type': 'application/x-www-form-urlencoded'}).content)
         except:
             logging.exception("failed...")
 
@@ -2594,17 +2662,17 @@ class APIPostSandbox(APIBaseHandler):
                     failed = True
 
                 if curs:
-                    posts, next_cursor, more = Post.query().fetch_page(25, start_cursor=curs)
+                    posts, next_cursor, more = Post.query(Post.expiry >= (datetime.datetime.now() - datetime.timedelta(hours=30))).fetch_page(25, start_cursor=curs)
                 else:
-                    posts, next_cursor, more = Post.query().fetch_page(25)
+                    posts, next_cursor, more = Post.query(Post.expiry >= (datetime.datetime.now() - datetime.timedelta(hours=30))).fetch_page(25)
             else:
                 if self.request.get_all("filter_post_type"):
                     filter_type = self.request.get_all("filter_post_type")[0].upper()
-                    date_now = datetime.datetime.now() - datetime.timedelta(hours=24)
+                    date_now = datetime.datetime.now() - datetime.timedelta(hours=30)
 
                     posts, next_cursor, more = Post.query(Post.post_type.IN([filter_type]), Post.expiry >= date_now).order(-Post.expiry).fetch_page(100)
                 else:
-                    posts, next_cursor, more = Post.query().fetch_page(25)
+                    posts, next_cursor, more = Post.query(Post.expiry >= (datetime.datetime.now() - datetime.timedelta(hours=30))).fetch_page(25)
 
             if not failed:
                 for post in posts:
@@ -3386,6 +3454,65 @@ class UploadHandler(blobstore_handlers.BlobstoreUploadHandler):
         self.redirect("/upload?success=File%20Uploaded")
 
 
+class ComputeReliefStatus(webapp2.RequestHandler):
+    def get(self):
+        # Compute Everything
+        locations = Location.query()
+        for location in locations:
+            location_id = location.key.id()
+            # enqueue compute task (TODO)
+
+
+    def post(self):
+        if not self.request.get('location_id'):
+            logging.error("Location ID not given")
+            return
+
+        location = Location.get_by_id(self.request.get('location_id'))
+        if not location:
+            logging.error("Location not found")
+            return
+
+        # Get Relief Efforts
+        distributions = DistributionRevision.query(DistributionRevision.name == location.key.id())
+
+        food_total = 0
+        hygiene_total = 0
+        medicine_total = 0
+        medical_mission_total = 0
+        shelter_total = 0
+        unknown_total = 0
+
+        for distribution in distributions:
+            if distribution.tag == "FOOD & WATER":
+                if distribution.num_of_packs:
+                    food_total += distribution.num_of_packs
+            elif distribution.tag == "SHELTER":
+                if distribution.num_of_packs:
+                    shelter_total += distribution.num_of_packs
+            elif distribution.tag == "MEDICINE":
+                if distribution.num_of_packs:
+                    medicine_total += distribution.num_of_packs
+            elif distribution.tag == "HYGIENE":
+                if distribution.num_of_packs:
+                    hygiene_total += distribution.num_of_packs
+            elif distribution.tag == "MEDICAL MISSION":
+                if distribution.num_of_packs:
+                    medical_mission_total += distribution.num_of_packs
+            else:
+                if distribution.num_of_packs:
+                    unknown_total += distribution.num_of_packs
+
+        location.relief_aid_totals = {}
+        location.relief_aid_totals['food'] = food_total
+        location.relief_aid_totals['shelter'] = shelter_total
+        location.relief_aid_totals['hygiene'] = hygiene_total
+        location.relief_aid_totals['medicine'] = medicine_total
+        location.relief_aid_totals['medical_mission'] = medical_mission_total
+        location.relief_aid_totals['unknown'] = unknown_total
+        location.put()
+
+
 app = webapp2.WSGIApplication([
     routes.DomainRoute(r'<:gcdc2013-bangonph\.appspot\.com|www\.bangonph\.com|staging\.gcdc2013-bangonph\.appspot\.com>', [
 
@@ -3403,6 +3530,8 @@ app = webapp2.WSGIApplication([
 
         # richmond:
         webapp2.Route('/s', handler=sampler, name="www-get-authorization-code"),
+
+        webapp2.Route('/admin/tasks/compute_relief_status', handler=ComputeReliefStatus, name="www-compute-relief-status"),
 
         webapp2.Route(r'/<:.*>', ErrorHandler)
     ]),

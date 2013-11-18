@@ -27,8 +27,31 @@
 
       
       <div class="row">
+        <div class="col-lg-6">
+            <div class="btn-group">
+              <a href="#" class="btn btn-default">All</a>
+              <a href="#" class="btn btn-default">Samar</a>
+              <a href="#" class="btn btn-default">Leyte</a>
+              <a href="#" class="btn btn-default">Cebu</a>
+              <a href="#" class="btn btn-default">Iloilo</a>
+              <a href="#" class="btn btn-default">Capiz</a>
+              <a href="#" class="btn btn-default">Aklan</a>
+              <a href="#" class="btn btn-default">Antique</a>
+            </div>
+        </div>
+        <div class="col-lg-6">
+          <div class="input-group">
+            <input type="text" class="form-control" placeholder="Search...">
+            <span class="input-group-btn">
+              <button class="btn btn-default" type="button">Search <span class="glyphicon glyphicon-search"></span></button>
+            </span>
+          </div><!-- /input-group -->
+        </div><!-- /.col-lg-6 -->
+        <!-- <div class="clearfix"></div> -->
+        <p>&nbsp;</p>
+
         <div class="col-lg-6 col-md-6 col-sm-6 col feed">
-       <strong>Need Anything? Post it here!</strong>
+          <strong>Need Anything? Post it here!</strong>
        <!-- <span class="pull-right"><a href="/posts" class="see-more-btn">see more</a></span> -->
 
 
@@ -111,7 +134,54 @@
         </div>
       </div>
       <div class="clearfix"></div>
-          
+
+        <div class="col-lg-4 col-md-6 col-sm-6 col updates-feed">
+          <div class="status-item">
+          <h4>Updates</h4>
+          <ul class="updates-wrap">
+            <li>
+              <img src="http://graph.facebook.com/550109953/picture?small">
+              <label style="margin-bottom: 0;"><a href="http://www.facebook.com/profile.php?id=550109953">Albert Chiu Padin</a></label> updated <a href="#"><span class="label label-success">Basey, Samar</span></a><br/>
+              <p>
+              Updates: Affected: 7510 families >> 7,510 families;</p>
+              </p>
+              <span class="update-date">November 17, 2013 - 12:16am</span>
+            </li>
+            <li>
+              <img src="http://graph.facebook.com/550109953/picture?small">
+              <label style="margin-bottom: 0;"><a href="http://www.facebook.com/profile.php?id=550109953">Albert Chiu Padin</a></label> updated <a href="#"><span class="label label-success">Basey, Samar</span></a><br/>
+              <p>
+              Updates: Affected Count: 0 >> 7510; Missing Count: 0 >> 39; Affected: Gathering Data >> 7510 families; Missing: Gathering Data >> 30 persons; Communication: No Communication >> Reachable - in terms of DILG coordination with the LGU; Source/s: http://www.ndrrmc.gov.ph/attachments/article/1125/doc02491920131116201822.pdf;</p>
+              </p>
+              <span class="update-date">November 17, 2013 - 12:16am</span>
+            </li>
+            <li>
+              <img src="http://graph.facebook.com/550109953/picture?small">
+              <label style="margin-bottom: 0;"><a href="http://www.facebook.com/profile.php?id=550109953">Albert Chiu Padin</a></label> updated <a href="#"><span class="label label-success">Basey, Samar</span></a><br/>
+              <p>
+              Updates: Affected: 7510 families >> 7,510 families;</p>
+              </p>
+              <span class="update-date">November 17, 2013 - 12:16am</span>
+            </li>
+            <li>
+              <img src="http://graph.facebook.com/550109953/picture?small">
+              <label style="margin-bottom: 0;"><a href="http://www.facebook.com/profile.php?id=550109953">Albert Chiu Padin</a></label> updated <a href="#"><span class="label label-success">Basey, Samar</span></a><br/>
+              <p>
+              Updates: Affected: 7510 families >> 7,510 families;</p>
+              </p>
+              <span class="update-date">November 17, 2013 - 12:16am</span>
+            </li>
+            <li>
+              <img src="http://graph.facebook.com/550109953/picture?small">
+              <label style="margin-bottom: 0;"><a href="http://www.facebook.com/profile.php?id=550109953">Albert Chiu Padin</a></label> updated <a href="#"><span class="label label-success">Basey, Samar</span></a><br/>
+              <p>
+              Updates: Affected Count: 0 >> 7510; Missing Count: 0 >> 39; Affected: Gathering Data >> 7510 families; Missing: Gathering Data >> 30 persons; Communication: No Communication >> Reachable - in terms of DILG coordination with the LGU; Source/s: http://www.ndrrmc.gov.ph/attachments/article/1125/doc02491920131116201822.pdf;</p>
+              </p>
+              <span class="update-date">November 17, 2013 - 12:16am</span>
+            </li>
+          </ul>
+          </div>
+        </div>
         {% for location in featured_locations %}
         <div class="col-lg-4 col-md-6 col-sm-6 col">
             <div class="status-item">
@@ -303,6 +373,9 @@
           $(function(){
               $('.feed-wrap').slimScroll({
                   height: '320px'
+              });
+              $('.updates-wrap').slimScroll({
+                  height: '376px'
               });
           });
         </script>

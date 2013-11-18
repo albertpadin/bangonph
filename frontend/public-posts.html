@@ -1,24 +1,9 @@
 {% extends 'frontend/public-index.html' %}
 
-{% block ogdetails %}<meta property="og:image" content="http://www.bangonph.com/img/bangon-ph-black.png"/>
-{% if post.post_type == "NEED" %}
-<meta property="og:image" content="http://www.bangonph.com/img/og-image-donation.png"/>
-{% else %}
-<meta property="og:image" content="http://www.bangonph.com/img/og-image-needs-help.png"/>
-{% endif %}
-
-{% if post.post_type == "NEED" %}
-<meta property="og:title" content="{{ post.name }} NEEDS Help!"/>
-{% else %}
-<meta property="og:title" content="{{ post.name }} OFFERED to Help!"/>
-{% endif %}
-
-    <meta property="og:url" content="{{ current_base_url }}"/>
-{% endblock %}
-
+{% block ogdetails %}<meta property="og:image" content="http://www.bangonph.com/img/bangon-ph-black.png"/>{% endblock %}
 
 {% block content %}
-<link rel="stylesheet" href="/css/datepicker.css">
+    <link rel="stylesheet" href="/css/datepicker.css">
     <div class="jumbotron">
       <div class="container">
         <h1>Let's Coordinate our Relief Efforts</h1>
@@ -28,12 +13,10 @@
         
         <div class="social-media pull-right">
           <div class="social-item">
-                      <a href="https://twitter.com/share" class="twitter-share-button" data-hashtags="BangonPH">Tweet</a>
-            <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+            <a href="https://twitter.com/share" class="twitter-share-button" data-hashtags="BangonPH">Tweet</a>
           </div>
           <div class="social-item">
-            <div class="fb-like" data-href="{{ current_base_url }}" data-layout="button_count" data-action="like" data-show-faces="false" data-share="true"></div>  
-            
+            <div class="fb-like" data-href="{{ current_base_url }}" data-layout="button_count" data-action="like" data-show-faces="false" data-share="true"></div>
           </div>
           <div class="clearfix"></div>
         </div>
@@ -44,85 +27,70 @@
       <!-- Example row of columns -->
       <div class="row">
           
-      <div class="col-lg-8 col-md-8">
-        <div id="campaign-content-wrap">
-            <h3 class="mt0">{{ post.name }}</h3>
-            <h4 class="label2 label-info">{{ post.location }}</h4>
-            <blockquote class="mb0">{{ post.message }}<br />Preferably before {{ post.expiry_friendly }}<br />{{ post.phone }}</blockquote>
-            <div class="pull-right">
-              <div class="social-item">
-                  <div class="fb-share-button" data-text="{{ post.message }}" data-href="{{ current_base_url }}" data-type="button_count"></div>
-              </div>
-              <div class="social-item">
-                <a href="https://twitter.com/share" class="twitter-share-button" data-hashtags="BangonPH">Tweet</a>
-                <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
-              </div>
-            </div>
-            <div class="clearfix"></div>
-            </div>
-          <div class="col-lg-8">
-<div id="fb-root"></div>
-<script>(function(d, s, id) {
-  var js, fjs = d.getElementsByTagName(s)[0];
-  if (d.getElementById(id)) return;
-  js = d.createElement(s); js.id = id;
-  js.src = "//connect.facebook.net/en_US/all.js#xfbml=1&appId=759672407382550";
-  fjs.parentNode.insertBefore(js, fjs);
-}(document, 'script', 'facebook-jssdk'));</script>
-              <div class="fb-comments" data-href="{{ current_base_url }}" data-numposts="10"></div>
-          </div>
-        </div>
-
-      <div class="col-lg-4 col-md-4 feed">
-          
-       <strong>Need Anything? Post it here!</strong>
+      <div class="col-lg-6 col-md-6 col-sm-6 col feed">
+          <strong>Need Anything? Post it here!</strong>
        <!-- <span class="pull-right"><a href="/posts" class="see-more-btn">see more</a></span> -->
 
-        <div class="feed-input">
-          <form id="post_need">
-            <textarea placeholder="what do you need.." name="message" class="text-input"></textarea>
-            <input type="text" name="expiry" placeholder="show this until what date" class="datepicker hidden">
-            <input type="text" name="location" placeholder="what place is this for" class="hidden">
-            <input type="text" name="name" placeholder="what is your name" class="hidden">
-            <input type="text" name="phone" placeholder="leave your contact details" class="hidden">
-            <input type="text" style="display: none;" name="comment">
-            <input type="hidden" name="post_type" value="NEED" />
-            <a href="#" class="btn btn-default hidden cancel-btn">Cancel</a>
-            <input type="submit" value="Post" id="post_need_submit" class="btn btn-primary hidden submit-btn">
-          </form>
-        </div>
 
-        <ul class="nav nav-pills">
+          <div class="feed-input">
+             <form id="post_need">
+                
+                <textarea placeholder="what do you need.." name="message" class="text-input"></textarea>
+                <input type="text" name="expiry" placeholder="show this until what date" class="datepicker hidden">
+                <input type="text" name="location" placeholder="what place is this for" class="hidden">
+                <input type="text" name="name" placeholder="what is your name" class="hidden">
+                <input type="text" name="phone" placeholder="leave your contact details" class="hidden">
+                <input type="text" style="display: none;" name="comment">
+                <input type="hidden" name="post_type" value="NEED" />
+               
+                  <a href="#" class="btn btn-default hidden cancel-btn">Cancel</a>
+                  <input type="submit" value="Post" id="post_need_submit" class="btn btn-primary hidden submit-btn">
+
+            </form>
+           </div>
+
+        
+       <ul class="nav nav-pills">
          <!--  <li class="active"><a href="#all" data-toggle="tab">All</a></li>
           <li><a href="#transpo" data-toggle="tab">Transpo</a></li>
           <li><a href="#volunteers" data-toggle="tab">Volunteers</a></li>
           <li><a href="#relief-goods" data-toggle="tab">Relief Goods</a></li> -->
-        </ul>
 
+        </ul>
         <div class="tab-content">
+
           <div class="tab-pane active" id="all">
-             <ul id="post_need_feed" class="feed-wrap"></ul>
+             <ul id="post_need_feed" class="feed-wrap">
+
+                
+
+             </ul>
           </div>
         </div>
+      </div>
 
-          <strong>What can you give? Let us know!</strong>
-          <!-- <span class="pull-right"><a href="/posts" class="see-more-btn">see more</a></span> -->
-         
-           <div class="feed-input">
-             <form id="post_have">
-                <textarea placeholder="what do you have.." name="message" class="text-input"></textarea>
-                <input type="text" name="expiry" placeholder="until when is it available" class="datepicker hidden">
-                <input type="text" name="location" placeholder="where is it" class="hidden">
-                <input type="text" name="name" placeholder="what is your name" class="hidden">
-                <input type="text" name="phone" placeholder="leave your contact details" class="hidden">
-                <input type="text" style="display: none;" name="comment">
-                <input type="hidden" name="post_type" value="HAVE" />
-                <a href="#" class="btn btn-default hidden cancel-btn">Cancel</a>
-                <input type="submit" value="Post" id="post_have_submit" class="btn btn-primary hidden submit-btn">
-              </form>
-            </div>
+      <div class="col-lg-6 col-md-6 col-sm-6 col feed">
+       <strong>What can you give? Let us know!</strong>
+       <!-- <span class="pull-right"><a href="/posts" class="see-more-btn">see more</a></span> -->
+       
+         <div class="feed-input">
+           <form id="post_have">
+              
+              <textarea placeholder="what do you have.." name="message" class="text-input"></textarea>
+              <input type="text" name="expiry" placeholder="until when is it available" class="datepicker hidden"> 
+              <input type="text" name="location" placeholder="where is it" class="hidden">
+              <input type="text" name="name" placeholder="what is your name" class="hidden">
+              <input type="text" name="phone" placeholder="leave your contact details" class="hidden">
+              <input type="text" style="display: none;" name="comment">
+              <input type="hidden" name="post_type" value="HAVE" />
+           
+              <a href="#" class="btn btn-default hidden cancel-btn">Cancel</a>
+              <input type="submit" value="Post" id="post_have_submit" class="btn btn-primary hidden submit-btn">
 
-          <ul class="nav nav-pills">
+        </form>
+       </div>
+
+       <ul class="nav nav-pills">
             <!-- <li class="active"><a href="#all-have" data-toggle="tab">All</a></li>
             <li><a href="#transpo-have" data-toggle="tab">Transpo</a></li>
             <li><a href="#volunteers-have" data-toggle="tab">Volunteers</a></li>
@@ -134,58 +102,31 @@
                <ul class="feed-wrap" id="post_have_feed"></ul>
             </div>
           </div>
-      </div>
 
-
-<!--             <h3 class="mt0">Other Posts from Dan</h3>
-            
-            <div class="related-posts-entry">
-                <h4 class="label2 label-danger">needs transpo</h4>
-                <p>Super Typhoon Yolanda hit the Philippines and left several towns devastated. Affecting more than 2 million people.. </p><a class="see-more-btn pull-right" href="#">See More</a> 
-              <div class="clearfix"></div>
-              <hr>
-            </div>
-
-            <div class="related-posts-entry">
-                <h4 class="label2 label-success">needs transpo</h4>
-                <p>Super Typhoon Yolanda hit the Philippines and left several towns devastated. Affecting more than 2 million people.. </p><a class="see-more-btn pull-right" href="#">See More</a> 
-              <div class="clearfix"></div>
-              <hr>
-            </div>
-
-            <div class="related-posts-entry">
-                <h4 class="label2 label-info">needs transpo</h4>
-                <p>Super Typhoon Yolanda hit the Philippines and left several towns devastated. Affecting more than 2 million people.. </p><a class="see-more-btn pull-right" href="#">See More</a> 
-              <div class="clearfix"></div>
-              <hr>
-            </div> -->
-            
         </div>
-      </div>
-      <div class="clearfix"></div>
-
-    <div class="clearfix"></div>
-    <br/>
-
-
+        <br /><br /><br /><br /><br />
+        <div class="clear"></div>
     </div>
-    </div>
+  </div>
+
 {% endblock %}
-{% block customcss %}
-<link rel="stylesheet" href="/css/jquery.bxslider.css">
-{% endblock %}
+
+
 {% block bottomjs %}
         <script src="/js/jquery-draggable.js"></script>
         <script src="/js/jquery.slimscroll.min.js"></script>
+
         <script src="/js/bootstrap-datepicker.js"></script>
         <script>
             $('.datepicker').datepicker();
         </script>
 
+        <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+
         <script>
           $(function(){
               $('.feed-wrap').slimScroll({
-                  height: '420px'
+                  height: '430px'
               });
           });
         </script>
@@ -206,7 +147,9 @@
             $(this).closest("form").find(".show").removeClass("show").addClass("hidden");
             $(this).closest("div").removeClass("shadowed");
           });
+
         </script>
+
         <script src="http://js.pusher.com/2.1/pusher.min.js"></script>
       <script type="text/javascript">
       $(document).ready(function(){
@@ -238,18 +181,20 @@
 
             if(data2.post_type){
               if(data2.post_type == "NEED"){
-                $("#post_need_feed").prepend(d);
+                $("#post_need_feed").append(d);
               }
               else {
-                $("#post_have_feed").prepend(d);
+                $("#post_have_feed").append(d);
               }
             }
             else {
-              $("#post_need_feed").prepend(d);
+              $("#post_need_feed").append(d);
             }
 
           }
+
           setTimeout(function(){twttr.widgets.load();FB.XFBML.parse();},100);
+          
         });
 
       });
@@ -290,10 +235,9 @@
             else {
               $("#post_need_feed").prepend(d);
             }
-
-      
           setTimeout(function(){twttr.widgets.load();FB.XFBML.parse();},100);
         });
+
       </script>
       <script type="text/javascript">
       $("#post_need").submit(function(e){
@@ -321,6 +265,5 @@
       });
 
       </script>
-
-      <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+      
 {% endblock %}

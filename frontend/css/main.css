@@ -572,7 +572,6 @@ height: 80px;
 
 .feed {
     margin-bottom: 20px;
-    display: none;
 }
 
 .feed > strong {
@@ -704,6 +703,14 @@ height: 80px;
     .hand:hover {
         cursor: hand;
         cursor:pointer;
+    }
+
+    .feed li a {
+        opacity: 0.95;
+    }
+
+    .feed li a:hover, .feed li a:focus {
+        opacity: 0.95;
     }
 
 

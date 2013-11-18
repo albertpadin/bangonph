@@ -35,6 +35,7 @@ var MainView = Backbone.View.extend({
   },
   users: function() {
     var self = this;
+    $(".failed-message").hide();
     $(".loading-message").show();
     var collection = new UsersCollection();
     collection.fetch({
@@ -121,6 +122,7 @@ var EditUser = Backbone.View.extend({
   },
   data: function(id) {
     var self = this;
+    $(".failed-message").hide();
     $(".loading-message").show();
     var collection = new UsersCollection();
     collection.fetch({

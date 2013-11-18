@@ -73,8 +73,8 @@ def slugify(value):
 
 def get_all_user(data):
     users = User.query(User.email != data).fetch(100)
+    datas = []
     if users:
-        datas = []
         for user in users:
             temp = {}
             temp["id"] = user.key.id()
@@ -84,7 +84,7 @@ def get_all_user(data):
             temp["permissions"] = user.permissions
             datas.append(temp)
 
-        return datas
+    return datas
 
 def add_user(data):
     user = User(id=data["email"])

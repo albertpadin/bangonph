@@ -35,6 +35,7 @@ var PostsView = Backbone.View.extend({
   },
   posts: function() {
     var self = this;
+    $(".failed-message").hide();
     $(".loading-message").show();
     var collection = new PostsCollection();
     collection.fetch({
@@ -167,6 +168,7 @@ var EditPost = Backbone.View.extend({
   },
   post: function(id) {
     var self = this;
+    $(".failed-message").hide();
     $(".loading-message").show();
     var collection = new PostsCollection();
     collection.fetch({

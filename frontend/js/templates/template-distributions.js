@@ -38,6 +38,7 @@ var DistributionView = Backbone.View.extend({
   },
   distributions: function() {
     var self = this;
+    $(".failed-message").hide();
     $(".loading-message").show();
     var collection = new DistributionCollection();
     collection.fetch({
@@ -204,6 +205,7 @@ var EditDistribution = Backbone.View.extend({
   },
   datas: function(id) {
     var self = this;
+    $(".failed-message").hide();
     $(".loading-message").show();
     $.ajax({
       type: "get",

@@ -1010,8 +1010,8 @@ class ContactHandler(BaseHandler):
             return
 
         contacts = Contact.query().order(-Contact.created).fetch(300)
+        datas = []
         if contacts:
-            datas = []
             for contact in contacts:
                 temp = {}
                 temp["id"] = contact.key.id()
@@ -1021,7 +1021,7 @@ class ContactHandler(BaseHandler):
                 temp["facebook"] = contact.facebook
                 temp["twitter"] = contact.twitter
                 datas.append(temp)
-            self.response.out.write(simplejson.dumps(datas))
+        self.response.out.write(simplejson.dumps(datas))
 
     def post(self):
         if self.request.get("id"):
@@ -1097,8 +1097,8 @@ class LocationHandler(BaseHandler):
             return
 
         locations = Location.query().order(-Location.name).fetch(300)
+        datas = []
         if locations:
-            datas = []
             for location in locations:
                 temp = {}
                 temp["id"] = location.key.id()
@@ -1119,7 +1119,7 @@ class LocationHandler(BaseHandler):
                 temp["missing_person"] = location.missing_person
                 temp["missing_person_text"] = location.missing_person_text
                 datas.append(temp)
-            self.response.out.write(simplejson.dumps(datas))
+        self.response.out.write(simplejson.dumps(datas))
 
     def post(self):
         if self.request.get("id"):
@@ -1285,8 +1285,8 @@ class DistributionHandler(BaseHandler):
             return
 
         distributions = Distribution.query().order(-Distribution.created).fetch(300)
+        datas = []
         if distributions:
-            datas = []
             for distribution in distributions:
                 temp = {}
                 temp["id"] = distribution.key.id()
@@ -1301,7 +1301,7 @@ class DistributionHandler(BaseHandler):
                 temp["featured_photo"] = distribution.featured_photo
                 temp["description"] = distribution.description
                 datas.append(temp)
-            self.response.out.write(simplejson.dumps(datas))
+        self.response.out.write(simplejson.dumps(datas))
 
     def post(self):
         if self.request.get("id"):
@@ -1687,8 +1687,8 @@ class DistributorHandler(BaseHandler):
             return
 
         distributors = Distributor.query().order(-Distributor.created).fetch(300)
+        datas = []
         if distributors:
-            datas = []
             for distributor in distributors:
                 temp = {}
                 temp["id"] = distributor.key.id()
@@ -1700,7 +1700,7 @@ class DistributorHandler(BaseHandler):
                 temp["contact_details"] = distributor.contact_details
 
                 datas.append(temp)
-            self.response.out.write(simplejson.dumps(datas))
+        self.response.out.write(simplejson.dumps(datas))
 
     def post(self):
         if self.request.get('id'):
@@ -1751,8 +1751,8 @@ class CentersHandler(BaseHandler):
                 return
 
         dropOffCenters = DropOffCenter.query().order(-DropOffCenter.created).fetch(300)
+        datas = []
         if dropOffCenters:
-            datas = []
             for drop in dropOffCenters:
                 temp = {}
                 temp["id"] = drop.key.id()
@@ -1768,7 +1768,8 @@ class CentersHandler(BaseHandler):
                 temp["contacts"] = drop.contacts
                 temp["email"] = drop.email
                 datas.append(temp)
-            self.response.out.write(simplejson.dumps(datas))
+        self.response.out.write(simplejson.dumps(datas))
+        
     def post(self):
         if self.request.get("id"):
             drop = DropOffCenter.get_by_id(self.request.get('id'))
@@ -3384,7 +3385,7 @@ class UploadHandler(blobstore_handlers.BlobstoreUploadHandler):
 
 
 app = webapp2.WSGIApplication([
-    routes.DomainRoute(r'<:gcdc2013-bangonph\.appspot\.com|www\.bangonph\.com|staging\.gcdc2013-bangonph\.appspot\.com|localhost>', [
+    routes.DomainRoute(r'<:gcdc2013-bangonph\.appspot\.com|www\.bangonph\.com|staging\.gcdc2013-bangonph\.appspot\.com>', [
 
         webapp2.Route('/', handler=PublicFrontPage, name="www-front"),
         webapp2.Route('/reliefoperations', handler=ReliefOperationsPage, name="www-reliefoperations"),
@@ -3403,7 +3404,7 @@ app = webapp2.WSGIApplication([
 
         webapp2.Route(r'/<:.*>', ErrorHandler)
     ]),
-    routes.DomainRoute(r'<:admin\.bangonph\.com>', [
+    routes.DomainRoute(r'<:admin\.bangonph\.com|localhost>', [
         webapp2.Route('/', handler=FrontPage, name="www-front"),
         webapp2.Route('/register', handler=RegisterPage, name="www-register"),
         webapp2.Route('/logout', handler=Logout, name="www-logout"),

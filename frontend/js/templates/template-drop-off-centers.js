@@ -40,6 +40,7 @@ var DropOffCenterView = Backbone.View.extend({
   },
   drops: function() {
     var self = this;
+    $(".failed-message").hide();
     $(".loading-message").show();
     var collection = new DropOffCollection();
     collection.fetch({
@@ -121,6 +122,7 @@ var EditDropOffCenter = Backbone.View.extend({
   },
   dropoff: function(id) {
     var self = this;
+    $(".failed-message").hide();
     $(".loading-message").show();
     var collection = new DropOffCollection();
     collection.fetch({

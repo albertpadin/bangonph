@@ -131,7 +131,13 @@ class Location(ndb.Model):
         details["statusBoard"] = self.status_board
         details["needs"] = self.needs
         details["status"] = self.status
-        details["images"] = self.images
+        details["images"] = []
+        try:
+            for image in self.images:
+                if image['src']:
+                    details['images'].append(image)
+        except:
+            pass
         details["hash_tag"] = self.hash_tag
         details["featured"] = self.featured
         details["relief_aid_status"] = self.relief_aid_status

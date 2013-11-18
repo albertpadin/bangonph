@@ -49,69 +49,6 @@
         <!-- <div class="clearfix"></div> -->
         <p>&nbsp;</p>
 
-        <div class="col-lg-6 col-md-6 col-sm-6 col feed">
-          <strong>Need Anything? Post it here!</strong>
-       <!-- <span class="pull-right"><a href="/posts" class="see-more-btn">see more</a></span> -->
-
-
-          <div class="feed-input">
-             <form id="post_need">
-                
-                <textarea placeholder="what do you need.." name="message" class="text-input"></textarea>
-                <input type="text" name="expiry" placeholder="show this until what date" class="datepicker hidden">
-                <input type="text" name="location" placeholder="what place is this for" class="hidden">
-                <input type="text" name="name" placeholder="what is your name" class="hidden">
-                <input type="text" name="phone" placeholder="leave your contact details" class="hidden">
-                <input type="text" style="display: none;" name="comment">
-                <input type="hidden" name="post_type" value="NEED" />
-               
-                  <a href="#" class="btn btn-default hidden cancel-btn">Cancel</a>
-                  <input type="submit" value="Post" id="post_need_submit" class="btn btn-primary hidden submit-btn">
-
-            </form>
-           </div>
-
-        
-       <ul class="nav nav-pills">
-         <!--  <li class="active"><a href="#all" data-toggle="tab">All</a></li>
-          <li><a href="#transpo" data-toggle="tab">Transpo</a></li>
-          <li><a href="#volunteers" data-toggle="tab">Volunteers</a></li>
-          <li><a href="#relief-goods" data-toggle="tab">Relief Goods</a></li> -->
-
-        </ul>
-        <div class="tab-content">
-
-          <div class="tab-pane active" id="all">
-             <ul id="post_need_feed" class="feed-wrap">
-
-                
-
-             </ul>
-          </div>
-        </div>
-      </div>
-
-      <div class="col-lg-6 col-md-6 col-sm-6 col feed">
-       <strong>What can you donate? Let us know!</strong>
-       <!-- <span class="pull-right"><a href="/posts" class="see-more-btn">see more</a></span> -->
-       
-         <div class="feed-input">
-           <form id="post_have">
-              
-              <textarea placeholder="what do you have.." name="message" class="text-input"></textarea>
-              <input type="text" name="expiry" placeholder="until when is it available" class="datepicker hidden"> 
-              <input type="text" name="location" placeholder="where is it" class="hidden">
-              <input type="text" name="name" placeholder="what is your name" class="hidden">
-              <input type="text" name="phone" placeholder="leave your contact details" class="hidden">
-              <input type="text" style="display: none;" name="comment">
-              <input type="hidden" name="post_type" value="HAVE" />
-           
-              <a href="#" class="btn btn-default hidden cancel-btn">Cancel</a>
-              <input type="submit" value="Post" id="post_have_submit" class="btn btn-primary hidden submit-btn">
-
-        </form>
-       </div>
-
        <ul class="nav nav-pills">
           <!-- <li class="active"><a href="#all-have" data-toggle="tab">All</a></li>
           <li><a href="#transpo-have" data-toggle="tab">Transpo</a></li>
@@ -670,5 +607,4 @@
 
     </script>
 
-</script>
 {% endblock %}

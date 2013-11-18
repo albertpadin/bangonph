@@ -912,6 +912,10 @@ class ReliefOperationsPage(BaseHandler):
 
 class PublicPostPage(BaseHandler):
     def get(self, page=None):
+        if not page:
+            self.render('frontend/public-posts.html')
+            return
+
         self.tv["current_page"] = "PUBLIC_POST"
         post = Post.get_by_id(int(page))
         if not post:
@@ -2486,9 +2490,11 @@ class APIPostsHandler(APIBaseHandler):
                     failed = True
 
                 if curs:
-                    posts, next_cursor, more = Post.query(Post.expiry >= (datetime.datetime.now() - datetime.timedelta(hours=30))).fetch_page(25, start_cursor=curs)
+                    # posts, next_cursor, more = Post.query(Post.expiry >= (datetime.datetime.now() - datetime.timedelta(hours=30))).fetch_page(25, start_cursor=curs)
+                    posts, next_cursor, more = Post.query().order(-Post.created).fetch_page(25, start_cursor=curs)
                 else:
-                    posts, next_cursor, more = Post.query(Post.expiry >= (datetime.datetime.now() - datetime.timedelta(hours=30))).fetch_page(25)
+                    # posts, next_cursor, more = Post.query(Post.expiry >= (datetime.datetime.now() - datetime.timedelta(hours=30))).fetch_page(25)
+                    posts, next_cursor, more = Post.query().order(-Post.created).fetch_page(25)
             else:
                 if self.request.get_all("filter_post_type"):
                     filter_type = self.request.get_all("filter_post_type")[0].upper()
@@ -3520,6 +3526,7 @@ app = webapp2.WSGIApplication([
         webapp2.Route('/reliefoperations', handler=ReliefOperationsPage, name="www-reliefoperations"),
         webapp2.Route(r'/locations/<:.*>/edit', handler=PublicLocationEditPage, name="www-locations-edit"),
         webapp2.Route(r'/locations/<:.*>', handler=PublicLocationPage, name="www-locations"),
+        webapp2.Route('/posts', handler=PublicPostPage, name="www-public-post"),
         webapp2.Route(r'/posts/<:.*>', handler=PublicPostPage, name="www-public-post"),
 
         webapp2.Route('/api/posts', handler=APIPostsHandler, name="www-api-posts"),

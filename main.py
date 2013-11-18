@@ -1159,14 +1159,14 @@ class LocationHandler(BaseHandler):
                 if location.images:
                     cnt = len(new_urls)
                     for i in range(0, cnt):
-                        for loc_image in location.images:
-                            if new_urls[i]["srcid"] == "":
-                                location.images.append({"src": new_urls[i]["src"], "image_title": new_titles[i]["image_title"], "image_caption": new_captions[i]["image_caption"]})
-                            else:
+                        if new_urls[i]["srcid"] != "":
+                            for loc_image in location.images:
                                 if new_urls[i]["srcid"] == loc_image["src"]:
                                     loc_image["src"] = new_urls[i]["src"]
                                     loc_image["image_title"] = new_titles[i]["image_title"]
                                     loc_image["image_caption"] = new_captions[i]["image_caption"]
+                        else:
+                            location.images.append({"src": new_urls[i]["src"], "image_title": new_titles[i]["image_title"], "image_caption": new_captions[i]["image_caption"]})
                 else:
                     images_datas = []
                     cnt = len(new_urls)

@@ -93,6 +93,13 @@
 .progress{
     margin-bottom: 2px!important;
 }
+
+
+    .jumbotron {
+    padding-top: 10px!important;
+    padding-bottom: 20px!important;
+    }
+
 /*end overwritten bootstrap*/
 
 /*le styles*/

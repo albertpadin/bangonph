@@ -90,12 +90,32 @@
       </footer>
     </div> <!-- /container -->        
     <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.1/jquery.min.js"></script>
-    <script>window.jQuery || document.write('<script src="/js/vendor/jquery-1.10.1.min.js"><\/script>')</script>
 
         <script src="/js/vendor/bootstrap.min.js"></script>
 
         <script src="/js/main.js"></script>
 
+        <script src="http://js.pusher.com/2.1/pusher.min.js"></script>
+      <script type="text/javascript">
+
+        //pusher
+        var pusher = new Pusher('e0a2a1c8316b9baddc9b');
+        var channel = pusher.subscribe('feeds');
+        
+        channel.bind('new_revision', function(data) {
+          //do something when the new data is triggered
+          console.log(data);
+          var d = '<li><img src="http://graph.facebook.com/' + data.fb_id + '/picture?small">
+              <label style="margin-bottom: 0;"><a target="_blank" href="http://www.facebook.com/profile.php?id=' + data.fb_id + '">' + data.fb_name + '</a></label> updated <a target="_blank" href="/locations/' + data.location + '"><span class="label label-success">' + data.revision_type + '</span></a><br/><p>' + data.changes + '</p><span class="update-date">' + data.created + '</span></li>';
+
+          $(".updates_feed").prepend(d);
+
+          var count = parseInt($(".actual_count").html());
+          count = count + 1;
+          $(".actual_count").html(count);
+        });
+      </script>
+       
         
 
       <script>

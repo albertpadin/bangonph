@@ -1,9 +1,15 @@
 from google.appengine.ext import ndb
 import logging
-import time, os
+import time, os, datetime
 from settings import API_RESPONSE, API_RESPONSE_DATA
+from settings import DATES, FOOD_MULTIPLIER, HYGIENE_MULTIPLIER, SHELTER_MULTIPLIER, MEDICINE_MULTIPLIER, MEDICAL_MISSION_MULTIPLIER
 
 currenturl = str(os.environ['wsgi.url_scheme'])+"://"+str(os.environ['HTTP_HOST'])
+
+def get_current_date():
+    now = datetime.datetime.now() + datetime.timedelta(hours=8)
+    return now.strftime("%m/%d/%Y")
+
 
 class User(ndb.Model):
     created = ndb.DateTimeProperty(auto_now_add=True)
@@ -104,7 +110,7 @@ class Location(ndb.Model):
     relief_aid_status = ndb.StringProperty(default="Unknown")
     needs = ndb.JsonProperty()
     status = ndb.JsonProperty()
-    requirements = ndb.JsonProperty(default={"food":0, "hygiene":0, "medicine":0, "medical_mission":0, "shelter":0})
+    levels = ndb.JsonProperty(default={})
     images = ndb.JsonProperty()
     hash_tag = ndb.StringProperty(repeated=True)
     featured = ndb.BooleanProperty(default=False)
@@ -144,22 +150,33 @@ class Location(ndb.Model):
         details["missing_person"] = self.missing_person
         details["missing_person_text"] = self.missing_person_text
         details["name"] = self.name
-        details["requirements"] = self.requirements
+        details["levels"] = self.levels
         tags = self.name.split(",")
         details['tags'] = []
         for tag in tags:
             details['tags'].append(tag.strip().lower())
         details['relief_aid_totals'] = self.relief_aid_totals
-        details['relief_aid_ratings'] = {"food":1, "hygiene":1, "medicine":1, "medical_mission":1, "shelter":1}
+        details['relief_aid_ratings'] = {}
 
-        if details['requirements']:
-            for key in details['requirements']:
-                if details['requirements'][key]:
-                    try:
-                        relief_aid_rating = (float(details['relief_aid_totals'][key]) / float(details['requirements'][key])) * 100
-                        details['relief_aid_ratings'][key] = relief_aid_rating
-                    except:
-                        logging.exception("error in relief aid rating computation")
+        for date in DATES:
+            details['relief_aid_ratings'][date] = {"food":0, "hygiene":0, "medicine":0, "medical_mission":0, "shelter":0}
+            if date not in details['levels']:
+                details['levels'][date] = {"food":0, "hygiene":0, "medicine":0, "medical_mission":0, "shelter":0}
+
+            requirement_level = 100 - details['levels'][date][key]
+            requirement = {}
+            requirement['food'] = self.affected_count * requirement_level * FOOD_MULTIPLIER
+            requirement['shelter'] = self.affected_count * requirement_level * SHELTER_MULTIPLIER
+            requirement['hygiene'] = self.affected_count * requirement_level * HYGIENE_MULTIPLIER
+            requirement['medicine'] = self.affected_count * requirement_level * MEDICINE_MULTIPLIER
+            requirement['medical_mission'] = self.affected_count * requirement_level * MEDICAL_MISSION_MULTIPLIER
+
+            for key in details['levels'][date]:
+                try:
+                    relief_aid_rating = (float(details['relief_aid_totals'][date][key]) / float(details['levels'][date][key])) * 100
+                    details['relief_aid_ratings'][date][key] = relief_aid_rating
+                except:
+                    logging.exception("error in relief aid rating computation")
 
         return details
 

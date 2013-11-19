@@ -195,7 +195,7 @@
                 </div>
               </div>
               <div class="clear"></div>
-              <h6>Relief Aid Status for 1 Week:</h6>
+              <h6>Relief Aid Status for next 7 Days:</h6>
               <div class="progress">
                 <div class="progress-bar progress-bar-danger" role="progressbar" {% if location.relief_aid_status == 'Unknown' %}aria-valuenow="1"{% else %}aria-valuenow="{{ location.relief_aid_status }}"{% endif %} aria-valuemin="0" aria-valuemax="100" {% if location.relief_aid_status == 'Unknown' %}style="width:1%"{% else %}style="width:{{ location.relief_aid_status }}%"{% endif %}>
                   {% if location.relief_aid_status == 'Unknown' %}<span class="sr-only">Unknown... <a href="https://docs.google.com/a/sym.ph/forms/d/1cGWQuAbuIVogA-uO9tZPlR5HMGGYQH3_Yp96BoBS3ng/viewform" target="_blank" title='Contribute Information'>Have Info?</a></span>{% else %}<span class="sr-only">{{ location.relief_aid_status }}%  &nbsp;&nbsp;&nbsp;Have Info?</a></span>{% endif %}
@@ -288,7 +288,7 @@
                 </div>
               </div>
               <div class="clear"></div>
-              <h6>Relief Aid Status for 1 Week:</h6>
+              <h6>Relief Aid Status for next 7 Days:</h6>
               <div class="progress">
                 <div class="progress-bar progress-bar-danger" role="progressbar" {% if location.relief_aid_status == 'Unknown' %}aria-valuenow="1"{% else %}aria-valuenow="{{ location.relief_aid_status }}"{% endif %} aria-valuemin="0" aria-valuemax="100" {% if location.relief_aid_status == 'Unknown' %}style="width:1%"{% else %}style="width:{{ location.relief_aid_status }}%"{% endif %}>
                   {% if location.relief_aid_status == 'Unknown' %}<span class="sr-only">Unknown... <a href="https://docs.google.com/a/sym.ph/forms/d/1cGWQuAbuIVogA-uO9tZPlR5HMGGYQH3_Yp96BoBS3ng/viewform" target="_blank" title='Contribute Information'>Have Info?</a></span>{% else %}<span class="sr-only">{{ location.relief_aid_status }}%  &nbsp;&nbsp;&nbsp;Have Info?</a></span>{% endif %}
@@ -390,11 +390,9 @@
 
         <script src="http://js.pusher.com/2.1/pusher.min.js"></script>
       <script type="text/javascript">
-
         //pusher
         var pusher = new Pusher('e0a2a1c8316b9baddc9b');
         var channel = pusher.subscribe('feeds');
-        
 
         channel.bind('new_revision', function(data) {
           //do something when the new data is triggered
@@ -409,7 +407,6 @@
           $(".actual_count").html(count);
         });
       </script>
-      
       <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
 
       <script type="text/javascript">

@@ -29,6 +29,7 @@ from google.appengine.api import memcache
 from settings import SETTINGS, API_RESPONSE, API_RESPONSE_DATA
 from settings import SECRET_SETTINGS
 from settings import OAUTH_RESP, API_OAUTH_RESP
+from settings import DATES
 
 from google.appengine.datastore.datastore_query import Cursor
 
@@ -646,30 +647,30 @@ class PublicLocationEditPage(BaseHandler):
             datas_status.append(temp)
             location_revision.status = datas_status
 
-            datas_requirements = []
-            if self.request.get('requirements_food'):
-                temp["food"] = int(self.request.get("requirements_food"))
+            datas_levels = []
+            if self.request.get('levels_food'):
+                temp["food"] = int(self.request.get("levels_food"))
             else:
                 temp["food"] = 0
-            if self.request.get('requirements_hygiene'):
-                temp["hygiene"] = int(self.request.get("requirements_hygiene"))
+            if self.request.get('levels_hygiene'):
+                temp["hygiene"] = int(self.request.get("levels_hygiene"))
             else:
                 temp["hygiene"] = 0
-            if self.request.get('requirements_medicine'):
-                temp["medicine"] = int(self.request.get("requirements_medicine"))
+            if self.request.get('levels_medicine'):
+                temp["medicine"] = int(self.request.get("levels_medicine"))
             else:
                 temp["medicine"] = 0
-            if self.request.get('requirements_medical_mission'):
-                temp["medical_mission"] = int(self.request.get("requirements_medical_mission"))
+            if self.request.get('levels_medical_mission'):
+                temp["medical_mission"] = int(self.request.get("levels_medical_mission"))
             else:
                 temp["medical_mission"] = 0
-            if self.request.get('requirements_shelter'):
-                temp["shelter"] = int(self.request.get("requirements_shelter"))
+            if self.request.get('levels_shelter'):
+                temp["shelter"] = int(self.request.get("levels_shelter"))
             else:
                 temp["shelter"] = 0
             temp["updated"] = str(datetime.datetime.now())
-            datas_requirements.append(temp)
-            location_revision.requirements = datas_requirements
+            datas_levels.append(temp)
+            location_revision.levels = datas_levels
 
             location_revision.put()
 
@@ -696,7 +697,7 @@ class PublicLocationEditPage(BaseHandler):
                     "food": self.request.get("status_food"),
                     "shelter": self.request.get("status_shelter")
                 }
-                requirements = {
+                levels = {
                     "food": temp["food"],
                     "hygiene": temp["hygiene"],
                     "medicine": temp["medicine"],
@@ -742,17 +743,17 @@ class PublicLocationEditPage(BaseHandler):
                         datas_changes.append("Communication: " + location.status["communication"] + " >> " + status["communication"])
                     if status["food"] != location.status["food"]:
                         datas_changes.append("Food: " + location.status["food"] + " >> " + status["food"])
-                if location.requirements:
-                    if requirements["food"] != location.requirements["food"]:
-                        datas_changes.append("Food & Water: " + location.requirements["food"] + " >> " + requirements["food"])
-                    if requirements["hygiene"] != location.requirements["hygiene"]:
-                        datas_changes.append("Hygiene: " + location.requirements["hygiene"] + " >> " + requirements["hygiene"])
-                    if requirements["medicine"] != location.requirements["medicine"]:
-                        datas_changes.append("Medicine: " + location.requirements["medicine"] + " >> " + requirements["medicine"])
-                    if requirements["medical_mission"] != location.requirements["medical_mission"]:
-                        datas_changes.append("Medical Mission: " + location.requirements["medical_mission"] + " >> " + requirements["medical_mission"])
-                    if requirements["shelter"] != location.requirements["shelter"]:
-                        datas_changes.append("Shelter: " + location.requirements["shelter"] + " >> " + requirements["shelter"])
+                if location.levels:
+                    if levels["food"] != location.levels["food"]:
+                        datas_changes.append("Food & Water: " + location.levels["food"] + " >> " + levels["food"])
+                    if levels["hygiene"] != location.levels["hygiene"]:
+                        datas_changes.append("Hygiene: " + location.levels["hygiene"] + " >> " + levels["hygiene"])
+                    if levels["medicine"] != location.levels["medicine"]:
+                        datas_changes.append("Medicine: " + location.levels["medicine"] + " >> " + levels["medicine"])
+                    if levels["medical_mission"] != location.levels["medical_mission"]:
+                        datas_changes.append("Medical Mission: " + location.levels["medical_mission"] + " >> " + levels["medical_mission"])
+                    if levels["shelter"] != location.levels["shelter"]:
+                        datas_changes.append("Shelter: " + location.levels["shelter"] + " >> " + levels["shelter"])
 
                 if self.request.get("source"):
                     datas_changes.append("Source/s: " + self.request.get('source'))
@@ -777,7 +778,7 @@ class PublicLocationEditPage(BaseHandler):
                 location.missing_person_text = self.request.get("missing_person_text")
                 location.status_board = self.request.get("status_board")
                 location.status = status
-                location.requirements = requirements
+                location.levels = levels
                 location.put()
 
                 p = pusher.Pusher(
@@ -3547,30 +3548,65 @@ class ComputeReliefStatus(webapp2.RequestHandler):
                 if distribution.num_of_packs:
                     if distribution.date not in food_total:
                         food_total[distribution.date] = distribution.num_of_packs
-                    food_total += distribution.num_of_packs
+                    else:
+                        food_total[distribution.date] += distribution.num_of_packs
             elif distribution.tag == "SHELTER":
                 if distribution.num_of_packs:
-                    shelter_total += distribution.num_of_packs
+                    if distribution.date not in shelter_total:
+                        shelter_total[distribution.date] = distribution.num_of_packs
+                    else:
+                        shelter_total[distribution.date] += distribution.num_of_packs
             elif distribution.tag == "MEDICINE":
                 if distribution.num_of_packs:
-                    medicine_total += distribution.num_of_packs
+                    if distribution.date not in medicine_total:
+                        medicine_total[distribution.date] = distribution.num_of_packs
+                    else:
+                        medicine_total[distribution.date] += distribution.num_of_packs
             elif distribution.tag == "HYGIENE":
                 if distribution.num_of_packs:
-                    hygiene_total += distribution.num_of_packs
+                    if distribution.date not in hygiene_total:
+                        hygiene_total[distribution.date] = distribution.num_of_packs
+                    else:
+                        hygiene_total[distribution.date] += distribution.num_of_packs
             elif distribution.tag == "MEDICAL MISSION":
                 if distribution.num_of_packs:
-                    medical_mission_total += distribution.num_of_packs
+                    if distribution.date not in medical_mission_total:
+                        medical_mission_total[distribution.date] = distribution.num_of_packs
+                    else:
+                        medical_mission_total[distribution.date] += distribution.num_of_packs
             else:
                 if distribution.num_of_packs:
-                    unknown_total += distribution.num_of_packs
+                    if distribution.date not in unknown_total:
+                        unknown_total[distribution.date] = distribution.num_of_packs
+                    else:
+                        unknown_total[distribution.date] += distribution.num_of_packs
 
         location.relief_aid_totals = {}
-        location.relief_aid_totals['food'] = food_total
-        location.relief_aid_totals['shelter'] = shelter_total
-        location.relief_aid_totals['hygiene'] = hygiene_total
-        location.relief_aid_totals['medicine'] = medicine_total
-        location.relief_aid_totals['medical_mission'] = medical_mission_total
-        location.relief_aid_totals['unknown'] = unknown_total
+        for date in DATES:
+            try:
+                location.relief_aid_totals[date]['food'] = food_total[date]
+            except:
+                location.relief_aid_totals[date]['food'] = 0
+            try:
+                location.relief_aid_totals[date]['shelter'] = shelter_total[date]
+            except:
+                location.relief_aid_totals[date]['shelter'] = 0
+            try:
+                location.relief_aid_totals[date]['hygiene'] = hygiene_total[date]
+            except:
+                location.relief_aid_totals[date]['hygiene'] = 0
+            try:
+                location.relief_aid_totals[date]['medicine'] = medicine_total[date]
+            except:
+                location.relief_aid_totals[date]['medicine'] = 0
+            try:
+                location.relief_aid_totals[date]['medical_mission'] = medical_mission_total[date]
+            except:
+                location.relief_aid_totals[date]['medical_mission'] = 0
+            try:
+                location.relief_aid_totals[date]['unknown'] = unknown_total[date]
+            except:
+                location.relief_aid_totals[date]['unknown'] = 0
         location.put()
 
 

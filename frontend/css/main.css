@@ -900,3 +900,10 @@ height: 80px;
     vertical-align: middle;
     margin-left: 3px;
 }
+
+.update_count {
+    margin-top: 5px;
+    font-size: 12px;
+    float: right;
+    font-style: italic;
+}

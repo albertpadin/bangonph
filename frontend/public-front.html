@@ -75,7 +75,7 @@
 
         <div class="col-lg-4 col-md-6 col-sm-6 col updates-feed visible-lg visible-xs">
           <div class="status-item">
-          <h4>Updates</h4>
+          <h4>Latest Updates <small class="update_count"><span class="actual_count">{{ update_count }}</span> updates since 8 hours ago</small></h4>
           <ul id='updates_feed' class="updates-wrap updates_feed updates-wrap-lg">
             {% for revision in revisions %}
             {% if revision.status %}
@@ -99,7 +99,7 @@
 
         <div class="col-lg-4 col-md-6 col-sm-6 col updates-feed visible-md">
           <div class="status-item">
-          <h4>Updates</h4>
+          <h4>Latest Updates <small class="update_count"><span class="actual_count">{{ update_count }}</span> updates in the last 8 hours</small></h4>
           <ul id='updates_feed' class="updates-wrap updates_feed updates-wrap-md">
             {% for revision in revisions %}
             {% if revision.status %}
@@ -123,7 +123,7 @@
 
         <div class="col-lg-4 col-md-6 col-sm-6 col updates-feed visible-sm">
           <div class="status-item">
-          <h4>Updates</h4>
+          <h4>Latest Updates <small class="update_count"><span class="actual_count">{{ update_count }}</span> since 8 hours ago</small></h4>
           <ul id='updates_feed' class="updates-wrap updates_feed updates-wrap-sm">
             {% for revision in revisions %}
             {% if revision.status %}
@@ -403,6 +403,10 @@
               <label style="margin-bottom: 0;"><a target="_blank" href="http://www.facebook.com/profile.php?id=' + data.fb_id + '">' + data.fb_name + '</a></label> updated <a href="/locations/' + data.location + '"><span class="label label-success">' + data.revision_type + '</span></a><br/><p>' + data.changes + '</p><span class="update-date">' + data.created + '</span></li>';
 
           $(".updates_feed").prepend(d);
+
+          var count = parseInt($(".actual_count").html());
+          count = count + 1;
+          $(".actual_count").html(count);
         });
       </script>
       

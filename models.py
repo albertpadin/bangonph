@@ -218,7 +218,7 @@ class DistributionRevision(ndb.Model):
     description = ndb.TextProperty()
     contacts = ndb.StringProperty()
     needs = ndb.StringProperty()
-    date = ndb.StringProperty()
+    date = ndb.StringProperty(default="UNKNOWN")
     tag = ndb.StringProperty()
 
 class Distribution(ndb.Model):

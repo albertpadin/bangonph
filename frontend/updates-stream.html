@@ -6,7 +6,7 @@
         <meta property="og:site_name" content="#BangonPH"/>
         <meta property="og:type" content="website"/>
         <meta property="og:description" content="We Need Your Help! Help the super typhoon Yolanda affected areas! Share information on your latest or planned relief drop here and let's get aid where it is needed the most!"/>
-        <title>#BangonPH Error</title>
+        <title>#BangonPH Update Stream</title>
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width">
         
@@ -25,14 +25,7 @@
         <script src="/js/vendor/modernizr-2.6.2.min.js"></script>
     </head>
     <body>
-    <div id="fb-root"></div>
-<script>(function(d, s, id) {
-  var js, fjs = d.getElementsByTagName(s)[0];
-  if (d.getElementById(id)) return;
-  js = d.createElement(s); js.id = id;
-  js.src = "//connect.facebook.net/en_US/all.js#xfbml=1&appId=759672407382550";
-  fjs.parentNode.insertBefore(js, fjs);
-}(document, 'script', 'facebook-jssdk'));</script>
+    
     <div class="navbar navbar-inverse navbar-fixed-top">
       <div class="container">
         <div class="navbar-header">
@@ -46,11 +39,14 @@
           <img src="/img/logo-mini.png" alt="">
           </a>
         </div>
+        <!-- <p class="navbar-text navbar-right"><a class="navbar-link" href="https://docs.google.com/a/sym.ph/forms/d/1cGWQuAbuIVogA-uO9tZPlR5HMGGYQH3_Yp96BoBS3ng/viewform" target="_blank">Are we missing anyone? Tell us.</a></p> -->
          
         <div class="navbar-collapse collapse">
           <ul class="nav navbar-nav pull-right">
+            <li><a href="/posts" title="NEED HELP">NEED ANY HELP?</a></li>
+
             <li><a href="http://google.org/personfinder/2013-yolanda/" target="_blank">Google Person Finder</a></li>
-            <li><a class="navbar-link" href="https://docs.google.com/a/sym.ph/forms/d/1cGWQuAbuIVogA-uO9tZPlR5HMGGYQH3_Yp96BoBS3ng/viewform" target="_blank">Contribute Information</a></li>
+            <li><a class="navbar-link" href="http://sym.ph/bangonph-guide/updating-information/" target="_blank">Contribute Information</a></li>
 
           </ul>
         </div>
@@ -60,29 +56,27 @@
     <div class="container">
     <div class="row">
       <div class="col-12">
-        <br /><br /><br />
-        <h1>An Error Occurred. It's not your fault. It's probably some programmer fiddling around in places where he shouldn't be. Please copy and paste the information below, and email to <a href="mailto:albert@sym.ph">albert@sym.ph</a> to help us catch the culprit. Thanks!</h1>
-        <br />
-        <br />
-        <h3 id="error details">Code 500 Error: <span id-='datetime'>
-
-        <script type='text/javascript'>
-
-        var currentdate = new Date();
-
-        var datetime = currentdate.getDate() + "/"
-                + (currentdate.getMonth()+1)  + "/" 
-                + currentdate.getFullYear() + " @ "  
-                + currentdate.getHours() + ":"  
-                + currentdate.getMinutes() + ":" 
-                + currentdate.getSeconds();
-
-        document.write(datetime);
-        </script></span></h3>
-
-        <br /><br /><br />
-        <h2>Please copy and paste the info above and email to <a href="mailto:albert@sym.ph">albert@sym.ph</a> to help us fix this problem.</h2>
-        <br /><br /><br /><br /><br /><br /><br /><br /><br />
+        <h2>Real Time Updates Stream</h2>
+        <h4>Latest Updates <small class="update_count"><span class="actual_count">{{ update_count }}</span> updates since 8 hours ago</small></h4>
+          <ul id='updates_feed' class="updates-wrap updates_feed updates-wrap-lg">
+            {% for revision in updates %}
+            {% if revision.status %}
+            <li>
+              <img src="http://graph.facebook.com/{{ revision.fb_id }}/picture?small">
+              <label style="margin-bottom: 0;">
+                <a target="_blank" href="http://www.facebook.com/profile.php?id={{ revision.fb_id }}">{% if revision.fb_firstname %}{{ revision.fb_firstname }} {% endif %}{% if revision.fb_middlename %}{{ revision.fb_middlename }}{% endif %} {% if revision.fb_lastname %}{{ revision.fb_lastname }}{% endif %}</a>
+              </label>
+              <a target="_blank" href="/locations/{{ revision.name }}">
+                <span class="label label-default">{{ revision.name|prettify }}</span>
+                <span class="label label-success">{{ revision.revision_type }}</span>
+              </a><br/>
+              <p>{% for stat in revision.status %}{{ stat }}; {% endfor %}</p>
+              <span class="update-date">{{ revision.created|to_date }}</span>
+            </li>
+            {% endif %}
+            {% endfor %}
+          </ul>
+          </div>
       </div>
     </div>
   </div>
@@ -101,7 +95,7 @@
         <script src="/js/vendor/bootstrap.min.js"></script>
 
         <script src="/js/main.js"></script>
-       
+
         
 
       <script>

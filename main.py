@@ -19,10 +19,12 @@ import csv
 from oauth_models import *
 from cStringIO import StringIO
 
+from google.appengine.api import taskqueue
 from google.appengine.api import urlfetch
 from google.appengine.ext import blobstore
 from google.appengine.ext.webapp import blobstore_handlers
 from google.appengine.api import images
+from google.appengine.api import memcache
 
 from settings import SETTINGS, API_RESPONSE, API_RESPONSE_DATA
 from settings import SECRET_SETTINGS
@@ -511,6 +513,17 @@ class PublicFrontPage(BaseHandler):
         self.tv['featured_locations'] = []
         self.tv['locations'] = []
 
+        update_count = memcache.get('update_count')
+        if not update_count:
+            try:
+                update_count = len(LocationRevisionChanges.query(LocationRevisionChanges.created >= (datetime.datetime.now() - datetime.timedelta(hours=8))).fetch(500, keys_only=True))
+                memcache.set('update_count', update_count, 300)
+            except:
+                update_count = 0
+                logging.exception("error in retrieving changes count")
+
+        self.tv['update_count'] = update_count
+
         for location in locations:
             self.tv['locations'].append(location.to_object())
 
@@ -522,6 +535,19 @@ class PublicFrontPage(BaseHandler):
             self.tv["revisions"] = user_changes
 
         self.render('frontend/public-front.html')
+
+
+class PublicUpdatesPage(BaseHandler):
+    def get(self):
+        self.tv["current_page"] = "PUBLIC_UPDATES"
+        self.tv['updates'] = []
+
+        updates = LocationRevisionChanges.query().order(-LocationRevisionChanges.created).fetch(100)
+        if updates:
+            self.tv['updates'] = updates
+        self.tv['update_count'] = len(updates)
+
+        self.render('frontend/updates-stream.html')
 
 
 class LocationSamplePage(BaseHandler):
@@ -776,6 +802,12 @@ class PublicLocationEditPage(BaseHandler):
                     "created": to_date(user_changes.created)
                     })
 
+                memcache.incr('update_count')
+                params = {
+                    "location_id": location.key.id()
+                }
+                taskqueue.add(url='/admin/tasks/compute_relief_status', params=params, method='POST')
+
             self.redirect("/locations/" + self.request.get("page_title") + "/edit?success=Successfully+updated.")
 
         if self.request.get("status") == "reliefs":
@@ -854,6 +886,8 @@ class PublicLocationEditPage(BaseHandler):
                     "revision_type": 'Added a New Relief Effort',
                     "created": to_date(user_changes.created)
                     })
+
+                memcache.incr('update_count')
 
                 self.redirect("/locations/" + self.request.get("page_title") + "/edit?success=Successfully+updated.")
             else:
@@ -1285,6 +1319,11 @@ class LocationHandler(BaseHandler):
                         featured_yes_no = False
                 location.featured = featured_yes_no
                 location.put()
+
+                params = {
+                    "location_id": location.key.id()
+                }
+                taskqueue.add(url='/admin/tasks/compute_relief_status', params=params, method='POST')
 
         else:
             urls = self.request.get("image_urls")
@@ -3478,8 +3517,10 @@ class ComputeReliefStatus(webapp2.RequestHandler):
         locations = Location.query()
         for location in locations:
             location_id = location.key.id()
-            # enqueue compute task (TODO)
-
+            params = {
+                "location_id": location_id
+            }
+            taskqueue.add(url='/admin/tasks/compute_relief_status', params=params, method='POST')
 
     def post(self):
         if not self.request.get('location_id'):
@@ -3494,16 +3535,18 @@ class ComputeReliefStatus(webapp2.RequestHandler):
         # Get Relief Efforts
         distributions = DistributionRevision.query(DistributionRevision.name == location.key.id())
 
-        food_total = 0
-        hygiene_total = 0
-        medicine_total = 0
-        medical_mission_total = 0
-        shelter_total = 0
-        unknown_total = 0
+        food_total = {}
+        hygiene_total = {}
+        medicine_total = {}
+        medical_mission_total = {}
+        shelter_total = {}
+        unknown_total = {}
 
         for distribution in distributions:
             if distribution.tag == "FOOD & WATER":
                 if distribution.num_of_packs:
+                    if distribution.date not in food_total:
+                        food_total[distribution.date] = distribution.num_of_packs
                     food_total += distribution.num_of_packs
             elif distribution.tag == "SHELTER":
                 if distribution.num_of_packs:
@@ -3556,6 +3599,7 @@ app = webapp2.WSGIApplication([
     routes.DomainRoute(r'<:gcdc2013-bangonph\.appspot\.com|www\.bangonph\.com|staging\.gcdc2013-bangonph\.appspot\.com>', [
 
         webapp2.Route('/', handler=PublicFrontPage, name="www-front"),
+        webapp2.Route('/updates', handler=PublicUpdatesPage, name="www-updates"),
         webapp2.Route('/reliefoperations', handler=ReliefOperationsPage, name="www-reliefoperations"),
         webapp2.Route(r'/locations/<:.*>/edit', handler=PublicLocationEditPage, name="www-locations-edit"),
         webapp2.Route(r'/locations/<:.*>', handler=PublicLocationPage, name="www-locations"),

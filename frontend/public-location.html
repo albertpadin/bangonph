@@ -190,7 +190,7 @@
                             <th>Date</th>
                           </tr>
                         </thead>
-                        <tbody>
+                        <tbody style="font-size: small;">
                           {% if distribution_changes %}
                             {% for changes in distribution_changes %}
                             {% if changes.relief_name %}
@@ -199,7 +199,7 @@
                               <td>{% if changes.destination %}{{ changes.destination }}{% endif %}</td>
                               <td>{% if changes.tag %}{{ changes.tag }}{% endif %}</td>
                               <td>{% if changes.num_of_packs %}{{ changes.num_of_packs }}{% endif %}</td>
-                              <td>{% if changes.description %}{{ changes.description }}{% endif %}</td>
+                              <td style="font-size: smaller;">{% if changes.description %}{{ changes.description }}{% endif %}</td>
                               <td>{% if changes.contacts %}{{ changes.contacts }}{% endif %}</td>
                               <td>{% if changes.needs %}{{ changes.needs }}{% endif %}</td>
                               <td>{% if changes.date %}{{ changes.date }}{% endif %}</td>
@@ -264,18 +264,12 @@
             </div>
 
             <div class="col-lg-8">
-              <br />
-              <br />
-              {% if location.status_board %}
+              {% if location.statusBoard %}
               <h4>Current Status and Information</h4>
-              <p>{{ location.status_board|nl_to_br|safe }}</p>
+              <p>{{ location.statusBoard|nl_to_br|safe }}</p>
               {% endif %}
-              <br />
-              <br />
-              <hr >
 
-              
-              
+
             </div>
             <div class="clear"></div>
 

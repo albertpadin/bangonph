@@ -474,29 +474,32 @@ Miscellaneous
                 <tr>
                   <th colspan=2>Recent Images Added</th>
                 </tr>
+                <tr>
                 <%
                   if (this.images) {
                     $.each(this.images, function(item, name) {
                 %>
-                <tr>
-                  <td colspan=2>
+                    <table id="loc-image-<%- item %>" class="table">
+                      <tr>
+                        <td colspan="2"><a href="javascript:;" onclick="javascript:deleteImage(<%- item %>, document.getElementById('id').value)">Delete this image?</a></td>
+                      </tr>
                     <%
                       $.each(name, function(n, i) {
                     %>
                       <% if (n == "src") { %>
-                        <tr>
+                        <tr id="loc-image-<%- item %>">
                           <td>Image URL</td>
-                          <td><input type="text" rel="<%- i %>" value="<%- i %>" id="image_url_1" class="form-control image_url"/></td>
+                          <td><input type="text" rel="<%- i %>" value="<%- i %>" id="image_url_1" class="form-control image_url"/>  <img src="<%- i %>" style="width: 100px; height: 100px;"/></td>
                         </tr>
                       <% } %>
                       <% if (n == "image_title") { %>
-                        <tr>
+                        <tr id="loc-image-<%- item %>">
                           <td>Title</td>
                           <td><input type="text" value="<%- i %>" id="image_title_1" class="form-control image_title"/></td>
                         </tr>
                       <% } %>
                       <% if (n == "image_caption") { %>
-                        <tr>
+                        <tr id="loc-image-<%- item %>">
                           <td>Caption</td>
                           <td><input type="text" value="<%- i %>" id="image_caption_1" class="form-control image_caption"/></td>
                         </tr>
@@ -504,12 +507,15 @@ Miscellaneous
                     <%
                       })
                     %>
-                  </td>
-                </tr>
+                      <tr id="loc-image-<%- item %>">
+                        <td colspan="2" style="border-bottom: 3px solid;"><br/></td>
+                      </tr>
+                    </table>
                 <%
                     })
                   }
                 %>
+                </tr>
               </table>
             <% 
                 })

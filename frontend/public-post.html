@@ -1,6 +1,6 @@
 {% extends 'frontend/public-index.html' %}
 
-{% block ogdetails %}<meta property="og:image" content="http://www.bangonph.com/img/bangon-ph-black.png"/>
+{% block ogdetails %}<meta property="og:image" content="http://www.bangonph.com/img/bangon-ph-black.png?v={{ version }}"/>
 {% if post.post_type == "NEED" %}
 <meta property="og:image" content="http://www.bangonph.com/img/og-image-donation.png"/>
 {% else %}

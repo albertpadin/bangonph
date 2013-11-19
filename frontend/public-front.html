@@ -1,6 +1,6 @@
 {% extends 'frontend/public-index.html' %}
 
-{% block ogdetails %}<meta property="og:image" content="http://www.bangonph.com/img/bangon-ph-black.png"/>{% endblock %}
+{% block ogdetails %}<meta property="og:image" content="http://www.bangonph.com/img/bangon-ph-black.png?v={{ version }}"/>{% endblock %}
 
 {% block content %}
     <link rel="stylesheet" href="/css/datepicker.css">
@@ -28,7 +28,7 @@
       
       <div class="row">
         <div class="col-lg-6">
-            <div class="btn-group">
+            <div class="btn-group" style="margin-bottom:5px;">
               <a id="show-all" class="active btn btn-default hand search_buttons">All</a>
               <a id="show-samar" class="btn btn-default hand search_buttons">Samar</a>
               <a id="show-leyte" class="btn btn-default hand search_buttons">Leyte</a>
@@ -51,10 +51,10 @@
       </div>
       <div class="clearfix"></div>
 
-        <div class="col-lg-4 col-md-6 col-sm-6 col updates-feed">
+        <div class="col-lg-4 col-md-6 col-sm-6 col updates-feed visible-lg visible-xs">
           <div class="status-item">
           <h4>Updates</h4>
-          <ul id='updates_feed' class="updates-wrap">
+          <ul id='updates_feed' class="updates-wrap updates_feed updates-wrap-lg">
             {% for revision in revisions %}
             {% if revision.status %}
             <li>
@@ -74,6 +74,55 @@
           </ul>
           </div>
         </div>
+
+        <div class="col-lg-4 col-md-6 col-sm-6 col updates-feed visible-md">
+          <div class="status-item">
+          <h4>Updates</h4>
+          <ul id='updates_feed' class="updates-wrap updates_feed updates-wrap-md">
+            {% for revision in revisions %}
+            {% if revision.status %}
+            <li>
+              <img src="http://graph.facebook.com/{{ revision.fb_id }}/picture?small">
+              <label style="margin-bottom: 0;">
+                <a target="_blank" href="http://www.facebook.com/profile.php?id={{ revision.fb_id }}">{% if revision.fb_firstname %}{{ revision.fb_firstname }} {% endif %}{% if revision.fb_middlename %}{{ revision.fb_middlename }}{% endif %} {% if revision.fb_lastname %}{{ revision.fb_lastname }}{% endif %}</a>
+              </label>
+              <a href="/locations/{{ revision.name }}">
+                <span class="label label-default">{{ revision.name|prettify }}</span>
+                <span class="label label-success">{{ revision.revision_type }}</span>
+              </a><br/>
+              <p>{% for stat in revision.status %}{{ stat }}; {% endfor %}</p>
+              <span class="update-date">{{ revision.created|to_date }}</span>
+            </li>
+            {% endif %}
+            {% endfor %}
+          </ul>
+          </div>
+        </div>
+
+        <div class="col-lg-4 col-md-6 col-sm-6 col updates-feed visible-sm">
+          <div class="status-item">
+          <h4>Updates</h4>
+          <ul id='updates_feed' class="updates-wrap updates_feed updates-wrap-sm">
+            {% for revision in revisions %}
+            {% if revision.status %}
+            <li>
+              <img src="http://graph.facebook.com/{{ revision.fb_id }}/picture?small">
+              <label style="margin-bottom: 0;">
+                <a target="_blank" href="http://www.facebook.com/profile.php?id={{ revision.fb_id }}">{% if revision.fb_firstname %}{{ revision.fb_firstname }} {% endif %}{% if revision.fb_middlename %}{{ revision.fb_middlename }}{% endif %} {% if revision.fb_lastname %}{{ revision.fb_lastname }}{% endif %}</a>
+              </label>
+              <a href="/locations/{{ revision.name }}">
+                <span class="label label-default">{{ revision.name|prettify }}</span>
+                <span class="label label-success">{{ revision.revision_type }}</span>
+              </a><br/>
+              <p>{% for stat in revision.status %}{{ stat }}; {% endfor %}</p>
+              <span class="update-date">{{ revision.created|to_date }}</span>
+            </li>
+            {% endif %}
+            {% endfor %}
+          </ul>
+          </div>
+        </div>
+
         {% for location in featured_locations %}
         <div class="col-lg-4 col-md-6 col-sm-6 col location" id="location_{{ location.id }}">
             <div class="location-tags" style='display: none;'>{{ location.name }}</div>
@@ -283,9 +332,18 @@
               $('.feed-wrap').slimScroll({
                   height: '320px'
               });
-              $('.updates-wrap').slimScroll({
-                  height: '376px'
+              $('.updates-wrap-lg').slimScroll({
+                  height: '370px'
               });
+
+              $('.updates-wrap-md').slimScroll({
+                  height: '421px'
+              });
+
+              $('.updates-wrap-sm').slimScroll({
+                  height: '360px'
+              });
+
           });
         </script>
         <script>
@@ -310,91 +368,11 @@
 
         <script src="http://js.pusher.com/2.1/pusher.min.js"></script>
       <script type="text/javascript">
-      $(document).ready(function(){
-
-        $.ajax({
-          type: 'GET',
-          url: '/api/posts',
-        })
-        .success(function(data) {
-          //get the posts here
-          for(i=0;i<data.data.posts.length;i++){
-            data2 = data.data.posts[i];
-            d = '<li class="all ' + data2.post_type + '">';
-            d += '<a href="/posts/' + data2.id + '">';
-            d += '<strong>' + data2.name + '</strong>';
-            d += '<p>';
-            if(data2.location){
-              d += '<span class="label label-default">' + data2.location + '</span>';
-            }/*
-            if(data2.post_type){
-              d += '<span class="label label-info">' + data2.post_type + '</span>'
-            }*/
-            d += data2.message;
-            if(data2.phone){
-              d +='<br/>' + data2.phone;
-            }
-            d += '<br/><span class="date-time">Preferably before ' + data2.expiry_friendly + '<div class="social-media pull-right"><div class="social-item"><div class="fb-share-button" data-href="http://www.bangonph.com/posts/' + data2.id + '" data-type="button_count"></div></div><div class="social-item"><a href="https://twitter.com/share" class="twitter-share-button" data-text="' + data2.message + '" data-url="http://www.bangonph.com/posts/' + data2.id + '" data-hashtags="BangonPH">Tweet</a></div><div class="clearfix"></div></div></span></p></a></li>';
-            /*d += '<br/><span class="date-time">' + data2.expiry_friendly + '</span></p></li>';*/
-
-            if(data2.post_type){
-              if(data2.post_type == "NEED"){
-                $("#post_need_feed").prepend(d);
-              }
-              else {
-                $("#post_have_feed").prepend(d);
-              }
-            }
-            else {
-              $("#post_need_feed").prepend(d);
-            }
-
-          }
-
-          setTimeout(function(){twttr.widgets.load();FB.XFBML.parse();},100);
-          
-        });
-
-      });
 
         //pusher
         var pusher = new Pusher('e0a2a1c8316b9baddc9b');
         var channel = pusher.subscribe('feeds');
-        channel.bind('new_post', function(data) {
-          //do something when the new data is triggered
-          console.log(data);
-            data2 = data;
-            d = '<li class="all ' + data2.post_type + '">';
-            d += '<a href="/posts/' + data2.id + '">';
-            d += '<strong>' + data2.name + '</strong>';
-            d += '<p>';
-            if(data2.location){
-              d += '<span class="label label-default">' + data2.location + '</span>';
-            }/*
-            if(data2.post_type){
-              d += '<span class="label label-info">' + data2.post_type + '</span>'
-            }*/
-            d += data2.message;
-            if(data2.phone){
-              d +='<br/>' + data2.phone;
-            }
-
-            d += '<br/><span class="date-time">Preferably before ' + data2.expiry_friendly + '<div class="social-media pull-right"><div class="social-item"><div class="fb-share-button" data-href="http://www.bangonph.com/posts/' + data2.id + '" data-type="button_count"></div></div><div class="social-item"><a href="https://twitter.com/share" class="twitter-share-button" data-text="' + data2.message + '" data-url="http://www.bangonph.com/posts/' + data2.id + '" data-hashtags="BangonPH">Tweet</a></div><div class="clearfix"></div></div></span></p></a></li>';
-            /*d += '<br/><span class="date-time">' + data2.expiry_friendly + '</span></p></li>';*/
-
-            if(data2.post_type){
-              if(data2.post_type == "NEED"){
-                $("#post_need_feed").prepend(d);
-              }
-              else {
-                $("#post_have_feed").prepend(d);
-              }
-            }
-            else {
-              $("#post_need_feed").prepend(d);
-            }
-          setTimeout(function(){twttr.widgets.load();FB.XFBML.parse();},100);
-        });
+        
 
         channel.bind('new_revision', function(data) {
           //do something when the new data is triggered
@@ -402,35 +380,10 @@
           var d = '<li><img src="http://graph.facebook.com/' + data.fb_id + '/picture?small">
               <label style="margin-bottom: 0;"><a target="_blank" href="http://www.facebook.com/profile.php?id=' + data.fb_id + '">' + data.fb_name + '</a></label> updated <a href="/locations/' + data.location + '"><span class="label label-success">' + data.revision_type + '</span></a><br/><p>' + data.changes + '</p><span class="update-date">' + data.created + '</span></li>';
 
-          $("#updates_feed").prepend(d);
+          $(".updates_feed").prepend(d);
         });
       </script>
-      <script type="text/javascript">
-      $("#post_need").submit(function(e){
-        e.preventDefault();
-        $("#post_need_submit").attr('disabled','disabled');
-        $.post( "/api/posts", $("#post_need").serialize(), function( data ) {
-          console.log(data);
-          $("#post_need").find("input[type=text], textarea").val("");
-          $("#post_need_submit").removeAttr('disabled');
-            $("#post_need").find(".show").removeClass("show").addClass("hidden");
-            $("#post_need").closest("div").removeClass("shadowed");
-        });
-      });
-
-      $("#post_have").submit(function(e){
-        e.preventDefault();
-        $("#post_have_submit").attr('disabled','disabled');
-        $.post( "/api/posts", $("#post_have").serialize(), function( data ) {
-          console.log(data);
-          $("#post_have").find("input[type=text], textarea").val("");
-          $("#post_have_submit").removeAttr('disabled');
-          $("#post_have").find(".show").removeClass("show").addClass("hidden");
-            $("#post_have").closest("div").removeClass("shadowed");
-        });
-      });
-
-      </script>
+      
       <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
 
       <script type="text/javascript">

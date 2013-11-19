@@ -695,6 +695,10 @@ height: 80px;
     .hidden {
         display: none;
     }
+    
+    #locations-container .hidden {
+        display: none!important;
+    }
 
     .show {
         display: block;

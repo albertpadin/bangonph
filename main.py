@@ -1135,6 +1135,16 @@ class ContactHandler(BaseHandler):
 class LocationHandler(BaseHandler):
     @login_required
     def get(self):
+        deleteimage = self.request.get('deleteimage')
+        if deleteimage:
+            location = Location.get_by_id(self.request.get("locid"))
+            if location:
+                if location.images:
+                    location.images.pop(int(deleteimage))
+                location.put()
+                
+            return
+
         delete_id = self.request.get("id_delete")
         if delete_id:
             location = Location.get_by_id(delete_id)

@@ -24,6 +24,17 @@
     margin-top: -16px!important;
 }
 
+.ml16{
+    margin-left: 16px!important;
+}
+
+.mr16{
+    margin-right: 16px!important;
+}
+
+.mb16{
+    margin-bottom: 16px!important;
+}
 .clear{
     clear: both;
 }
@@ -120,12 +131,12 @@
     }
 
     .status-entry span:hover{
-        text-overflow:auto;
+/*        text-overflow:auto;
         overflow: visible;
         position: absolute;
         background-color: white;
         z-index: 9;
-        margin-left: 4px;
+        margin-left: 4px;*/
     }
 }
 
@@ -149,6 +160,10 @@
         background-color: white;
         z-index: 9;
         margin-left: 4px;
+    }
+
+    .special{
+        margin-top: 16px;
     }
 }
 
@@ -174,6 +189,10 @@
         z-index: 9;
         margin-left: 4px;
     }
+
+    .special{
+        margin-top: 16px;
+    }
 }
 
 /* Landscape phone to portrait tablet */
@@ -197,6 +216,10 @@
         background-color: white;
         z-index: 9;
         margin-left: 4px;
+    }
+
+    .special{
+        margin-top: 16px;
     }
 }
 
@@ -260,6 +283,9 @@
 
 .entry-btn{
     margin-top: 8px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .relief-orgs-group img{
@@ -849,4 +875,28 @@ height: 80px;
 .intro img{
     height: 100%;
     width: 136px;
+}
+
+.ngo-list{
+    float: left;
+}
+
+.ngo-list a img{
+    width: 50px;
+    height: auto;
+    margin-left: 4px;
+    margin-bottom: 8px;
+}
+
+.ngo-list a img:active{
+    position: relative;
+    top: 1px;
+}
+
+#see-more{
+    color: rgb(201, 50, 13);
+    font-size: 12px;
+    text-decoration: underline;
+    vertical-align: middle;
+    margin-left: 3px;
 }

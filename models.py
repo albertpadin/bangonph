@@ -160,7 +160,7 @@ class Location(ndb.Model):
                         details['relief_aid_ratings'][key] = relief_aid_rating
                     except:
                         logging.exception("error in relief aid rating computation")
-        
+
         return details
 
 
@@ -215,7 +215,7 @@ class DistributionRevision(ndb.Model):
     relief_name = ndb.StringProperty()
     destination = ndb.StringProperty()
     num_of_packs = ndb.IntegerProperty()
-    description = ndb.StringProperty()
+    description = ndb.TextProperty()
     contacts = ndb.StringProperty()
     needs = ndb.StringProperty()
     date = ndb.StringProperty()

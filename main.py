@@ -15,7 +15,9 @@ import hashlib
 import base64
 import facebook
 import pusher
+import csv
 from oauth_models import *
+from cStringIO import StringIO
 
 from google.appengine.api import urlfetch
 from google.appengine.ext import blobstore
@@ -518,7 +520,7 @@ class PublicFrontPage(BaseHandler):
         user_changes = LocationRevisionChanges.query().order(-LocationRevisionChanges.created).fetch(25)
         if user_changes:
             self.tv["revisions"] = user_changes
-        
+
         self.render('frontend/public-front.html')
 
 
@@ -575,7 +577,7 @@ class PublicLocationEditPage(BaseHandler):
 
             self.render('frontend/public-location-edit.html')
         else:
-            path = self.request.path.split("/")[0] + "/" + self.request.path.split("/")[1] 
+            path = self.request.path.split("/")[0] + "/" + self.request.path.split("/")[1]
             # self.response.out.write("You are not allowed to visit this site. Click <a href='"+ path +"'>here</a> to go back.")
             path_facebook = facebook.generate_login_url(path, self.uri_for('www-publicfblogin'))
             self.redirect(path_facebook)
@@ -1142,7 +1144,7 @@ class LocationHandler(BaseHandler):
                 if location.images:
                     location.images.pop(int(deleteimage))
                 location.put()
-                
+
             return
 
         delete_id = self.request.get("id_delete")
@@ -2802,7 +2804,7 @@ class APIDropOffCentersHandler(APIBaseHandler):
                 resp["description"] = "List of drop off centers"
                 resp["property"] = "drop-off-centers"
                 resp["data"] = data
-                
+
         else:
             center = DropOffCenter.get_by_id(instance_id)
             if center:
@@ -3033,7 +3035,7 @@ class APIEffortsHandler(APIBaseHandler):
                 resp["description"] = "List of efforts"
                 resp["property"] = "efforts"
                 resp["data"] = data
-                
+
         else:
             effort = Distribution.get_by_id(instance_id)
             if effort:
@@ -3529,6 +3531,27 @@ class ComputeReliefStatus(webapp2.RequestHandler):
         location.put()
 
 
+class UploadDistributionRevisionScript(BaseHandler):
+    def get(self):
+        self.render('frontend/system-overide-uploader.html')
+
+    def post(self):
+        if self.request.get('file'):
+            stringReader = csv.reader(StringIO(self.request.get('file')))
+
+            for row in stringReader:
+                res = add_rev(row)
+                if res == "Success":
+                    res = "<span style=\"background-color: green; color: white\">" + res + "</span>"
+                else:
+                    res = "<span style=\"background-color: red; color: white\">" + res + "</span>"
+                self.response.out.write(str(row[0]) +", " + str(row[1]) + ", " + str(row[4]) + " ---> " + res + "<br>")
+
+        else:
+            self.tv['error'] = "Please select a file first."
+            self.render('frontend/system-overide-uploader.html')
+
+
 app = webapp2.WSGIApplication([
     routes.DomainRoute(r'<:gcdc2013-bangonph\.appspot\.com|www\.bangonph\.com|staging\.gcdc2013-bangonph\.appspot\.com>', [
 
@@ -3579,6 +3602,9 @@ app = webapp2.WSGIApplication([
         webapp2.Route('/upload/handler', handler=UploadHandler, name="www-upload-handler"),
         webapp2.Route('/distributors', handler=DistributorHandler, name="www-distributors"),
         webapp2.Route('/distributions/fetch', handler=DistributionFetchHandler, name="www-distributions-fetch"),
+
+
+        webapp2.Route('/system/override/scripts/upload', handler=UploadDistributionRevisionScript, name="www-upload-distribution"),
 
 
 

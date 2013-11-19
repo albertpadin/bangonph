@@ -312,7 +312,7 @@ def add_post(data, instance_id=""):
         post.message = data["message"]
 
     if data["post_type"]:
-        
+
         types = []
         for this_type in data["post_type"]:
             post_type = this_type.replace(" ", "_")
@@ -363,7 +363,7 @@ def add_mock_post(data, instance_id=""):
         post.message = data["message"]
 
     if data["post_type"]:
-        
+
         types = []
         for this_type in data["post_type"]:
             post_type = this_type.replace(" ", "_")
@@ -456,3 +456,21 @@ def check_all_keys(keys=[], haystack=[]):
         if key not in haystack:
             return False
     return True
+
+def add_rev(row):
+    try:
+        from models import DistributionRevision
+        drev = DistributionRevision()
+        drev.name = row[0]
+        drev.relief_name = str(row[3])
+        drev.destination = str(row[1])
+        drev.num_of_packs = int(row[6])
+        drev.description = str(row[5])
+        drev.contacts = str(row[8])
+        drev.date = str(row[7])
+        drev.tag = str(row[4])
+        drev.put()
+    except Exception, e:
+        return 'Failed (' + str(e) + ")"
+    else:
+        return 'Success'

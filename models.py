@@ -238,6 +238,33 @@ class DistributionRevision(ndb.Model):
     date = ndb.StringProperty(default="UNKNOWN")
     tag = ndb.StringProperty()
 
+    def to_object(self, expand=""):
+        details = {}
+        details["meta"] = {"href": "http://api.bangonph.com/v1/efforts/" + str(self.key.id())}
+        details["created"] = str(self.created)
+        details["updated"] = str(self.updated)
+
+        details["date"] = str(self.date)
+        details["name"] = self.name
+        details["relief_name"] = self.relief_name
+        details["destination"] = self.destination
+        details["num_of_packs"] = self.num_of_packs
+        details["fb_id"] = self.fb_id
+        details["fb_email"] = self.fb_email
+        details["fb_access_token"] = self.fb_access_token
+        details["fb_username"] = self.fb_username
+        details["fb_lastname"] = self.fb_lastname
+        details["fb_firstname"] = self.fb_firstname
+        details["fb_middlename"] = self.fb_middlename
+        details["fb_name"] = self.fb_name
+        details["description"] = self.description
+        details["contacts"] = self.contacts
+        details["needs"] = self.needs
+        details["tag"] = self.tag
+        
+        
+        return details
+
 class Distribution(ndb.Model):
     created = ndb.DateTimeProperty(auto_now_add=True)
     updated = ndb.DateTimeProperty(auto_now=True)

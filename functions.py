@@ -190,7 +190,7 @@ def add_distribution(data, instance_id=""):
         distribution.contacts = data["contact"]
 
     if data["destinations"]:
-        distribution.destinations = data["destinations"]
+        distribution.destination = data["destinations"]
 
     if data["supply_goal"]:
         distribution.supply_goal = data["supply_goal"]
@@ -239,6 +239,9 @@ def add_distribution(data, instance_id=""):
 
     if data["tag"]:
         distribution.tag = data["tag"]
+
+    if data["description"]:
+        distribution.description = data["description"]
 
     distribution.put()
 

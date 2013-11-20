@@ -103,35 +103,35 @@
               <div class="status-group">
 
               <h5>Relief Aid Status for past 7 Days:</h5>
-              <h6>Food & Water ({{ location.relief_aid_seven_day_totals.food }} Given of {{ location.relief_seven_day_requirement.food }} Required)</h6>
+              <h6>Food & Water ({{ location.relief_aid_seven_day_totals.food|with_commas }} Given of {{ location.relief_seven_day_requirement.food|with_commas }} Required)</h6>
               <div class="progress">
                 <div class="progress-bar progress-bar-{% if location.relief_aid_seven_day_summary.food > 75 %}success{% else %}{% if location.relief_aid_seven_day_summary.food > 35 %}warning{% else %}danger{% endif %}{% endif %}" role="progressbar" {% if not location.relief_aid_seven_day_summary.food %}aria-valuenow="1"{% else %}aria-valuenow="{{ location.relief_aid_seven_day_summary.food|two_decimal }}"{% endif %} aria-valuemin="0" aria-valuemax="100" {% if not location.relief_aid_seven_day_summary.food %}style="width:1%"{% else %}style="width:{{ location.relief_aid_seven_day_summary.food|two_decimal }}%"{% endif %}>
                   <span class="sr-only">{{ location.relief_aid_seven_day_summary.food|two_decimal }}%  &nbsp;&nbsp;&nbsp;</a></span>
                 </div>
               </div>
 
-              <h6>Hygiene Packs ({{ location.relief_aid_seven_day_totals.hygiene }} Given of {{ location.relief_seven_day_requirement.hygiene }} Required)</h6>
+              <h6>Hygiene Packs ({{ location.relief_aid_seven_day_totals.hygiene|with_commas }} Given of {{ location.relief_seven_day_requirement.hygiene|with_commas }} Required)</h6>
               <div class="progress">
                 <div class="progress-bar progress-bar-{% if location.relief_aid_seven_day_summary.hygiene > 75 %}success{% else %}{% if location.relief_aid_seven_day_summary.hygiene > 35 %}warning{% else %}danger{% endif %}{% endif %}" role="progressbar" {% if not location.relief_aid_seven_day_summary.hygiene %}aria-valuenow="1"{% else %}aria-valuenow="{{ location.relief_aid_seven_day_summary.hygiene|two_decimal }}"{% endif %} aria-valuemin="0" aria-valuemax="100" {% if not location.relief_aid_seven_day_summary.hygiene %}style="width:1%"{% else %}style="width:{{ location.relief_aid_seven_day_summary.hygiene|two_decimal }}%"{% endif %}>
                   <span class="sr-only">{{ location.relief_aid_seven_day_summary.hygiene|two_decimal }}%  &nbsp;&nbsp;&nbsp;</a></span>
                 </div>
               </div>
 
-              <h6>Medicine ({{ location.relief_aid_seven_day_totals.medicine }} Given of {{ location.relief_seven_day_requirement.medicine }} Required)</h6>
+              <h6>Medicine ({{ location.relief_aid_seven_day_totals.medicine|with_commas }} Given of {{ location.relief_seven_day_requirement.medicine|with_commas }} Required)</h6>
               <div class="progress">
                 <div class="progress-bar progress-bar-{% if location.relief_aid_seven_day_summary.medicine > 75 %}success{% else %}{% if location.relief_aid_seven_day_summary.medicine > 35 %}warning{% else %}danger{% endif %}{% endif %}" role="progressbar" {% if not location.relief_aid_seven_day_summary.medicine %}aria-valuenow="1"{% else %}aria-valuenow="{{ location.relief_aid_seven_day_summary.medicine|two_decimal }}"{% endif %} aria-valuemin="0" aria-valuemax="100" {% if not location.relief_aid_seven_day_summary.medicine %}style="width:1%"{% else %}style="width:{{ location.relief_aid_seven_day_summary.medicine|two_decimal }}%"{% endif %}>
                   <span class="sr-only">{{ location.relief_aid_seven_day_summary.medicine|two_decimal }}%  &nbsp;&nbsp;&nbsp;</a></span>
                 </div>
               </div>
 
-              <h6>Medical Missions ({{ location.relief_aid_seven_day_totals.medical_mission }} Given of {{ location.relief_seven_day_requirement.medical_mission }} Required)</h6>
+              <h6>Medical Missions ({{ location.relief_aid_seven_day_totals.medical_mission|with_commas }} Given of {{ location.relief_seven_day_requirement.medical_mission|with_commas }} Required)</h6>
               <div class="progress">
                 <div class="progress-bar progress-bar-{% if location.relief_aid_seven_day_summary.medical_mission > 75 %}success{% else %}{% if location.relief_aid_seven_day_summary.medical_mission > 35 %}warning{% else %}danger{% endif %}{% endif %}" role="progressbar" {% if not location.relief_aid_seven_day_summary.medical_mission %}aria-valuenow="1"{% else %}aria-valuenow="{{ location.relief_aid_seven_day_summary.medical_mission|two_decimal }}"{% endif %} aria-valuemin="0" aria-valuemax="100" {% if not location.relief_aid_seven_day_summary.medical_mission %}style="width:1%"{% else %}style="width:{{ location.relief_aid_seven_day_summary.medical_mission|two_decimal }}%"{% endif %}>
                   <span class="sr-only">{{ location.relief_aid_seven_day_summary.medical_mission|two_decimal }}%  &nbsp;&nbsp;&nbsp;</a></span>
                 </div>
               </div>
 
-              <h6>Shelter ({{ location.relief_aid_seven_day_totals.shelter }} Given of {{ location.relief_seven_day_requirement.shelter }} Required)</h6>
+              <h6>Shelter ({{ location.relief_aid_seven_day_totals.shelter|with_commas }} Given of {{ location.relief_seven_day_requirement.shelter|with_commas }} Required)</h6>
               <div class="progress">
                 <div class="progress-bar progress-bar-{% if location.relief_aid_seven_day_summary.shelter > 75 %}success{% else %}{% if location.relief_aid_seven_day_summary.shelter > 35 %}warning{% else %}danger{% endif %}{% endif %}" role="progressbar" {% if not location.relief_aid_seven_day_summary.shelter %}aria-valuenow="1"{% else %}aria-valuenow="{{ location.relief_aid_seven_day_summary.shelter|two_decimal }}"{% endif %} aria-valuemin="0" aria-valuemax="100" {% if not location.relief_aid_seven_day_summary.shelter %}style="width:1%"{% else %}style="width:{{ location.relief_aid_seven_day_summary.shelter|two_decimal }}%"{% endif %}>
                   <span class="sr-only">{{ location.relief_aid_seven_day_summary.shelter|two_decimal }}%  &nbsp;&nbsp;&nbsp;</a></span>
@@ -405,35 +405,35 @@
               <div class="status-group">
 
               <h5>Relief Aid Status for past 7 Days:</h5>
-              <h6>Food & Water ({{ location.relief_aid_seven_day_totals.food }} Given of {{ location.relief_seven_day_requirement.food }} Required)</h6>
+              <h6>Food & Water ({{ location.relief_aid_seven_day_totals.food|with_commas }} Given of {{ location.relief_seven_day_requirement.food|with_commas }} Required)</h6>
               <div class="progress">
                 <div class="progress-bar progress-bar-{% if location.relief_aid_seven_day_summary.food > 75 %}success{% else %}{% if location.relief_aid_seven_day_summary.food > 35 %}warning{% else %}danger{% endif %}{% endif %}" role="progressbar" {% if not location.relief_aid_seven_day_summary.food %}aria-valuenow="1"{% else %}aria-valuenow="{{ location.relief_aid_seven_day_summary.food|two_decimal }}"{% endif %} aria-valuemin="0" aria-valuemax="100" {% if not location.relief_aid_seven_day_summary.food %}style="width:1%"{% else %}style="width:{{ location.relief_aid_seven_day_summary.food|two_decimal }}%"{% endif %}>
                   <span class="sr-only">{{ location.relief_aid_seven_day_summary.food|two_decimal }}%  &nbsp;&nbsp;&nbsp;</a></span>
                 </div>
               </div>
 
-              <h6>Hygiene Packs ({{ location.relief_aid_seven_day_totals.hygiene }} Given of {{ location.relief_seven_day_requirement.hygiene }} Required)</h6>
+              <h6>Hygiene Packs ({{ location.relief_aid_seven_day_totals.hygiene|with_commas }} Given of {{ location.relief_seven_day_requirement.hygiene|with_commas }} Required)</h6>
               <div class="progress">
                 <div class="progress-bar progress-bar-{% if location.relief_aid_seven_day_summary.hygiene > 75 %}success{% else %}{% if location.relief_aid_seven_day_summary.hygiene > 35 %}warning{% else %}danger{% endif %}{% endif %}" role="progressbar" {% if not location.relief_aid_seven_day_summary.hygiene %}aria-valuenow="1"{% else %}aria-valuenow="{{ location.relief_aid_seven_day_summary.hygiene|two_decimal }}"{% endif %} aria-valuemin="0" aria-valuemax="100" {% if not location.relief_aid_seven_day_summary.hygiene %}style="width:1%"{% else %}style="width:{{ location.relief_aid_seven_day_summary.hygiene|two_decimal }}%"{% endif %}>
                   <span class="sr-only">{{ location.relief_aid_seven_day_summary.hygiene|two_decimal }}%  &nbsp;&nbsp;&nbsp;</a></span>
                 </div>
               </div>
 
-              <h6>Medicine ({{ location.relief_aid_seven_day_totals.medicine }} Given of {{ location.relief_seven_day_requirement.medicine }} Required)</h6>
+              <h6>Medicine ({{ location.relief_aid_seven_day_totals.medicine|with_commas }} Given of {{ location.relief_seven_day_requirement.medicine|with_commas }} Required)</h6>
               <div class="progress">
                 <div class="progress-bar progress-bar-{% if location.relief_aid_seven_day_summary.medicine > 75 %}success{% else %}{% if location.relief_aid_seven_day_summary.medicine > 35 %}warning{% else %}danger{% endif %}{% endif %}" role="progressbar" {% if not location.relief_aid_seven_day_summary.medicine %}aria-valuenow="1"{% else %}aria-valuenow="{{ location.relief_aid_seven_day_summary.medicine|two_decimal }}"{% endif %} aria-valuemin="0" aria-valuemax="100" {% if not location.relief_aid_seven_day_summary.medicine %}style="width:1%"{% else %}style="width:{{ location.relief_aid_seven_day_summary.medicine|two_decimal }}%"{% endif %}>
                   <span class="sr-only">{{ location.relief_aid_seven_day_summary.medicine|two_decimal }}%  &nbsp;&nbsp;&nbsp;</a></span>
                 </div>
               </div>
 
-              <h6>Medical Missions ({{ location.relief_aid_seven_day_totals.medical_mission }} Given of {{ location.relief_seven_day_requirement.medical_mission }} Required)</h6>
+              <h6>Medical Missions ({{ location.relief_aid_seven_day_totals.medical_mission|with_commas }} Given of {{ location.relief_seven_day_requirement.medical_mission|with_commas }} Required)</h6>
               <div class="progress">
                 <div class="progress-bar progress-bar-{% if location.relief_aid_seven_day_summary.medical_mission > 75 %}success{% else %}{% if location.relief_aid_seven_day_summary.medical_mission > 35 %}warning{% else %}danger{% endif %}{% endif %}" role="progressbar" {% if not location.relief_aid_seven_day_summary.medical_mission %}aria-valuenow="1"{% else %}aria-valuenow="{{ location.relief_aid_seven_day_summary.medical_mission|two_decimal }}"{% endif %} aria-valuemin="0" aria-valuemax="100" {% if not location.relief_aid_seven_day_summary.medical_mission %}style="width:1%"{% else %}style="width:{{ location.relief_aid_seven_day_summary.medical_mission|two_decimal }}%"{% endif %}>
                   <span class="sr-only">{{ location.relief_aid_seven_day_summary.medical_mission|two_decimal }}%  &nbsp;&nbsp;&nbsp;</a></span>
                 </div>
               </div>
 
-              <h6>Shelter ({{ location.relief_aid_seven_day_totals.shelter }} Given of {{ location.relief_seven_day_requirement.shelter }} Required)</h6>
+              <h6>Shelter ({{ location.relief_aid_seven_day_totals.shelter|with_commas }} Given of {{ location.relief_seven_day_requirement.shelter|with_commas }} Required)</h6>
               <div class="progress">
                 <div class="progress-bar progress-bar-{% if location.relief_aid_seven_day_summary.shelter > 75 %}success{% else %}{% if location.relief_aid_seven_day_summary.shelter > 35 %}warning{% else %}danger{% endif %}{% endif %}" role="progressbar" {% if not location.relief_aid_seven_day_summary.shelter %}aria-valuenow="1"{% else %}aria-valuenow="{{ location.relief_aid_seven_day_summary.shelter|two_decimal }}"{% endif %} aria-valuemin="0" aria-valuemax="100" {% if not location.relief_aid_seven_day_summary.shelter %}style="width:1%"{% else %}style="width:{{ location.relief_aid_seven_day_summary.shelter|two_decimal }}%"{% endif %}>
                   <span class="sr-only">{{ location.relief_aid_seven_day_summary.shelter|two_decimal }}%  &nbsp;&nbsp;&nbsp;</a></span>

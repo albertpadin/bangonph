@@ -338,36 +338,11 @@
           <div class="custom-item">
             <h5 class="center-text">#BangonPH Top 10 Contributors:</h5>
               <div class="contributors">
-                <a href="#">
-                  <img class="ml0" src="/img/placeholder.png" title="Dan Pantinople" alt="Dan Pantinople">
+                {% for contributor in contributors %}
+                <a href="http://www.facebook.com/profile.php?id={{ contributor.fb_id }}">
+                  <img class="ml0" src="http://graph.facebook.com/{{ contributor.fb_id }}/picture?small" title="{{ contributor.fb_firstname }}" alt="{{ contributor.fb_firstname }}">
                 </a>
-                <a href="#">
-                  <img src="/img/placeholder.png" title="Richmond Wang" alt="Richmond Wang">
-                </a>
-                <a href="#">
-                  <img src="/img/placeholder.png" title="Albert Padin" alt="Albert Padin">
-                </a>
-                <a href="#">
-                  <img src="/img/placeholder.png" title="Nicole Padin" alt="Nicole Padin">
-                </a>
-                <a href="#">
-                  <img src="/img/placeholder.png" title="Dave Overton" alt="Dave Overton">
-                </a>
-                <a href="#">
-                  <img src="/img/placeholder.png" title="Kent Astudillo" alt="Kent Astudillo">
-                </a>
-                <a href="#">
-                  <img src="/img/placeholder.png" title="Fe Mojado" alt="Fe Mojado">
-                </a>
-                <a href="#">
-                  <img src="/img/placeholder.png" title="Jonina Sharpe" alt="Jonina Sharpe">
-                </a>
-                <a href="#">
-                  <img src="/img/placeholder.png" title="Juan de la Cruz" alt="Juan de la Cruz">
-                </a>
-                <a href="#">
-                  <img src="/img/placeholder.png" title="George Padin" alt="George Padin">
-                </a>
+                {% endfor %}
               </div>
           </div>
         </div>

@@ -3,6 +3,7 @@
 {% block ogdetails %}
 <meta property="og:image" content="http://www.bangonph.com/img/bangon-ph-black.png?v={{ version }}"/>
 <meta name="twitter:image" content="http://www.bangonph.com/img/bangon-ph-black.png?v={{ version }}">
+  <meta property="twitter:title" content="#BangonPH"/>
 {% endblock %}
 
 {% block content %}
@@ -394,8 +395,7 @@
         channel.bind('new_revision', function(data) {
           //do something when the new data is triggered
           console.log(data);
-          var d = '<li><img src="http://graph.facebook.com/' + data.fb_id + '/picture?small">
-              <label style="margin-bottom: 0;"><a target="_blank" href="http://www.facebook.com/profile.php?id=' + data.fb_id + '">' + data.fb_name + '</a></label> updated <a href="/locations/' + data.location + '"><span class="label label-success">' + data.revision_type + '</span></a><br/><p>' + data.changes + '</p><span class="update-date">' + data.created + '</span></li>';
+          var d = '<li><img src="http://graph.facebook.com/' + data.fb_id + '/picture?small"><label style="margin-bottom: 0;"><a target="_blank" href="http://www.facebook.com/profile.php?id=' + data.fb_id + '">' + data.fb_name + '</a></label> updated <a href="/locations/' + data.location + '"><span class="label label-success">' + data.revision_type + '</span></a><br/><p>' + data.changes + '</p><span class="update-date">' + data.created + '</span></li>';
 
           $(".updates_feed").prepend(d);
 

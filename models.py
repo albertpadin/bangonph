@@ -157,10 +157,11 @@ class Location(ndb.Model):
             details['tags'].append(tag.strip().lower())
         if not self.relief_aid_totals:
             self.relief_aid_totals = {}
-        details['relief_aid_totals'] = self.relief_aid_totals
         details['relief_aid_ratings'] = {}
+        details['relief_aid_totals'] = {}
 
         if show_relief:
+            details['relief_aid_totals'] = self.relief_aid_totals
             if not self.affected_count:
                 self.affected_count = 1000
 

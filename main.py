@@ -3057,16 +3057,16 @@ class APIEffortsHandler(APIBaseHandler):
                     failed = True
                 else:
                     if curs:
-                        efforts, next_cursor, more = Distribution.query().fetch_page(25, start_cursor=curs)
+                        efforts, next_cursor, more = DistributionRevision.query().fetch_page(25, start_cursor=curs)
                     else:
-                        efforts, next_cursor, more = Distribution.query().fetch_page(25)
+                        efforts, next_cursor, more = DistributionRevision.query().fetch_page(25)
             else:
                 if self.request.get("filter_locations"):
                     loc = slugify(self.request.get("filter_locations"))
                     loc_key = Location.get_by_id(loc)
-                    efforts, next_cursor, more  = Distribution.query(Distribution.destinations == loc_key.key).fetch_page(25)
+                    efforts, next_cursor, more  = DistributionRevision.query(DistributionRevision.destinations == loc_key.key).fetch_page(25)
                 else:
-                    efforts, next_cursor, more = Distribution.query().fetch_page(25)
+                    efforts, next_cursor, more = DistributionRevision.query().fetch_page(25)
 
             for effort in efforts:
                 efforts_json.append(effort.to_object(self.request.get("expand").lower()))
@@ -3084,7 +3084,7 @@ class APIEffortsHandler(APIBaseHandler):
                 resp["data"] = data
 
         else:
-            effort = Distribution.get_by_id(instance_id)
+            effort = DistributionRevision.get_by_id(long(instance_id))
             if effort:
                 resp["description"] = "Instance data"
                 resp["property"] = "posts"
@@ -3137,7 +3137,7 @@ class APIEffortsHandler(APIBaseHandler):
 
         else:
             resp["method"] = "edit"
-            exist = Distribution.get_by_id(long(instance_id))
+            exist = DistributionRevision.get_by_id(long(instance_id))
             if exist:
                 effort = add_distribution(data, instance_id)
                 if effort:
@@ -3162,7 +3162,7 @@ class APIEffortsHandler(APIBaseHandler):
         resp = API_RESPONSE.copy()
         resp["method"] = "delete"
         if instance_id:
-            effort = Distribution.get_by_id(long(instance_id))
+            effort = DistributionRevision.get_by_id(long(instance_id))
             if effort:
                 subscriber.key.delete()
                 resp["description"] = "Successfully deleted the instance"

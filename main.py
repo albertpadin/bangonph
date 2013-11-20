@@ -3,7 +3,7 @@ reload(sys)
 sys.setdefaultencoding('utf-8')
 import webapp2, jinja2, os, calendar
 from webapp2_extras import routes
-from models import User, Contact, Location, Post, Distribution, File, Distributor, Subscriber, DropOffCenter, LocationRevision, LocationRevisionChanges, DistributionRevision
+from models import User, Contact, Location, Post, Distribution, File, Distributor, Subscriber, DropOffCenter, LocationRevision, LocationRevisionChanges, DistributionRevision, Contributor
 from functions import *
 import json as simplejson
 import logging
@@ -34,6 +34,26 @@ from settings import DATES
 from google.appengine.datastore.datastore_query import Cursor
 
 jinja_environment = jinja2.Environment(loader=jinja2.FileSystemLoader(os.path.dirname(__file__)), autoescape=True)
+
+
+def add_contribution(fb_id, fb_email, fb_username, fb_firstname, fb_middlename, fb_lastname, location_id, location_name):
+    contribution = Contributor.get_by_id(str(fb_id))
+    if not contribution:
+        contribution = Contributor(id=str(fb_id))
+        contribution.fb_id = str(fb_id)
+        contribution.fb_email = str(fb_email)
+        contribution.fb_username = str(fb_username)
+        contribution.fb_lastname = str(fb_lastname)
+        contribution.fb_firstname = str(fb_firstname)
+        contribution.fb_middlename = str(fb_middlename)
+        contribution.locations = []
+        contribution.locations_pretty = []
+    if location_id not in contribution.locations:
+        contribution.locations.append(location_id)
+        contribution.locations_pretty.append(location_name)
+    contribution.contributions += 1
+    contribution.put()
+    return
 
 
 def with_commas(value):
@@ -125,7 +145,7 @@ class BaseHandler(webapp2.RequestHandler):
         self.public_user = self.get_public_current_user()
 
 
-    def render(self, template_path=None, force=False):
+    def render(self, template_path=None, force=False, cache=0):
         self.tv["current_timestamp"] = time.mktime(self.now.timetuple())
         self.settings["current_year"] = self.now.year
         self.tv["settings"] = self.settings
@@ -145,8 +165,10 @@ class BaseHandler(webapp2.RequestHandler):
             return
 
         template = jinja_environment.get_template(template_path)
-        self.response.out.write(template.render(self.tv))
-        logging.debug(self.tv)
+        output = template.render(self.tv)
+        if cache:
+            memcache.set(str(self.tv['version']) + ':path:' + self.tv['current_url'], output, cache)
+        self.response.out.write(output)
 
 
     def get_session(self):
@@ -503,6 +525,11 @@ class LoginPage(BaseHandler):
 
 class PublicFrontPage(BaseHandler):
     def get(self):
+        output = memcache.get(str(self.tv['version']) + ':path:' + self.tv['current_url'])
+        if output:
+            self.response.write(output)
+            return
+
         self.tv["current_page"] = "PUBLIC_FRONT"
         featured_locations = []
         locations = Location.query().fetch(300)
@@ -526,16 +553,16 @@ class PublicFrontPage(BaseHandler):
         self.tv['update_count'] = update_count
 
         for location in locations:
-            self.tv['locations'].append(location.to_object())
+            self.tv['locations'].append(location.to_object(show_relief=True))
 
         for featured_location in featured_locations:
-            self.tv['featured_locations'].append(featured_location.to_object())
+            self.tv['featured_locations'].append(featured_location.to_object(show_relief=True))
 
         user_changes = LocationRevisionChanges.query().order(-LocationRevisionChanges.created).fetch(25)
         if user_changes:
             self.tv["revisions"] = user_changes
 
-        self.render('frontend/public-front.html')
+        self.render('frontend/public-front.html', cache=30)
 
 
 class PublicUpdatesPage(BaseHandler):
@@ -809,6 +836,8 @@ class PublicLocationEditPage(BaseHandler):
                 }
                 taskqueue.add(url='/admin/tasks/compute_relief_status', params=params, method='POST')
 
+                add_contribution(user_changes.fb_id, user_changes.fb_email, user_changes.fb_username, user_changes.fb_firstname, user_changes.fb_middlename, user_changes.fb_lastname, location.key.id(), location.name)
+
             self.redirect("/locations/" + self.request.get("page_title") + "/edit?success=Successfully+updated.")
 
         if self.request.get("status") == "reliefs":
@@ -889,6 +918,13 @@ class PublicLocationEditPage(BaseHandler):
                     })
 
                 memcache.incr('update_count')
+
+                params = {
+                    "location_id": distribution_revision.name
+                }
+                taskqueue.add(url='/admin/tasks/compute_relief_status', params=params, method='POST')
+
+                add_contribution(user_changes.fb_id, user_changes.fb_email, user_changes.fb_username, user_changes.fb_firstname, user_changes.fb_middlename, user_changes.fb_lastname, self.request.get("page_title"), self.request.get("page_title_pretty"))
 
                 self.redirect("/locations/" + self.request.get("page_title") + "/edit?success=Successfully+updated.")
             else:
@@ -2679,6 +2715,7 @@ class APIPostsHandler(APIBaseHandler):
         }
         form_data = urllib.urlencode(form_fields)
 
+
         try:
             logging.debug(urlfetch.fetch(url="http://reliefboard.com/messages/feed", payload=form_data, method=urlfetch.POST, headers={'Content-Type': 'application/x-www-form-urlencoded'}).content)
         except:
@@ -3660,6 +3697,7 @@ app = webapp2.WSGIApplication([
         webapp2.Route('/s', handler=sampler, name="www-get-authorization-code"),
 
         webapp2.Route('/admin/tasks/compute_relief_status', handler=ComputeReliefStatus, name="www-compute-relief-status"),
+        webapp2.Route('/admin/api/v1/locations', handler=APILocationsHandler, name="admin-api-locations"),
 
         webapp2.Route(r'/<:.*>', ErrorHandler)
     ]),

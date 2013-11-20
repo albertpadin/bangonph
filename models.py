@@ -149,6 +149,7 @@ class Location(ndb.Model):
     needs = ndb.JsonProperty()
     status = ndb.JsonProperty()
     levels = ndb.JsonProperty(default={})
+    current_levels = ndb.JsonProperty(default={"food":0, "hygiene":0, "medicine":0, "medical_mission":0, "shelter":0})
     images = ndb.JsonProperty()
     hash_tag = ndb.StringProperty(repeated=True)
     featured = ndb.BooleanProperty(default=False)
@@ -190,6 +191,7 @@ class Location(ndb.Model):
         details["missing_person_text"] = self.missing_person_text
         details["name"] = self.name
         details["levels"] = self.levels
+        details["current_levels"] = self.current_levels
         tags = self.name.split(",")
         details['tags'] = []
         for tag in tags:
@@ -199,6 +201,7 @@ class Location(ndb.Model):
         details['relief_aid_ratings'] = {}
         details['relief_aid_seven_day_summary'] = {}
         details['relief_aid_totals'] = {}
+        details['relief_requirement'] = {}
 
         if show_relief:
             details['relief_aid_totals'] = self.relief_aid_totals
@@ -208,12 +211,15 @@ class Location(ndb.Model):
             for date in DATES:
                 details['relief_aid_ratings'][date] = {"food":0, "hygiene":0, "medicine":0, "medical_mission":0, "shelter":0}
                 if date not in details['levels']:
-                    details['levels'][date] = {"food":0, "hygiene":0, "medicine":0, "medical_mission":0, "shelter":0}
+                    details['levels'][date] = self.current_levels
+                if date not in details['relief_requirement']:
+                    details['relief_requirement'][date] = {"food":0, "hygiene":0, "medicine":0, "medical_mission":0, "shelter":0}
 
                 for key in details['levels'][date]:
                     requirement_level = float(100 - details['levels'][date][key]) / 100
                     requirement = {}
-                    requirement[key] = self.affected_count * requirement_level * MULTIPLIER[key]
+                    requirement[key] = self.affected_count * requirement_level / MULTIPLIER[key]
+                    details['relief_requirement'][date][key] = requirement[key]
                     if date not in details['relief_aid_totals']:
                         details['relief_aid_totals'][date] = {"food":0, "hygiene":0, "medicine":0, "medical_mission":0, "shelter":0}
                     relief_aid_rating = (float(details['relief_aid_totals'][date][key]) / float(requirement[key])) * 100
@@ -222,15 +228,23 @@ class Location(ndb.Model):
             totals = {}
             details['relief_aid_seven_day_summary'] = {}
             details['relief_aid_seven_day_summary']['all'] = float(0)
+            details['relief_seven_day_requirement_totals'] = {}
+            details['relief_aid_seven_day_totals'] = {"food":0, "hygiene":0, "medicine":0, "medical_mission":0, "shelter":0}
+            details['relief_seven_day_requirement'] = {"food":0, "hygiene":0, "medicine":0, "medical_mission":0, "shelter":0}
             for date in get_past_seven_days():
                 for key in details['relief_aid_ratings'][date]:
                     if key not in totals:
                         totals[key] = float(0)
                     totals[key] += details['relief_aid_ratings'][date][key]
+                    if key not in details['relief_seven_day_requirement_totals']:
+                        details['relief_seven_day_requirement_totals'][key] = 0
+                    details['relief_seven_day_requirement_totals'][key] += details['relief_requirement'][date][key]
 
             for key in totals:
+                details['relief_aid_seven_day_totals'][key] = int(totals[key])
                 details['relief_aid_seven_day_summary'][key] = totals[key] / float(7)
                 details['relief_aid_seven_day_summary']['all'] += details['relief_aid_seven_day_summary'][key]
+                details['relief_seven_day_requirement'][key] = int(details['relief_seven_day_requirement_totals'][key] / 7)
 
             details['relief_aid_seven_day_summary']['all'] = details['relief_aid_seven_day_summary']['all'] / float(7)
 

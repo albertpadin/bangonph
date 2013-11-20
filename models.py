@@ -214,14 +214,14 @@ class Location(ndb.Model):
                     details['levels'][date] = self.current_levels
                 if date not in details['relief_requirement']:
                     details['relief_requirement'][date] = {"food":0, "hygiene":0, "medicine":0, "medical_mission":0, "shelter":0}
+                if date not in details['relief_aid_totals']:
+                    details['relief_aid_totals'][date] = {"food":0, "hygiene":0, "medicine":0, "medical_mission":0, "shelter":0}
 
                 for key in details['levels'][date]:
                     requirement_level = float(100 - details['levels'][date][key]) / 100
                     requirement = {}
                     requirement[key] = self.affected_count * requirement_level / MULTIPLIER[key]
                     details['relief_requirement'][date][key] = requirement[key]
-                    if date not in details['relief_aid_totals']:
-                        details['relief_aid_totals'][date] = {"food":0, "hygiene":0, "medicine":0, "medical_mission":0, "shelter":0}
                     relief_aid_rating = (float(details['relief_aid_totals'][date][key]) / float(requirement[key])) * 100
                     details['relief_aid_ratings'][date][key] = relief_aid_rating
 
@@ -231,6 +231,8 @@ class Location(ndb.Model):
             details['relief_seven_day_requirement_totals'] = {}
             details['relief_aid_seven_day_totals'] = {"food":0, "hygiene":0, "medicine":0, "medical_mission":0, "shelter":0}
             details['relief_seven_day_requirement'] = {"food":0, "hygiene":0, "medicine":0, "medical_mission":0, "shelter":0}
+            details['relief_aid_seven_day_totals']['all'] = 0
+            details['relief_seven_day_requirement_totals']['all'] = 0
             for date in get_past_seven_days():
                 for key in details['relief_aid_ratings'][date]:
                     if key not in totals:
@@ -238,13 +240,15 @@ class Location(ndb.Model):
                     totals[key] += details['relief_aid_ratings'][date][key]
                     if key not in details['relief_seven_day_requirement_totals']:
                         details['relief_seven_day_requirement_totals'][key] = 0
-                    details['relief_seven_day_requirement_totals'][key] += details['relief_requirement'][date][key]
-
+                    details['relief_seven_day_requirement_totals'][key] += int(details['relief_requirement'][date][key])
+                    details['relief_seven_day_requirement_totals']['all'] += int(details['relief_requirement'][date][key])
+                    if key not in details['relief_aid_seven_day_totals']:
+                        details['relief_aid_seven_day_totals'][key] = 0
+                    details['relief_aid_seven_day_totals'][key] += int(details['relief_aid_totals'][date][key])
+                    details['relief_aid_seven_day_totals']['all'] += int(details['relief_aid_totals'][date][key])
             for key in totals:
-                details['relief_aid_seven_day_totals'][key] = int(totals[key])
                 details['relief_aid_seven_day_summary'][key] = totals[key] / float(7)
                 details['relief_aid_seven_day_summary']['all'] += details['relief_aid_seven_day_summary'][key]
-                details['relief_seven_day_requirement'][key] = int(details['relief_seven_day_requirement_totals'][key] / 7)
 
             details['relief_aid_seven_day_summary']['all'] = details['relief_aid_seven_day_summary']['all'] / float(7)
 

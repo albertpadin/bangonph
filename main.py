@@ -881,7 +881,7 @@ class PublicLocationEditPage(BaseHandler):
 
                 p['feeds'].trigger('new_revision', {
                     "changes": "; ".join(datas_changes),
-                    "location": location.key.id(),
+                    "location": distribution_revision.name,
                     "fb_id": user_changes.fb_id,
                     "fb_name": user_name,
                     "revision_type": 'Added a New Relief Effort',
@@ -2258,8 +2258,12 @@ class APILocationsHandler(APIBaseHandler):
                 locations, next_cursor, more = Location.query().fetch_page(25)
 
             if not failed:
-                for location in locations:
-                    locations_json.append(location.to_object())
+                if self.request.get('show_relief'):
+                    for location in locations:
+                        locations_json.append(location.to_object(show_relief=True))
+                else:
+                    for location in locations:
+                        locations_json.append(location.to_object())
 
                 data = {}
                 data["locations"] = locations_json
@@ -2276,7 +2280,10 @@ class APILocationsHandler(APIBaseHandler):
             if location:
                 resp["description"] = "Instance data"
                 resp["property"] = "posts"
-                resp["data"] = location.to_object()
+                if self.request.get('show_relief'):
+                    resp["data"] = location.to_object(show_relief=True)
+                else:
+                    resp["data"] = location.to_object()
             else:
                 # instance dont exist
                 resp['response'] = "invalid_instance"
@@ -3583,30 +3590,31 @@ class ComputeReliefStatus(webapp2.RequestHandler):
 
         location.relief_aid_totals = {}
         for date in DATES:
+            location.relief_aid_totals[date] = {'food': 0, 'hygiene': 0, 'shelter':0, 'medicine':0, 'medical_mission':0, 'unknown':0}
             try:
                 location.relief_aid_totals[date]['food'] = food_total[date]
             except:
-                location.relief_aid_totals[date]['food'] = 0
+                pass
             try:
                 location.relief_aid_totals[date]['shelter'] = shelter_total[date]
             except:
-                location.relief_aid_totals[date]['shelter'] = 0
+                pass
             try:
                 location.relief_aid_totals[date]['hygiene'] = hygiene_total[date]
             except:
-                location.relief_aid_totals[date]['hygiene'] = 0
+                pass
             try:
                 location.relief_aid_totals[date]['medicine'] = medicine_total[date]
             except:
-                location.relief_aid_totals[date]['medicine'] = 0
+                pass
             try:
                 location.relief_aid_totals[date]['medical_mission'] = medical_mission_total[date]
             except:
-                location.relief_aid_totals[date]['medical_mission'] = 0
+                pass
             try:
                 location.relief_aid_totals[date]['unknown'] = unknown_total[date]
             except:
-                location.relief_aid_totals[date]['unknown'] = 0
+                pass
         location.put()
 
 

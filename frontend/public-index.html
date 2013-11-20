@@ -4,9 +4,15 @@
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
         {% block ogdetails %}{% endblock %}
+
+        <meta name="twitter:card" content="summary">
+        <meta name="twitter:site" content="@bangonphils">
+        <meta property="og:url" content="{{ current_base_url }}">
+
         <meta property="og:site_name" content="#BangonPH"/>
         <meta property="og:type" content="website"/>
         <meta property="og:description" content="{% if og_description %}{{ og_description }}{% else %}We Need Your Help! Help the super typhoon Yolanda affected areas! Share information on your latest or planned relief drop here and let's get aid where it is needed the most!{% endif %}"/>
+        <meta property="twitter:description" content="{% if og_description %}{{ og_description }}{% else %}We Need Your Help! Help the super typhoon Yolanda affected areas! Share information on your latest or planned relief drop here and let's get aid where it is needed the most!{% endif %}"/>
         <title>{% if page_title %}{{ page_title }}{% else %}#BangonPH{% endif %}</title>
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width">

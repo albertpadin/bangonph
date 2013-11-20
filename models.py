@@ -2,7 +2,7 @@ from google.appengine.ext import ndb
 import logging
 import time, os, datetime
 from settings import API_RESPONSE, API_RESPONSE_DATA
-from settings import DATES, FOOD_MULTIPLIER, HYGIENE_MULTIPLIER, SHELTER_MULTIPLIER, MEDICINE_MULTIPLIER, MEDICAL_MISSION_MULTIPLIER
+from settings import DATES, MULTIPLIER
 
 currenturl = str(os.environ['wsgi.url_scheme'])+"://"+str(os.environ['HTTP_HOST'])
 
@@ -116,9 +116,9 @@ class Location(ndb.Model):
     featured = ndb.BooleanProperty(default=False)
     missing_person = ndb.IntegerProperty()
     missing_person_text = ndb.StringProperty()
-    relief_aid_totals = ndb.JsonProperty()
+    relief_aid_totals = ndb.JsonProperty(default={})
 
-    def to_object(self, extended=""):
+    def to_object(self, extended="", show_relief=False):
         details = {}
         details["meta"] = {"href": "http://api.bangonph.com/v1/locations/" + str(self.key.id())}
         details["created"] = str(self.created)
@@ -155,28 +155,28 @@ class Location(ndb.Model):
         details['tags'] = []
         for tag in tags:
             details['tags'].append(tag.strip().lower())
+        if not self.relief_aid_totals:
+            self.relief_aid_totals = {}
         details['relief_aid_totals'] = self.relief_aid_totals
         details['relief_aid_ratings'] = {}
 
-        for date in DATES:
-            details['relief_aid_ratings'][date] = {"food":0, "hygiene":0, "medicine":0, "medical_mission":0, "shelter":0}
-            if date not in details['levels']:
-                details['levels'][date] = {"food":0, "hygiene":0, "medicine":0, "medical_mission":0, "shelter":0}
+        if show_relief:
+            if not self.affected_count:
+                self.affected_count = 1000
 
-            requirement_level = 100 - details['levels'][date][key]
-            requirement = {}
-            requirement['food'] = self.affected_count * requirement_level * FOOD_MULTIPLIER
-            requirement['shelter'] = self.affected_count * requirement_level * SHELTER_MULTIPLIER
-            requirement['hygiene'] = self.affected_count * requirement_level * HYGIENE_MULTIPLIER
-            requirement['medicine'] = self.affected_count * requirement_level * MEDICINE_MULTIPLIER
-            requirement['medical_mission'] = self.affected_count * requirement_level * MEDICAL_MISSION_MULTIPLIER
+            for date in DATES:
+                details['relief_aid_ratings'][date] = {"food":0, "hygiene":0, "medicine":0, "medical_mission":0, "shelter":0}
+                if date not in details['levels']:
+                    details['levels'][date] = {"food":0, "hygiene":0, "medicine":0, "medical_mission":0, "shelter":0}
 
-            for key in details['levels'][date]:
-                try:
-                    relief_aid_rating = (float(details['relief_aid_totals'][date][key]) / float(details['levels'][date][key])) * 100
+                for key in details['levels'][date]:
+                    requirement_level = float(100 - details['levels'][date][key]) / 100
+                    requirement = {}
+                    requirement[key] = self.affected_count * requirement_level * MULTIPLIER[key]
+                    if date not in details['relief_aid_totals']:
+                        details['relief_aid_totals'][date] = {"food":0, "hygiene":0, "medicine":0, "medical_mission":0, "shelter":0}
+                    relief_aid_rating = (float(details['relief_aid_totals'][date][key]) / float(requirement[key])) * 100
                     details['relief_aid_ratings'][date][key] = relief_aid_rating
-                except:
-                    logging.exception("error in relief aid rating computation")
 
         return details
 

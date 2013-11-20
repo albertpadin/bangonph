@@ -145,11 +145,7 @@ DATES = [
 ]
 
 # RELIEF GOODS LAST HOW LONG IN DAYS?
-FOOD_MULTIPLIER = 1
-HYGIENE_MULTIPLIER = 3
-SHELTER_MULTIPLIER = 20
-MEDICINE_MULTIPLIER = 10
-MEDICAL_MISSION_MULTIPLIER = 30
+MULTIPLIER = {'food':1, 'hygiene':3, 'shelter':20, 'medicine':10,'medical_mission':30}
 
 # Local Settings
 import os

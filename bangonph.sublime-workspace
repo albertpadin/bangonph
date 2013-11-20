@@ -1,0 +1,1174 @@
+{
+	"auto_complete":
+	{
+		"selected_items":
+		[
+			[
+				"Users",
+				"UsersCollection"
+			],
+			[
+				"src",
+				"srcid"
+			],
+			[
+				"image",
+				"images"
+			],
+			[
+				"new",
+				"new_urls"
+			],
+			[
+				"loc",
+				"loc_image"
+			],
+			[
+				"rel",
+				"relief_name"
+			],
+			[
+				"dis",
+				"distribution_revision"
+			],
+			[
+				"opt",
+				"option	Tag"
+			],
+			[
+				"statu",
+				"status_board"
+			],
+			[
+				"stat",
+				"status_board"
+			],
+			[
+				"miss",
+				"missing_person_text"
+			],
+			[
+				"ms",
+				"missing"
+			],
+			[
+				"loca",
+				"localhost"
+			],
+			[
+				"mis",
+				"missing_person"
+			],
+			[
+				"Missin",
+				"Missing"
+			],
+			[
+				"dist",
+				"distribution_revision"
+			],
+			[
+				"m",
+				"medicine"
+			],
+			[
+				"page",
+				"page_title"
+			],
+			[
+				"public",
+				"public_user"
+			],
+			[
+				"fb",
+				"fb_lastname"
+			],
+			[
+				"fba",
+				"fb_access_token"
+			],
+			[
+				"user",
+				"user_changes"
+			],
+			[
+				"aff",
+				"affected_count_text"
+			],
+			[
+				"Loc",
+				"Location"
+			],
+			[
+				"datas",
+				"datas_status"
+			],
+			[
+				"death",
+				"death_count"
+			],
+			[
+				"locatio",
+				"location_revision"
+			],
+			[
+				"pub",
+				"public_user"
+			],
+			[
+				"pb",
+				"public_user"
+			],
+			[
+				"ex",
+				"exception"
+			],
+			[
+				"sta",
+				"state_url"
+			],
+			[
+				"lo",
+				"location_revision"
+			],
+			[
+				"th",
+				"thead	Tag"
+			],
+			[
+				"edit",
+				"editPost"
+			],
+			[
+				"e",
+				"expiry"
+			],
+			[
+				"post",
+				"post_type"
+			],
+			[
+				"po",
+				"post_type"
+			],
+			[
+				"fade",
+				"fadeOut"
+			],
+			[
+				"feature",
+				"featured_yes_no"
+			],
+			[
+				"fe",
+				"featured_yes_no"
+			],
+			[
+				"Di",
+				"Distributor"
+			],
+			[
+				"conta",
+				"contacts"
+			],
+			[
+				"drop",
+				"drop_off_locations"
+			],
+			[
+				"dro",
+				"drop_off_locations"
+			],
+			[
+				"Drop",
+				"DropOffCollection"
+			],
+			[
+				"dri",
+				"distributor"
+			],
+			[
+				"Aff",
+				"affected_count_text"
+			],
+			[
+				"de",
+				"death_count_text"
+			],
+			[
+				"di",
+				"distribution"
+			],
+			[
+				"data",
+				"datas_distribution"
+			],
+			[
+				"temp",
+				"temp_type"
+			],
+			[
+				"Dis",
+				"Distribution"
+			],
+			[
+				"in",
+				"info"
+			],
+			[
+				"text",
+				"textarea"
+			],
+			[
+				"con",
+				"contacts"
+			],
+			[
+				"act",
+				"actual_supply_food"
+			],
+			[
+				"local",
+				"localhost"
+			],
+			[
+				"M",
+				"Medicines"
+			],
+			[
+				"F",
+				"Food"
+			],
+			[
+				"hash",
+				"hash_tag"
+			],
+			[
+				"has",
+				"hash_tag"
+			],
+			[
+				"cont",
+				"contact"
+			],
+			[
+				"id",
+				"id_delete"
+			],
+			[
+				"edi",
+				"editLocation"
+			],
+			[
+				"delete",
+				"delete_id"
+			],
+			[
+				"ur",
+				"urls"
+			],
+			[
+				"sc",
+				"script	Tag"
+			],
+			[
+				"r",
+				"removeimage"
+			],
+			[
+				"url",
+				"urlsafe"
+			],
+			[
+				"d",
+				"distribution"
+			],
+			[
+				"ac",
+				"actual_supply"
+			],
+			[
+				"su",
+				"supply_goal"
+			],
+			[
+				"date",
+				"date_of_distribution"
+			],
+			[
+				"for",
+				"form-control"
+			],
+			[
+				"distr",
+				"distribution"
+			],
+			[
+				"log",
+				"login_required"
+			],
+			[
+				"subs",
+				"subscribers"
+			],
+			[
+				"Dist",
+				"Distribution"
+			],
+			[
+				"fom",
+				"formData"
+			],
+			[
+				"dele",
+				"delete_id"
+			],
+			[
+				"ed",
+				"editContact"
+			],
+			[
+				"Co",
+				"Collection"
+			],
+			[
+				"ha",
+				"hash_password"
+			],
+			[
+				"h",
+				"h4"
+			],
+			[
+				"phone",
+				"phonebooks"
+			],
+			[
+				"ren",
+				"renderAddPage"
+			],
+			[
+				"Ad",
+				"AddressBookCollection"
+			],
+			[
+				"input",
+				"input-missing"
+			],
+			[
+				"get",
+				"get_by_id"
+			],
+			[
+				"id_",
+				"id_delete"
+			],
+			[
+				"ad",
+				"AddressBookCollection"
+			],
+			[
+				"fu",
+				"fullname"
+			],
+			[
+				"Add",
+				"AddressBook"
+			],
+			[
+				"js",
+				"jsonn"
+			],
+			[
+				"st",
+				"stringify"
+			],
+			[
+				"address",
+				"addressbook"
+			],
+			[
+				"add",
+				"addressbook"
+			],
+			[
+				"to",
+				"toJSON"
+			],
+			[
+				"addre",
+				"addressid"
+			],
+			[
+				"c",
+				"collection"
+			],
+			[
+				"reg",
+				"registerView"
+			],
+			[
+				"rou",
+				"routes"
+			],
+			[
+				"child",
+				"childrens"
+			],
+			[
+				"pr",
+				"profilepage"
+			],
+			[
+				"hre",
+				"href='javascript:void"
+			],
+			[
+				"mysqfec",
+				"mysql_fetch_object"
+			],
+			[
+				"rowev",
+				"row_event_edit"
+			],
+			[
+				"row",
+				"row_event_edit"
+			],
+			[
+				"event",
+				"eventid"
+			],
+			[
+				"sq",
+				"sql_sermon_archives2"
+			],
+			[
+				"mysqlfec",
+				"mysql_fetch_object"
+			],
+			[
+				"sql",
+				"sql_sermon_archives"
+			],
+			[
+				"mysqnum",
+				"mysql_num_rows"
+			],
+			[
+				"ro",
+				"row_sermon_edit"
+			],
+			[
+				"sermo",
+				"sermonid"
+			],
+			[
+				"serm",
+				"sermonid"
+			],
+			[
+				"mysqlfetch",
+				"mysql_fetch_object"
+			],
+			[
+				"mysql_num",
+				"mysql_num_rows"
+			],
+			[
+				"pass",
+				"password"
+			],
+			[
+				"go_to",
+				"go_to_index"
+			],
+			[
+				"desc",
+				"description"
+			],
+			[
+				"ref",
+				"referencedata"
+			],
+			[
+				"date_de",
+				"date_default_timezone_set"
+			],
+			[
+				"todo",
+				"todo_task_name"
+			],
+			[
+				"mysqlfet",
+				"mysql_fetch_object"
+			],
+			[
+				"mysqlnum",
+				"mysql_num_rows"
+			],
+			[
+				"mysqlfe",
+				"mysql_fetch_object"
+			],
+			[
+				"border",
+				"border-bottom"
+			]
+		]
+	},
+	"buffers":
+	[
+		{
+			"file": "main.py",
+			"settings":
+			{
+				"buffer_size": 153814,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "models.py",
+			"settings":
+			{
+				"buffer_size": 14935,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "frontend/index.html",
+			"settings":
+			{
+				"buffer_size": 6951,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "frontend/js/templates/template-users.js",
+			"settings":
+			{
+				"buffer_size": 4205,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "frontend/js/bangonph-main.js",
+			"settings":
+			{
+				"buffer_size": 4984,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "frontend/dashboard.html",
+			"settings":
+			{
+				"buffer_size": 2110,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "functions.py",
+			"settings":
+			{
+				"buffer_size": 12834,
+				"line_ending": "Windows"
+			}
+		}
+	],
+	"build_system": "",
+	"command_palette":
+	{
+		"height": 392.0,
+		"selected_items":
+		[
+			[
+				"",
+				"Auto Wrap: Toggle"
+			],
+			[
+				"Package Control: ",
+				"Package Control: Upgrade Package"
+			],
+			[
+				"Package Control: ins",
+				"Package Control: Install Package"
+			]
+		],
+		"width": 400.0
+	},
+	"console":
+	{
+		"height": 278.0
+	},
+	"distraction_free":
+	{
+		"menu_visible": true,
+		"show_minimap": false,
+		"show_open_files": false,
+		"show_tabs": false,
+		"side_bar_visible": false,
+		"status_bar_visible": false
+	},
+	"file_history":
+	[
+		"/C/Users/chardtymae/Documents/projects/bangonph/frontend/js/pubnub/main.js",
+		"/C/Users/chardtymae/Documents/projects/bangonph/frontend/js/main.js",
+		"/C/Users/chardtymae/Documents/projects/bangonph/frontend/js/templates/template-locations.js",
+		"/C/Users/chardtymae/Documents/projects/bangonph/frontend/template-locations.html",
+		"/C/Users/chardtymae/Documents/projects/filmschool.net/main.py",
+		"/C/Users/chardtymae/Documents/projects/bangonph/frontend/js/templates/template-distributions.js",
+		"/C/Users/chardtymae/Documents/projects/bangonph/frontend/js/templates/template-distributors.js",
+		"/C/Users/chardtymae/Documents/projects/bangonph/frontend/js/templates/template-drop-off-centers.js",
+		"/C/Users/chardtymae/Documents/projects/bangonph/frontend/js/templates/template-posts.js",
+		"/C/Users/chardtymae/Documents/projects/bangonph/frontend/js/templates/template-resources.js",
+		"/C/Users/chardtymae/Documents/projects/bangonph/frontend/js/templates/template-users.js",
+		"/C/Users/chardtymae/Documents/projects/bangonph/frontend/js/templates/template-contacts.js",
+		"/C/Users/chardtymae/Documents/projects/bangonph/frontend/public-location.html",
+		"/C/Users/chardtymae/Documents/projects/bangonph/frontend/public-location-edit.html",
+		"/C/Users/chardtymae/Documents/projects/bangonph/pusher/__init__.py",
+		"/C/Users/chardtymae/Documents/projects/bangonph/main2.py",
+		"/C/Users/chardtymae/Documents/projects/bangonph/facebook.py",
+		"/C/Users/chardtymae/Documents/projects/filmschool.net/models.py",
+		"/C/Users/chardtymae/Documents/projects/bangonph/frontend/template-posts.html",
+		"/C/Users/chardtymae/Documents/projects/bangonph/frontend/template-users.html",
+		"/C/Users/chardtymae/Documents/projects/bangonph/frontend/front.html",
+		"/C/Users/chardtymae/Documents/projects/filmschool.net/frontend/index.html",
+		"/C/Users/chardtymae/Documents/projects/bangonph/frontend/template-distributions.html",
+		"/C/Users/chardtymae/Documents/projects/bangonph/frontend/template-distributors.html",
+		"/C/Users/chardtymae/Documents/projects/bangonph/frontend/template-resources.html",
+		"/C/Users/chardtymae/Documents/projects/bangonph/frontend/template-drop-off-centers.html",
+		"/C/Users/chardtymae/Documents/projects/bangonph/frontend/template-contacts.html",
+		"/C/Users/chardtymae/Documents/projects/filmschool.net/frontend/school-programs.html",
+		"/C/Users/chardtymae/Documents/projects/bangonph/frontend/cosmo.html",
+		"/C/Users/chardtymae/Documents/projects/bangonph/frontend/js/template-contacts.js",
+		"/C/Users/chardtymae/Documents/projects/bangonph/frontend/js/template-locations.js",
+		"/C/Users/chardtymae/Documents/projects/bangonph/frontend/js/template-users.js",
+		"/C/Users/chardtymae/Desktop/backbone/main.py",
+		"/C/Users/chardtymae/Documents/projects/bangonph/frontend/index.html",
+		"/C/Users/chardtymae/Documents/projects/bangonph/frontend/users.html",
+		"/C/Users/chardtymae/Documents/projects/bangonph/frontend/js/users.js",
+		"/C/Users/chardtymae/Desktop/backbone/frontend/js/addressbook-main.js",
+		"/C/Users/chardtymae/Documents/projects/bangonph/functions.py",
+		"/C/Users/chardtymae/Documents/projects/bangonph/frontend/js/bangonph.js",
+		"/C/Users/chardtymae/Documents/projects/bangonph/settings.py",
+		"/C/Users/chardtymae/Documents/projects/bangonph/models.py",
+		"/C/Users/chardtymae/Documents/projects/bangonph/app.yaml",
+		"/C/Users/chardtymae/Documents/projects/bangonph/frontend/main.html",
+		"/C/Users/chardtymae/Documents/projects/boilerplate-appengine/main.py",
+		"/C/Users/chardtymae/Documents/projects/bangonph/frontend/dashboard.html",
+		"/C/Users/chardtymae/Documents/projects/bangonph/frontend/main2.html",
+		"/C/Users/chardtymae/Documents/projects/backbone/frontend/js/routerview.js",
+		"/C/Users/chardtymae/Documents/projects/bangonph/README.md",
+		"/C/Users/chardtymae/Desktop/yolandavictims/settings.py",
+		"/C/Users/chardtymae/Desktop/yolandavictims/frontend/main.html",
+		"/C/Users/chardtymae/Desktop/yolandavictims/frontend/learn-more.html",
+		"/C/Users/chardtymae/Desktop/yolandavictims/frontend/main2.html",
+		"/C/Users/chardtymae/Desktop/yolandavictims/frontend/cosmo.html",
+		"/C/Users/chardtymae/Desktop/yolandavictims/main.py",
+		"/C/Users/chardtymae/Desktop/yolandavictims/app.yaml",
+		"/C/Users/chardtymae/Desktop/yolandavictims/frontend/css/bootstrap.cosmo.css",
+		"/C/Users/chardtymae/Desktop/yolandavictims/frontend/js/addressbook.js",
+		"/C/Users/chardtymae/Desktop/backbone/frontend/js/test.js",
+		"/C/Users/chardtymae/Desktop/backbone/frontend/js/ab-js/script.js",
+		"/C/Users/chardtymae/Desktop/backbone/frontend/test-front.html",
+		"/C/Users/chardtymae/Desktop/backbone/frontend/test.html",
+		"/C/Users/chardtymae/Desktop/backbone/main2.py",
+		"/C/Users/chardtymae/Desktop/backbone/frontend/js/test2.js",
+		"/C/xampp/htdocs/addressbookMVC/php/addNewContact.php",
+		"/C/Users/chardtymae/Desktop/backbone/frontend/addressbook.html",
+		"/C/Users/chardtymae/Desktop/backbone/frontend/js/routerview.js",
+		"/C/Users/chardtymae/Desktop/backbone/frontend/js/example-3.js",
+		"/C/Users/chardtymae/Desktop/backbone/frontend/js/example-3-1.js",
+		"/C/Users/chardtymae/Desktop/backbone/frontend/cosmo.html",
+		"/G/Downloaded JS Files/Backbone/example-3.js",
+		"/G/Downloaded JS Files/Backbone/example-2.js",
+		"/G/Downloaded JS Files/Backbone/example-2.html",
+		"/C/xampp/htdocs/addressbookMVC/php/deleteContact.php",
+		"/C/xampp/htdocs/addressbookMVC/php/listContacts.php",
+		"/C/xampp/htdocs/addressbookMVC/backbone.js/js/script.js",
+		"/C/xampp/htdocs/addressbookMVC/backbone.js/addressbook.html",
+		"/C/Users/chardtymae/Desktop/backbone/models.py",
+		"/G/Downloaded JS Files/Backbone/example-3.html",
+		"/C/Users/chardtymae/Desktop/backbone/frontend/js/script.js",
+		"/C/xampp/htdocs/addressbookMVC/db.sql",
+		"/C/xampp/htdocs/addressbookMVC/php/config.php",
+		"/C/Users/chardtymae/Downloads/addressbookMVC-master/backbone.js/js/script.js",
+		"/C/Users/chardtymae/Downloads/addressbookMVC-master/php/addNewContact.php",
+		"/C/Users/chardtymae/Downloads/addressbookMVC-master/db.sql",
+		"/C/Users/chardtymae/Downloads/addressbookMVC-master/php/searchById.php",
+		"/C/Users/chardtymae/Downloads/addressbookMVC-master/php/listContacts.php",
+		"/C/Users/chardtymae/Downloads/addressbookMVC-master/php/deleteContact.php",
+		"/C/Users/chardtymae/Downloads/addressbookMVC-master/php/config.php",
+		"/C/Users/chardtymae/Downloads/addressbookMVC-master/backbone.js/index.html",
+		"/C/Users/chardtymae/Downloads/addressbookMVC-master/backbone.js/css/ab-style.css",
+		"/C/Users/chardtymae/Downloads/addressbookMVC-master/backbone.js/js/plugins.js",
+		"/C/Users/chardtymae/Desktop/backbone/frontend/js/plugins.js",
+		"/C/Users/chardtymae/Downloads/addressbookMVC-master/backbone.js/.htaccess",
+		"/C/Users/chardtymae/Desktop/backbone/frontend/example-3.html",
+		"/C/Users/chardtymae/Desktop/backbone/frontend/js/bootstrap.min.js",
+		"/C/Users/chardtymae/Desktop/backbone/frontend/front.html",
+		"/C/Users/chardtymae/Desktop/backbone/frontend/index.html",
+		"/C/Users/chardtymae/Desktop/backbone/settings.py",
+		"/C/Users/chardtymae/Desktop/backbone/frontend/css/bootstrap.cosmo.css",
+		"/C/Users/chardtymae/Desktop/backbone/frontend/js/fastFrag.js",
+		"/C/Users/chardtymae/Desktop/backbone/frontend/js/json2html.js",
+		"/C/Users/chardtymae/Desktop/backbone/frontend/js/jquery.json2html.js",
+		"/C/Users/chardtymae/Desktop/backbone/frontend/dynamic404.html",
+		"/C/Users/chardtymae/Desktop/backbone/frontend/Backbone/example-3.html",
+		"/C/Users/chardtymae/Desktop/backbone/app.yaml",
+		"/C/Users/chardtymae/Downloads/urbanairship-phonegap-1.0.6/android/sample-app/assets/www/index.html",
+		"/C/xampp/htdocs/ilink/infopage_editor.php",
+		"/C/xampp/htdocs/ilink/abort.bat",
+		"/C/Users/chardtymae/Desktop/fbconsole.py",
+		"/C/Users/chardtymae/Desktop/fblogin.html",
+		"/C/Users/chardtymae/Desktop/engineapp/main.py",
+		"/C/xampp/htdocs/ajax/first_page.php",
+		"/C/xampp/htdocs/ilink/ajax3.php",
+		"/C/xampp/htdocs/ilink/live-infopage.php",
+		"/C/xampp/htdocs/ilink/infopage-action.php",
+		"/C/xampp/htdocs/sortable/process-sortable.php",
+		"/C/Users/chardtymae/Downloads/REDIPS_drag/example00/ajax.php",
+		"/C/xampp/htdocs/ilink/infopage.php",
+		"/C/xampp/htdocs/ilink/infopage-editor.php",
+		"/C/xampp/htdocs/ilink/iddolink_ilink_infopage.sql",
+		"/C/xampp/htdocs/ilink/class/functions.php",
+		"/C/Users/chardtymae/AppData/Local/Temp/fz3temp-1/config.php",
+		"/G/MY PROJECTS/classrecord/student/addActivity.php",
+		"/C/xampp/htdocs/igc/admin/senddata.php",
+		"/C/xampp/htdocs/template/wordpress/wp-admin/setup-config.php",
+		"/C/xampp/htdocs/igc/admin/dashboard.php",
+		"/C/xampp/htdocs/igc/staff.php",
+		"/C/xampp/htdocs/igc/new  3.txt"
+	],
+	"find":
+	{
+		"height": 34.0
+	},
+	"find_in_files":
+	{
+		"height": 0.0,
+		"where_history":
+		[
+			""
+		]
+	},
+	"find_state":
+	{
+		"case_sensitive": false,
+		"find_history":
+		[
+			"if school",
+			"if self.",
+			"data",
+			"add_location",
+			"s resources",
+			"UserHandler",
+			"donate now",
+			"distribution_revision",
+			"public_user",
+			"=======",
+			"<<<",
+			"user",
+			"user_change",
+			"datas_changes",
+			"s public",
+			"alert alert-warning alert-dismissable",
+			"status",
+			"middle_name",
+			"public_login_fb",
+			"PublicLogout",
+			"Logout",
+			"get_current_user",
+			"PublicLocationPage",
+			"f login",
+			"login_fb",
+			"pubicfb",
+			"PublicFBLoginPage",
+			"FBLoginPage",
+			"www-fblogin",
+			"fb_login",
+			"PublicLocationPage",
+			"s location",
+			"s locations",
+			"datetime.datetime",
+			"datetime.datetime.strptime(self.request.get(\"expiry\"), \"%m/%d/%Y\") #1992-10-20",
+			"datetime.datetime",
+			"APIPostsHandler",
+			"s location",
+			"location",
+			"distribution",
+			"DistributionHandler",
+			"LocationHandler",
+			"resources",
+			"CentersHandler",
+			"drop-off-centers",
+			"CentersHandler",
+			"drop-off-centers",
+			"distributor",
+			"DistributionFetchHandler",
+			"DistributionHandler",
+			"PublicLocationPage",
+			"LocationHandler",
+			"<<<<<",
+			"ContactHandler",
+			"status",
+			"add_location",
+			"DistributionFetchHandler",
+			"/distributors",
+			"<<<<<",
+			">>>>",
+			"<<",
+			"<",
+			"data",
+			"add_destribution",
+			"DistributionHandler",
+			"locations",
+			"AddDistribution",
+			"addDistributor",
+			"\\",
+			"addDistributor",
+			"addDistribution",
+			"AddDistribution",
+			"DistributionView",
+			"request",
+			"window.location",
+			"LocationHandler",
+			"contactsGrid",
+			"get_all_user",
+			"images",
+			"page-header",
+			"addContactPage",
+			"listContactsPage",
+			".fetch",
+			"addAddressBook",
+			"new AddressBook",
+			"new addressbook()",
+			"addContactPage",
+			"contactModel",
+			"addContactPage",
+			"destroy",
+			"setElement",
+			"contactscollection",
+			"listContactsPage",
+			"response",
+			"contactmodel",
+			"model",
+			"saved",
+			"<button",
+			"table",
+			"forms",
+			"addContactPage",
+			"length",
+			"profile",
+			"json",
+			"view all",
+			"button",
+			"senddata2",
+			"sendData",
+			"senddata",
+			"app",
+			"alt tag",
+			"ALT TAG",
+			"iddoprivate/",
+			"location",
+			"#login",
+			"askque",
+			"password",
+			"js",
+			"addquestion\"",
+			"\"references\"",
+			"<li><a href=\"#references\" data-transition=\"slide\">조사표</a></li>",
+			"id=\"references",
+			"function showPageLoadingMsg",
+			"showPageLoadingMsg",
+			"h",
+			"count = 1",
+			"GO!",
+			"<text"
+		],
+		"highlight": true,
+		"in_selection": false,
+		"preserve_case": false,
+		"regex": false,
+		"replace_history":
+		[
+			"/img",
+			""
+		],
+		"reverse": false,
+		"show_context": true,
+		"use_buffer2": true,
+		"whole_word": false,
+		"wrap": true
+	},
+	"groups":
+	[
+		{
+			"selected": 3,
+			"sheets":
+			[
+				{
+					"buffer": 0,
+					"file": "main.py",
+					"settings":
+					{
+						"buffer_size": 153814,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								41618,
+								41618
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Python/Python.tmLanguage",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true,
+							"word_wrap": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 14657.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 1,
+					"file": "models.py",
+					"settings":
+					{
+						"buffer_size": 14935,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								0,
+								0
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Python/Python.tmLanguage",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 1144.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 2,
+					"file": "frontend/index.html",
+					"settings":
+					{
+						"buffer_size": 6951,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								3273,
+								3273
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/HTML/HTML.tmLanguage",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 1085.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 3,
+					"file": "frontend/js/templates/template-users.js",
+					"settings":
+					{
+						"buffer_size": 4205,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								269,
+								269
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/JavaScript/JavaScript.tmLanguage",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 4,
+					"file": "frontend/js/bangonph-main.js",
+					"settings":
+					{
+						"buffer_size": 4984,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								3995,
+								3995
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/JavaScript/JavaScript.tmLanguage",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true,
+							"word_wrap": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 1845.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 5,
+					"file": "frontend/dashboard.html",
+					"settings":
+					{
+						"buffer_size": 2110,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								546,
+								546
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/HTML/HTML.tmLanguage",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 255.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 6,
+					"file": "functions.py",
+					"settings":
+					{
+						"buffer_size": 12834,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								0,
+								0
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Python/Python.tmLanguage",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 861.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				}
+			]
+		}
+	],
+	"incremental_find":
+	{
+		"height": 0.0
+	},
+	"input":
+	{
+		"height": 35.0
+	},
+	"layout":
+	{
+		"cells":
+		[
+			[
+				0,
+				0,
+				1,
+				1
+			]
+		],
+		"cols":
+		[
+			0.0,
+			1.0
+		],
+		"rows":
+		[
+			0.0,
+			1.0
+		]
+	},
+	"menu_visible": true,
+	"replace":
+	{
+		"height": 62.0
+	},
+	"save_all_on_build": true,
+	"select_file":
+	{
+		"height": 0.0,
+		"selected_items":
+		[
+			[
+				"main",
+				"main.py"
+			]
+		],
+		"width": 0.0
+	},
+	"select_project":
+	{
+		"height": 500.0,
+		"selected_items":
+		[
+		],
+		"width": 380.0
+	},
+	"show_minimap": true,
+	"show_open_files": false,
+	"show_tabs": true,
+	"side_bar_visible": true,
+	"side_bar_width": 216.0,
+	"status_bar_visible": true
+}

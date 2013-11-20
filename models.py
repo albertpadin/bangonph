@@ -292,6 +292,7 @@ class DistributionRevision(ndb.Model):
     needs = ndb.StringProperty()
     date = ndb.StringProperty(default="UNKNOWN")
     tag = ndb.StringProperty()
+    status = ndb.StringProperty(default="UNKNOWN")
 
 class Distribution(ndb.Model):
     created = ndb.DateTimeProperty(auto_now_add=True)

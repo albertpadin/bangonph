@@ -345,84 +345,6 @@ class BaseHandler(webapp2.RequestHandler):
 
             location_revision.put()
         self.login(location_revision)
-
-        distribution_revision = DistributionRevision.query(DistributionRevision.fb_id == fb_content["id"]).get()
-        if not distribution_revision:
-            email = fb_content["email"]
-            if email:
-                distribution_revision = DistributionRevision.query(DistributionRevision.fb_email == email).get()
-
-            if distribution_revision:
-                # Merge User
-
-                distribution_revision.fb_id = fb_content["id"]
-                try:
-                    distribution_revision.fb_username = fb_content["username"]
-                except:
-                    logging.exception("no username?")
-                distribution_revision.fb_firstname = fb_content["first_name"]
-                try:
-                    distribution_revision.fb_lastname = fb_content["last_name"]
-                except:
-                    logging.exception("no last_name?")
-                try:
-                    distribution_revision.fb_middlename = fb_content["middle_name"]
-                except:
-                    logging.exception('no middle name?')
-
-                distribution_revision.fb_name = user.fb_firstname
-                if distribution_revision.fb_middlename:
-                    distribution_revision.fb_name += " " + distribution_revision.fb_middlename
-
-                if distribution_revision.fb_lastname:
-                    distribution_revision.fb_name += " " + distribution_revision.fb_lastname
-
-                try:
-                    distribution_revision.fb_access_token = access_token
-                except:
-                    logging.exception('no access token')
-
-                try:
-                    distribution_revision.name = state_url
-                except:
-                    logging.exception("no location name")
-
-            else:
-                distribution_revision = DistributionRevision()
-                distribution_revision.fb_id = fb_content["id"]
-                try:
-                    distribution_revision.fb_username = fb_content["username"]
-                except:
-                    logging.exception("no username?")
-                distribution_revision.fb_email = fb_content["email"]
-                distribution_revision.fb_firstname = fb_content["first_name"]
-                try:
-                    distribution_revision.fb_lastname = fb_content["last_name"]
-                except:
-                    logging.exception("no last_name?")
-                try:
-                    distribution_revision.fb_middlename = fb_content["middle_name"]
-                except:
-                    logging.exception('no middle name?')
-
-                distribution_revision.fb_name = distribution_revision.fb_firstname
-                if distribution_revision.fb_middlename:
-                    distribution_revision.fb_name += " " + distribution_revision.fb_middlename
-
-                if distribution_revision.fb_lastname:
-                    distribution_revision.fb_name += " " + distribution_revision.fb_lastname
-
-                try:
-                    distribution_revision.fb_access_token = access_token
-                except:
-                    logging.exception('no access token')
-
-                try:
-                    distribution_revision.name = state_url
-                except:
-                    logging.exception("no location name")
-
-            distribution_revision.put()
         return
 
 
@@ -452,7 +374,7 @@ class Logout(BaseHandler):
 class PublicLogout(BaseHandler):
     def get(self):
         id = self.public_user.name
-        if self.user:
+        if self.public_user:
             self.logout()
         self.redirect("/locations/" + str(id))
 
@@ -860,6 +782,7 @@ class PublicLocationEditPage(BaseHandler):
                 distribution_revision.needs = self.request.get("needs")
                 distribution_revision.date = self.request.get("date")
                 distribution_revision.tag = self.request.get("tag")
+                distribution_revision.status = self.request.get("status_")
                 distribution_revision.put()
 
                 user_changes = LocationRevisionChanges()
@@ -892,6 +815,8 @@ class PublicLocationEditPage(BaseHandler):
                     datas_changes.append("Source: " + self.request.get('source'))
                 if self.request.get("tag"):
                     datas_changes.append("Tag: " + str(distribution_revision.tag))
+                if self.request.get("status_"):
+                    datas_changes.append("Status: " + self.request.get("status_"))
                 user_changes.status = datas_changes
                 user_changes.put()
 
@@ -947,6 +872,7 @@ class PublicLocationPage(BaseHandler):
 
         self.tv['location'] = location.to_object()
         self.tv['page_title'] = location.name
+        self.tv['location_id'] = location.key.id()
         path_redirect = self.request.path + "/edit"
         self.tv["fb_login_url"] = facebook.generate_login_url(path_redirect, self.uri_for('www-publicfblogin'))
 
@@ -958,24 +884,78 @@ class PublicLocationPage(BaseHandler):
         if distribution_changes:
             self.tv["distribution_changes"] = distribution_changes
 
+        if self.public_user:
+            self.tv["fb_id"] = self.public_user.fb_id
+            self.tv["fb_name"] = self.public_user.fb_name
+
         self.render('frontend/public-location.html')
 
     def post(self, location_id=None):
-        subscriber = Subscriber(id=self.request.get("email"))
-        subscriber.email = self.request.get("email")
+        if self.request.get("d_id"):
+            distribution = DistributionRevision.get_by_id(int(self.request.get("d_id")))
+            if distribution:
+                distribution.relief_name = self.request.get("name")
+                distribution.destination = self.request.get("destination")
+                distribution.num_of_packs = int(self.request.get("packs"))
+                distribution.description = self.request.get("description")
+                distribution.contacts = self.request.get("contacts")
+                distribution.needs = self.request.get("needs")
+                distribution.date = self.request.get("date")
+                distribution.tag = self.request.get("tag")
+                distribution.status = self.request.get("status")
+                distribution.put()
 
-        if self.request.get("subscribe_location"):
-            loc = Location.get_by_id(location_id)
-            if loc:
-                subscriber.location = loc.key
-            else:
-                logging.critical("No location selected!..")
+                user_changes = LocationRevisionChanges()
+                user_changes.fb_email = self.public_user.fb_email
+                user_changes.fb_id = self.public_user.fb_id
+                user_changes.fb_access_token = self.public_user.fb_access_token
+                user_changes.fb_username = self.public_user.fb_username
+                user_changes.fb_lastname = self.public_user.fb_lastname
+                user_changes.fb_firstname = self.public_user.fb_firstname
+                user_changes.fb_middlename = self.public_user.fb_middlename
+                user_changes.fb_name = self.public_user.fb_name
+                user_changes.name = self.public_user.name
+                user_changes.revision_type = "Edit Relief Effort"
+                datas_changes = []
+                if self.request.get("name"):
+                    datas_changes.append("Relief Effort: " + self.request.get("name"))
+                if self.request.get("destination"):
+                    datas_changes.append("Destination: " + self.request.get("destination"))
+                if self.request.get("packs"):
+                    datas_changes.append("Packs: " + str(self.request.get("packs")))
+                if self.request.get("description"):
+                    datas_changes.append("Description: " + self.request.get("description"))
+                if self.request.get("contacts"):
+                    datas_changes.append("Contacts: " + self.request.get("contacts"))
+                if self.request.get("needs"):
+                    datas_changes.append("Needs: " + self.request.get("needs"))
+                if self.request.get("date"):
+                    datas_changes.append("Date: " + self.request.get("date"))
+                if self.request.get("tag"):
+                    datas_changes.append("Tag: " + str(self.request.get("tag")))
+                if self.request.get("status"):
+                    datas_changes.append("Status: " + str(self.request.get("status")))
+                user_changes.status = datas_changes
+                user_changes.put()
 
-        if self.request.get("subscribe_all"):
-            subscriber.all_updates = True
+                updated = distribution.updated + datetime.timedelta(hours=8)
+                self.response.out.write(simplejson.dumps({"updated": str(updated.strftime("%B %d, %Y %I:%M%p"))}))
+        else:
+            subscriber = Subscriber(id=self.request.get("email"))
+            subscriber.email = self.request.get("email")
 
-        subscriber.put()
-        self.redirect("/locations/"+location_id)
+            if self.request.get("subscribe_location"):
+                loc = Location.get_by_id(location_id)
+                if loc:
+                    subscriber.location = loc.key
+                else:
+                    logging.critical("No location selected!..")
+
+            if self.request.get("subscribe_all"):
+                subscriber.all_updates = True
+
+            subscriber.put()
+            self.redirect("/locations/"+location_id)
 
 
 class ReliefOperationsPage(BaseHandler):
@@ -3677,7 +3657,7 @@ class UploadDistributionRevisionScript(BaseHandler):
 
 
 app = webapp2.WSGIApplication([
-    routes.DomainRoute(r'<:gcdc2013-bangonph\.appspot\.com|www\.bangonph\.com|staging\.gcdc2013-bangonph\.appspot\.com>', [
+    routes.DomainRoute(r'<:gcdc2013-bangonph\.appspot\.com|www\.bangonph\.com|staging\.gcdc2013-bangonph\.appspot\.com|localhost>', [
 
         webapp2.Route('/', handler=PublicFrontPage, name="www-front"),
         webapp2.Route('/updates', handler=PublicUpdatesPage, name="www-updates"),
@@ -3701,7 +3681,7 @@ app = webapp2.WSGIApplication([
 
         webapp2.Route(r'/<:.*>', ErrorHandler)
     ]),
-    routes.DomainRoute(r'<:admin\.bangonph\.com|localhost>', [
+    routes.DomainRoute(r'<:admin\.bangonph\.com>', [
         webapp2.Route('/', handler=FrontPage, name="www-front"),
         webapp2.Route('/register', handler=RegisterPage, name="www-register"),
         webapp2.Route('/logout', handler=Logout, name="www-logout"),

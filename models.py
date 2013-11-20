@@ -11,6 +11,44 @@ def get_current_date():
     return now.strftime("%m/%d/%Y")
 
 
+def get_next_seven_days():
+    days = []
+    now = datetime.datetime.now() + datetime.timedelta(hours=8)
+    for i in range(0,7):
+        if i:
+            day = now + datetime.timedelta(days=i)
+        else:
+            day = now
+        days.append(day.strftime("%m/%d/%Y"))
+    return days
+
+
+def get_past_seven_days():
+    days = []
+    now = datetime.datetime.now() + datetime.timedelta(hours=8)
+    for i in range(0,7):
+        if i:
+            day = now - datetime.timedelta(days=i)
+        else:
+            day = now
+        days.append(day.strftime("%m/%d/%Y"))
+    return days
+
+
+class Contributor(ndb.Model):
+    created = ndb.DateTimeProperty(auto_now_add=True)
+    updated = ndb.DateTimeProperty(auto_now=True)
+    fb_email = ndb.StringProperty()
+    fb_id = ndb.StringProperty()
+    fb_username = ndb.StringProperty()
+    fb_lastname = ndb.StringProperty()
+    fb_firstname = ndb.StringProperty()
+    fb_middlename = ndb.StringProperty()
+    contributions = ndb.IntegerProperty(default=0)
+    locations = ndb.StringProperty(repeated=True)
+    locations_pretty = ndb.StringProperty(repeated=True)
+
+
 class User(ndb.Model):
     created = ndb.DateTimeProperty(auto_now_add=True)
     updated = ndb.DateTimeProperty(auto_now=True)
@@ -135,6 +173,7 @@ class Location(ndb.Model):
         details["missing_count"] = self.missing_person
         details["missing_count_text"] = self.missing_person_text
         details["statusBoard"] = self.status_board
+        details["status_board"] = self.status_board
         details["needs"] = self.needs
         details["status"] = self.status
         details["images"] = []
@@ -158,6 +197,7 @@ class Location(ndb.Model):
         if not self.relief_aid_totals:
             self.relief_aid_totals = {}
         details['relief_aid_ratings'] = {}
+        details['relief_aid_seven_day_summary'] = {}
         details['relief_aid_totals'] = {}
 
         if show_relief:
@@ -179,8 +219,22 @@ class Location(ndb.Model):
                     relief_aid_rating = (float(details['relief_aid_totals'][date][key]) / float(requirement[key])) * 100
                     details['relief_aid_ratings'][date][key] = relief_aid_rating
 
-        return details
+            totals = {}
+            details['relief_aid_seven_day_summary'] = {}
+            details['relief_aid_seven_day_summary']['all'] = float(0)
+            for date in get_past_seven_days():
+                for key in details['relief_aid_ratings'][date]:
+                    if key not in totals:
+                        totals[key] = float(0)
+                    totals[key] += details['relief_aid_ratings'][date][key]
 
+            for key in totals:
+                details['relief_aid_seven_day_summary'][key] = totals[key] / float(7)
+                details['relief_aid_seven_day_summary']['all'] += details['relief_aid_seven_day_summary'][key]
+
+            details['relief_aid_seven_day_summary']['all'] = details['relief_aid_seven_day_summary']['all'] / float(7)
+
+        return details
 
 
 class DropOffCenter(ndb.Model):

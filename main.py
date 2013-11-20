@@ -36,6 +36,11 @@ from google.appengine.datastore.datastore_query import Cursor
 jinja_environment = jinja2.Environment(loader=jinja2.FileSystemLoader(os.path.dirname(__file__)), autoescape=True)
 
 
+def get_current_date():
+    now = datetime.datetime.now() + datetime.timedelta(hours=8)
+    return now.strftime("%m/%d/%Y")
+
+
 def add_contribution(fb_id, fb_email, fb_username, fb_firstname, fb_middlename, fb_lastname, location_id, location_name):
     contribution = Contributor.get_by_id(str(fb_id))
     if not contribution:
@@ -60,6 +65,10 @@ def with_commas(value):
     return "{:,}".format(value)
 
 
+def two_decimal(value):
+    return "{:10.2f}".format(value)
+
+
 def no_commas(values):
     tag_string = ""
     for value in values:
@@ -79,6 +88,7 @@ def nl_to_br(text):
     return text.replace('<','&lt;').replace('>','&gt;').replace('&','&amp;').replace('\n','<br />')
 
 jinja_environment.filters['nl_to_br'] = nl_to_br
+jinja_environment.filters['two_decimal'] = two_decimal
 jinja_environment.filters['no_commas'] = no_commas
 jinja_environment.filters['prettify'] = prettify
 jinja_environment.filters['with_commas'] = with_commas
@@ -770,17 +780,18 @@ class PublicLocationEditPage(BaseHandler):
                         datas_changes.append("Communication: " + location.status["communication"] + " >> " + status["communication"])
                     if status["food"] != location.status["food"]:
                         datas_changes.append("Food: " + location.status["food"] + " >> " + status["food"])
-                if location.levels:
-                    if levels["food"] != location.levels["food"]:
-                        datas_changes.append("Food & Water: " + location.levels["food"] + " >> " + levels["food"])
-                    if levels["hygiene"] != location.levels["hygiene"]:
-                        datas_changes.append("Hygiene: " + location.levels["hygiene"] + " >> " + levels["hygiene"])
-                    if levels["medicine"] != location.levels["medicine"]:
-                        datas_changes.append("Medicine: " + location.levels["medicine"] + " >> " + levels["medicine"])
-                    if levels["medical_mission"] != location.levels["medical_mission"]:
-                        datas_changes.append("Medical Mission: " + location.levels["medical_mission"] + " >> " + levels["medical_mission"])
-                    if levels["shelter"] != location.levels["shelter"]:
-                        datas_changes.append("Shelter: " + location.levels["shelter"] + " >> " + levels["shelter"])
+                date = get_current_date()
+                if location.current_levels:
+                    if levels["food"] != location.current_levels["food"]:
+                        datas_changes.append("Food & Water: " + location.current_levels["food"] + " >> " + levels["food"])
+                    if levels["hygiene"] != location.current_levels["hygiene"]:
+                        datas_changes.append("Hygiene: " + location.current_levels["hygiene"] + " >> " + levels["hygiene"])
+                    if levels["medicine"] != location.current_levels["medicine"]:
+                        datas_changes.append("Medicine: " + location.current_levels["medicine"] + " >> " + levels["medicine"])
+                    if levels["medical_mission"] != location.current_levels["medical_mission"]:
+                        datas_changes.append("Medical Mission: " + location.current_levels["medical_mission"] + " >> " + levels["medical_mission"])
+                    if levels["shelter"] != location.current_levels["shelter"]:
+                        datas_changes.append("Shelter: " + location.current_levels["shelter"] + " >> " + levels["shelter"])
 
                 if self.request.get("source"):
                     datas_changes.append("Source/s: " + self.request.get('source'))
@@ -805,7 +816,7 @@ class PublicLocationEditPage(BaseHandler):
                 location.missing_person_text = self.request.get("missing_person_text")
                 location.status_board = self.request.get("status_board")
                 location.status = status
-                location.levels = levels
+                location.current_levels = levels
                 location.put()
 
                 p = pusher.Pusher(
@@ -945,7 +956,7 @@ class PublicLocationPage(BaseHandler):
 
         self.tv['efforts'] = Distribution.query(Distribution.destinations == location.key, Distribution.date_of_distribution >= datetime.datetime.now()).order(Distribution.date_of_distribution)
 
-        self.tv['location'] = location.to_object()
+        self.tv['location'] = location.to_object(show_relief=True)
         self.tv['page_title'] = location.name
         path_redirect = self.request.path + "/edit"
         self.tv["fb_login_url"] = facebook.generate_login_url(path_redirect, self.uri_for('www-publicfblogin'))

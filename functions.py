@@ -179,9 +179,9 @@ def add_location(data, location_key=""):
 
 def add_distribution(data, instance_id=""):
     if instance_id:
-        distribution = Distribution.get_by_id(int(instance_id))
+        distribution = DistributionRevision.get_by_id(int(instance_id))
     else:
-        distribution = Distribution()
+        distribution = DistributionRevision()
 
     if data["date_of_distribution"]:
         distribution.date_of_distribution = data["date_of_distribution"]

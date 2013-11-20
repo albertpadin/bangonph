@@ -1,9 +1,15 @@
 from google.appengine.ext import ndb
 import logging
-import time, os
+import time, os, datetime
 from settings import API_RESPONSE, API_RESPONSE_DATA
+from settings import DATES, MULTIPLIER
 
 currenturl = str(os.environ['wsgi.url_scheme'])+"://"+str(os.environ['HTTP_HOST'])
+
+def get_current_date():
+    now = datetime.datetime.now() + datetime.timedelta(hours=8)
+    return now.strftime("%m/%d/%Y")
+
 
 class User(ndb.Model):
     created = ndb.DateTimeProperty(auto_now_add=True)
@@ -104,15 +110,15 @@ class Location(ndb.Model):
     relief_aid_status = ndb.StringProperty(default="Unknown")
     needs = ndb.JsonProperty()
     status = ndb.JsonProperty()
-    requirements = ndb.JsonProperty(default={"food":0, "hygiene":0, "medicine":0, "medical_mission":0, "shelter":0})
+    levels = ndb.JsonProperty(default={})
     images = ndb.JsonProperty()
     hash_tag = ndb.StringProperty(repeated=True)
     featured = ndb.BooleanProperty(default=False)
     missing_person = ndb.IntegerProperty()
     missing_person_text = ndb.StringProperty()
-    relief_aid_totals = ndb.JsonProperty()
+    relief_aid_totals = ndb.JsonProperty(default={})
 
-    def to_object(self, extended=""):
+    def to_object(self, extended="", show_relief=False):
         details = {}
         details["meta"] = {"href": "http://api.bangonph.com/v1/locations/" + str(self.key.id())}
         details["created"] = str(self.created)
@@ -144,22 +150,33 @@ class Location(ndb.Model):
         details["missing_person"] = self.missing_person
         details["missing_person_text"] = self.missing_person_text
         details["name"] = self.name
-        details["requirements"] = self.requirements
+        details["levels"] = self.levels
         tags = self.name.split(",")
         details['tags'] = []
         for tag in tags:
             details['tags'].append(tag.strip().lower())
+        if not self.relief_aid_totals:
+            self.relief_aid_totals = {}
         details['relief_aid_totals'] = self.relief_aid_totals
-        details['relief_aid_ratings'] = {"food":1, "hygiene":1, "medicine":1, "medical_mission":1, "shelter":1}
+        details['relief_aid_ratings'] = {}
 
-        if details['requirements']:
-            for key in details['requirements']:
-                if details['requirements'][key]:
-                    try:
-                        relief_aid_rating = (float(details['relief_aid_totals'][key]) / float(details['requirements'][key])) * 100
-                        details['relief_aid_ratings'][key] = relief_aid_rating
-                    except:
-                        logging.exception("error in relief aid rating computation")
+        if show_relief:
+            if not self.affected_count:
+                self.affected_count = 1000
+
+            for date in DATES:
+                details['relief_aid_ratings'][date] = {"food":0, "hygiene":0, "medicine":0, "medical_mission":0, "shelter":0}
+                if date not in details['levels']:
+                    details['levels'][date] = {"food":0, "hygiene":0, "medicine":0, "medical_mission":0, "shelter":0}
+
+                for key in details['levels'][date]:
+                    requirement_level = float(100 - details['levels'][date][key]) / 100
+                    requirement = {}
+                    requirement[key] = self.affected_count * requirement_level * MULTIPLIER[key]
+                    if date not in details['relief_aid_totals']:
+                        details['relief_aid_totals'][date] = {"food":0, "hygiene":0, "medicine":0, "medical_mission":0, "shelter":0}
+                    relief_aid_rating = (float(details['relief_aid_totals'][date][key]) / float(requirement[key])) * 100
+                    details['relief_aid_ratings'][date][key] = relief_aid_rating
 
         return details
 
@@ -218,7 +235,7 @@ class DistributionRevision(ndb.Model):
     description = ndb.TextProperty()
     contacts = ndb.StringProperty()
     needs = ndb.StringProperty()
-    date = ndb.StringProperty()
+    date = ndb.StringProperty(default="UNKNOWN")
     tag = ndb.StringProperty()
 
 class Distribution(ndb.Model):

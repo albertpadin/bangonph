@@ -907,3 +907,22 @@ height: 80px;
     vertical-align: middle;
     margin-left: 3px;
 }
+
+.update_count {
+    margin-top: 5px;
+    font-size: 12px;
+    float: right;
+    font-style: italic;
+}
+
+.btn-fb {
+    border: none!important;
+    padding-right: 30px;
+    background: #4298DB url('/img/fb.png') no-repeat right bottom!important;
+    float: right;
+    opacity: 0.85;
+}
+
+.btn-fb:hover, .btn-fb:focus {
+    opacity: 1;
+}

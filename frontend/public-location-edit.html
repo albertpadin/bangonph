@@ -3,7 +3,9 @@
 {% block ogdetails %}
 
     <meta property="og:image" content="{{ location.featured_photo }}"/>
+    <meta property="twitter:image" content="{{ location.featured_photo }}"/>
     <meta property="og:title" content="{{ page_title }}"/>
+    <meta property="twitter:title" content="{{ page_title }}"/>
     <meta property="og:url" content="{{ current_base_url }}"/>
 
 {% endblock %}
@@ -240,31 +242,143 @@
                   <td></td>
                 </tr>
                 <tr>
-                  <th colspan="2">Daily Relief Requirements</th>
+                  <th colspan="2">Current Relief Levels</th>
                 </tr>
                 <tr>
                   <td>Food & Water</td>
-                  <td><input name="requirement_food" class="form-control" type="text" value="{% if location.requirements.food %}{{ location.requirements.food }}{% endif %}" placeholder="Requirement Count (Numbers Only)" onblur="if(isNaN(this.value)){ alert('Please remove non-numeric value.'); this.focus(); return false; }" /></td>
+                  <td>
+                    <select name="levels_food" class="form-control">
+                      <option{% if location.levels.food == 0 %} selected="selected"{% endif %} value="0">0%</option>
+                      <option{% if location.levels.food == 5 %} selected="selected"{% endif %} value="5">5%</option>
+                      <option{% if location.levels.food == 10 %} selected="selected"{% endif %} value="10">10%</option>
+                      <option{% if location.levels.food == 15 %} selected="selected"{% endif %} value="15">15%</option>
+                      <option{% if location.levels.food == 20 %} selected="selected"{% endif %} value="20">20%</option>
+                      <option{% if location.levels.food == 25 %} selected="selected"{% endif %} value="25">25%</option>
+                      <option{% if location.levels.food == 30 %} selected="selected"{% endif %} value="30">30%</option>
+                      <option{% if location.levels.food == 35 %} selected="selected"{% endif %} value="35">35%</option>
+                      <option{% if location.levels.food == 40 %} selected="selected"{% endif %} value="40">40%</option>
+                      <option{% if location.levels.food == 45 %} selected="selected"{% endif %} value="45">45%</option>
+                      <option{% if location.levels.food == 50 %} selected="selected"{% endif %} value="50">50%</option>
+                      <option{% if location.levels.food == 55 %} selected="selected"{% endif %} value="55">55%</option>
+                      <option{% if location.levels.food == 60 %} selected="selected"{% endif %} value="60">60%</option>
+                      <option{% if location.levels.food == 65 %} selected="selected"{% endif %} value="65">65%</option>
+                      <option{% if location.levels.food == 70 %} selected="selected"{% endif %} value="70">70%</option>
+                      <option{% if location.levels.food == 75 %} selected="selected"{% endif %} value="75">75%</option>
+                      <option{% if location.levels.food == 80 %} selected="selected"{% endif %} value="80">80%</option>
+                      <option{% if location.levels.food == 85 %} selected="selected"{% endif %} value="85">85%</option>
+                      <option{% if location.levels.food == 90 %} selected="selected"{% endif %} value="90">90%</option>
+                      <option{% if location.levels.food == 95 %} selected="selected"{% endif %} value="95">95%</option>
+                      <option{% if location.levels.food == 100 %} selected="selected"{% endif %} value="100">100%</option>
+                    </select>
+                  </td>
                 </tr>
 
                 <tr>
                   <td>Hygiene Packs</td>
-                  <td><input name="requirement_hygiene" class="form-control" type="text" value="{% if location.requirements.hygiene %}{{ location.requirements.hygiene }}{% endif %}" placeholder="Requirement Count (Numbers Only)" onblur="if(isNaN(this.value)){ alert('Please remove non-numeric value.'); this.focus(); return false; }" /></td>
+                  <td><select name="levels_hygiene" class="form-control">
+                      <option{% if location.levels.hygiene == 0 %} selected="selected"{% endif %} value="0">0%</option>
+                      <option{% if location.levels.hygiene == 5 %} selected="selected"{% endif %} value="5">5%</option>
+                      <option{% if location.levels.hygiene == 10 %} selected="selected"{% endif %} value="10">10%</option>
+                      <option{% if location.levels.hygiene == 15 %} selected="selected"{% endif %} value="15">15%</option>
+                      <option{% if location.levels.hygiene == 20 %} selected="selected"{% endif %} value="20">20%</option>
+                      <option{% if location.levels.hygiene == 25 %} selected="selected"{% endif %} value="25">25%</option>
+                      <option{% if location.levels.hygiene == 30 %} selected="selected"{% endif %} value="30">30%</option>
+                      <option{% if location.levels.hygiene == 35 %} selected="selected"{% endif %} value="35">35%</option>
+                      <option{% if location.levels.hygiene == 40 %} selected="selected"{% endif %} value="40">40%</option>
+                      <option{% if location.levels.hygiene == 45 %} selected="selected"{% endif %} value="45">45%</option>
+                      <option{% if location.levels.hygiene == 50 %} selected="selected"{% endif %} value="50">50%</option>
+                      <option{% if location.levels.hygiene == 55 %} selected="selected"{% endif %} value="55">55%</option>
+                      <option{% if location.levels.hygiene == 60 %} selected="selected"{% endif %} value="60">60%</option>
+                      <option{% if location.levels.hygiene == 65 %} selected="selected"{% endif %} value="65">65%</option>
+                      <option{% if location.levels.hygiene == 70 %} selected="selected"{% endif %} value="70">70%</option>
+                      <option{% if location.levels.hygiene == 75 %} selected="selected"{% endif %} value="75">75%</option>
+                      <option{% if location.levels.hygiene == 80 %} selected="selected"{% endif %} value="80">80%</option>
+                      <option{% if location.levels.hygiene == 85 %} selected="selected"{% endif %} value="85">85%</option>
+                      <option{% if location.levels.hygiene == 90 %} selected="selected"{% endif %} value="90">90%</option>
+                      <option{% if location.levels.hygiene == 95 %} selected="selected"{% endif %} value="95">95%</option>
+                      <option{% if location.levels.hygiene == 100 %} selected="selected"{% endif %} value="100">100%</option>
+                    </select></td>
                 </tr>
 
                 <tr>
                   <td>Medicine Packs</td>
-                  <td><input name="requirement_medicine" class="form-control" type="text" value="{% if location.requirements.medicine %}{{ location.requirements.medicine }}{% endif %}" placeholder="Requirement Count (Numbers Only)" onblur="if(isNaN(this.value)){ alert('Please remove non-numeric value.'); this.focus(); return false; }" /></td>
+                  <td><select name="levels_medicine" class="form-control">
+                      <option{% if location.levels.medicine == 0 %} selected="selected"{% endif %} value="0">0%</option>
+                      <option{% if location.levels.medicine == 5 %} selected="selected"{% endif %} value="5">5%</option>
+                      <option{% if location.levels.medicine == 10 %} selected="selected"{% endif %} value="10">10%</option>
+                      <option{% if location.levels.medicine == 15 %} selected="selected"{% endif %} value="15">15%</option>
+                      <option{% if location.levels.medicine == 20 %} selected="selected"{% endif %} value="20">20%</option>
+                      <option{% if location.levels.medicine == 25 %} selected="selected"{% endif %} value="25">25%</option>
+                      <option{% if location.levels.medicine == 30 %} selected="selected"{% endif %} value="30">30%</option>
+                      <option{% if location.levels.medicine == 35 %} selected="selected"{% endif %} value="35">35%</option>
+                      <option{% if location.levels.medicine == 40 %} selected="selected"{% endif %} value="40">40%</option>
+                      <option{% if location.levels.medicine == 45 %} selected="selected"{% endif %} value="45">45%</option>
+                      <option{% if location.levels.medicine == 50 %} selected="selected"{% endif %} value="50">50%</option>
+                      <option{% if location.levels.medicine == 55 %} selected="selected"{% endif %} value="55">55%</option>
+                      <option{% if location.levels.medicine == 60 %} selected="selected"{% endif %} value="60">60%</option>
+                      <option{% if location.levels.medicine == 65 %} selected="selected"{% endif %} value="65">65%</option>
+                      <option{% if location.levels.medicine == 70 %} selected="selected"{% endif %} value="70">70%</option>
+                      <option{% if location.levels.medicine == 75 %} selected="selected"{% endif %} value="75">75%</option>
+                      <option{% if location.levels.medicine == 80 %} selected="selected"{% endif %} value="80">80%</option>
+                      <option{% if location.levels.medicine == 85 %} selected="selected"{% endif %} value="85">85%</option>
+                      <option{% if location.levels.medicine == 90 %} selected="selected"{% endif %} value="90">90%</option>
+                      <option{% if location.levels.medicine == 95 %} selected="selected"{% endif %} value="95">95%</option>
+                      <option{% if location.levels.medicine == 100 %} selected="selected"{% endif %} value="100">100%</option>
+                    </select></td>
                 </tr>
 
                 <tr>
                   <td>Medical Missions</td>
-                  <td><input name="requirement_medical_mission" class="form-control" type="text" value="{% if location.requirements.medical_mission %}{{ location.requirements.medical_mission }}{% endif %}" placeholder="Requirement Count (Numbers Only)" onblur="if(isNaN(this.value)){ alert('Please remove non-numeric value.'); this.focus(); return false; }" /></td>
+                  <td><select name="levels_medical_mission" class="form-control">
+                      <option{% if location.levels.medical_mission == 0 %} selected="selected"{% endif %} value="0">0%</option>
+                      <option{% if location.levels.medical_mission == 5 %} selected="selected"{% endif %} value="5">5%</option>
+                      <option{% if location.levels.medical_mission == 10 %} selected="selected"{% endif %} value="10">10%</option>
+                      <option{% if location.levels.medical_mission == 15 %} selected="selected"{% endif %} value="15">15%</option>
+                      <option{% if location.levels.medical_mission == 20 %} selected="selected"{% endif %} value="20">20%</option>
+                      <option{% if location.levels.medical_mission == 25 %} selected="selected"{% endif %} value="25">25%</option>
+                      <option{% if location.levels.medical_mission == 30 %} selected="selected"{% endif %} value="30">30%</option>
+                      <option{% if location.levels.medical_mission == 35 %} selected="selected"{% endif %} value="35">35%</option>
+                      <option{% if location.levels.medical_mission == 40 %} selected="selected"{% endif %} value="40">40%</option>
+                      <option{% if location.levels.medical_mission == 45 %} selected="selected"{% endif %} value="45">45%</option>
+                      <option{% if location.levels.medical_mission == 50 %} selected="selected"{% endif %} value="50">50%</option>
+                      <option{% if location.levels.medical_mission == 55 %} selected="selected"{% endif %} value="55">55%</option>
+                      <option{% if location.levels.medical_mission == 60 %} selected="selected"{% endif %} value="60">60%</option>
+                      <option{% if location.levels.medical_mission == 65 %} selected="selected"{% endif %} value="65">65%</option>
+                      <option{% if location.levels.medical_mission == 70 %} selected="selected"{% endif %} value="70">70%</option>
+                      <option{% if location.levels.medical_mission == 75 %} selected="selected"{% endif %} value="75">75%</option>
+                      <option{% if location.levels.medical_mission == 80 %} selected="selected"{% endif %} value="80">80%</option>
+                      <option{% if location.levels.medical_mission == 85 %} selected="selected"{% endif %} value="85">85%</option>
+                      <option{% if location.levels.medical_mission == 90 %} selected="selected"{% endif %} value="90">90%</option>
+                      <option{% if location.levels.medical_mission == 95 %} selected="selected"{% endif %} value="95">95%</option>
+                      <option{% if location.levels.medical_mission == 100 %} selected="selected"{% endif %} value="100">100%</option>
+                    </select></td>
                 </tr>
 
                 <tr>
                   <td>Shelter Materials</td>
-                  <td><input name="requirement_shelter" class="form-control" type="text" value="{% if location.requirements.shelter %}{{ location.requirements.shelter }}{% endif %}" placeholder="Requirement Count (Numbers Only)" onblur="if(isNaN(this.value)){ alert('Please remove non-numeric value.'); this.focus(); return false; }" /></td>
+                  <td><select name="levels_shelter" class="form-control">
+                      <option{% if location.levels.shelter == 0 %} selected="selected"{% endif %} value="0">0%</option>
+                      <option{% if location.levels.shelter == 5 %} selected="selected"{% endif %} value="5">5%</option>
+                      <option{% if location.levels.shelter == 10 %} selected="selected"{% endif %} value="10">10%</option>
+                      <option{% if location.levels.shelter == 15 %} selected="selected"{% endif %} value="15">15%</option>
+                      <option{% if location.levels.shelter == 20 %} selected="selected"{% endif %} value="20">20%</option>
+                      <option{% if location.levels.shelter == 25 %} selected="selected"{% endif %} value="25">25%</option>
+                      <option{% if location.levels.shelter == 30 %} selected="selected"{% endif %} value="30">30%</option>
+                      <option{% if location.levels.shelter == 35 %} selected="selected"{% endif %} value="35">35%</option>
+                      <option{% if location.levels.shelter == 40 %} selected="selected"{% endif %} value="40">40%</option>
+                      <option{% if location.levels.shelter == 45 %} selected="selected"{% endif %} value="45">45%</option>
+                      <option{% if location.levels.shelter == 50 %} selected="selected"{% endif %} value="50">50%</option>
+                      <option{% if location.levels.shelter == 55 %} selected="selected"{% endif %} value="55">55%</option>
+                      <option{% if location.levels.shelter == 60 %} selected="selected"{% endif %} value="60">60%</option>
+                      <option{% if location.levels.shelter == 65 %} selected="selected"{% endif %} value="65">65%</option>
+                      <option{% if location.levels.shelter == 70 %} selected="selected"{% endif %} value="70">70%</option>
+                      <option{% if location.levels.shelter == 75 %} selected="selected"{% endif %} value="75">75%</option>
+                      <option{% if location.levels.shelter == 80 %} selected="selected"{% endif %} value="80">80%</option>
+                      <option{% if location.levels.shelter == 85 %} selected="selected"{% endif %} value="85">85%</option>
+                      <option{% if location.levels.shelter == 90 %} selected="selected"{% endif %} value="90">90%</option>
+                      <option{% if location.levels.shelter == 95 %} selected="selected"{% endif %} value="95">95%</option>
+                      <option{% if location.levels.shelter == 100 %} selected="selected"{% endif %} value="100">100%</option>
+                    </select></td>
                 </tr>
                 
               </tbody>

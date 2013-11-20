@@ -3,17 +3,10 @@
     <head>
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-        {% block ogdetails %}{% endblock %}
-
-        <meta name="twitter:card" content="summary">
-        <meta name="twitter:site" content="@bangonphils">
-        <meta property="og:url" content="{{ current_base_url }}">
-
         <meta property="og:site_name" content="#BangonPH"/>
         <meta property="og:type" content="website"/>
-        <meta property="og:description" content="{% if og_description %}{{ og_description }}{% else %}We Need Your Help! Help the super typhoon Yolanda affected areas! Share information on your latest or planned relief drop here and let's get aid where it is needed the most!{% endif %}"/>
-        <meta property="twitter:description" content="{% if og_description %}{{ og_description }}{% else %}We Need Your Help! Help the super typhoon Yolanda affected areas! Share information on your latest or planned relief drop here and let's get aid where it is needed the most!{% endif %}"/>
-        <title>{% if page_title %}{{ page_title }}{% else %}#BangonPH{% endif %}</title>
+        <meta property="og:description" content="We Need Your Help! Help the super typhoon Yolanda affected areas! Share information on your latest or planned relief drop here and let's get aid where it is needed the most!"/>
+        <title>#BangonPH Update Stream</title>
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width">
         
@@ -27,21 +20,12 @@
             }
         </style>
         <link rel="stylesheet" href="/css/bootstrap-theme.min.css">
-        <link rel="stylesheet" href="/css/main.css?v={{ version }}">
-        {% block customcss %}{% endblock %}
+        <link rel="stylesheet" href="/css/main.css?v=error">
 
         <script src="/js/vendor/modernizr-2.6.2.min.js"></script>
     </head>
     <body>
-      <div id="fb-root"></div>
-<script>(function(d, s, id) {
-  var js, fjs = d.getElementsByTagName(s)[0];
-  if (d.getElementById(id)) return;
-  js = d.createElement(s); js.id = id;
-  js.src = "//connect.facebook.net/en_US/all.js#xfbml=1&appId=759672407382550";
-  fjs.parentNode.insertBefore(js, fjs);
-}(document, 'script', 'facebook-jssdk'));</script>
-
+    
     <div class="navbar navbar-inverse navbar-fixed-top">
       <div class="container">
         <div class="navbar-header">
@@ -63,47 +47,42 @@
 
             <li><a href="http://google.org/personfinder/2013-yolanda/" target="_blank">Google Person Finder</a></li>
             <li><a class="navbar-link" href="http://sym.ph/bangonph-guide/updating-information/" target="_blank">Contribute Information</a></li>
-<!--             <li><a href="#">How to Help</a></li>
-            <li class="dropdown">
-              <a href="#" class="dropdown-toggle" data-toggle="dropdown">Affected Areas <b class="caret"></b></a>
-              <ul class="dropdown-menu">
-                <li class="dropdown-header">Negros Occidental</li>
-                <li><a href="#">Ormoc</a></li>
-                <li><a href="#">Isabel</a></li>
-                <li><a href="#">Marida</a></li>
-                <li><a href="#">Baybay</a></li>
-                <li class="divider"></li>
-                <li class="dropdown-header">Leyte</li>
-                <li><a href="#">Ormoc</a></li>
-                <li><a href="#">Isabel</a></li>
-                <li><a href="#">Marida</a></li>
-                <li><a href="#">Baybay</a></li>
-              </ul>
-            </li>
 
-            <li class="dropdown">
-              <a href="#" class="dropdown-toggle" data-toggle="dropdown">Organizations <b class="caret"></b></a>
-              <ul class="dropdown-menu">
-                <li><a href="#">RedCross</a></li>
-                <li><a href="#">UN</a></li>
-                <li><a href="#">SaveALife.Org</a></li>
-              </ul>
-            </li> -->
           </ul>
         </div>
       </div>
     </div>
 
-    {% block content %}
-
-    {% endblock %}
+    <div class="container">
+    <div class="row">
+      <div class="col-12">
+        <h2>Real Time Updates Stream</h2>
+        <h4>Latest Updates <small class="update_count"><span class="actual_count">{{ update_count }}</span> updates since 8 hours ago</small></h4>
+          <ul id='updates_feed' class="updates-wrap updates_feed updates-wrap-lg">
+            {% for revision in updates %}
+            {% if revision.status %}
+            <li>
+              <img src="http://graph.facebook.com/{{ revision.fb_id }}/picture?small">
+              <label style="margin-bottom: 0;">
+                <a target="_blank" href="http://www.facebook.com/profile.php?id={{ revision.fb_id }}">{% if revision.fb_firstname %}{{ revision.fb_firstname }} {% endif %}{% if revision.fb_middlename %}{{ revision.fb_middlename }}{% endif %} {% if revision.fb_lastname %}{{ revision.fb_lastname }}{% endif %}</a>
+              </label>
+              <a target="_blank" href="/locations/{{ revision.name }}">
+                <span class="label label-default">{{ revision.name|prettify }}</span>
+                <span class="label label-success">{{ revision.revision_type }}</span>
+              </a><br/>
+              <p>{% for stat in revision.status %}{{ stat }}; {% endfor %}</p>
+              <span class="update-date">{{ revision.created|to_date }}</span>
+            </li>
+            {% endif %}
+            {% endfor %}
+          </ul>
+          </div>
+      </div>
+    </div>
+  </div>
 
 
     <div class="container">
-      <div class="alert alert-warning alert-dismissable">
-            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-            <strong>Unfortunately,</strong> there are more places severely affected by Super Typhoon Yolanda. We will update this list as soon as we get more information. If you wish to share any information, email us at <a href="mailto:help@bangonph.com">help@bangonph.com</a>
-          </div>
       <hr>
       <footer>
         <p>&copy; #BangonPH 2013. Powered by <a href='http://www.pusher.com' title='Pusher. Real time messaging'>Pusher</a></p>
@@ -111,14 +90,33 @@
       </footer>
     </div> <!-- /container -->        
     <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.1/jquery.min.js"></script>
-    <script>window.jQuery || document.write('<script src="/js/vendor/jquery-1.10.1.min.js"><\/script>')</script>
 
         <script src="/js/vendor/bootstrap.min.js"></script>
 
         <script src="/js/main.js"></script>
+
+        <script src="http://js.pusher.com/2.1/pusher.min.js"></script>
+      <script type="text/javascript">
+
+        //pusher
+        var pusher = new Pusher('e0a2a1c8316b9baddc9b');
+        var channel = pusher.subscribe('feeds');
         
-        {% block bottomjs %}
-        {% endblock %}
+        channel.bind('new_revision', function(data) {
+          //do something when the new data is triggered
+          console.log(data);
+          var d = '<li><img src="http://graph.facebook.com/' + data.fb_id + '/picture?small">
+              <label style="margin-bottom: 0;"><a target="_blank" href="http://www.facebook.com/profile.php?id=' + data.fb_id + '">' + data.fb_name + '</a></label> updated <a target="_blank" href="/locations/' + data.location + '"><span class="label label-success">' + data.revision_type + '</span></a><br/><p>' + data.changes + '</p><span class="update-date">' + data.created + '</span></li>';
+
+          $(".updates_feed").prepend(d);
+
+          var count = parseInt($(".actual_count").html());
+          count = count + 1;
+          $(".actual_count").html(count);
+        });
+      </script>
+       
+        
 
       <script>
         (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){

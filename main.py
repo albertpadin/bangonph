@@ -573,8 +573,9 @@ class PublicFrontPage(BaseHandler):
             self.tv["revisions"] = user_changes
 
         try:
-            self.tv['contributors'] = Contributor.query().order(-Contributor.contribution).fetch(10)
+            self.tv['contributors'] = Contributor.query().order(-Contributor.contributions).fetch(10)
         except:
+            logging.exception("contributors")
             self.tv['contributors'] = []
 
         self.render('frontend/public-front.html', cache=30)

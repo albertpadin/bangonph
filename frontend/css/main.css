@@ -8,6 +8,10 @@
     margin-bottom: 0!important;
 }
 
+.ml0{
+    margin-left: 0!important;
+}
+
 .mr20{
     margin-right: 20px!important;
 }
@@ -925,4 +929,27 @@ height: 80px;
 
 .btn-fb:hover, .btn-fb:focus {
     opacity: 1;
+}
+
+.contributors{
+    text-align: center;
+}
+
+.contributors a{
+    text-decoration: none;
+}
+
+
+.contributors a img{
+    width: 50px;
+    height: auto;
+    margin-left: 4px;
+    margin-bottom: 8px;
+    border: 1px solid #e6e6e6;
+}
+
+.custom-item{
+    padding: 0px;
+    border-radius: 6px;
+    margin-bottom: 16px;
 }

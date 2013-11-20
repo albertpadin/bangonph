@@ -268,8 +268,11 @@ class DistributionRevision(ndb.Model):
         details["updated"] = str(self.updated)
 
         if self.date:
-            date = datetime.datetime.strptime(self.date, "%m/%d/%Y")
-            details["dateOfDistribution"] = str(date)
+            try:
+                date = datetime.datetime.strptime(self.date, "%m/%d/%Y")
+                details["dateOfDistribution"] = str(date)
+            except:
+                details["dateOfDistribution"] = self.date
         else:
             details["dateOfDistribution"] = ""
 

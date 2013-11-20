@@ -290,8 +290,91 @@ class DistributionRevision(ndb.Model):
     description = ndb.TextProperty()
     contacts = ndb.StringProperty()
     needs = ndb.StringProperty()
-    date = ndb.StringProperty(default="UNKNOWN")
+    date = ndb.StringProperty(default="UNKNOWN") # m-d-yyyy
     tag = ndb.StringProperty()
+
+    """ added """
+    featured_photo = ndb.StringProperty()
+    images = ndb.JsonProperty()
+    status = ndb.StringProperty()
+    info = ndb.TextProperty()
+    supply_goal = ndb.JsonProperty()
+    actual_supply = ndb.JsonProperty()
+
+
+    def to_object(self, expand=""):
+        details = {}
+        
+        details["relief_name"] = self.relief_name
+        details["num_of_packs"] = self.num_of_packs
+        details["fb_id"] = self.fb_id
+        details["fb_email"] = self.fb_email
+        details["fb_access_token"] = self.fb_access_token
+        details["fb_username"] = self.fb_username
+        details["fb_lastname"] = self.fb_lastname
+        details["fb_firstname"] = self.fb_firstname
+        details["fb_middlename"] = self.fb_middlename
+        details["fb_name"] = self.fb_name
+        details["needs"] = self.needs
+        details["tag"] = self.tag
+        
+        details["meta"] = {"href": "http://api.bangonph.com/v1/efforts/" + str(self.key.id())}
+        details["created"] = str(self.created)
+        details["updated"] = str(self.updated)
+
+        if self.date:
+            try:
+                date = datetime.datetime.strptime(self.date, "%m/%d/%Y")
+                details["dateOfDistribution"] = str(date)
+            except:
+                details["dateOfDistribution"] = self.date
+        else:
+            details["dateOfDistribution"] = ""
+
+        details["images"] = self.images
+        details["status"] = self.status
+        details["info"] = self.info
+        details["featured_photo"] = self.featured_photo
+        details["description"] = self.description
+
+        if expand == "contacts":
+            contact_details = {}
+            try:
+                cont = Contact.get_by_id(self.contacts)
+                contact_details["contact_details"] = cont.to_object()
+            except:
+                cont = Contact.query(Contact.name == self.contacts).fetch(1)
+                contact_details["contact_details"] = cont[0].to_object()
+            details["contact"] = contact_details
+        else:
+            if self.contacts:
+                data = {}
+                data["meta"] = {"href": "http://api.bangonph.com/v1/contacts/" + str(self.contacts)}
+                details["contact"] = data
+            else:
+                details["contact"] = ""
+
+
+
+        if expand == "destinations":
+            destination_details = {}
+            location = Location.get_by_id(self.name)
+            destination_details["destination_details"] = location.to_object()
+            details["destinations"] = destination_details
+        else:
+            if self.destinations:
+                data = {}
+                data["meta"] = {"href": "http://api.bangonph.com/v1/locations/" + str(self.name)}
+                details["destinations"] = data
+            else:
+                details["destinations"] = ""
+
+
+        details["id"] = self.key.id()
+        details["supply_goal"] = self.supply_goal
+        details["actual_supply"] = self.actual_supply
+
+        return details
 
 class Distribution(ndb.Model):
     created = ndb.DateTimeProperty(auto_now_add=True)

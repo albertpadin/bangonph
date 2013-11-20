@@ -184,14 +184,13 @@ def add_distribution(data, instance_id=""):
         distribution = DistributionRevision()
 
     if data["date_of_distribution"]:
-        distribution.date_of_distribution = data["date_of_distribution"]
-
+        distribution.date = data["date_of_distribution"]
 
     if data["contact"]:
-        distribution.contact = data["contact"]
+        distribution.contacts = data["contact"]
 
     if data["destinations"]:
-        distribution.destinations = ndb.Key("Location", data["destinations"])
+        distribution.destination = data["destinations"]
 
     if data["supply_goal"]:
         distribution.supply_goal = data["supply_goal"]
@@ -208,8 +207,38 @@ def add_distribution(data, instance_id=""):
     if data["info"]:
         distribution.info = data["info"]
 
-    if data["featured_photo"]:
-        distribution.featured_photo = data["featured_photo"]
+    if data["fb_email"]:
+        distribution.fb_email = data["fb_email"]
+
+    if data["fb_id"]:
+        distribution.fb_id = data["fb_id"]
+
+    if data["fb_access_token"]:
+        distribution.fb_access_token = data["fb_access_token"]
+
+    if data["fb_username"]:
+        distribution.fb_username = data["fb_username"]
+
+    if data["fb_lastname"]:
+        distribution.fb_lastname = data["fb_lastname"]
+
+    if data["fb_middlename"]:
+        distribution.fb_middlename = data["fb_middlename"]
+
+    if data["fb_name"]:
+        distribution.fb_name = data["fb_name"]
+
+    if data["relief_name"]:
+        distribution.relief_name = data["relief_name"]
+
+    if data["num_of_packs"]:
+        distribution.num_of_packs = data["num_of_packs"]
+
+    if data["needs"]:
+        distribution.needs = data["needs"]
+
+    if data["tag"]:
+        distribution.tag = data["tag"]
 
     if data["description"]:
         distribution.description = data["description"]

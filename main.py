@@ -3138,23 +3138,37 @@ class APIEffortsHandler(APIBaseHandler):
     @oauthed_required
     def post(self, instance_id=None):
         resp = API_RESPONSE.copy()
-        if self.request.get("date_of_distribution"):
-            try:
-                date = datetime.datetime.strptime(self.request.get("date_of_distribution"), "%Y-%m-%d"), #1992-10-20
-            except:
-                resp['response'] = "invalid_date_format"
-                resp['code'] = 406
-                resp['property'] = "date_of_distribution"
-                resp['description'] = "Use this format (YYYY-mm-dd H:M:S)"
-        else:
-            date = None
+        # if self.request.get("date_of_distribution"):
+        #     try:
+        #         date = datetime.datetime.strptime(self.request.get("date_of_distribution"), "%Y-%m-%d"), #1992-10-20
+        #     except:
+        #         resp['response'] = "invalid_date_format"
+        #         resp['code'] = 406
+        #         resp['property'] = "date_of_distribution"
+        #         resp['description'] = "Use this format (YYYY-mm-dd H:M:S)"
+        # else:
+        #     date = None
         data = {
-            "date_of_distribution": date,
+            "date_of_distribution": self.request.get("date_of_distribution"),
             "contact": self.request.get("contact"),
             "destinations": self.request.get("destinations"),
             "supply_goal": self.request.get("supply_goal"),
             "actual_supply": self.request.get("actual_supply"),
-            "images": self.request.get("images")
+            "images": self.request.get("images"),
+            "fb_email": self.request.get("fb_email"),
+            "fb_id": self.request.get("fb_id"),
+            "fb_access_token": self.request.get("fb_access_token"),
+            "fb_username": self.request.get("fb_username"),
+            "fb_lastname": self.request.get("fb_lastname"),
+            "fb_firstname": self.request.get("fb_firstname"),
+            "fb_middlename": self.request.get("fb_middlename"),
+            "fb_name": self.request.get("fb_name"),
+            "name": self.request.get("name"),
+            "relief_name": self.request.get("relief_name"),
+            "num_of_packs": self.request.get("num_of_packs"),
+            "description": self.request.get("description"),
+            "needs": self.request.get("needs"),
+            "tag": self.request.get("tag")
         }
 
         # self.params["date_of_distribution"] = date

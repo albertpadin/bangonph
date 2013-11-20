@@ -235,7 +235,7 @@ class DistributionRevision(ndb.Model):
     description = ndb.TextProperty()
     contacts = ndb.StringProperty()
     needs = ndb.StringProperty()
-    date = ndb.StringProperty(default="UNKNOWN")
+    date = ndb.StringProperty(default="UNKNOWN") # m-d-yyyy
     tag = ndb.StringProperty()
 
     """ added """
@@ -250,7 +250,6 @@ class DistributionRevision(ndb.Model):
     def to_object(self, expand=""):
         details = {}
         
-        details["name"] = self.name
         details["relief_name"] = self.relief_name
         details["num_of_packs"] = self.num_of_packs
         details["fb_id"] = self.fb_id
@@ -267,7 +266,13 @@ class DistributionRevision(ndb.Model):
         details["meta"] = {"href": "http://api.bangonph.com/v1/efforts/" + str(self.key.id())}
         details["created"] = str(self.created)
         details["updated"] = str(self.updated)
-        details["dateOfDistribution"] = str(self.date)
+
+        if self.date:
+            date = datetime.datetime.strptime(self.date, "%m/%d/%Y")
+            details["dateOfDistribution"] = str(date)
+        else:
+            details["dateOfDistribution"] = ""
+
         details["images"] = self.images
         details["status"] = self.status
         details["info"] = self.info
@@ -295,14 +300,13 @@ class DistributionRevision(ndb.Model):
 
         if expand == "destinations":
             destination_details = {}
-            logging.critical(self.destination)
-            location = Location.get_by_id(self.destination)
+            location = Location.get_by_id(self.name)
             destination_details["destination_details"] = location.to_object()
             details["destinations"] = destination_details
         else:
             if self.destinations:
                 data = {}
-                data["meta"] = {"href": "http://api.bangonph.com/v1/locations/" + str(self.destination)}
+                data["meta"] = {"href": "http://api.bangonph.com/v1/locations/" + str(self.name)}
                 details["destinations"] = data
             else:
                 details["destinations"] = ""

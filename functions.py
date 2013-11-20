@@ -228,9 +228,6 @@ def add_distribution(data, instance_id=""):
     if data["fb_name"]:
         distribution.fb_name = data["fb_name"]
 
-    if data["name"]:
-        distribution.name = data["name"]
-
     if data["relief_name"]:
         distribution.relief_name = data["relief_name"]
 

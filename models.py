@@ -380,17 +380,16 @@ class DistributionRevision(ndb.Model):
             destination_details["destination_details"] = location.to_object()
             details["destinations"] = destination_details
         else:
-            if self.destinations:
+            if self.name:
                 data = {}
                 data["meta"] = {"href": "http://api.bangonph.com/v1/locations/" + str(self.name)}
                 details["destinations"] = data
             else:
                 details["destinations"] = ""
 
-
         details["id"] = self.key.id()
-        details["supply_goal"] = self.supply_goal
-        details["actual_supply"] = self.actual_supply
+        details["supply_goal"] = self.num_of_packs
+        details["actual_supply"] = self.num_of_packs
 
         return details
 

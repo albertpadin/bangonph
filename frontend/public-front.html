@@ -193,7 +193,7 @@
                 </div>
               </div>
               <div class="clear"></div>
-              <h6>Relief Aid Status for past 7 Days:</h6>
+              <h6>Relief Aid Status for the past 7 Days:</h6>
               <div class="progress">
                 <div class="progress-bar progress-bar-{% if location.relief_aid_seven_day_summary.all > 75 %}success{% else %}{% if location.relief_aid_seven_day_summary.all > 35 %}warning{% else %}danger{% endif %}{% endif %}" role="progressbar" {% if not location.relief_aid_seven_day_summary.all %}aria-valuenow="1"{% else %}aria-valuenow="{{ location.relief_aid_seven_day_summary.all|two_decimal }}"{% endif %} aria-valuemin="0" aria-valuemax="100" {% if not location.relief_aid_seven_day_summary.all %}style="width:1%"{% else %}style="width:{{ location.relief_aid_seven_day_summary.all|two_decimal }}%"{% endif %}>
                   <span class="sr-only" style="right: 100px!important;">{{ location.relief_aid_seven_day_totals.all|with_commas }} Given of <strong>{{ location.relief_seven_day_requirement_totals.all|with_commas }} Required</strong></span> <span class="sr-only">{{ location.relief_aid_seven_day_summary.all|two_decimal }}%  &nbsp;&nbsp;&nbsp;</a></span>
@@ -286,7 +286,7 @@
                 </div>
               </div>
               <div class="clear"></div>
-              <h6>Relief Aid Status for past 7 Days:</h6>
+              <h6>Relief Aid Status for the past 7 Days:</h6>
               <div class="progress">
                 <div class="progress-bar progress-bar-{% if location.relief_aid_seven_day_summary.all > 75 %}success{% else %}{% if location.relief_aid_seven_day_summary.all > 35 %}warning{% else %}danger{% endif %}{% endif %}" role="progressbar" {% if not location.relief_aid_seven_day_summary.all %}aria-valuenow="1"{% else %}aria-valuenow="{{ location.relief_aid_seven_day_summary.all|two_decimal }}"{% endif %} aria-valuemin="0" aria-valuemax="100" {% if not location.relief_aid_seven_day_summary.all %}style="width:1%"{% else %}style="width:{{ location.relief_aid_seven_day_summary.all|two_decimal }}%"{% endif %}>
                   <span class="sr-only" style="right: 100px!important;">{{ location.relief_aid_seven_day_totals.all|with_commas }} Given of <strong>{{ location.relief_seven_day_requirement_totals.all|with_commas }} Required</strong></span> <span class="sr-only">{{ location.relief_aid_seven_day_summary.all|two_decimal }}%  &nbsp;&nbsp;&nbsp;</a></span>

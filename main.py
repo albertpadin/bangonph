@@ -23,6 +23,7 @@ from google.appengine.api import taskqueue
 from google.appengine.api import urlfetch
 from google.appengine.ext import blobstore
 from google.appengine.ext.webapp import blobstore_handlers
+from google.appengine.api import files
 from google.appengine.api import images
 from google.appengine.api import memcache
 
@@ -87,12 +88,20 @@ def to_date(date):
 def nl_to_br(text):
     return text.replace('<','&lt;').replace('>','&gt;').replace('&','&amp;').replace('\n','<br />')
 
+def to_dash(text):
+    return text.replace(" ", "-")
+
+def to_title(text):
+    return text.title()
+
 jinja_environment.filters['nl_to_br'] = nl_to_br
 jinja_environment.filters['two_decimal'] = two_decimal
 jinja_environment.filters['no_commas'] = no_commas
 jinja_environment.filters['prettify'] = prettify
 jinja_environment.filters['with_commas'] = with_commas
 jinja_environment.filters['to_date'] = to_date
+jinja_environment.filters['to_dash'] = to_dash
+jinja_environment.filters['to_title'] = to_title
 
 
 def login_required(fn):
@@ -153,6 +162,7 @@ class BaseHandler(webapp2.RequestHandler):
         self.session = self.get_session()
         self.user = self.get_current_user()
         self.public_user = self.get_public_current_user()
+        self.public_org_user = self.get_public_current_user_orgs()
 
 
     def render(self, template_path=None, force=False, cache=0):
@@ -200,6 +210,12 @@ class BaseHandler(webapp2.RequestHandler):
         else:
             return None
 
+    def get_public_current_user_orgs(self):
+        if self.session.has_key("user"):
+            distributor = Distributor.get_by_id(self.session["user"])
+            return distributor
+        else:
+            return None
 
     def login(self, user):
         self.session["user"] = user.key.id()
@@ -278,83 +294,152 @@ class BaseHandler(webapp2.RequestHandler):
 
     def public_login_fb(self, fb_content, access_token, state_url):
         self.logout()
-        location_revision = LocationRevision.query(LocationRevision.fb_id == fb_content["id"]).get()
-        if not location_revision:
-            email = fb_content["email"]
-            if email:
-                location_revision = LocationRevision.query(LocationRevision.fb_email == email).get()
+        if state_url != "new-org" or state_url != "new-relief":
+            location_revision = LocationRevision.query(LocationRevision.fb_id == fb_content["id"]).get()
+            if not location_revision:
+                email = fb_content["email"]
+                if email:
+                    location_revision = LocationRevision.query(LocationRevision.fb_email == email).get()
 
-            if location_revision:
-                # Merge User
+                if location_revision:
+                    # Merge User
 
-                location_revision.fb_id = fb_content["id"]
-                try:
-                    location_revision.fb_username = fb_content["username"]
-                except:
-                    logging.exception("no username?")
-                location_revision.fb_firstname = fb_content["first_name"]
-                try:
-                    location_revision.fb_lastname = fb_content["last_name"]
-                except:
-                    logging.exception("no last_name?")
-                try:
-                    location_revision.fb_middlename = fb_content["middle_name"]
-                except:
-                    logging.exception('no middle name?')
+                    location_revision.fb_id = fb_content["id"]
+                    try:
+                        location_revision.fb_username = fb_content["username"]
+                    except:
+                        logging.exception("no username?")
+                    location_revision.fb_firstname = fb_content["first_name"]
+                    try:
+                        location_revision.fb_lastname = fb_content["last_name"]
+                    except:
+                        logging.exception("no last_name?")
+                    try:
+                        location_revision.fb_middlename = fb_content["middle_name"]
+                    except:
+                        logging.exception('no middle name?')
 
-                location_revision.fb_name = user.fb_firstname
-                if location_revision.fb_middlename:
-                    location_revision.fb_name += " " + location_revision.fb_middlename
+                    location_revision.fb_name = user.fb_firstname
+                    if location_revision.fb_middlename:
+                        location_revision.fb_name += " " + location_revision.fb_middlename
 
-                if location_revision.fb_lastname:
-                    location_revision.fb_name += " " + location_revision.fb_lastname
+                    if location_revision.fb_lastname:
+                        location_revision.fb_name += " " + location_revision.fb_lastname
 
-                try:
-                    location_revision.fb_access_token = access_token
-                except:
-                    logging.exception('no access token')
+                    try:
+                        location_revision.fb_access_token = access_token
+                    except:
+                        logging.exception('no access token')
 
-                try:
-                    location_revision.name = state_url
-                except:
-                    logging.exception("no location name")
-            else:
-                location_revision = LocationRevision()
-                location_revision.fb_id = fb_content["id"]
-                try:
-                    location_revision.fb_username = fb_content["username"]
-                except:
-                    logging.exception("no username?")
-                location_revision.fb_email = fb_content["email"]
-                location_revision.fb_firstname = fb_content["first_name"]
-                try:
-                    location_revision.fb_lastname = fb_content["last_name"]
-                except:
-                    logging.exception("no last_name?")
-                try:
-                    location_revision.fb_middlename = fb_content["middle_name"]
-                except:
-                    logging.exception('no middle name?')
+                    try:
+                        location_revision.name = state_url
+                    except:
+                        logging.exception("no location name")
+                else:
+                    location_revision = LocationRevision()
+                    location_revision.fb_id = fb_content["id"]
+                    try:
+                        location_revision.fb_username = fb_content["username"]
+                    except:
+                        logging.exception("no username?")
+                    location_revision.fb_email = fb_content["email"]
+                    location_revision.fb_firstname = fb_content["first_name"]
+                    try:
+                        location_revision.fb_lastname = fb_content["last_name"]
+                    except:
+                        logging.exception("no last_name?")
+                    try:
+                        location_revision.fb_middlename = fb_content["middle_name"]
+                    except:
+                        logging.exception('no middle name?')
 
-                location_revision.fb_name = location_revision.fb_firstname
-                if location_revision.fb_middlename:
-                    location_revision.fb_name += " " + location_revision.fb_middlename
+                    location_revision.fb_name = location_revision.fb_firstname
+                    if location_revision.fb_middlename:
+                        location_revision.fb_name += " " + location_revision.fb_middlename
 
-                if location_revision.fb_lastname:
-                    location_revision.fb_name += " " + location_revision.fb_lastname
+                    if location_revision.fb_lastname:
+                        location_revision.fb_name += " " + location_revision.fb_lastname
 
-                try:
-                    location_revision.fb_access_token = access_token
-                except:
-                    logging.exception('no access token')
+                    try:
+                        location_revision.fb_access_token = access_token
+                    except:
+                        logging.exception('no access token')
 
-                try:
-                    location_revision.name = state_url
-                except:
-                    logging.exception("no location name")
+                    try:
+                        location_revision.name = state_url
+                    except:
+                        logging.exception("no location name")
 
-            location_revision.put()
-        self.login(location_revision)
+                location_revision.put()
+            self.login(location_revision)
+        else:
+            distributor = Distributor.query(Distributor.fb_id == fb_content["id"]).get()
+            if not distributor:
+                email = fb_content["email"]
+                if email:
+                    distributor = Distributor.query(Distributor.fb_email == email).get()
+
+                if distributor:
+                    # Merge User
+
+                    distributor.fb_id = fb_content["id"]
+                    try:
+                        distributor.fb_username = fb_content["username"]
+                    except:
+                        logging.exception("no username?")
+                    distributor.fb_firstname = fb_content["first_name"]
+                    try:
+                        distributor.fb_lastname = fb_content["last_name"]
+                    except:
+                        logging.exception("no last_name?")
+                    try:
+                        distributor.fb_middlename = fb_content["middle_name"]
+                    except:
+                        logging.exception('no middle name?')
+
+                    distributor.fb_name = user.fb_firstname
+                    if distributor.fb_middlename:
+                        distributor.fb_name += " " + distributor.fb_middlename
+
+                    if distributor.fb_lastname:
+                        distributor.fb_name += " " + distributor.fb_lastname
+
+                    try:
+                        distributor.fb_access_token = access_token
+                    except:
+                        logging.exception('no access token')
+                else:
+                    distributor = Distributor()
+                    distributor.fb_id = fb_content["id"]
+                    try:
+                        distributor.fb_username = fb_content["username"]
+                    except:
+                        logging.exception("no username?")
+                    distributor.fb_email = fb_content["email"]
+                    distributor.fb_firstname = fb_content["first_name"]
+                    try:
+                        distributor.fb_lastname = fb_content["last_name"]
+                    except:
+                        logging.exception("no last_name?")
+                    try:
+                        distributor.fb_middlename = fb_content["middle_name"]
+                    except:
+                        logging.exception('no middle name?')
+
+                    distributor.fb_name = distributor.fb_firstname
+                    if distributor.fb_middlename:
+                        distributor.fb_name += " " + distributor.fb_middlename
+
+                    if distributor.fb_lastname:
+                        distributor.fb_name += " " + distributor.fb_lastname
+
+                    try:
+                        distributor.fb_access_token = access_token
+                    except:
+                        logging.exception('no access token')
+
+                distributor.put()
+            self.login(distributor)
         return
 
 
@@ -383,11 +468,21 @@ class Logout(BaseHandler):
 
 class PublicLogout(BaseHandler):
     def get(self):
-        id = self.public_user.name
         if self.public_user:
-            self.logout()
-        self.redirect("/locations/" + str(id))
-
+            id = self.public_user.name
+            if id:
+                self.logout()
+                self.redirect("/locations/" + str(id))
+            else:
+                self.logout()
+                self.redirect("/")
+        else:
+            if self.public_org_user:
+                self.logout()
+                self.redirect("/orgs")
+            else:
+                self.logout()
+                self.redirect("/")
 
 class LoginPage(BaseHandler):
     def get(self):
@@ -974,6 +1069,261 @@ class PublicLocationPage(BaseHandler):
             subscriber.put()
             self.redirect("/locations/"+location_id)
 
+class OrgsHandler(BaseHandler):
+    def get(self):
+        self.tv["current_page"] = "ORGS"
+
+        self.tv["main_org"] = True
+
+        path_redirect = self.request.path + "/new-org"
+        self.tv["fb_login_url"] = facebook.generate_login_url(path_redirect, self.uri_for('www-publicfblogin'))
+
+        user_changes = LocationRevisionChanges.query().order(-LocationRevisionChanges.created).fetch(100)
+        if user_changes:
+            self.tv["status_changes"] = user_changes
+
+        distributors = Distributor.query(Distributor.name != None).fetch(100)
+        if distributors:
+            self.tv["distributors"] = distributors
+
+        self.render('frontend/public-orgs.html')
+
+class OrgsNewHandler(BaseHandler):
+    def get(self):
+        if self.request.get("success"):
+            self.tv["success"] = True
+
+        if self.public_org_user:
+            self.tv["current_page"] = "ORGS"
+            self.tv["new_org"] = True
+
+            user_changes = LocationRevisionChanges.query().order(-LocationRevisionChanges.created).fetch(100)
+            if user_changes:
+                self.tv["status_changes"] = user_changes
+
+            self.render('frontend/public-orgs.html')
+        else:
+            path_facebook = facebook.generate_login_url(self.request.path, self.uri_for('www-publicfblogin'))
+            self.redirect(path_facebook)
+
+    def post(self):
+        distributor = Distributor()
+
+        file_name = files.blobstore.create(mime_type='image/jpg')
+        upload_file = self.request.POST.get("file").file.read()
+
+        with files.open(file_name, 'a') as f:
+            f.write(upload_file)
+
+        files.finalize(file_name)
+        blob_key = files.blobstore.get_blob_key(file_name)
+        blob_image = blobstore.BlobInfo.get(blob_key)
+
+        distributor.blob_key = blob_key
+        try:
+            distributor.logo = images.get_serving_url(blob_image)
+        except:
+            logging.exception("Not an image?")
+
+        distributor.name = self.request.get("org_name").lower()
+        distributor.contact_num = self.request.get("contact_num")
+        distributor.email = self.request.get("email")
+        if "http://" in self.request.get("website") or "https://" in self.request.get("website"):
+            distributor.website = self.request.get("website")
+        else:
+            distributor.website = "http://" + self.request.get("website")
+
+        if "http://" in self.request.get("facebook") or "https://" in self.request.get("facebook"):
+            distributor.facebook = self.request.get("facebook")
+        else:
+            distributor.facebook = "http://" + self.request.get("facebook")
+        distributor.contact_details = self.request.get("contact_details")
+        distributor.put()
+
+        user_changes = LocationRevisionChanges()
+        if self.public_org_user:
+            user_changes.fb_email = self.public_org_user.fb_email
+            user_changes.fb_id = self.public_org_user.fb_id
+            user_changes.fb_username = self.public_org_user.fb_username
+            user_changes.fb_lastname = self.public_org_user.fb_lastname
+            user_changes.fb_firstname = self.public_org_user.fb_firstname
+            user_changes.fb_middlename = self.public_org_user.fb_middlename
+            user_changes.fb_name = self.public_org_user.fb_name
+        elif self.public_user:
+            user_changes.fb_email = self.public_user.fb_email
+            user_changes.fb_id = self.public_user.fb_id
+            user_changes.fb_username = self.public_user.fb_username
+            user_changes.fb_lastname = self.public_user.fb_lastname
+            user_changes.fb_firstname = self.public_user.fb_firstname
+            user_changes.fb_middlename = self.public_user.fb_middlename
+            user_changes.fb_name = self.public_user.fb_name
+        user_changes.revision_type = "Orgs"
+        datas_changes = []
+        if self.request.get("org_name"):
+            datas_changes.append("Org Name: " + self.request.get("org_name"))
+        if self.request.get("contact_num"):
+            datas_changes.append("Contact Number: " + self.request.get("contact_num"))
+        if self.request.get("contact_details"):
+            datas_changes.append("Contact Details: " + self.request.get("contact_details"))
+        if self.request.get("email"):
+            datas_changes.append("Email: " + self.request.get("email"))
+        if self.request.get("website"):
+            datas_changes.append("Website: " + self.request.get("website"))
+        if self.request.get("facebook"):
+            datas_changes.append("Facebook: " + self.request.get("facebook"))
+        user_changes.status = datas_changes
+        user_changes.put()
+
+        self.redirect(self.request.path + "?success=Successfully-added.")
+
+class OrgsViewHandler(BaseHandler):
+    def get(self, *args, **kwargs):
+        if kwargs["org"]:
+            org_name = kwargs["org"]
+            self.tv["view_org"] = True
+
+            if self.public_user:
+                self.tv["fb_id"] = self.public_user.fb_id
+                self.tv["fb_name"] = self.public_user.fb_name
+                self.tv["fb_login_url"] = self.request.path + "/new-relief"
+            elif self.public_org_user:
+                self.tv["fb_id"] = self.public_org_user.fb_id
+                self.tv["fb_name"] = self.public_org_user.fb_name
+                self.tv["fb_login_url"] = self.request.path + "/new-relief"
+            else:
+                path_redirect = self.request.path + "/new-relief"
+                self.tv["fb_login_url"] = facebook.generate_login_url(path_redirect, self.uri_for('www-publicfblogin'))
+
+            user_changes = LocationRevisionChanges.query().order(-LocationRevisionChanges.created).fetch(100)
+            if user_changes:
+                self.tv["status_changes"] = user_changes
+
+            distributor = Distributor.query(Distributor.name == org_name.replace("-", " ")).fetch(1)
+            if distributor:
+                self.tv["distributor"] = distributor[0]
+
+                distribution_changes = DistributionRevision.query(DistributionRevision.fb_name == distributor[0].name.title()).order(-DistributionRevision.created).fetch(100)
+                if distribution_changes:
+                    self.tv["distribution_changes"] = distribution_changes
+
+            self.render('frontend/public-orgs.html')
+
+class OrgsNewReliefHandler(BaseHandler):
+    def get(self, *args, **kwargs):
+        if kwargs["org"]:
+            org_name = kwargs["org"]
+            self.tv["new_relief"] = True
+
+            self.tv["path"] = self.request.path.replace("/new-relief","")
+
+            if self.public_user:
+                user_changes = LocationRevisionChanges.query().order(-LocationRevisionChanges.created).fetch(100)
+                if user_changes:
+                    self.tv["status_changes"] = user_changes
+
+                distributor = Distributor.query(Distributor.name == org_name.replace("-", " ")).fetch(1)
+                if distributor:
+                    self.tv["distributor"] = distributor[0]
+
+                locations = Location.query().fetch(300)
+                if locations:
+                    self.tv["locations"] = locations
+
+                self.render('frontend/public-orgs.html')
+            elif self.public_org_user:
+                user_changes = LocationRevisionChanges.query().order(-LocationRevisionChanges.created).fetch(100)
+                if user_changes:
+                    self.tv["status_changes"] = user_changes
+
+                distributor = Distributor.query(Distributor.name == org_name.replace("-", " ")).fetch(1)
+                if distributor:
+                    self.tv["distributor"] = distributor[0]
+
+                locations = Location.query().fetch(300)
+                if locations:
+                    self.tv["locations"] = locations
+
+                self.render('frontend/public-orgs.html')
+            else:
+                path_redirect = self.request.path
+                self.redirect(facebook.generate_login_url(path_redirect, self.uri_for('www-publicfblogin')))
+
+    def post(self, *args, **kwargs):
+        distribution_revision = DistributionRevision()
+        if self.public_org_user:
+            distribution_revision.fb_email = self.public_org_user.fb_email
+            distribution_revision.fb_id = self.public_org_user.fb_id
+            distribution_revision.fb_access_token = self.public_org_user.fb_access_token
+            distribution_revision.fb_username = self.public_org_user.fb_username
+            distribution_revision.fb_lastname = self.public_org_user.fb_lastname
+            distribution_revision.fb_firstname = self.public_org_user.fb_firstname
+            distribution_revision.fb_middlename = self.public_org_user.fb_middlename
+            distribution_revision.fb_name = self.public_org_user.fb_name
+        elif self.public_user:
+            distribution_revision.fb_email = self.public_user.fb_email
+            distribution_revision.fb_id = self.public_user.fb_id
+            distribution_revision.fb_access_token = self.public_user.fb_access_token
+            distribution_revision.fb_username = self.public_user.fb_username
+            distribution_revision.fb_lastname = self.public_user.fb_lastname
+            distribution_revision.fb_firstname = self.public_user.fb_firstname
+            distribution_revision.fb_middlename = self.public_user.fb_middlename
+            distribution_revision.fb_name = self.public_user.fb_name
+        distribution_revision.name = self.request.get("location") # location name
+        distribution_revision.relief_name = self.request.get("relief_name")
+        distribution_revision.destination = self.request.get("destination")
+        distribution_revision.num_of_packs = int(self.request.get("packs"))
+        distribution_revision.description = self.request.get("description")
+        distribution_revision.contacts = self.request.get("contacts")
+        distribution_revision.needs = self.request.get("needs")
+        distribution_revision.date = self.request.get("date")
+        distribution_revision.tag = self.request.get("tag")
+        distribution_revision.status = self.request.get("status")
+        distribution_revision.put()
+
+        user_changes = LocationRevisionChanges()
+        if self.public_org_user:
+            user_changes.fb_email = self.public_org_user.fb_email
+            user_changes.fb_id = self.public_org_user.fb_id
+            user_changes.fb_access_token = self.public_org_user.fb_access_token
+            user_changes.fb_username = self.public_org_user.fb_username
+            user_changes.fb_lastname = self.public_org_user.fb_lastname
+            user_changes.fb_firstname = self.public_org_user.fb_firstname
+            user_changes.fb_middlename = self.public_org_user.fb_middlename
+            user_changes.fb_name = self.public_org_user.fb_name
+        elif self.public_user:
+            user_changes.fb_email = self.public_user.fb_email
+            user_changes.fb_id = self.public_user.fb_id
+            user_changes.fb_access_token = self.public_user.fb_access_token
+            user_changes.fb_username = self.public_user.fb_username
+            user_changes.fb_lastname = self.public_user.fb_lastname
+            user_changes.fb_firstname = self.public_user.fb_firstname
+            user_changes.fb_middlename = self.public_user.fb_middlename
+            user_changes.fb_name = self.public_user.fb_name
+        user_changes.name = self.request.get("location")
+        user_changes.revision_type = "Added a New Relief Effort"
+        datas_changes = []
+        if self.request.get("relief_name"):
+            datas_changes.append("Relief Effort: " + distribution_revision.name)
+        if self.request.get("destination"):
+            datas_changes.append("Destination: " + distribution_revision.destination)
+        if self.request.get("packs"):
+            datas_changes.append("Packs: " + str(distribution_revision.num_of_packs))
+        if self.request.get("description"):
+            datas_changes.append("Description: " + distribution_revision.description)
+        if self.request.get("contacts"):
+            datas_changes.append("Contacts: " + distribution_revision.contacts)
+        if self.request.get("needs"):
+            datas_changes.append("Needs: " + distribution_revision.needs)
+        if self.request.get("date"):
+            datas_changes.append("Date: " + distribution_revision.date)
+        if self.request.get("tag"):
+            datas_changes.append("Tag: " + str(distribution_revision.tag))
+        if self.request.get("status"):
+            datas_changes.append("Status: " + self.request.get("status"))
+        user_changes.status = datas_changes
+        user_changes.put()
+
+        self.redirect(self.request.path + "?success=Successfully-added.")
 
 class ReliefOperationsPage(BaseHandler):
     def get(self):
@@ -1863,20 +2213,30 @@ class DistributorHandler(BaseHandler):
     def post(self):
         if self.request.get('id'):
             distributor = Distributor.get_by_id(int(self.request.get("id")))
-            distributor.name = self.request.get("name")
+            distributor.name = self.request.get("name").lower()
             distributor.contact_num = self.request.get("contact_num")
             distributor.email = self.request.get("email")
-            distributor.website = self.request.get("website")
-            distributor.facebook = self.request.get("facebook")
+            if "http://" in self.request.get("website") or "https://" in self.request.get("website"):
+                distributor.website = self.request.get("website")
+            else:
+                distributor.website = "http://" + self.request.get("website")
+
+            if "http://" in self.request.get("facebook") or "https://" in self.request.get("facebook"):
+                distributor.facebook = self.request.get("facebook")
+            else:
+                distributor.facebook = "http://" + self.request.get("facebook")
             distributor.contact_details = self.request.get("contact_details")
             distributor.put()
         else:
             distributor = Distributor()
-            distributor.name = self.request.get("name")
+            distributor.name = self.request.get("name").lower()
             distributor.contact_num = self.request.get("contact_num")
             distributor.email = self.request.get("email")
             distributor.website = self.request.get("website")
-            distributor.facebook = self.request.get("facebook")
+            if "http://" in self.request.get("facebook") or "https://" in self.request.get("facebook"):
+                distributor.facebook = self.request.get("facebook")
+            else:
+                distributor.facebook = "http://" + self.request.get("facebook")
             distributor.contact_details = self.request.get("contact_details")
             distributor.put()
 
@@ -3700,6 +4060,11 @@ app = webapp2.WSGIApplication([
 
         webapp2.Route('/api/posts', handler=APIPostsHandler, name="www-api-posts"),
         webapp2.Route(r'/api/posts/<:.*>', handler=APIPostsHandler, name="www-api-posts"),
+
+        webapp2.Route('/orgs', handler=OrgsHandler, name="www-orgs"),
+        webapp2.Route('/orgs/new-org', handler=OrgsNewHandler, name="www-orgs-new"),
+        webapp2.Route(r'/orgs/<org>', handler=OrgsViewHandler, name="www-orgs-view"),
+        webapp2.Route(r'/orgs/<org>/new-relief', handler=OrgsNewReliefHandler, name="www-orgs-new-relief"),
 
         webapp2.Route('/fblogin', handler=PublicFBLoginPage, name="www-publicfblogin"),
         webapp2.Route('/logout', handler=PublicLogout, name="www-public-logout"),

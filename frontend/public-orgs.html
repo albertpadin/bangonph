@@ -1,0 +1,338 @@
+{% extends 'frontend/public-index.html' %}
+
+{% block ogdetails %}
+
+<!-- <meta property="og:image" content="http://s2.djyimg.com/n3/eet-content/uploads/2013/11/treeCEBUYolanda-611x450.jpg"/>
+    <meta property="og:title" content="Cebu"/>
+    <meta property="og:url" content="http://bangonphilippines.appspot.com/"/>
+    <meta property="og:site_name" content="BangonPhilippines"/>
+    <meta property="og:type" content="website"/>
+    <meta property="og:description" content="Several municipalities and cities were severely affected by supertyphoon Yolanda. Here are some of the ways you can help in the relief efforts underway to help over 2 million affected Filipinos."/> -->
+
+{% endblock %}
+
+
+{% block content %}
+<div id="relief-cover" class="jumbotron">
+  <div class="container">
+    <div class="container">
+      <h1>ORGS {% if view_org or new_relief %}- {{ distributor.name|to_title }}{% endif %}</h1>
+    </div>
+  </div>
+</div>
+
+<div class="container">
+  <!-- Example row of columns -->
+  <div class="row">
+    <div class="col-lg-8 col-md-8">
+      <h3 class="mt0">
+        {% if not view_org and not new_org and not new_relief %}
+          Lists
+        {% elif new_org %}
+          Add New Org
+        {% elif new_relief %}
+          Add A Relief Effort
+        {% else %}
+          &nbsp;
+        {% endif %}
+
+        {% if not new_org and not view_org and not new_relief %}
+          <a href="{{ fb_login_url }}" class="btn btn-fb btn-info">Add new Org</a>
+        {% elif new_org %}
+          <a href="/orgs" style="font-size: 15px; float: right;">&lt;-- Back to ORGS</a>
+        {% elif new_relief %}
+          &nbsp;
+        {% else %}
+          <a href="{{ fb_login_url }}" class="btn btn-fb btn-info">Add a relief effort</a>
+        {% endif %}
+      </h3>
+      <div id="content">
+        <br/>
+        <style type="text/css">
+          div.img_org {
+            margin:5px;
+            padding: 5px;
+            height:auto;
+            width:auto;
+            float:left;
+            text-align:center;
+          }
+          div.img_org img  {
+            display: inline;
+            margin: 5px;
+            width: 110px;
+            height: 110px;
+          }
+          div.desc {
+            text-align:center;
+            font-weight:normal;
+            width:120px;
+            margin:5px;
+          }
+        </style>
+        {% if main_org %}
+          {% if distributors %}
+            {% for distributor in distributors %}
+            <div class="img_org">
+              <a href="/orgs/{{ distributor.name|to_dash }}">
+                <img src="{% if distributor.logo %}{{ distributor.logo }}{% else %}/img/unknown.jpg{% endif %}" alt="{{ distributor.name|to_title }}">
+              </a>
+              <div class="desc">{{ distributor.name|to_title }}</div>
+            </div>
+            </tr>
+            {% endfor %}
+          {% endif %}
+        {% elif new_org %}
+          {% if success %}
+          <div class="alert alert-success">
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+            <strong>Well done!</strong> You successfully added new org.
+          </div>
+          {% endif %}
+          <form method="post" enctype="multipart/form-data">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th colspan="2">Please Fill in ALL the Fields</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Image</td>
+                  <td><input type="file" name="file" required="required"/></td>
+                </tr>
+                <tr>
+                  <td>Org Name</td>
+                  <td><input type="text" name="org_name" required="required" class="form-control"/></td>
+                </tr>
+                <tr>
+                  <td>Contact Number</td>
+                  <td><input type="text" name="contact_num" class="form-control"/></td>
+                </tr>
+                <tr>
+                  <td>Contact Details</td>
+                  <td><input type="text" name="contact_details" class="form-control"/></td>
+                </tr>
+                <tr>
+                  <td>Email</td>
+                  <td><input type="email" name="email" class="form-control"/></td>
+                </tr>
+                <tr>
+                  <td>Website</td>
+                  <td><input type="text" name="website" class="form-control"/></td>
+                </tr>
+                <tr>
+                  <td>Facebook</td>
+                  <td><input type="text" name="facebook" class="form-control"/></td>
+                </tr>
+                <tr>
+                  <td colspan="2"><a href="/orgs" class="btn btn-default">Cancel</a>&nbsp;&nbsp;<button type="submit" class="btn btn-primary">Submit</button></td>
+                </tr>
+              </tbody>
+            </table>
+          </form>
+        {% elif view_org %}
+          <div style="float: left">
+            <img style="width: 150px; height: 150px;" src="{% if distributor.logo %}{{ distributor.logo }}{% else %}/img/unknown.jpg{% endif %}" alt="{{ distributor.name|to_title }}"/>
+            <span style="font-size: 25px;">{{ distributor.name|to_title }}</span>
+          </div>
+          <br/><br/>
+          <br/><br/>
+          <br/><br/>
+          <table class="table" style="margin-top: 60px;">
+            <thead>
+              <tr>
+                <th>Destination (Barangay)</th>
+                <th>TAG</th>
+                <th># of Packs</th>
+                <th>Description</th>
+                <th>Contact Details</th>
+                <th>Needs</th>
+                <th>Date</th>
+              </tr>
+            </thead>
+            <tbody style="font-size: small;">
+              {% if distribution_changes %}
+                {% for changes in distribution_changes %}
+                  {% if changes.relief_name %}
+                  <tr class="edit_tr" onclick="$('.table_edit_{{ changes.key.id() }}').slideDown('fast');">
+                    <td id="destination2_{{ changes.key.id() }}">{% if changes.destination %}{{ changes.destination }}{% endif %}</td>
+                    <td id="tag2_{{ changes.key.id() }}">{% if changes.tag %}{{ changes.tag }}{% endif %}</td>
+                    <td id="packs2_{{ changes.key.id() }}">{% if changes.num_of_packs %}{{ changes.num_of_packs }}{% endif %}</td>
+                    <td id="description2_{{ changes.key.id() }}" style="font-size: smaller;">{% if changes.description %}{{ changes.description }}{% endif %}</td>
+                    <td id="contacts2_{{ changes.key.id() }}">{% if changes.contacts %}{{ changes.contacts }}{% endif %}</td>
+                    <td id="needs2_{{ changes.key.id() }}">{% if changes.needs %}{{ changes.needs }}{% endif %}</td>
+                    <td id="date2_{{ changes.key.id() }}">
+                      {% if changes.date %}{{ changes.date }}{% endif %}<br/>
+                      <div id="status2_{{ changes.key.id() }}" class="status2_{{ changes.key.id() }}">
+                      {% if changes.status %}
+                          {% if changes.status == "UNKNOWN" %}
+                          <span class="label label-default">UNKNOWN</span>
+                          {% elif changes.status == "MISSION ACCOMPLISHED" %}
+                          <span class="label label-success">MISSION ACCOMPLISHED</span>
+                          {% elif changes.status == "ONGOING" %}
+                          <span class="label label-warning">ONGOING</span>
+                          {% elif changes.status == "POSTPONED" %}
+                          <span class="label label-info">POSTPONED</span>
+                          {% elif changes.status == "CANCELLED" %}
+                          <span class="label label-danger">CANCELLED</span>
+                          {% endif %}
+                      {% endif %}
+                      </div>
+                    </td>
+                  </tr>
+                  {% endif %}
+                {% endfor %}
+              {% else %}
+              <tr>
+                <td colspan="10">Empty.</td>
+              </tr>
+              {% endif %}
+            </tbody>
+          </table>
+        {% elif new_relief %}
+          <form method="post">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th colspan="2">Please Fill in ALL the Fields</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Location</td>
+                  <td>
+                    <input type="hidden" value="{{ distributor.name|to_title }}" name="relief_name"/>
+                    <select name="location" class="form-control">
+                      {% for location in locations %}
+                      <option value="{{ location.name }}">{{ location.name }}</option>
+                      {% endfor %}
+                    </select>
+                  </td>
+                </tr>
+                <tr>
+                  <td>Destination (Barangay)</td>
+                  <td><input type="text" name="destination" class="form-control" required="required"/></td>
+                </tr>
+                <tr>
+                  <td>Tag (Category)</td>
+                  <td>
+                    <select name="tag" class="form-control">
+                      <option value="UNKNOWN">UNKNOWN</option>
+                      <option value="FOOD & WATER">FOOD & WATER</option>
+                      <option value="SHELTER">SHELTER</option>
+                      <option value="MEDICINE">MEDICINE</option>
+                      <option value="HYGIENE">HYGIENE</option>
+                      <option value="MEDICAL MISSION">MEDICAL MISSION</option>
+                    </select>
+                  </td>
+                </tr>
+                <tr>
+                  <td>Number of Packs/Units (Number only)</td>
+                  <td><input type="text" class="form-control" required="required" onblur="if(isNaN(this.value)){ alert('Please remove non-numeric value.'); this.focus(); return false; }" name="packs" placeholder="Number only"/></td>
+                </tr>
+                <tr>
+                  <td>Description</td>
+                  <td><textarea class="form-control" name="description" required="required"></textarea></td>
+                </tr>
+                <tr>
+                  <td>Contact Details</td>
+                  <td><input type="text" class="form-control" name="contacts" required="required"/></td>
+                </tr>
+                <tr>
+                  <td>Needs of Relief Operation</td>
+                  <td><textarea class="form-control" name="needs" placeholder="Does this relief operation need anything? Volunteers? Transportation? Anything? Put it here."></textarea></td>
+                </tr>
+                <tr>
+                  <td>Date of Operation</td>
+                  <td>
+                    <select class="form-control" name="date">
+                      <option value="UNKNOWN">UNKNOWN</option>
+                      <option value="11/08/2013">11/08/2013</option>
+                      <option value="11/09/2013">11/09/2013</option>
+                      <option value="11/10/2013">11/10/2013</option>
+                      <option value="11/11/2013">11/11/2013</option>
+                      <option value="11/12/2013">11/12/2013</option>
+                      <option value="11/13/2013">11/13/2013</option>
+                      <option value="11/14/2013">11/14/2013</option>
+                      <option value="11/15/2013">11/15/2013</option>
+                      <option value="11/16/2013">11/16/2013</option>
+                      <option value="11/17/2013">11/17/2013</option>
+                      <option value="11/18/2013">11/18/2013</option>
+                      <option value="11/19/2013">11/19/2013</option>
+                      <option value="11/20/2013">11/20/2013</option>
+                      <option value="11/21/2013">11/21/2013</option>
+                      <option value="11/22/2013">11/22/2013</option>
+                      <option value="11/23/2013">11/23/2013</option>
+                      <option value="11/24/2013">11/24/2013</option>
+                      <option value="11/25/2013">11/25/2013</option>
+                      <option value="11/26/2013">11/26/2013</option>
+                      <option value="11/27/2013">11/27/2013</option>
+                      <option value="11/28/2013">11/28/2013</option>
+                      <option value="11/29/2013">11/29/2013</option>
+                      <option value="11/30/2013">11/30/2013</option>
+                    </select>
+                  </td>
+                </tr>
+                <tr>
+                  <td>Status</td>
+                  <td>
+                    <select class="form-control" name="status">
+                      <option value="UNKNOWN">UNKNOWN</option>
+                      <option value="ONGOING">ONGOING</option>
+                      <option value="MISSION ACCOMPLISHED">MISSION ACCOMPLISHED</option>
+                      <option value="CANCELLED">CANCELLED</option>
+                      <option value="POSTPONED">POSTPONED</option>
+                    </select>
+                  </td>
+                </tr>
+                <tr>
+                  <td colspan="2"><a href="{{ path }}" class="btn btn-default">Cancel</a>&nbsp;&nbsp;<button class="btn btn-primary">Submit</button></td>
+                </tr>
+              </tbody>
+            </table>
+          </form>
+        {% endif %}
+        <div class="clearfix"></div>
+      </div>
+    </div>
+    <div class="col-lg-4 col-md-4 hide-on-small">
+      <h4>Revision History</h4>
+      <div class="revision_history" style="overflow-y: scroll; height: 400px; border: 1px solid #e2e2e2; border-radius: 5px">
+        {% if status_changes %}
+          {% for user in status_changes %}
+            <div style="padding: 5px; border-bottom: 1px solid #e2e2e2">
+                <img style="width: 40px; height: 40px; float: left; margin: 5px;" src="http://graph.facebook.com/{{ user.fb_id }}/picture?small"/>
+                <label style="margin-bottom: 0;"><a href="http://www.facebook.com/profile.php?id={{ user.fb_id }}">{{ user.fb_name }}</a></label>
+                <p style="margin-top: 0; font-size: smaller"><em>{{ user.created|to_date }}</em><br />
+                  Updates:
+                  {% for stat in user.status %}
+                    <span>{{ stat }}; </span>
+                  {% endfor %}
+                </p>
+                <div class="clear"></div>
+            </div>
+          {% endfor %}
+        {% endif %}
+      </div>
+      <div class="clear"></div>
+    </div>
+  </div>
+  <br/>
+</div>
+{% endblock %}
+{% block customcss %}
+<link rel="stylesheet" href="css/jquery.bxslider.css">
+{% endblock %}
+{% block bottomjs %}
+  <script src="js/jquery.bxslider.min.js"></script>
+    <script src="js/jquery.easing.1.3.js"></script>
+    <script src="js/jquery.fitvids.js"></script>
+    <script type="text/javascript">
+    $('.bxslider').bxSlider({
+      pagerCustom: '#bx-pager',
+      adaptiveHeight: true,
+      mode: 'fade'
+    });
+    </script>
+{% endblock %}

@@ -207,6 +207,7 @@
                     <div>
                       <h3 style="float:left">Recently Added Relief Efforts</h3>
                       <a href="{{ fb_login_url }}" style="float: right; margin-top: 15px;" class="btn btn-fb btn-info">Add a relief effort to this location</a>
+                      {% if fb_id %}
                       <style type="text/css">
                         .relief-table .edit_tr:hover {
                           background: #80C8E5;
@@ -216,6 +217,7 @@
                           cursor:pointer;
                         }
                       </style>
+                      {% endif %}
                       <table class="table relief-table">
                         <thead>
                           <tr>
@@ -247,8 +249,8 @@
                                   {% if changes.status %}
                                       {% if changes.status == "UNKNOWN" %}
                                       <span class="label label-default">UNKNOWN</span>
-                                      {% elif changes.status == "MISSION COMPLETED" %}
-                                      <span class="label label-success">MISSION COMPLETED</span>
+                                      {% elif changes.status == "MISSION ACCOMPLISHED" %}
+                                      <span class="label label-success">MISSION ACCOMPLISHED</span>
                                       {% elif changes.status == "ONGOING" %}
                                       <span class="label label-warning">ONGOING</span>
                                       {% elif changes.status == "POSTPONED" %}
@@ -344,7 +346,7 @@
                                             <select class="form-control" id="status_{{ changes.key.id() }}">
                                               <option value="UNKNOWN" {% if changes.status %}{% if changes.status == "UNKNOWN" %} selected {% endif %}{% endif %}>UNKNOWN</option>
                                               <option value="ONGOING" {% if changes.status %}{% if changes.status == "ONGOING" %} selected {% endif %}{% endif %}>ONGOING</option>
-                                              <option value="MISSION COMPLETED" {% if changes.status %}{% if changes.status == "MISSION COMPLETED" %} selected {% endif %}{% endif %}>MISSION COMPLETED</option>
+                                              <option value="MISSION ACCOMPLISHED" {% if changes.status %}{% if changes.status == "MISSION ACCOMPLISHED" %} selected {% endif %}{% endif %}>MISSION ACCOMPLISHED</option>
                                               <option value="CANCELLED" {% if changes.status %}{% if changes.status == "CANCELLED" %} selected {% endif %}{% endif %}>CANCELLED</option>
                                               <option value="POSTPONED" {% if changes.status %}{% if changes.status == "POSTPONED" %} selected {% endif %}{% endif %}>POSTPONED</option>
                                             </select>
@@ -580,10 +582,10 @@
             </div>
 
             <h4>Revision History</h4>
-            <div class="revision_history" style="overflow-y: scroll; height: 350px; border: 1px solid #e2e2e2;">
+            <div class="revision_history" style="overflow-y: scroll; height: 350px; border: 1px solid #e2e2e2; border-radius: 5px">
               {% if status_changes %}
                 {% for user in status_changes %}
-                  <div>
+                  <div style="padding: 5px; border-bottom: 1px solid #e2e2e2">
                       <img style="width: 40px; height: 40px; float: left; margin: 5px;" src="http://graph.facebook.com/{{ user.fb_id }}/picture?small"/>
                       <label style="margin-bottom: 0;"><a href="http://www.facebook.com/profile.php?id={{ user.fb_id }}">{{ user.fb_name }}</a></label>
                       <p style="margin-top: 0; font-size: smaller"><em>{{ user.created|to_date }}</em><br />
@@ -746,8 +748,8 @@
 
           if (status == "UNKNOWN") {
             $("#date2_"+ d_id).html(date + "<br/><span class=\"label label-default\">UNKNOWN</span>");
-          } else if (status == "MISSION COMPLETED") {
-            $("#date2_"+ d_id).html(date + "<br/><span class=\"label label-success\">MISSION COMPLETED</span>");
+          } else if (status == "MISSION ACCOMPLISHED") {
+            $("#date2_"+ d_id).html(date + "<br/><span class=\"label label-success\">MISSION ACCOMPLISHED</span>");
           } else if (status == "ONGOING") {
             $("#date2_"+ d_id).html(date + "<br/><span class=\"label label-warning\">ONGOING</span>");
           } else if (status == "POSTPONED") {

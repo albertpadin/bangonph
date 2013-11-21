@@ -310,6 +310,7 @@ class DistributionRevision(ndb.Model):
     needs = ndb.StringProperty()
     date = ndb.StringProperty(default="UNKNOWN") # m-d-yyyy
     tag = ndb.StringProperty()
+    status = ndb.StringProperty(default="UNKNOWN")
 
     """ added """
     featured_photo = ndb.StringProperty()

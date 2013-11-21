@@ -95,6 +95,7 @@
                         <option value="MEDICAL MISSION">MEDICAL MISSION</option>
                       </select>
                     </td>
+                  </tr>
                   <tr>
                     <td>Number of Packs/Units</td>
                     <td><input type="text" class="form-control" required="required" name="packs" onblur="if(isNaN(this.value)){ alert('Please remove non-numeric value.'); this.focus(); return false; }" placeholder="Number only"/></td>
@@ -116,8 +117,8 @@
                     <td>
                       <select name="date" class="form-control">
                         <option value="UNKNOWN">UNKNOWN</option>
-                        <option value="11/10/2013">11/08/2013</option>
-                        <option value="11/10/2013">11/09/2013</option>
+                        <option value="11/08/2013">11/08/2013</option>
+                        <option value="11/09/2013">11/09/2013</option>
                         <option value="11/10/2013">11/10/2013</option>
                         <option value="11/11/2013">11/11/2013</option>
                         <option value="11/12/2013">11/12/2013</option>
@@ -142,6 +143,18 @@
                       </select>
                     </td>
                   </tr>
+                  <tr>
+                      <td>Status</td>
+                      <td>
+                        <select class="form-control" name="status_">
+                          <option value="UNKNOWN">UNKNOWN</option>
+                          <option value="ONGOING">ONGOING</option>
+                          <option value="MISSION COMPLETED">MISSION COMPLETED</option>
+                          <option value="CANCELLED">CANCELLED</option>
+                          <option value="POSTPONED">POSTPONED</option>
+                        </select>
+                      </td>
+                    </tr>
                 </tbody>
               </table>
               <a href="/locations/{{ location_id }}" class="btn btn-default">Cancel</a>

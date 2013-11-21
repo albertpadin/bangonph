@@ -207,6 +207,13 @@
                     <div>
                       <h3 style="float:left">Recently Added Relief Efforts</h3>
                       <a href="{{ fb_login_url }}" style="float: right; margin-top: 15px;" class="btn btn-fb btn-info">Add a relief effort to this location</a>
+                      <style type="text/css">
+                        .edit_tr:hover {
+                          background:url(/img/edit.png) right no-repeat; /* #80C8E5;*/
+                          cursor:pointer;
+                          text-decoration: none;
+                        }
+                      </style>
                       <table class="table">
                         <thead>
                           <tr>
@@ -218,23 +225,144 @@
                             <th>Contact Details</th>
                             <th>Needs</th>
                             <th>Date</th>
+                            {% if fb_id %}
+                            <th>Action</th>
+                            {% endif %}
                           </tr>
                         </thead>
                         <tbody style="font-size: small;">
                           {% if distribution_changes %}
                             {% for changes in distribution_changes %}
-                            {% if changes.relief_name %}
-                            <tr>
-                              <td>{% if changes.relief_name %}{{ changes.relief_name }}{% endif %}</td>
-                              <td>{% if changes.destination %}{{ changes.destination }}{% endif %}</td>
-                              <td>{% if changes.tag %}{{ changes.tag }}{% endif %}</td>
-                              <td>{% if changes.num_of_packs %}{{ changes.num_of_packs }}{% endif %}</td>
-                              <td style="font-size: smaller;">{% if changes.description %}{{ changes.description }}{% endif %}</td>
-                              <td>{% if changes.contacts %}{{ changes.contacts }}{% endif %}</td>
-                              <td>{% if changes.needs %}{{ changes.needs }}{% endif %}</td>
-                              <td>{% if changes.date %}{{ changes.date }}{% endif %}</td>
-                            </tr>
-                            {% endif %}
+                              {% if changes.relief_name %}
+                              <tr>
+                                <td id="relief_name2_{{ changes.key.id() }}">{% if changes.relief_name %}{{ changes.relief_name }}{% endif %}</td>
+                                <td id="destination2_{{ changes.key.id() }}">{% if changes.destination %}{{ changes.destination }}{% endif %}</td>
+                                <td id="tag2_{{ changes.key.id() }}">{% if changes.tag %}{{ changes.tag }}{% endif %}</td>
+                                <td id="packs2_{{ changes.key.id() }}">{% if changes.num_of_packs %}{{ changes.num_of_packs }}{% endif %}</td>
+                                <td id="description2_{{ changes.key.id() }}" style="font-size: smaller;">{% if changes.description %}{{ changes.description }}{% endif %}</td>
+                                <td id="contacts2_{{ changes.key.id() }}">{% if changes.contacts %}{{ changes.contacts }}{% endif %}</td>
+                                <td id="needs2_{{ changes.key.id() }}">{% if changes.needs %}{{ changes.needs }}{% endif %}</td>
+                                <td id="date2_{{ changes.key.id() }}">
+                                  {% if changes.date %}{{ changes.date }}{% endif %}<br/>
+                                  <div id="status2_{{ changes.key.id() }}" class="status2_{{ changes.key.id() }}">
+                                  {% if changes.status %}
+                                      {% if changes.status == "UNKNOWN" %}
+                                      <span class="label label-default">UNKNOWN</span>
+                                      {% elif changes.status == "MISSION COMPLETED" %}
+                                      <span class="label label-success">MISSION COMPLETED</span>
+                                      {% elif changes.status == "ONGOING" %}
+                                      <span class="label label-warning">ONGOING</span>
+                                      {% elif changes.status == "POSTPONED" %}
+                                      <span class="label label-info">POSTPONED</span>
+                                      {% elif changes.status == "CANCELLED" %}
+                                      <span class="label label-danger">CANCELLED</span>
+                                      {% endif %}
+                                  {% endif %}
+                                  </div>
+                                </td>
+                                {% if fb_id %}
+                                <td class="edit_tr"><a href="javascript:;" onclick="$('.table_edit_{{ changes.key.id() }}').slideDown('fast');">Edit</a></td>
+                                {% endif %}
+                              </tr>
+                              {% if fb_id %}
+                              <tr class="table_edit_{{ changes.key.id() }}" style="display:none">
+                                  <td colspan="8">
+                                    <table class="table">
+                                      <thead>
+                                        <tr>
+                                          <th colspan="2">Please Fill in ALL the Fields</th>
+                                        </tr>
+                                      </thead>
+                                      <tbody>
+                                        <tr>
+                                          <td>Org Name</td>
+                                          <td><input type="text" value="{% if changes.relief_name %}{{ changes.relief_name }}{% endif %}" class="form-control" required="required" id="relief_name_{{ changes.key.id() }}"/></td>
+                                        </tr>
+                                        <tr>
+                                          <td>Destination (Barangay)</td>
+                                          <td><input type="text" value="{% if changes.destination %}{{ changes.destination }}{% endif %}" class="form-control" required="required" id="destination_{{ changes.key.id() }}"/></td>
+                                        </tr>
+                                        <tr>
+                                          <td>Tag (Category)</td>
+                                          <td>
+                                            <select class="form-control" id="tag_{{ changes.key.id() }}">
+                                              <option value="UNKNOWN" {% if changes.tag %}{% if changes.tag == "UNKNOWN" %} selected {% endif %}{% endif %}>UNKNOWN</option>
+                                              <option value="FOOD & WATER" {% if changes.tag %}{% if changes.tag == "FOOD & WATER" %} selected {% endif %}{% endif %}>FOOD & WATER</option>
+                                              <option value="SHELTER" {% if changes.tag %}{% if changes.tag == "SHELTER" %} selected {% endif %}{% endif %}>SHELTER</option>
+                                              <option value="MEDICINE" {% if changes.tag %}{% if changes.tag == "MEDICINE" %} selected {% endif %}{% endif %}>MEDICINE</option>
+                                              <option value="HYGIENE" {% if changes.tag %}{% if changes.tag == "HYGIENE" %} selected {% endif %}{% endif %}>HYGIENE</option>
+                                              <option value="MEDICAL MISSION" {% if changes.tag %}{% if changes.tag == "MEDICAL MISSION" %} selected {% endif %}{% endif %}>MEDICAL MISSION</option>
+                                            </select>
+                                          </td>
+                                        </tr>
+                                        <tr>
+                                          <td>Number of Packs/Units (Number only)</td>
+                                          <td><input type="text" class="form-control" required="required" id="packs_{{ changes.key.id() }}" onblur="if(isNaN(this.value)){ alert('Please remove non-numeric value.'); this.focus(); return false; }" placeholder="Number only" value="{% if changes.num_of_packs %}{{ changes.num_of_packs }}{% endif %}"/></td>
+                                        </tr>
+                                        <tr>
+                                          <td>Description</td>
+                                          <td><textarea class="form-control" id="description_{{ changes.key.id() }}" required="required">{% if changes.description %}{{ changes.description }}{% endif %}</textarea></td>
+                                        </tr>
+                                        <tr>
+                                          <td>Contact Details</td>
+                                          <td><input type="text" class="form-control" required="required" id="contacts_{{ changes.key.id() }}" value="{% if changes.contacts %}{{ changes.contacts }}{% endif %}"/></td>
+                                        </tr>
+                                        <tr>
+                                          <td>Needs of Relief Operation</td>
+                                          <td><textarea class="form-control" placeholder="Does this relief operation need anything? Volunteers? Transportation? Anything? Put it here." id="needs_{{ changes.key.id() }}">{% if changes.needs %}{{ changes.needs }}{% endif %}</textarea></td>
+                                        </tr>
+                                        <tr>
+                                          <td>Date of Operation</td>
+                                          <td>
+                                            <select id="date_{{ changes.key.id() }}" class="form-control">
+                                              <option value="UNKNOWN" {% if changes.date %}{% if changes.date == "MEDICINE" %} selected {% endif %}{% endif %}>UNKNOWN</option>
+                                              <option value="11/08/2013" {% if changes.date %}{% if changes.date == "11/08/2013" %} selected {% endif %}{% endif %}>11/08/2013</option>
+                                              <option value="11/09/2013" {% if changes.date %}{% if changes.date == "11/09/2013" %} selected {% endif %}{% endif %}>11/09/2013</option>
+                                              <option value="11/10/2013" {% if changes.date %}{% if changes.date == "11/10/2013" %} selected {% endif %}{% endif %}>11/10/2013</option>
+                                              <option value="11/11/2013" {% if changes.date %}{% if changes.date == "11/11/2013" %} selected {% endif %}{% endif %}>11/11/2013</option>
+                                              <option value="11/12/2013" {% if changes.date %}{% if changes.date == "11/12/2013" %} selected {% endif %}{% endif %}>11/12/2013</option>
+                                              <option value="11/13/2013" {% if changes.date %}{% if changes.date == "11/13/2013" %} selected {% endif %}{% endif %}>11/13/2013</option>
+                                              <option value="11/14/2013" {% if changes.date %}{% if changes.date == "11/14/2013" %} selected {% endif %}{% endif %}>11/14/2013</option>
+                                              <option value="11/15/2013" {% if changes.date %}{% if changes.date == "11/15/2013" %} selected {% endif %}{% endif %}>11/15/2013</option>
+                                              <option value="11/16/2013" {% if changes.date %}{% if changes.date == "11/16/2013" %} selected {% endif %}{% endif %}>11/16/2013</option>
+                                              <option value="11/17/2013" {% if changes.date %}{% if changes.date == "11/17/2013" %} selected {% endif %}{% endif %}>11/17/2013</option>
+                                              <option value="11/18/2013" {% if changes.date %}{% if changes.date == "11/18/2013" %} selected {% endif %}{% endif %}>11/18/2013</option>
+                                              <option value="11/19/2013" {% if changes.date %}{% if changes.date == "11/19/2013" %} selected {% endif %}{% endif %}>11/19/2013</option>
+                                              <option value="11/20/2013" {% if changes.date %}{% if changes.date == "11/20/2013" %} selected {% endif %}{% endif %}>11/20/2013</option>
+                                              <option value="11/21/2013" {% if changes.date %}{% if changes.date == "11/21/2013" %} selected {% endif %}{% endif %}>11/21/2013</option>
+                                              <option value="11/22/2013" {% if changes.date %}{% if changes.date == "11/22/2013" %} selected {% endif %}{% endif %}>11/22/2013</option>
+                                              <option value="11/23/2013" {% if changes.date %}{% if changes.date == "11/23/2013" %} selected {% endif %}{% endif %}>11/23/2013</option>
+                                              <option value="11/24/2013" {% if changes.date %}{% if changes.date == "11/24/2013" %} selected {% endif %}{% endif %}>11/24/2013</option>
+                                              <option value="11/25/2013" {% if changes.date %}{% if changes.date == "11/25/2013" %} selected {% endif %}{% endif %}>11/25/2013</option>
+                                              <option value="11/26/2013" {% if changes.date %}{% if changes.date == "11/26/2013" %} selected {% endif %}{% endif %}>11/26/2013</option>
+                                              <option value="11/27/2013" {% if changes.date %}{% if changes.date == "11/27/2013" %} selected {% endif %}{% endif %}>11/27/2013</option>
+                                              <option value="11/28/2013" {% if changes.date %}{% if changes.date == "11/28/2013" %} selected {% endif %}{% endif %}>11/28/2013</option>
+                                              <option value="11/29/2013" {% if changes.date %}{% if changes.date == "11/29/2013" %} selected {% endif %}{% endif %}>11/29/2013</option>
+                                              <option value="11/30/2013" {% if changes.date %}{% if changes.date == "11/30/2013" %} selected {% endif %}{% endif %}>11/30/2013</option>
+                                            </select>
+                                          </td>
+                                        </tr>
+                                        <tr>
+                                          <td>Status</td>
+                                          <td>
+                                            <select class="form-control" id="status_{{ changes.key.id() }}">
+                                              <option value="UNKNOWN" {% if changes.status %}{% if changes.status == "UNKNOWN" %} selected {% endif %}{% endif %}>UNKNOWN</option>
+                                              <option value="ONGOING" {% if changes.status %}{% if changes.status == "ONGOING" %} selected {% endif %}{% endif %}>ONGOING</option>
+                                              <option value="MISSION COMPLETED" {% if changes.status %}{% if changes.status == "MISSION COMPLETED" %} selected {% endif %}{% endif %}>MISSION COMPLETED</option>
+                                              <option value="CANCELLED" {% if changes.status %}{% if changes.status == "CANCELLED" %} selected {% endif %}{% endif %}>CANCELLED</option>
+                                              <option value="POSTPONED" {% if changes.status %}{% if changes.status == "POSTPONED" %} selected {% endif %}{% endif %}>POSTPONED</option>
+                                            </select>
+                                          </td>
+                                        </tr>
+                                        <tr>
+                                          <td colspan="2"><button class="btn btn-default" onclick="$('.table_edit_{{ changes.key.id() }}').slideUp('fast');">Cancel</button>&nbsp;&nbsp;<button class="btn btn-primary update_table" data-id="{{ location_id }}" rel="{{ changes.key.id() }}">Update</button> <img style="display: none;" class="fb-load-image" src="/img/facebook_indicator_blue_medium.gif"/></td>
+                                        </tr>
+                                      </tbody>
+                                    </table>
+                                  </td>
+                              </tr>
+                              {% endif %}
+                              {% endif %}
                             {% endfor %}
                           {% else %}
                           <tr>
@@ -456,7 +584,7 @@
             </div>
 
             <h4>Revision History</h4>
-            <div style="overflow-y: scroll; height: 350px; border: 1px solid #e2e2e2;">
+            <div class="revision_history" style="overflow-y: scroll; height: 350px; border: 1px solid #e2e2e2;">
               {% if status_changes %}
                 {% for user in status_changes %}
                   <div>
@@ -576,4 +704,68 @@
       mode: 'fade'
     });
     </script>
+
+  <script type="text/javascript">
+    $(".update_table").click(function() {
+      var d_id = $(this).attr("rel");
+      var loc_id = $(this).attr("data-id");
+      var relief_name = $("#relief_name_"+ d_id).val();
+      var destination = $("#destination_"+ d_id).val();
+      var tag = $("#tag_"+ d_id).val();
+      var packs = $("#packs_"+ d_id).val();
+      var description = $("#description_" + d_id).val();
+      var contacts = $("#contacts_"+ d_id).val();
+      var needs = $("#needs_"+ d_id).val();
+      var date = $("#date_"+ d_id).val();
+      var status = $("#status_"+ d_id).val();
+
+      $.ajax({
+        beforeSend: function() { $(".fb-load-image").show(); },
+        complete: function() { $(".fb-load-image").hide(); },
+        type: "post",
+        url: "/locations/" + loc_id,
+        data: {
+          "d_id": d_id,
+          "name": relief_name,
+          "destination": destination,
+          "tag": tag,
+          "packs": packs,
+          "description": description,
+          "contacts": contacts,
+          "needs": needs,
+          "date": date,
+          "status": status
+        },
+        success: function(datas) {
+          var updated = JSON.parse(datas);
+          var data = updated.updated;
+
+          $("#relief_name2_"+ d_id).text(relief_name);
+          $("#destination2_"+ d_id).text(destination);
+          $("#tag2_"+ d_id).text(tag);
+          $("#packs2_"+ d_id).text(packs);
+          $("#description2_" + d_id).text(description);
+          $("#contacts2_"+ d_id).text(contacts);
+          $("#needs2_"+ d_id).text(needs);
+
+          if (status == "UNKNOWN") {
+            $("#date2_"+ d_id).html(date + "<br/><span class=\"label label-default\">UNKNOWN</span>");
+          } else if (status == "MISSION COMPLETED") {
+            $("#date2_"+ d_id).html(date + "<br/><span class=\"label label-success\">MISSION COMPLETED</span>");
+          } else if (status == "ONGOING") {
+            $("#date2_"+ d_id).html(date + "<br/><span class=\"label label-warning\">ONGOING</span>");
+          } else if (status == "POSTPONED") {
+            $("#date2_"+ d_id).html(date + "<br/><span class=\"label label-info\">POSTPONED</span>");
+          } else if (status == "CANCELLED") {
+            $("#date2_"+ d_id).html(date + "<br/><span class=\"label label-danger\">CANCELLED</span>");
+          }
+
+
+          $(".table_edit_"+ d_id).hide();
+
+          $(".revision_history").prepend("<div><img style=\"width: 40px; height: 40px; float: left; margin: 5px;\" src=\"http://graph.facebook.com/{{ fb_id }}/picture?small\"/><label style=\"margin-bottom: 0;\"><a href=\"http://www.facebook.com/profile.php?id={{ fb_id }}\">{{ fb_name }}</a></label><p style=\"margin-top: 0; font-size: smaller\"><em>"+data+"</em><br />Updates: <span>Relief Effort: "+relief_name+"; Destination: "+destination+"; Packs: "+packs+"; Description: "+description+"; Contacts: "+contacts+"; Needs: "+needs+"; Date: "+date+"; Tag: "+tag+"; Status: "+status+"</span></p><div class=\"clear\"></div></div>");
+        }
+      });
+    });
+  </script>
 {% endblock %}

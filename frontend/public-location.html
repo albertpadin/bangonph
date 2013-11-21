@@ -179,13 +179,15 @@
                       <h3 style="float:left">Recently Added Relief Efforts</h3>
                       <a href="{{ fb_login_url }}" style="float: right; margin-top: 15px;" class="btn btn-fb btn-info">Add a relief effort to this location</a>
                       <style type="text/css">
-                        .edit_tr:hover {
-                          background:url(/img/edit.png) right no-repeat; /* #80C8E5;*/
+                        .relief-table .edit_tr:hover {
+                          background: #80C8E5;
+                        }
+                        .relief-table .edit_tr:hover td:last-child {
+                          background:url(/img/edit.png) right no-repeat;
                           cursor:pointer;
-                          text-decoration: none;
                         }
                       </style>
-                      <table class="table">
+                      <table class="table relief-table">
                         <thead>
                           <tr>
                             <th>Name</th>
@@ -196,16 +198,13 @@
                             <th>Contact Details</th>
                             <th>Needs</th>
                             <th>Date</th>
-                            {% if fb_id %}
-                            <th>Action</th>
-                            {% endif %}
                           </tr>
                         </thead>
                         <tbody style="font-size: small;">
                           {% if distribution_changes %}
                             {% for changes in distribution_changes %}
                               {% if changes.relief_name %}
-                              <tr>
+                              <tr class="edit_tr" onclick="$('.table_edit_{{ changes.key.id() }}').slideDown('fast');">
                                 <td id="relief_name2_{{ changes.key.id() }}">{% if changes.relief_name %}{{ changes.relief_name }}{% endif %}</td>
                                 <td id="destination2_{{ changes.key.id() }}">{% if changes.destination %}{{ changes.destination }}{% endif %}</td>
                                 <td id="tag2_{{ changes.key.id() }}">{% if changes.tag %}{{ changes.tag }}{% endif %}</td>
@@ -231,9 +230,6 @@
                                   {% endif %}
                                   </div>
                                 </td>
-                                {% if fb_id %}
-                                <td class="edit_tr"><a href="javascript:;" onclick="$('.table_edit_{{ changes.key.id() }}').slideDown('fast');">Edit</a></td>
-                                {% endif %}
                               </tr>
                               {% if fb_id %}
                               <tr class="table_edit_{{ changes.key.id() }}" style="display:none">

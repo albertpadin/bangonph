@@ -1108,23 +1108,7 @@ class OrgsNewHandler(BaseHandler):
 
     def post(self):
         distributor = Distributor()
-
-        file_name = files.blobstore.create(mime_type='image/jpg')
-        upload_file = self.request.POST.get("file").file.read()
-
-        with files.open(file_name, 'a') as f:
-            f.write(upload_file)
-
-        files.finalize(file_name)
-        blob_key = files.blobstore.get_blob_key(file_name)
-        blob_image = blobstore.BlobInfo.get(blob_key)
-
-        distributor.blob_key = blob_key
-        try:
-            distributor.logo = images.get_serving_url(blob_image)
-        except:
-            logging.exception("Not an image?")
-
+        distributor.logo = self.request.get("image_url")
         distributor.name = self.request.get("org_name").lower()
         distributor.contact_num = self.request.get("contact_num")
         distributor.email = self.request.get("email")
@@ -1182,6 +1166,8 @@ class OrgsViewHandler(BaseHandler):
             org_name = kwargs["org"]
             self.tv["view_org"] = True
 
+            self.tv["original_path"] = self.request.path
+
             if self.public_user:
                 self.tv["fb_id"] = self.public_user.fb_id
                 self.tv["fb_name"] = self.public_user.fb_name
@@ -1207,6 +1193,14 @@ class OrgsViewHandler(BaseHandler):
                     self.tv["distribution_changes"] = distribution_changes
 
             self.render('frontend/public-orgs.html')
+
+    def post(self, *args, **kwargs):
+        if self.request.get("distributor_id") and self.request.get("image_url"):
+            distributor = Distributor.get_by_id(int(self.request.get("distributor_id")))
+            if distributor:
+                distributor.logo = self.request.get("image_url")
+                distributor.put()
+                self.response.out.write(simplejson.dumps({"image_url": self.request.get("image_url")}))
 
 class OrgsNewReliefHandler(BaseHandler):
     def get(self, *args, **kwargs):

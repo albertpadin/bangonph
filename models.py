@@ -82,8 +82,7 @@ class Distributor(ndb.Model):
     website = ndb.StringProperty()
     facebook = ndb.StringProperty()
     contact_details = ndb.TextProperty()
-    logo = ndb.StringProperty()
-    blob_key = ndb.BlobKeyProperty()
+    logo = ndb.StringProperty() #image url
     fb_email = ndb.StringProperty() # public login
     fb_id = ndb.StringProperty() # public login
     fb_access_token = ndb.StringProperty() # public login

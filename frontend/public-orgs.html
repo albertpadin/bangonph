@@ -11,13 +11,41 @@
 
 {% endblock %}
 
-
+  
 {% block content %}
-<div id="relief-cover" class="jumbotron">
+<div class="jumbotron" style="background: url(../img/cover.jpg); background-repeat: no-repeat; background-size: cover;">
   <div class="container">
-    <div class="container">
-      <h1>ORGS {% if view_org or new_relief %}- {{ distributor.name|to_title }}{% endif %}</h1>
-    </div>
+    {% if view_org or new_relief %}
+      <style type="text/css">
+        .grid-block { position: relative; float: left; width: 160px; }
+        .caption { display: none; position: absolute; top: 0; left: 0; width: 100%; height: 100%; }
+        .caption p { color: #fff; font-size: .75em; line-height: 1.5em; margin: 120px 35px 10px; }
+        .caption a.edit-pic { padding: 5px 10px; background: #08c; color: #fff; border-radius: 2px; -moz-border-radius: 2px; font-weight: bold; text-decoration: none; font-size: 12px; }
+        .caption a.edit-pic:hover { background: #fff; color: #08c; }
+      </style>
+
+      <div class="grid-block standard">
+        <div class="caption">
+          <p>
+            <a href="javascript:;" onclick="$('.change-pic').toggle('fast')" class="edit-pic">Edit Picture</a>
+            <img style="display: none; position: absolute; margin-left: 10px; z-index: 9999; margin-top: 15px;" class="fb-load-image" src="/img/facebook_indicator_blue_medium.gif"/>
+          </p>
+          <form id="frmChangePic">
+            <div class="input-group change-pic" style="width: 270px; margin-left: 35px; display:none; margin-top: -10px;">
+              <input type="hidden" name="distributor_id" value="{{ distributor.key.id() }}"/>
+              <input type="text" name="image_url" required="required" class="form-control" placeholder="Enter image url">
+              <span class="input-group-btn">
+                <button class="btn btn-default btnsubmit" type="submit">Submit</button>
+              </span>
+            </div>
+          </form>
+        </div>
+        <img class="img_display" style="width: 150px; height: 150px;" src="{% if distributor.logo %}{{ distributor.logo }}{% else %}/img/unknown.jpg{% endif %}" alt="{{ distributor.name|to_title }}"/>
+      </div>
+      <span style="font-size: 30px; float: left; margin-top: 50px;">{{ distributor.name|to_title }}</span>
+    {% else %}
+      <h1>Organizations</h1>
+    {% endif %}
   </div>
 </div>
 
@@ -37,7 +65,7 @@
         {% endif %}
 
         {% if not new_org and not view_org and not new_relief %}
-          <a href="{{ fb_login_url }}" class="btn btn-fb btn-info">Add new Org</a>
+          <a href="{{ fb_login_url }}" class="btn btn-fb btn-info">Add new Organization</a>
         {% elif new_org %}
           <a href="/orgs" style="font-size: 15px; float: right;">&lt;-- Back to ORGS</a>
         {% elif new_relief %}
@@ -98,8 +126,8 @@
               </thead>
               <tbody>
                 <tr>
-                  <td>Image</td>
-                  <td><input type="file" name="file" required="required"/></td>
+                  <td>Image Url</td>
+                  <td><input type="text" name="image_url" required="required"/></td>
                 </tr>
                 <tr>
                   <td>Org Name</td>
@@ -132,13 +160,6 @@
             </table>
           </form>
         {% elif view_org %}
-          <div style="float: left">
-            <img style="width: 150px; height: 150px;" src="{% if distributor.logo %}{{ distributor.logo }}{% else %}/img/unknown.jpg{% endif %}" alt="{{ distributor.name|to_title }}"/>
-            <span style="font-size: 25px;">{{ distributor.name|to_title }}</span>
-          </div>
-          <br/><br/>
-          <br/><br/>
-          <br/><br/>
           {% if fb_id %}
           <style type="text/css">
             .relief-table .edit_tr:hover {
@@ -150,7 +171,7 @@
             }
           </style>
           {% endif %}
-          <table class="table relief-table" style="margin-top: 60px;">
+          <table class="table relief-table">
             <thead>
               <tr>
                 <th>Destination (Barangay)</th>
@@ -507,5 +528,34 @@
         }
       });
     });
+  </script>
+  <script type="text/javascript">
+  $(document).ready(function() {
+    $('.standard').hover(
+      function(){
+        $(this).find('.caption').show();
+      },
+      function(){
+        $(this).find('.caption').hide();
+      }
+    );
+  });
+  $("form#frmChangePic").submit(function(){
+    var data = $(this).serialize();
+    $.ajax({
+      beforeSend: function() { $(".standard").find('.btnsubmit').attr("disabled", "disabled"); $(".fb-load-image").show(); },
+      complete: function() { $(".fb-load-image").hide(); },
+      type: "post",
+      url: "{{ original_path }}" + "?" + data,
+      success: function(data) {
+        var image = JSON.parse(data);
+        document.getElementsByName("image_url").value = "";
+        $(".standard").find('.btnsubmit').removeAttr("disabled");
+        $(".standard").find('.img_display').attr("src", image.image_url);
+        $(".standard").find('.caption').hide();
+      }
+    });
+    return false;
+  });
   </script>
 {% endblock %}

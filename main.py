@@ -94,7 +94,12 @@ def to_dash(text):
 def to_title(text):
     return text.title()
 
+def slugify(text):
+    text = str(text)
+    return text.replace(' ','').replace('"',"").replace("'","").lower()
+
 jinja_environment.filters['nl_to_br'] = nl_to_br
+jinja_environment.filters['slugify'] = slugify
 jinja_environment.filters['two_decimal'] = two_decimal
 jinja_environment.filters['no_commas'] = no_commas
 jinja_environment.filters['prettify'] = prettify

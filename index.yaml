@@ -22,6 +22,12 @@ indexes:
 
 - kind: DistributionRevision
   properties:
+  - name: fb_name
+  - name: created
+    direction: desc
+
+- kind: DistributionRevision
+  properties:
   - name: name
   - name: created
     direction: desc
@@ -29,6 +35,12 @@ indexes:
 - kind: LocationRevisionChanges
   properties:
   - name: name
+  - name: created
+    direction: desc
+
+- kind: LocationRevisionChanges
+  properties:
+  - name: revision_type
   - name: created
     direction: desc
 

@@ -94,7 +94,12 @@ def to_dash(text):
 def to_title(text):
     return text.title()
 
+def slugify(text):
+    text = str(text)
+    return text.replace(' ','').replace('"',"").replace("'","").lower()
+
 jinja_environment.filters['nl_to_br'] = nl_to_br
+jinja_environment.filters['slugify'] = slugify
 jinja_environment.filters['two_decimal'] = two_decimal
 jinja_environment.filters['no_commas'] = no_commas
 jinja_environment.filters['prettify'] = prettify
@@ -187,7 +192,10 @@ class BaseHandler(webapp2.RequestHandler):
         template = jinja_environment.get_template(template_path)
         output = template.render(self.tv)
         if cache:
-            memcache.set(str(self.tv['version']) + ':path:' + self.tv['current_url'], output, cache)
+            try:
+                memcache.set(str(self.tv['version']) + ':path:' + self.tv['current_url'], output, cache)
+            except:
+                logging.exception('memcache error...')
         self.response.out.write(output)
 
 
@@ -2937,10 +2945,10 @@ class APIPostsHandler(APIBaseHandler):
 
                 if curs:
                     # posts, next_cursor, more = Post.query(Post.expiry >= (datetime.datetime.now() - datetime.timedelta(hours=30))).fetch_page(25, start_cursor=curs)
-                    posts, next_cursor, more = Post.query().order(-Post.created).fetch_page(25, start_cursor=curs)
+                    posts, next_cursor, more = Post.query().order(-Post.created).fetch_page(100, start_cursor=curs)
                 else:
                     # posts, next_cursor, more = Post.query(Post.expiry >= (datetime.datetime.now() - datetime.timedelta(hours=30))).fetch_page(25)
-                    posts, next_cursor, more = Post.query().order(-Post.created).fetch_page(25)
+                    posts, next_cursor, more = Post.query().order(-Post.created).fetch_page(100)
             else:
                 if self.request.get_all("filter_post_type"):
                     filter_type = self.request.get_all("filter_post_type")[0].upper()
@@ -2949,7 +2957,7 @@ class APIPostsHandler(APIBaseHandler):
                     posts, next_cursor, more = Post.query(Post.post_type.IN([filter_type]), Post.expiry >= date_now).order(-Post.expiry).fetch_page(100)
                 else:
                     date_now = datetime.datetime.now() - datetime.timedelta(hours=30)
-                    posts, next_cursor, more = Post.query(Post.expiry >= date_now).fetch_page(25)
+                    posts, next_cursor, more = Post.query(Post.expiry >= date_now).order(-Post.expiry).fetch_page(100)
 
             if not failed:
                 for post in posts:
@@ -3463,7 +3471,7 @@ class APIEffortsHandler(APIBaseHandler):
                 data = {}
                 data["efforts"] = efforts_json
                 if more:
-                    data["next_page"] = "http://api.bangonph.com/v1/locations?cursor=" + str(next_cursor.urlsafe())
+                    data["next_page"] = "http://api.bangonph.com/v1/efforts?cursor=" + str(next_cursor.urlsafe())
                 else:
                     data["next_page"] = False
 
@@ -3921,6 +3929,21 @@ class UploadHandler(blobstore_handlers.BlobstoreUploadHandler):
         self.redirect("/upload?success=File%20Uploaded")
 
 
+class ReComputeReliefStatus(webapp2.RequestHandler):
+    def get(self):
+        # Compute Everything
+        locations = DistributionRevision.query()
+        date = get_current_date()
+        distributions = []
+        for location in locations:
+            if location.date <= date: 
+                location.status = 'MISSION ACCOMPLISHED'
+            else:
+                location.status = 'UNKNOWN'
+            distributions.append(location)
+        ndb.put_multi(distributions)
+
+
 class ComputeReliefStatus(webapp2.RequestHandler):
     def get(self):
         # Compute Everything
@@ -4067,6 +4090,7 @@ app = webapp2.WSGIApplication([
         webapp2.Route('/s', handler=sampler, name="www-get-authorization-code"),
 
         webapp2.Route('/admin/tasks/compute_relief_status', handler=ComputeReliefStatus, name="www-compute-relief-status"),
+        webapp2.Route('/admin/scripts/recompute_relief', handler=ReComputeReliefStatus, name="www-recompute-relief-status"),
         webapp2.Route('/admin/api/v1/locations', handler=APILocationsHandler, name="admin-api-locations"),
 
         webapp2.Route(r'/<:.*>', ErrorHandler)

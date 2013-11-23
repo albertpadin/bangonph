@@ -76,32 +76,32 @@
       </h3>
       <div id="content">
         <br/>
-        <style type="text/css">
-          div.img_org {
-            margin:5px;
-            padding: 5px;
-            height:auto;
-            width:auto;
-            float:left;
-            text-align:center;
-          }
-          div.img_org img  {
-            display: inline;
-            margin: 5px;
-            width: 110px;
-            height: 110px;
-          }
-          div.desc {
-            text-align:center;
-            font-weight:normal;
-            width:120px;
-            margin:5px;
-          }
-        </style>
+        <div class="col-lg-7 p0">
+          <div class="btn-group">
+            <a id="show-all" class="btn btn-default hand search_buttons">#</a>
+            <a id="show-all" class="btn btn-default hand search_buttons">A-D</a>
+            <a id="show-all" class="btn btn-default hand search_buttons">E-H</a>
+            <a id="show-all" class="btn btn-default hand search_buttons">I-L</a>
+            <a id="show-all" class="btn btn-default hand search_buttons">M-P</a>
+            <a id="show-all" class="btn btn-default hand search_buttons">Q-T</a>
+            <a id="show-all" class="btn btn-default hand search_buttons">U-X</a>
+            <a id="show-all" class="btn btn-default hand search_buttons">Y-Z</a>
+          </div>
+        </div>
+        <div class="col-lg-5 p0">
+          <div class="input-group special">
+            <input type="text" class="form-control" id="search" placeholder="Search for the location here..."><span class="input-group-btn">
+              <button class="btn btn-default" type="button">Search <span class="glyphicon glyphicon-search"></span></button>
+            </span>
+          </div><!-- /input-group -->
+        </div>
+        <div class="clearfix"></div>
+        <br/>
+
         {% if main_org %}
           {% if distributors %}
             {% for distributor in distributors %}
-            <div class="img_org">
+            <div class="img_org col-lg-4">
               <a href="/orgs/{{ distributor.name|to_dash }}">
                 <img src="{% if distributor.logo %}{{ distributor.logo }}{% else %}/img/unknown.jpg{% endif %}" alt="{{ distributor.name|to_title }}">
               </a>

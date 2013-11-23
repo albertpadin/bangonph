@@ -1014,3 +1014,38 @@ height: 80px;
     */
     #no-more-tables td:before { content: attr(data-title); }
 }
+
+
+
+/* ORGS */
+
+  div.img_org {
+    height: auto;
+    width: 100%;
+    float: left;
+    padding: 0px;
+  }
+  div.img_org img  {
+    float: left;
+    margin: 5px;
+    width: 40px;
+    height: auto;
+  }
+  div.desc {
+    float: left;
+    padding: 10px 0 10px 24px;
+    margin-top: 5px;
+    font-weight: normal;
+    width: 85%;
+  }
+
+
+  #org-sort a{
+    padding: 6px 10px;
+    font-size: 10px;
+  }
+
+  .p0 {
+    padding: 0px;
+  }
+

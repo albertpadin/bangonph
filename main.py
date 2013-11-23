@@ -3,7 +3,7 @@ reload(sys)
 sys.setdefaultencoding('utf-8')
 import webapp2, jinja2, os, calendar
 from webapp2_extras import routes
-from models import User, Contact, Location, Post, Distribution, File, Distributor, Subscriber, DropOffCenter, LocationRevision, LocationRevisionChanges, DistributionRevision, Contributor
+from models import User, Contact, Location, Post, Distribution, File, Distributor, Subscriber, DropOffCenter, LocationRevision, LocationRevisionChanges, DistributionRevision, Contributor, FBUser
 from functions import *
 import json as simplejson
 import logging
@@ -213,15 +213,15 @@ class BaseHandler(webapp2.RequestHandler):
 
     def get_public_current_user(self):
         if self.session.has_key("user"):
-            location_revision = LocationRevision.get_by_id(self.session["user"])
-            return location_revision
+            user = FBUser.get_by_id(self.session["user"])
+            return user
         else:
             return None
 
     def get_public_current_user_orgs(self):
         if self.session.has_key("user"):
-            distributor = Distributor.get_by_id(self.session["user"])
-            return distributor
+            user = FBUser.get_by_id(self.session["user"])
+            return user
         else:
             return None
 
@@ -302,153 +302,41 @@ class BaseHandler(webapp2.RequestHandler):
 
     def public_login_fb(self, fb_content, access_token, state_url):
         self.logout()
-        if state_url != "new-org" or state_url != "new-relief":
-            location_revision = LocationRevision.query(LocationRevision.fb_id == fb_content["id"]).get()
-            if not location_revision:
-                email = fb_content["email"]
-                if email:
-                    location_revision = LocationRevision.query(LocationRevision.fb_email == email).get()
+        user = FBUser.get_by_id(str(fb_content["id"]))
+        if not user:
+            user = FBUser(id=str(fb_content["id"]))
+            user.fb_id = fb_content["id"]
+            try:
+                user.fb_email = fb_content["email"]
+            except:
+                logging.exception('no email')
+            try:
+                user.fb_username = fb_content["username"]
+            except:
+                logging.exception("no username?")
+            user.fb_firstname = fb_content["first_name"]
+            try:
+                user.fb_lastname = fb_content["last_name"]
+            except:
+                logging.exception("no last_name?")
+            try:
+                user.fb_middlename = fb_content["middle_name"]
+            except:
+                logging.exception('no middle name?')
 
-                if location_revision:
-                    # Merge User
+            user.fb_name = user.fb_firstname
+            if user.fb_middlename:
+                user.fb_name += " " + user.fb_middlename
 
-                    location_revision.fb_id = fb_content["id"]
-                    try:
-                        location_revision.fb_username = fb_content["username"]
-                    except:
-                        logging.exception("no username?")
-                    location_revision.fb_firstname = fb_content["first_name"]
-                    try:
-                        location_revision.fb_lastname = fb_content["last_name"]
-                    except:
-                        logging.exception("no last_name?")
-                    try:
-                        location_revision.fb_middlename = fb_content["middle_name"]
-                    except:
-                        logging.exception('no middle name?')
+            if user.fb_lastname:
+                user.fb_name += " " + user.fb_lastname
 
-                    location_revision.fb_name = user.fb_firstname
-                    if location_revision.fb_middlename:
-                        location_revision.fb_name += " " + location_revision.fb_middlename
-
-                    if location_revision.fb_lastname:
-                        location_revision.fb_name += " " + location_revision.fb_lastname
-
-                    try:
-                        location_revision.fb_access_token = access_token
-                    except:
-                        logging.exception('no access token')
-
-                    try:
-                        location_revision.name = state_url
-                    except:
-                        logging.exception("no location name")
-                else:
-                    location_revision = LocationRevision()
-                    location_revision.fb_id = fb_content["id"]
-                    try:
-                        location_revision.fb_username = fb_content["username"]
-                    except:
-                        logging.exception("no username?")
-                    location_revision.fb_email = fb_content["email"]
-                    location_revision.fb_firstname = fb_content["first_name"]
-                    try:
-                        location_revision.fb_lastname = fb_content["last_name"]
-                    except:
-                        logging.exception("no last_name?")
-                    try:
-                        location_revision.fb_middlename = fb_content["middle_name"]
-                    except:
-                        logging.exception('no middle name?')
-
-                    location_revision.fb_name = location_revision.fb_firstname
-                    if location_revision.fb_middlename:
-                        location_revision.fb_name += " " + location_revision.fb_middlename
-
-                    if location_revision.fb_lastname:
-                        location_revision.fb_name += " " + location_revision.fb_lastname
-
-                    try:
-                        location_revision.fb_access_token = access_token
-                    except:
-                        logging.exception('no access token')
-
-                    try:
-                        location_revision.name = state_url
-                    except:
-                        logging.exception("no location name")
-
-                location_revision.put()
-            self.login(location_revision)
-        else:
-            distributor = Distributor.query(Distributor.fb_id == fb_content["id"]).get()
-            if not distributor:
-                email = fb_content["email"]
-                if email:
-                    distributor = Distributor.query(Distributor.fb_email == email).get()
-
-                if distributor:
-                    # Merge User
-
-                    distributor.fb_id = fb_content["id"]
-                    try:
-                        distributor.fb_username = fb_content["username"]
-                    except:
-                        logging.exception("no username?")
-                    distributor.fb_firstname = fb_content["first_name"]
-                    try:
-                        distributor.fb_lastname = fb_content["last_name"]
-                    except:
-                        logging.exception("no last_name?")
-                    try:
-                        distributor.fb_middlename = fb_content["middle_name"]
-                    except:
-                        logging.exception('no middle name?')
-
-                    distributor.fb_name = user.fb_firstname
-                    if distributor.fb_middlename:
-                        distributor.fb_name += " " + distributor.fb_middlename
-
-                    if distributor.fb_lastname:
-                        distributor.fb_name += " " + distributor.fb_lastname
-
-                    try:
-                        distributor.fb_access_token = access_token
-                    except:
-                        logging.exception('no access token')
-                else:
-                    distributor = Distributor()
-                    distributor.fb_id = fb_content["id"]
-                    try:
-                        distributor.fb_username = fb_content["username"]
-                    except:
-                        logging.exception("no username?")
-                    distributor.fb_email = fb_content["email"]
-                    distributor.fb_firstname = fb_content["first_name"]
-                    try:
-                        distributor.fb_lastname = fb_content["last_name"]
-                    except:
-                        logging.exception("no last_name?")
-                    try:
-                        distributor.fb_middlename = fb_content["middle_name"]
-                    except:
-                        logging.exception('no middle name?')
-
-                    distributor.fb_name = distributor.fb_firstname
-                    if distributor.fb_middlename:
-                        distributor.fb_name += " " + distributor.fb_middlename
-
-                    if distributor.fb_lastname:
-                        distributor.fb_name += " " + distributor.fb_lastname
-
-                    try:
-                        distributor.fb_access_token = access_token
-                    except:
-                        logging.exception('no access token')
-
-                distributor.put()
-            self.login(distributor)
-        return
+            try:
+                user.fb_access_token = access_token
+            except:
+                logging.exception('no access token')
+            user.put()
+        self.login(user)
 
 
     def logout(self):

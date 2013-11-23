@@ -72,6 +72,20 @@ class User(ndb.Model):
         return details
 
 
+class FBUser(ndb.Model):
+    created = ndb.DateTimeProperty(auto_now_add=True)
+    updated = ndb.DateTimeProperty(auto_now=True)
+    name = ndb.StringProperty()
+    fb_email = ndb.StringProperty() # public login
+    fb_id = ndb.StringProperty() # public login
+    fb_access_token = ndb.StringProperty() # public login
+    fb_username = ndb.StringProperty() # public login
+    fb_lastname = ndb.StringProperty() # public login
+    fb_firstname = ndb.StringProperty() # public login
+    fb_middlename = ndb.StringProperty() # public login
+    fb_name = ndb.StringProperty() # public login
+
+
 
 class Distributor(ndb.Model):
     created = ndb.DateTimeProperty(auto_now_add=True)
@@ -320,7 +334,7 @@ class DistributionRevision(ndb.Model):
     needs = ndb.StringProperty()
     date = ndb.StringProperty(default="UNKNOWN") # m-d-yyyy
     tag = ndb.StringProperty()
-    status = ndb.StringProperty(default="UNKNOWN")
+    status = ndb.StringProperty(default="MISSION ACCOMPLISHED")
 
     """ added """
     featured_photo = ndb.StringProperty()

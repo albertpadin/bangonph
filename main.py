@@ -78,7 +78,10 @@ def no_commas(values):
 
 
 def prettify(ugly):
-    return ugly.replace("-", " ").title()
+    try:
+        return ugly.replace("-", " ").title()
+    except:
+        return ""
 
 
 def to_date(date):

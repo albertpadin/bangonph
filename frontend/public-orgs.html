@@ -40,12 +40,25 @@
             </div>
           </form>
         </div>
-        <img class="img_display" style="width: 150px; height: 150px;" src="{% if distributor.logo %}{{ distributor.logo }}{% else %}/img/unknown.jpg{% endif %}" alt="{{ distributor.name|to_title }}"/>
+        <img class="img_display" style="width: 150px; height: 150px;" src="{% if distributor.logo %}{{ distributor.logo }}{% else %}/img/unknown.jpg{% endif %}" alt="{{ distributor.name }}"/>
       </div>
-      <span style="font-size: 30px; float: left; margin-top: 50px;">{{ distributor.name|to_title }}</span>
+      <span style="font-size: 30px; float: left; margin-top: 50px;">{{ distributor.name }}</span>
+      <!-- {% if distributor.website %}<br /><a href="{{ distributor.website }}">{{ distributor.website }}</a>{% endif %}
+      {% if distributor.facebook %}<br /><a href="{{ distributor.facebook }}">{{ distributor.facebook }}</a>{% endif %} -->
+
     {% else %}
       <h1>Organizations</h1>
     {% endif %}
+
+    <div class="social-media pull-right">
+      <div class="social-item">
+        <a href="https://twitter.com/share" class="twitter-share-button" data-hashtags="BangonPH">Tweet</a>
+      </div>
+      <div class="social-item">
+        <div class="fb-like" data-href="{{ current_base_url }}" data-layout="button_count" data-action="like" data-show-faces="false" data-share="true"></div>
+      </div>
+      <div class="clearfix"></div>
+    </div>
   </div>
 </div>
 
@@ -54,27 +67,34 @@
   <div class="row">
     <div class="col-lg-8 col-md-8">
       <h3 class="mt0">
-        {% if not view_org and not new_org and not new_relief %}
+        {% if not view_org and not new_org and not new_relief and not edit_org %}
           Lists
         {% elif new_org %}
           Add New Org
+        {% elif edit_org %}
+          Edit {{ org.name }}
         {% elif new_relief %}
           Add A Relief Effort
         {% else %}
           &nbsp;
         {% endif %}
 
-        {% if not new_org and not view_org and not new_relief %}
+        {% if not new_org and not view_org and not new_relief and not edit_org %}
           <a href="{{ fb_login_url }}" class="btn btn-fb btn-info">Add new Organization</a>
         {% elif new_org %}
           <a href="/orgs" style="font-size: 15px; float: right;">&lt;-- Back to ORGS</a>
+        {% elif edit_org %}
+          <a href="/orgs/{{ org.handle }}" style="font-size: 15px; float: right;">&lt;-- Back to {{ org.name }}</a>
         {% elif new_relief %}
           &nbsp;
         {% else %}
-          <a href="{{ fb_login_url }}" class="btn btn-fb btn-info">Add a relief effort</a>
+          <a href="{{ fb_login_url }}" class="btn btn-fb btn-info" style="margin-left: 10px;">Add a Relief Operation</a>
+          <a href="/orgs/{{ distributor.handle }}/edit" class="btn btn-fb btn-info">Edit Organization Info</a>
         {% endif %}
       </h3>
       <div id="content">
+        {% if main_org %}
+        <!--
         <br/>
         <div class="col-lg-7 p0">
           <div class="btn-group">
@@ -93,19 +113,21 @@
             <input type="text" class="form-control" id="search" placeholder="Search for the location here..."><span class="input-group-btn">
               <button class="btn btn-default" type="button">Search <span class="glyphicon glyphicon-search"></span></button>
             </span>
-          </div><!-- /input-group -->
+          </div>
         </div>
         <div class="clearfix"></div>
         <br/>
+        -->
+        {% endif %}
 
         {% if main_org %}
           {% if distributors %}
             {% for distributor in distributors %}
             <div class="img_org col-lg-4">
-              <a href="/orgs/{{ distributor.name|to_dash }}">
-                <img src="{% if distributor.logo %}{{ distributor.logo }}{% else %}/img/unknown.jpg{% endif %}" alt="{{ distributor.name|to_title }}">
+              <a href="/orgs/{{ distributor.handle }}">
+                <img src="{% if distributor.logo %}{{ distributor.logo }}{% else %}/img/unknown.jpg{% endif %}" alt="{{ distributor.name }}">
               </a>
-              <div class="desc">{{ distributor.name|to_title }}</div>
+              <div class="desc"><a href="/orgs/{{ distributor.handle }}">{{ distributor.name }}</a></div>
             </div>
             </tr>
             {% endfor %}
@@ -126,8 +148,8 @@
               </thead>
               <tbody>
                 <tr>
-                  <td>Image Url</td>
-                  <td><input type="text" name="image_url" required="required"/></td>
+                  <td>Logo Image URL</td>
+                  <td><input type="text" name="image_url" required="required" class="form-control" /></td>
                 </tr>
                 <tr>
                   <td>Org Name</td>
@@ -155,6 +177,49 @@
                 </tr>
                 <tr>
                   <td colspan="2"><a href="/orgs" class="btn btn-default">Cancel</a>&nbsp;&nbsp;<button type="submit" class="btn btn-primary">Submit</button></td>
+                </tr>
+              </tbody>
+            </table>
+          </form>
+        {% elif edit_org %}
+          <form method="post" enctype="multipart/form-data">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th colspan="2">Please Fill in ALL the Fields</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Logo Image URL</td>
+                  <td><input type="text" name="image_url" value="{% if org.logo %}{{ org.logo }}{% endif %}" required="required" class="form-control" /></td>
+                </tr>
+                <tr>
+                  <td>Org Name</td>
+                  <td><input type="text" name="org_name" value="{{ org.name }}" required="required" class="form-control"/></td>
+                </tr>
+                <tr>
+                  <td>Contact Number</td>
+                  <td><input type="text" name="contact_num" value="{{ org.contact_num }}" class="form-control"/></td>
+                </tr>
+                <tr>
+                  <td>Contact Details</td>
+                  <td><input type="text" name="contact_details" value="{{ org.contact_details }}" class="form-control"/></td>
+                </tr>
+                <tr>
+                  <td>Email</td>
+                  <td><input type="email" value="{{ org.email }}" name="email" class="form-control"/></td>
+                </tr>
+                <tr>
+                  <td>Website</td>
+                  <td><input type="text" value="{{ org.website }}" name="website" class="form-control"/></td>
+                </tr>
+                <tr>
+                  <td>Facebook</td>
+                  <td><input type="text" value="{{ org.facebook }}" name="facebook" class="form-control"/></td>
+                </tr>
+                <tr>
+                  <td colspan="2"><a href="/orgs/{{ org.handle }}" class="btn btn-default">Cancel</a>&nbsp;&nbsp;<button type="submit" class="btn btn-primary">Save</button></td>
                 </tr>
               </tbody>
             </table>
@@ -332,10 +397,10 @@
                 <tr>
                   <td>Location</td>
                   <td>
-                    <input type="hidden" value="{{ distributor.name|to_title }}" name="relief_name"/>
+                    <input type="hidden" value="{{ distributor.name }}" name="relief_name"/>
                     <select name="location" class="form-control">
                       {% for location in locations %}
-                      <option value="{{ location.name }}">{{ location.name }}</option>
+                      <option value="{{ location.key.id() }}">{{ location.name }}</option>
                       {% endfor %}
                     </select>
                   </td>
@@ -529,6 +594,7 @@
       });
     });
   </script>
+  <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
   <script type="text/javascript">
   $(document).ready(function() {
     $('.standard').hover(

@@ -62,6 +62,10 @@ def add_contribution(fb_id, fb_email, fb_username, fb_firstname, fb_middlename, 
     return
 
 
+def sanitize(value):
+    return value.strip().lower().replace(' ','-').replace("'","").replace('"','').replace(",","").replace('.','').replace('@','').replace('!','').replace('$','').replace('*','').replace('&','and').replace('(','').replace(')','').replace('+','plus').replace('=','').replace(':','').replace(';','').replace('<','').replace('>','').replace('/','').replace('?','').replace('~','').replace('`','').replace("#","")
+
+
 def with_commas(value):
     return "{:,}".format(value)
 
@@ -705,15 +709,15 @@ class PublicLocationEditPage(BaseHandler):
                 date = get_current_date()
                 if location.current_levels:
                     if levels["food"] != location.current_levels["food"]:
-                        datas_changes.append("Food & Water: " + location.current_levels["food"] + " >> " + levels["food"])
+                        datas_changes.append("Food & Water: " + str(location.current_levels["food"]) + " >> " + str(levels["food"]))
                     if levels["hygiene"] != location.current_levels["hygiene"]:
-                        datas_changes.append("Hygiene: " + location.current_levels["hygiene"] + " >> " + levels["hygiene"])
+                        datas_changes.append("Hygiene: " + str(location.current_levels["hygiene"]) + " >> " + str(levels["hygiene"]))
                     if levels["medicine"] != location.current_levels["medicine"]:
-                        datas_changes.append("Medicine: " + location.current_levels["medicine"] + " >> " + levels["medicine"])
+                        datas_changes.append("Medicine: " + str(location.current_levels["medicine"]) + " >> " + str(levels["medicine"]))
                     if levels["medical_mission"] != location.current_levels["medical_mission"]:
-                        datas_changes.append("Medical Mission: " + location.current_levels["medical_mission"] + " >> " + levels["medical_mission"])
+                        datas_changes.append("Medical Mission: " + str(location.current_levels["medical_mission"]) + " >> " + str(levels["medical_mission"]))
                     if levels["shelter"] != location.current_levels["shelter"]:
-                        datas_changes.append("Shelter: " + location.current_levels["shelter"] + " >> " + levels["shelter"])
+                        datas_changes.append("Shelter: " + str(location.current_levels["shelter"]) + " >> " + str(levels["shelter"]))
 
                 if self.request.get("source"):
                     datas_changes.append("Source/s: " + self.request.get('source'))
@@ -977,11 +981,11 @@ class OrgsHandler(BaseHandler):
         path_redirect = self.request.path + "/new-org"
         self.tv["fb_login_url"] = facebook.generate_login_url(path_redirect, self.uri_for('www-publicfblogin'))
 
-        user_changes = LocationRevisionChanges.query().order(-LocationRevisionChanges.created).fetch(100)
+        user_changes = LocationRevisionChanges.query().order(-LocationRevisionChanges.created).fetch(25)
         if user_changes:
             self.tv["status_changes"] = user_changes
 
-        distributors = Distributor.query(Distributor.name != None).fetch(100)
+        distributors = Distributor.query(Distributor.name != None).fetch(500)
         if distributors:
             self.tv["distributors"] = distributors
 
@@ -1006,9 +1010,19 @@ class OrgsNewHandler(BaseHandler):
             self.redirect(path_facebook)
 
     def post(self):
-        distributor = Distributor()
+        distributor_id = sanitize(self.request.get("org_name"))
+        temp_distributor_id = distributor_id
+        while True:
+            count = 1
+            if Distributor.query(Distributor.handle == temp_distributor_id).get(keys_only=True):
+                temp_distributor_id = distributor_id + str(count)
+                count += 1
+            else:
+                distributor = Distributor()
+                break
+        distributor.handle = temp_distributor_id
         distributor.logo = self.request.get("image_url")
-        distributor.name = self.request.get("org_name").lower()
+        distributor.name = self.request.get("org_name")
         distributor.contact_num = self.request.get("contact_num")
         distributor.email = self.request.get("email")
         if "http://" in self.request.get("website") or "https://" in self.request.get("website"):
@@ -1083,11 +1097,11 @@ class OrgsViewHandler(BaseHandler):
             if user_changes:
                 self.tv["status_changes"] = user_changes
 
-            distributor = Distributor.query(Distributor.name == org_name.replace("-", " ")).fetch(1)
+            distributor = Distributor.query(Distributor.handle == org_name).get()
             if distributor:
-                self.tv["distributor"] = distributor[0]
+                self.tv["distributor"] = distributor
 
-                distribution_changes = DistributionRevision.query(DistributionRevision.fb_name == distributor[0].name.title()).order(-DistributionRevision.created).fetch(100)
+                distribution_changes = DistributionRevision.query(DistributionRevision.org_id == org_name).order(-DistributionRevision.created).fetch(100)
                 if distribution_changes:
                     self.tv["distribution_changes"] = distribution_changes
 
@@ -1096,10 +1110,124 @@ class OrgsViewHandler(BaseHandler):
     def post(self, *args, **kwargs):
         if self.request.get("distributor_id") and self.request.get("image_url"):
             distributor = Distributor.get_by_id(int(self.request.get("distributor_id")))
-            if distributor:
+            if distributor and self.request.get('image_url'):
                 distributor.logo = self.request.get("image_url")
                 distributor.put()
                 self.response.out.write(simplejson.dumps({"image_url": self.request.get("image_url")}))
+
+
+class OrgsEditHandler(BaseHandler):
+    def get(self, *args, **kwargs):
+        if kwargs["org"]:
+            if not self.public_org_user:
+                path_redirect = self.request.path
+                self.redirect(facebook.generate_login_url(path_redirect, self.uri_for('www-publicfblogin')))
+                return
+
+            org_name = kwargs["org"]
+            self.tv['edit_org'] = True
+
+            self.tv["original_path"] = self.request.path
+
+            if self.public_user:
+                self.tv["fb_id"] = self.public_user.fb_id
+                self.tv["fb_name"] = self.public_user.fb_name
+                self.tv["fb_login_url"] = self.request.path + "/edit"
+            elif self.public_org_user:
+                self.tv["fb_id"] = self.public_org_user.fb_id
+                self.tv["fb_name"] = self.public_org_user.fb_name
+                self.tv["fb_login_url"] = self.request.path + "/edit"
+            else:
+                path_redirect = self.request.path + "/edit"
+                self.tv["fb_login_url"] = facebook.generate_login_url(path_redirect, self.uri_for('www-publicfblogin'))
+
+            user_changes = LocationRevisionChanges.query().order(-LocationRevisionChanges.created).fetch(100)
+            if user_changes:
+                self.tv["status_changes"] = user_changes
+
+            distributor = Distributor.query(Distributor.handle == org_name).get()
+            if distributor:
+                self.tv["org"] = distributor
+
+            self.render('frontend/public-orgs.html')
+            return
+        self.redirect('/orgs')
+
+    def post(self, *args, **kwargs):
+        if kwargs["org"]:
+            if not self.public_org_user:
+                path_redirect = self.request.path
+                self.redirect(facebook.generate_login_url(path_redirect, self.uri_for('www-publicfblogin')))
+                return
+
+            org_name = kwargs["org"]
+
+            if self.public_user:
+                self.tv["fb_id"] = self.public_user.fb_id
+                self.tv["fb_name"] = self.public_user.fb_name
+                self.tv["fb_login_url"] = self.request.path + "/edit"
+            elif self.public_org_user:
+                self.tv["fb_id"] = self.public_org_user.fb_id
+                self.tv["fb_name"] = self.public_org_user.fb_name
+                self.tv["fb_login_url"] = self.request.path + "/edit"
+            else:
+                path_redirect = self.request.path + "/edit"
+                self.tv["fb_login_url"] = facebook.generate_login_url(path_redirect, self.uri_for('www-publicfblogin'))
+
+            distributor = Distributor.query(Distributor.handle == org_name).get()
+            if distributor:
+                user_changes = LocationRevisionChanges()
+                if self.public_org_user:
+                    user_changes.fb_email = self.public_org_user.fb_email
+                    user_changes.fb_id = self.public_org_user.fb_id
+                    user_changes.fb_username = self.public_org_user.fb_username
+                    user_changes.fb_lastname = self.public_org_user.fb_lastname
+                    user_changes.fb_firstname = self.public_org_user.fb_firstname
+                    user_changes.fb_middlename = self.public_org_user.fb_middlename
+                    user_changes.fb_name = self.public_org_user.fb_name
+                elif self.public_user:
+                    user_changes.fb_email = self.public_user.fb_email
+                    user_changes.fb_id = self.public_user.fb_id
+                    user_changes.fb_username = self.public_user.fb_username
+                    user_changes.fb_lastname = self.public_user.fb_lastname
+                    user_changes.fb_firstname = self.public_user.fb_firstname
+                    user_changes.fb_middlename = self.public_user.fb_middlename
+                    user_changes.fb_name = self.public_user.fb_name
+                user_changes.revision_type = "Orgs"
+                user_changes.name = distributor.handle
+                datas_changes = []
+
+                if self.request.get("org_name"):
+                    datas_changes.append("Org Name: " + str(distributor.name) + " >> " + self.request.get("org_name"))
+                    distributor.name = self.request.get('org_name')
+                if self.request.get("contact_num"):
+                    datas_changes.append("Contact Number: " + str(distributor.contact_num) + " >> " + self.request.get("contact_num"))
+                    distributor.contact_num = self.request.get('contact_num')
+                if self.request.get("contact_details"):
+                    datas_changes.append("Contact Details: " + str(distributor.contact_details) + " >> " + self.request.get("contact_details"))
+                    distributor.contact_details = self.request.get('contact_details')
+                if self.request.get("email"):
+                    datas_changes.append("Email: " + str(distributor.email) + " >> " + self.request.get("email"))
+                    distributor.email = self.request.get('email')
+                if self.request.get("website"):
+                    datas_changes.append("Website: " + str(distributor.website) + " >> " + self.request.get("website"))
+                    if "http://" in self.request.get("website") or "https://" in self.request.get("website"):
+                        distributor.website = self.request.get("website")
+                    else:
+                        distributor.website = "http://" + self.request.get("website")
+                if self.request.get("facebook"):
+                    datas_changes.append("Facebook: " + str(distributor.facebook) + " >> " + self.request.get("facebook"))
+                    distributor.facebook = self.request.get('facebook')
+                if self.request.get('image_url'):
+                    datas_changes.append("Image URL: " + str(distributor.logo) + " >> " + self.request.get("image_url"))
+                    distributor.logo = self.request.get("image_url")
+                user_changes.status = datas_changes
+                user_changes.put()
+                distributor.put()
+                self.redirect(self.request.path + "?success=Changes%20Saved.")
+                return
+        self.redirect(self.request.path)
+
 
 class OrgsNewReliefHandler(BaseHandler):
     def get(self, *args, **kwargs):
@@ -1114,9 +1242,9 @@ class OrgsNewReliefHandler(BaseHandler):
                 if user_changes:
                     self.tv["status_changes"] = user_changes
 
-                distributor = Distributor.query(Distributor.name == org_name.replace("-", " ")).fetch(1)
+                distributor = Distributor.query(Distributor.handle == org_name).get()
                 if distributor:
-                    self.tv["distributor"] = distributor[0]
+                    self.tv["distributor"] = distributor
 
                 locations = Location.query().fetch(300)
                 if locations:
@@ -1128,9 +1256,9 @@ class OrgsNewReliefHandler(BaseHandler):
                 if user_changes:
                     self.tv["status_changes"] = user_changes
 
-                distributor = Distributor.query(Distributor.name == org_name.replace("-", " ")).fetch(1)
+                distributor = Distributor.query(Distributor.handle == org_name).get()
                 if distributor:
-                    self.tv["distributor"] = distributor[0]
+                    self.tv["distributor"] = distributor
 
                 locations = Location.query().fetch(300)
                 if locations:
@@ -1142,6 +1270,7 @@ class OrgsNewReliefHandler(BaseHandler):
                 self.redirect(facebook.generate_login_url(path_redirect, self.uri_for('www-publicfblogin')))
 
     def post(self, *args, **kwargs):
+        org_name = kwargs["org"]
         distribution_revision = DistributionRevision()
         if self.public_org_user:
             distribution_revision.fb_email = self.public_org_user.fb_email
@@ -1171,6 +1300,7 @@ class OrgsNewReliefHandler(BaseHandler):
         distribution_revision.date = self.request.get("date")
         distribution_revision.tag = self.request.get("tag")
         distribution_revision.status = self.request.get("status")
+        distribution_revision.org_id = org_name
         distribution_revision.put()
 
         user_changes = LocationRevisionChanges()
@@ -1216,7 +1346,7 @@ class OrgsNewReliefHandler(BaseHandler):
         user_changes.status = datas_changes
         user_changes.put()
 
-        self.redirect(self.request.path + "?success=Successfully-added.")
+        self.redirect("/orgs/" + org_name + "?success=Successfully-added.")
 
 class ReliefOperationsPage(BaseHandler):
     def get(self):
@@ -3823,16 +3953,27 @@ class UploadHandler(blobstore_handlers.BlobstoreUploadHandler):
 class ReComputeReliefStatus(webapp2.RequestHandler):
     def get(self):
         # Compute Everything
-        locations = DistributionRevision.query()
-        date = get_current_date()
-        distributions = []
-        for location in locations:
-            if location.date <= date: 
-                location.status = 'MISSION ACCOMPLISHED'
-            else:
-                location.status = 'UNKNOWN'
-            distributions.append(location)
-        ndb.put_multi(distributions)
+        distributors = Distributor.query(Distributor.name != None)
+        d = []
+        for distributor in distributors:
+            try:
+                distributor.handle = sanitize(distributor.name)
+                d.append(distributor)
+            except:
+                logging.exception("something went wrong")
+        ndb.put_multi(d)
+        self.response.write('done')
+
+        # locations = DistributionRevision.query()
+        # date = get_current_date()
+        # distributions = []
+        # for location in locations:
+        #     if location.date <= date:
+        #         location.status = 'MISSION ACCOMPLISHED'
+        #     else:
+        #         location.status = 'UNKNOWN'
+        #     distributions.append(location)
+        # ndb.put_multi(distributions)
 
 
 class ComputeReliefStatus(webapp2.RequestHandler):
@@ -3971,6 +4112,7 @@ app = webapp2.WSGIApplication([
 
         webapp2.Route('/orgs', handler=OrgsHandler, name="www-orgs"),
         webapp2.Route('/orgs/new-org', handler=OrgsNewHandler, name="www-orgs-new"),
+        webapp2.Route(r'/orgs/<org>/edit', handler=OrgsEditHandler, name="www-orgs-edit"),
         webapp2.Route(r'/orgs/<org>', handler=OrgsViewHandler, name="www-orgs-view"),
         webapp2.Route(r'/orgs/<org>/new-relief', handler=OrgsNewReliefHandler, name="www-orgs-new-relief"),
 

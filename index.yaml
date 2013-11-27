@@ -66,3 +66,9 @@ indexes:
   - name: code
   - name: created
     direction: desc
+
+- kind: DistributionRevision
+  properties:
+  - name: org_id
+  - name: created
+    direction: desc

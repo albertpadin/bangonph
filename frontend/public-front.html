@@ -82,7 +82,7 @@
               <label style="margin-bottom: 0;">
                 <a target="_blank" href="http://www.facebook.com/profile.php?id={{ revision.fb_id }}">{% if revision.fb_firstname %}{{ revision.fb_firstname }} {% endif %}{% if revision.fb_middlename %}{{ revision.fb_middlename }}{% endif %} {% if revision.fb_lastname %}{{ revision.fb_lastname }}{% endif %}</a>
               </label>
-              <a href="/locations/{{ revision.name }}">
+              <a href="{% if revision.revision_type == 'Orgs' %}/orgs{% else %}/locations{% endif %}/{{ revision.name }}">
                 <span class="label label-default">{{ revision.name|prettify }}</span>
                 <span class="label label-success">{{ revision.revision_type }}</span>
               </a><br/>
@@ -106,7 +106,7 @@
               <label style="margin-bottom: 0;">
                 <a target="_blank" href="http://www.facebook.com/profile.php?id={{ revision.fb_id }}">{% if revision.fb_firstname %}{{ revision.fb_firstname }} {% endif %}{% if revision.fb_middlename %}{{ revision.fb_middlename }}{% endif %} {% if revision.fb_lastname %}{{ revision.fb_lastname }}{% endif %}</a>
               </label>
-              <a href="/locations/{{ revision.name }}">
+              <a href="{% if revision.revision_type == 'Orgs' %}/orgs{% else %}/locations{% endif %}/{{ revision.name }}">
                 <span class="label label-default">{{ revision.name|prettify }}</span>
                 <span class="label label-success">{{ revision.revision_type }}</span>
               </a><br/>
@@ -130,7 +130,7 @@
               <label style="margin-bottom: 0;">
                 <a target="_blank" href="http://www.facebook.com/profile.php?id={{ revision.fb_id }}">{% if revision.fb_firstname %}{{ revision.fb_firstname }} {% endif %}{% if revision.fb_middlename %}{{ revision.fb_middlename }}{% endif %} {% if revision.fb_lastname %}{{ revision.fb_lastname }}{% endif %}</a>
               </label>
-              <a href="/locations/{{ revision.name }}">
+              <a href="{% if revision.revision_type == 'Orgs' %}/orgs{% else %}/locations{% endif %}/{{ revision.name }}">
                 <span class="label label-default">{{ revision.name|prettify }}</span>
                 <span class="label label-success">{{ revision.revision_type }}</span>
               </a><br/>

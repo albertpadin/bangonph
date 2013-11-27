@@ -105,6 +105,7 @@ class Distributor(ndb.Model):
     fb_firstname = ndb.StringProperty() # public login
     fb_middlename = ndb.StringProperty() # public login
     fb_name = ndb.StringProperty() # public login
+    handle = ndb.StringProperty()
 
 
     def to_object(self):
@@ -120,6 +121,7 @@ class Distributor(ndb.Model):
         details["website"] = self.website
         details["facebook"] = self.contact_num
         details["contact_details"] = self.contact_details
+        details["handle"] = self.handle
 
         return details
 
@@ -343,6 +345,7 @@ class DistributionRevision(ndb.Model):
     info = ndb.TextProperty()
     supply_goal = ndb.JsonProperty()
     actual_supply = ndb.JsonProperty()
+    org_id = ndb.StringProperty()
 
 
     def to_object(self, expand=""):

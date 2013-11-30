@@ -3486,7 +3486,7 @@ class APIEffortsHandler(APIBaseHandler):
                     efforts, next_cursor, more = DistributionRevision.query().fetch_page(25)
 
             for effort in efforts:
-                efforts_json.append(effort.to_object(self.request.get("expand").lower()))
+                efforts_json.append(effort.to_api_object(self.request.get("expand").lower()))
 
             if not failed:
                 data = {}
@@ -3505,7 +3505,7 @@ class APIEffortsHandler(APIBaseHandler):
             if effort:
                 resp["description"] = "Instance data"
                 resp["property"] = "posts"
-                resp["data"] = effort.to_object()
+                resp["data"] = effort.to_api_object()
             else:
                 # instance dont exist
                 resp['response'] = "invalid_instance"
@@ -3558,7 +3558,7 @@ class APIEffortsHandler(APIBaseHandler):
             effort = add_distribution(data)
             if effort:
                 resp["description"] = "Successfully created the instance"
-                resp["data"] = effort.to_object()
+                resp["data"] = effort.to_api_object()
             else:
                 # foolsafe, failsafe, watever!
                 resp['response'] = "cannot_create"
@@ -3573,7 +3573,7 @@ class APIEffortsHandler(APIBaseHandler):
                 effort = add_distribution(data, instance_id)
                 if effort:
                     resp["description"] = "Successfully edited the instance"
-                    resp["data"] = effort.to_object()
+                    resp["data"] = effort.to_api_object()
                 else:
                     # didnt edi but imposible
                     resp['response'] = "cannot_edit"
